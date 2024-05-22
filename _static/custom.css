@@ -1,0 +1,237 @@
+/* custom.css */
+
+/* Importar las fuentes Source Code Pro */
+@font-face {
+  font-family: 'Source Code Pro';
+  src: url('fonts/SourceCodePro-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Source Code Pro';
+  src: url('fonts/SourceCodePro-It.otf') format('opentype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+/* Variantes de peso (incluyendo negrita e itálica) */
+@font-face {
+  font-family: 'Source Code Pro';
+  src: url('fonts/SourceCodePro-Light.otf') format('opentype');
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'Source Code Pro';
+  src: url('fonts/SourceCodePro-LightIt.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Source Code Pro';
+  src: url('fonts/SourceCodePro-Medium.otf') format('opentype');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Source Code Pro';
+  src: url('fonts/SourceCodePro-MediumIt.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Source Code Pro';
+  src: url('fonts/SourceCodePro-Semibold.otf') format('opentype');
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: 'Source Code Pro';
+  src: url('fonts/SourceCodePro-SemiboldIt.otf') format('opentype');
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Source Code Pro';
+  src: url('fonts/SourceCodePro-Bold.otf') format('opentype');
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: 'Source Code Pro';
+  src: url('fonts/SourceCodePro-BoldIt.otf') format('opentype');
+  font-weight: 600;
+  font-style: italic;
+}
+
+/* Aplicar la fuente al cuerpo del texto */
+body {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Estilos para títulos y subtítulos (incluyendo # Título) */
+h1, h2, h3, h4, h5, h6, .markdown-section h1 {
+  font-family: 'Source Code Pro', monospace; /* Usar la misma fuente que el cuerpo */
+  font-weight: 600; 
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+h1, .markdown-section h1 {
+  font-size: 2.0em;
+  font-weight: bold !important;
+  color: #663399 !important;
+  margin-top: 16px !important;
+}
+
+h2 {
+  font-size: 1.6em;
+  font-weight: bold !important;
+}
+
+h3 {
+  font-size: 1.5em;
+  font-weight: bold !important;
+}
+
+h4 {
+  font-size: 1.4em;
+}
+
+
+p {
+  font-size: 1.1em;
+}
+
+
+a {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 1.05em;
+  font-weight: 400 !important;
+} 
+
+/* Estilos para listas */
+ul, ol {
+  padding-left: 2em;
+}
+
+/* Estilos para bloques de código */
+pre, code {
+  font-family: 'Source Code Pro', monospace;
+  background-color: #f5f5f5;
+  padding: 0.5em;
+}
+
+.sd-tab-label {
+  font-size: 1.1em !important;
+  font-weight: 500 !important;
+  color: #663399 !important;
+  /* color: #b1a1ed !important; */
+}
+
+.h-word {
+  font-family: 'Source Code Pro', monospace;
+  font-weight: 500; /* Negrita */
+  color: #25c19f; /* O el color que prefieras */
+}
+
+a.reference.internal.nav-link.active {
+  color: #663399 !important;
+}
+
+.reference.external {
+  color: #663399; /* Color morado oscuro */
+  text-decoration: none; /* Quitar subrayado */
+  border-bottom: 2px solid #663399; /* Línea inferior morada */
+  padding-bottom: 2px; /* Espacio inferior para evitar que la línea se corte */
+}
+
+/* Estilo hover para enlaces externos */
+.reference.external:hover {
+  color: #9966CC; /* Color lavanda al pasar el mouse */
+  border-bottom-color: #9966CC; /* Línea inferior lavanda al pasar el mouse */
+}
+
+/*Ocultar Search Bar */
+.btn.navbar-btn.search-button-field.search-button__button { 
+  display: none !important;
+}
+/*Ocultar Boton de Generar PDF  */
+.dropdown.dropdown-source-buttons {
+  display: none !important;
+}
+/*Ocultar Boton Descargas */
+.dropdown.dropdown-download-buttons {
+  display: none !important;
+}
+
+/* Hide Captions */
+.caption {
+  display: none !important;
+}
+
+/* Estilo para enlaces externos */
+.reference.external {
+  color: #663399; /* Color morado oscuro */
+  text-decoration: none !important; /* Quitar subrayado */
+  border-bottom: none !important;
+}
+
+/* Estilo hover para enlaces externos */
+.reference.external:hover {
+  color: #9966CC; /* Color lavanda al pasar el mouse */
+}
+
+/* Agregar texto "link" o "clink" en el hover */
+.reference.external:hover::after {
+  content: " (link)"; /* Puedes cambiar "link" por "clink" si lo prefieres */
+  font-size: 0.8em; /* Ajusta el tamaño de fuente según tus preferencias */
+  margin-left: 5px;  /* Ajusta el espacio entre el enlace y el texto */
+}
+
+
+/*Ocultar Boton Toggle Dark/Light */
+/* .btn.btn-sm.navbar-btn.theme-switch-button {
+  display: none !important;
+} */
+
+/* .navbar-brand.logo{
+  display: none !important; 
+} */
+
+
+/* Estilos para pantallas pequeñas */
+/* Estilos base para el botón */
+/* Estilos base para el botón */
+button {
+  background-color: #00ffff;
+  color: #400073;
+  border: none;
+  padding: 12px 24px; 
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.3s ease; /* Transición suave para el hover */
+  transform-origin: center; /* Escala desde el centro para evitar desplazamiento */
+  font-size: 1.2rem; 
+}
+
+/* Media Query para pantallas pequeñas (móviles) */
+@media (max-width: 767px) {
+  button {
+      padding: 4px 10px;  /* Padding reducido para móviles */
+      font-size: 0.9rem; /* Tamaño de fuente reducido para móviles */
+  }
+}
+
+/* Hover effect (aplicado en todas las pantallas) */
+button:hover {
+  transform: scale(1.1); /* Aumenta el tamaño en un 10% al pasar el mouse */
+}
+
