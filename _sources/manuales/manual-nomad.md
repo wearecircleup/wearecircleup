@@ -238,7 +238,7 @@ Circle Up garantiza la confidencialidad y seguridad de los datos personales, ado
 
 ### Ejercicio de Derechos
 
-Los voluntarios y participantes de Circle Up pueden ejercer sus derechos de conocer, actualizar, rectificar y suprimir sus datos personales, así como revocar la autorización otorgada para su tratamiento, mediante comunicación escrita dirigida a Circle Up a la dirección de correo electrónico **gocircleup@gmail.com**.
+Los voluntarios y participantes de Circle Up pueden ejercer sus derechos de conocer, actualizar, rectificar y suprimir sus datos personales, así como revocar la autorización otorgada para su tratamiento, mediante comunicación escrita dirigida a Circle Up a la dirección de correo electrónico **wearecircleup@gmail.com**.
 
 ### Vigencia de la Política
 
