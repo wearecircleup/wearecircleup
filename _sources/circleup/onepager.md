@@ -1,34 +1,35 @@
-# CircleUp: Desata el Potencial Humano en Tocancipá
+# CircleUp
 
-[Imagen de un grupo diverso de personas de todas las edades colaborando y aprendiendo juntas en un espacio público, con el logo de CircleUp en la esquina superior derecha]
+<span class="h-word">¿Y si la educación fuera tan contagiosa como la risa?</span>
 
-## ¿Y si la educación fuera tan contagiosa como la risa?
+Los fines de semana en Tocancipá están a punto de cambiar. En <span class="h-word">CircleUp</span>, creemos que el aprendizaje es un acto de <span class="h-word">rebeldía</span>, un desafío a lo establecido.
 
-En CircleUp, creemos que el <span class="h-word">aprendizaje</span> es un acto de <span class="h-word">rebeldía</span>, un desafío a lo establecido. Es la chispa que enciende la <span class="h-word">curiosidad</span> y <span class="h-word">transforma</span> comunidades. Nuestra <span class="h-word">misión</span> es simple pero audaz: <span class="h-word">democratizar</span> el <span class="h-word">conocimiento</span>, un curso a la vez.
+### ¿Qué es CircleUp?
 
-## ¿Cómo lo hacemos?
+Es un <span class="h-word">movimiento</span>, una explosión de conocimiento que aprovecha al máximo escenarios públicos. Es la plataforma que hace uso de la tecnología para conectar voluntarios y personas, es uno de los caminos para <span class="h-word">democratizar</span> el conocimiento, un curso a la vez.
 
-| Características Clave | Descripción | Beneficios |
-|---|---|---|
-| **Modelo de Aprendizaje Comunitario** | Conectamos a voluntarios apasionados con estudiantes curiosos, creando una red de aprendizaje colaborativo y enriquecedor. | Fomenta la participación activa, el intercambio de conocimientos y el desarrollo de habilidades prácticas. |
-| **Optimización de Espacios Públicos** | Transformamos espacios subutilizados como oficinas, bibliotecas y escenarios culturales en vibrantes centros de aprendizaje durante los fines de semana. | Maximiza el uso de recursos existentes, promueve la inclusión y crea un ambiente de aprendizaje dinámico. |
-| **Promoción a través de Medios Públicos** | Utilizamos los canales de comunicación oficiales de la administración pública para difundir nuestras propuestas académicas y llegar a un público más amplio. | Aumenta la visibilidad de los cursos, atrae a más participantes y fortalece la colaboración con entidades gubernamentales. |
-| **Enfoque en el Aprendizaje en Vivo** | Priorizamos la interacción en tiempo real entre voluntarios y estudiantes, ya sea de forma presencial o virtual, para un aprendizaje más efectivo y personalizado. | Fomenta la participación activa, el intercambio de ideas y la resolución de dudas en el momento. |
-| **Plataforma Tecnológica Innovadora** | Desarrollamos una plataforma escalable con arquitectura distribuida, un sistema de mensajería inteligente con IA generativa y modelos de aprendizaje automático para análisis demográfico avanzado. | Mejora la experiencia del usuario, facilita la gestión de cursos y personaliza el aprendizaje. |
+### ¿Cómo funciona?
 
+| <span class="h-word">Transformamos Espacios</span>                                                                                                                                                                                                          | <span class="h-word">Conectamos Personas</span>                                                                                                                                                                                                                  |
+|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| _¿Esa biblioteca que cierra los fines de semana? ¿Ese auditorio que solo se usa para eventos formales? En CircleUp, los convertimos en espacios de aprendizaje, donde voluntarios comparten sus conocimientos con mentes curiosas._ | _Imagina a un emprendedor jubilado enseñando a jóvenes emprendedores a construir, o a un ingeniero de software guiando a adolescentes en el mundo de la programación. En CircleUp, estas conexiones inesperadas suceden todos los días._ |
 
-## ¿Por qué CircleUp importa?
+<span class="h-word">Usamos</span> _la tecnología para amplificar el impacto. Nuestra plataforma no solo facilita la inscripción a cursos y la gestión de espacios, sino que también utiliza inteligencia artificia para conectar a las personas con los temas que les apasionan_.
 
-* **Porque el conocimiento es poder.**  Y en CircleUp, ese poder está al alcance de todos, sin importar su edad, origen o nivel educativo.
-* **Porque el aprendizaje es un deporte de equipo.**  En CircleUp, no hay profesores ni alumnos, solo personas que comparten su pasión por aprender y crecer juntos.
-* **Porque el futuro de Tocancipá está en sus manos.**  Y en CircleUp, estamos equipando a esa comunidad con las herramientas y el conocimiento que necesitan para construir ese futuro.
+### Tecnología que Impulsa el Aprendizaje:
 
-## ¿Te unes a la revolución del aprendizaje?
+CircleUp no es solo una plataforma, es un motor de cambio con propuestas a mediano plazo donde contamos con:
 
-No se trata solo de tomar un curso, se trata de ser parte de un movimiento que está cambiando la forma en que Tocancipá aprende y crece.
+- <span class="h-word">Arquitecturas de Software Distribuidas:</span> Para garantizar un acceso rápido y confiable a nuestros servicios, sin importar cuántas personas se unan a nuestra comunidad.
+- <span class="h-word">Mensajería Inteligente:</span> ¿Quieres saber qué cursos hay disponibles? Nuestra mensajería inteligente, impulsada por IA, te mostrará la agenda de CircleUp de forma personalizada y te ayudará a encontrar el curso perfecto para ti.
+- <span class="h-word">Observatorio de Datos:</span> Un mapa del conocimiento que revela las necesidades y aspiraciones de la comunidad, permitiéndonos adaptar nuestros programas para un impacto máximo.
 
-**Contáctanos:**
+### Un Movimiento, Una Comunidad
 
-[Información de contacto de CircleUp]
+CircleUp es una iniciativa sin fines de lucro, impulsada por la pasión y el compromiso de nuestra comunidad. Creemos que el conocimiento es un derecho, no un privilegio, y estamos aquí para hacerlo realidad.
 
-**¡CircleUp: donde el aprendizaje es una aventura, no una tarea!** 
+### Únete a la Revolución
+
+¿Estás listo para transformar tu comunidad y tu vida? Únete a CircleUp y descubre el poder del aprendizaje colaborativo. No solo aprenderás nuevas habilidades, sino que formarás parte de un movimiento que está cambiando el mundo, un curso a la vez.
+
+Conoce cómo apoyarnos y hagamos uso de la tecnología sin complicaciones, sin dejar de lado el networking presencial que se convierte en semilla de emprendimientos.
