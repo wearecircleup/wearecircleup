@@ -1,3 +1,8 @@
+<div style="position: relative; width: 100%; padding: 10px;">
+    <div style="border-radius: 10px; overflow: hidden;">
+        <img src="https://i.ibb.co/TH6HzwQ/body.jpg" alt="Imagen de fondo" style="width: 100%; height: auto;">
+    </div>
+</div>
 
 # La Leyenda de las Tribus Circle Up: Un Legado de Aprendizaje Comunitario
 {bdg-info}`Tribus`
