@@ -48,6 +48,7 @@ CircleUp es una iniciativa sin fines de lucro, impulsada por la pasión y el com
 
 Tu apoyo, ya sea a través de mentorias, recursos tecnológicos o alianzas estratégicas, es crucial para expandir nuestro alcance y potenciar nuestro impacto.
 
+
 <div style="position: relative; width: 100%; padding: 10px;">
     <div style="border-radius: 10px; overflow: hidden;">
         <img src="https://i.ibb.co/NKDJj8X/footer.png" alt="Imagen de fondo" style="width: 100%; height: auto;">
