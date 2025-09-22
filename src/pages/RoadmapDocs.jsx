@@ -9,12 +9,12 @@ import ButtonGradient from "../assets/svg/ButtonGradient";
 const HelpCarousel = () => {
   const [currentImage, setCurrentImage] = useState(0);
   const images = [
-    "/src/assets/circleimages/help-carrusel-1.png",
-    "/src/assets/circleimages/help-carrusel-2.png",
-    "/src/assets/circleimages/help-carrusel-3.png",
-    "/src/assets/circleimages/help-carrusel-4.png",
-    "/src/assets/circleimages/help-carrusel-5.png",
-    "/src/assets/circleimages/help-carrusel-6.png"
+    "/wearecircleup/assets/circleimages/help-carrusel-1.png",
+    "/wearecircleup/assets/circleimages/help-carrusel-2.png",
+    "/wearecircleup/assets/circleimages/help-carrusel-3.png",
+    "/wearecircleup/assets/circleimages/help-carrusel-4.png",
+    "/wearecircleup/assets/circleimages/help-carrusel-5.png",
+    "/wearecircleup/assets/circleimages/help-carrusel-6.png"
   ];
 
   useEffect(() => {

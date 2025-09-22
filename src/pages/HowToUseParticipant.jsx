@@ -17,25 +17,25 @@ const HowToUseParticipant = ({ setCurrentPage }) => {
       id: 0,
       title: "Encuentra tu taller",
       description: "Explora temas útiles cerca de ti: habilidades para el trabajo, vida práctica y desarrollo personal. Todos los talleres son gratuitos y abiertos.",
-      image: "/src/assets/circleimages/par-sub-nav-1.png"
+      image: "/wearecircleup/assets/circleimages/par-sub-nav-1.png"
     },
     {
       id: 1,
       title: "Inscríbete en 1 minuto",
       description: "Reserva tu cupo con un formulario corto y recibe recordatorios. Si el taller es en café con ticket simbólico, te lo contamos antes para que decidas.",
-      image: "/src/assets/circleimages/par-sub-nav-2.png"
+      image: "/wearecircleup/assets/circleimages/par-sub-nav-2.png"
     },
     {
       id: 2,
       title: "Participa y crea algo",
       description: "Sesiones prácticas de 1–2 horas donde haces, no solo escuchas. Te llevas algo concreto: un documento, un plan o una habilidad demostrable.",
-      image: "/src/assets/circleimages/par-sub-nav-3.png"
+      image: "/wearecircleup/assets/circleimages/par-sub-nav-3.png"
     },
     {
       id: 3,
       title: "Sigue aprendiendo",
       description: "Recibe recursos, certificado digital y opciones para continuar. Si te animas, también puedes enseñar lo que sabes en el futuro.",
-      image: "/src/assets/circleimages/par-sub-nav-4.png"
+      image: "/wearecircleup/assets/circleimages/par-sub-nav-4.png"
     }
   ];
 

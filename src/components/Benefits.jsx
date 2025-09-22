@@ -13,49 +13,49 @@ const Benefits = () => {
       name: "Biblioteca Central",
       role: "Espacio de Aprendizaje",
       text: "Un lugar tranquilo y acogedor donde puedes concentrarte en aprender nuevas habilidades con el apoyo de voluntarios expertos.",
-      image: "/src/assets/circleimages/home-carrusel-1.png"
+      image: "/wearecircleup/assets/circleimages/home-carrusel-1.png"
     },
     {
       id: 1,
       name: "Café Comunitario",
       role: "Espacio de Aprendizaje", 
       text: "Aprende mientras disfrutas de un café. Un ambiente relajado perfecto para talleres de emprendimiento y networking.",
-      image: "/src/assets/circleimages/home-carrusel-2.png"
+      image: "/wearecircleup/assets/circleimages/home-carrusel-2.png"
     },
     {
       id: 2,
       name: "Plaza Comunitaria",
       role: "Espacio de Aprendizaje",
       text: "Conecta con tu comunidad. Un espacio donde la tradición te permite crear experiencias de aprendizaje únicas y colaborativas.",
-      image: "/src/assets/circleimages/home-carrusel-3.png"
+      image: "/wearecircleup/assets/circleimages/home-carrusel-3.png"
     },
     {
       id: 3,
       name: "Espacio Natural",
       role: "Espacio de Aprendizaje",
       text: "Aprende en armonía. Un ambiente donde el arte, la creatividad y el conocimiento fluyen naturalmente bajo el cielo abierto.",
-      image: "/src/assets/circleimages/home-carrusel-4.png"
+      image: "/wearecircleup/assets/circleimages/home-carrusel-4.png"
     },
     {
       id: 4,
       name: "Biblioteca Moderna",
       role: "Espacio de Aprendizaje",
       text: "Un espacio que eleva tu experiencia de aprendizaje. Perfecto para estudio colaborativo y talleres en un ambiente contemporáneo.",
-      image: "/src/assets/circleimages/home-carrusel-5.png"
+      image: "/wearecircleup/assets/circleimages/home-carrusel-5.png"
     },
     {
       id: 5,
       name: "Plaza Patrimonial",
       role: "Espacio de Aprendizaje",
       text: "Aprende rodeado de historia y tradición. Un espacio donde el patrimonio cultural se convierte en talleres y memoria colectiva.",
-      image: "/src/assets/circleimages/home-carrusel-6.png"
+      image: "/wearecircleup/assets/circleimages/home-carrusel-6.png"
     },
     {
       id: 6,
       name: "Ludoteca Creativa",
       role: "Espacio de Aprendizaje",
       text: "Un mundo de colores donde el juego se convierte en aprendizaje. Espacio diseñado para talleres lúdicos, desarrollo de habilidades sociales y creatividad.",
-      image: "/src/assets/circleimages/home-carrusel-7.png"
+      image: "/wearecircleup/assets/circleimages/home-carrusel-7.png"
     }
   ];
 

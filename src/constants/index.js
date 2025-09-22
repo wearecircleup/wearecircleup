@@ -99,7 +99,7 @@ export const roadmap = [
     text: "Detectamos las brechas de conocimiento en la comunidad a través de encuestas y conversaciones directas con los participantes.",
     date: "Fase 1",
     status: "done",
-    imageUrl: "/src/assets/circleimages/roadmap-1.png",
+    imageUrl: "/wearecircleup/assets/circleimages/roadmap-1.png",
     colorful: true,
   },
   {
@@ -108,7 +108,7 @@ export const roadmap = [
     text: "Reclutamos voluntarios especialistas que comparten su experiencia profesional de manera accesible y práctica.",
     date: "Fase 2",
     status: "done",
-    imageUrl: "/src/assets/circleimages/roadmap-2.png",
+    imageUrl: "/wearecircleup/assets/circleimages/roadmap-2.png",
   },
   {
     id: "2",
@@ -116,7 +116,7 @@ export const roadmap = [
     text: "Organizamos sesiones presenciales en bibliotecas y espacios públicos donde se facilita el aprendizaje colaborativo.",
     date: "Fase 3",
     status: "progress",
-    imageUrl: "/src/assets/circleimages/roadmap-3.png",
+    imageUrl: "/wearecircleup/assets/circleimages/roadmap-3.png",
   },
   {
     id: "3",
@@ -124,7 +124,7 @@ export const roadmap = [
     text: "Acompañamos el progreso de cada participante y otorgamos certificaciones que validen sus nuevas competencias.",
     date: "Fase 4",
     status: "progress",
-    imageUrl: "/src/assets/circleimages/roadmap-4.png",
+    imageUrl: "/wearecircleup/assets/circleimages/roadmap-4.png",
   },
 ];
 

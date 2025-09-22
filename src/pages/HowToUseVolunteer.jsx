@@ -17,25 +17,25 @@ const HowToUseVolunteer = ({ setCurrentPage }) => {
       id: 0,
       title: "Define tu rol",
       description: "Cuéntanos qué sabes y a quién quieres apoyar. Desde 2 h al mes. No necesitas ser docente.",
-      image: "/src/assets/circleimages/vol-sub-nav-1.png"
+      image: "/wearecircleup/assets/circleimages/vol-sub-nav-1.png"
     },
     {
       id: 1,
       title: "Onboarding 90 min",
       description: "Metodología, plantillas y tips. Quedas listo para tu primera sesión.",
-      image: "/src/assets/circleimages/vol-sub-nav-2.png"
+      image: "/wearecircleup/assets/circleimages/vol-sub-nav-2.png"
     },
     {
       id: 2,
       title: "Primer taller acompañado",
       description: "Sesión práctica de 1–2 h con apoyo de un coordinador. Tú pones el conocimiento; nosotros la logística y la comunidad.",
-      image: "/src/assets/circleimages/vol-sub-nav-3.png"
+      image: "/wearecircleup/assets/circleimages/vol-sub-nav-3.png"
     },
     {
       id: 3,
       title: "Suma impacto",
       description: "Itera con feedback, propone nuevos temas y, si quieres, mentoriza a nuevos voluntarios.",
-      image: "/src/assets/circleimages/vol-sub-nav-4.png"
+      image: "/wearecircleup/assets/circleimages/vol-sub-nav-4.png"
     }
   ];
 

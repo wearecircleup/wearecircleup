@@ -26,7 +26,7 @@ const Services = () => {
             <div className="relative min-h-[39rem] border border-n-1/10 rounded-3xl overflow-hidden">
               <div className="absolute inset-0">
                 <img
-                  src="/src/assets/circleimages/service-left.png"
+                  src="/wearecircleup/assets/circleimages/service-left.png"
                   alt="Service Left"
                   className="h-full w-full object-cover pointer-events-none select-none"
                   width={630}
@@ -84,7 +84,7 @@ const Services = () => {
 
               <div className="relative h-[20rem] bg-n-8 rounded-xl overflow-hidden md:h-[25rem]">
                 <img
-                  src="/src/assets/circleimages/service-right.png"
+                  src="/wearecircleup/assets/circleimages/service-right.png"
                   className={`w-full h-full object-cover ${
                     isPlaying && "animate-pulse"
                   } pointer-events-none select-none`}
