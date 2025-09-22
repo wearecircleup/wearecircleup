@@ -1,16 +1,16 @@
-import { useState, useEffect } from "react";
-import NeedHelp from "../components/NeedHelp";
-import HowItWorks from "../components/HowItWorks";
+import { useState } from "react";
+import Header from "../components/Header";
 import Section from "../components/Section";
+import Button from "../components/Button";
+import HowItWorks from "../components/HowItWorks";
+import NeedHelp from "../components/NeedHelp";
+import FAQ from "../components/FAQ";
 import Logo from "../components/Logo";
 import Footer from "../components/Footer";
-import Header from "../components/Header";
 import ButtonGradient from "../assets/svg/ButtonGradient";
-import Button from "../components/Button";
 import { curve } from "../assets";
 
 const HowToUseParticipant = ({ setCurrentPage }) => {
-  const [expandedFAQ, setExpandedFAQ] = useState(0);
   const [activeStep, setActiveStep] = useState(0);
 
   const steps = [
@@ -123,9 +123,6 @@ const HowToUseParticipant = ({ setCurrentPage }) => {
     }
   ];
 
-  const toggleFAQ = (index) => {
-    setExpandedFAQ(expandedFAQ === index ? null : index);
-  };
 
   return (
     <>
@@ -264,45 +261,9 @@ const HowToUseParticipant = ({ setCurrentPage }) => {
           </div>
         </Section> */}
 
-        {/* FAQ Section */}
-        <Section className="overflow-hidden relative">
-          {/* Background elements */}
-          <div className="absolute top-1/2 left-1/4 w-80 h-80 opacity-2 rotate-45">
-            <img src="/src/assets/grid.png" alt="" className="w-full h-full object-cover" />
-          </div>
-
-          <div className="container relative z-2">
-            <div className="grid gap-10 lg:grid-cols-2">
-              <div>
-                <h2 className="h2 mb-4">Preguntas frecuentes</h2>
-                <p className="body-1 text-n-4 mb-6">
-                  ¿No encuentras lo que buscas? <span className="text-color-1 cursor-pointer">Contáctanos</span>
-                </p>
-              </div>
-              
-              <div className="space-y-0">
-                {participantFAQs.map((faq, index) => (
-                  <div key={index} className="border-t border-n-6 first:border-t-0 last:border-b border-b-n-6">
-                    <button 
-                      className="w-full px-0 py-6 text-left flex items-center justify-between hover:text-color-1 transition-colors"
-                      onClick={() => toggleFAQ(index)}
-                    >
-                      <span className="text-n-1 font-medium text-lg">{faq.question}</span>
-                      <span className="text-n-3 text-2xl font-light">
-                        {expandedFAQ === index ? '−' : '+'}
-                      </span>
-                    </button>
-                    {expandedFAQ === index && (
-                      <div className="pb-6 -mt-2">
-                        <p className="text-n-3 leading-relaxed pr-8">{faq.answer}</p>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </Section>
+        <FAQ 
+          faqs={participantFAQs}
+        />
 
 
         {/* Call to Action Section */}

@@ -1,5 +1,5 @@
 import { brainwaveSymbol, check, curve } from "../assets";
-import logo from "../assets/circleimages/logo.svg";
+// import logo from "../assets/circleimages/logo.svg";
 import { collabApps, collabContent, collabText } from "../constants";
 import Button from "./Button";
 import { LeftCurve, RightCurve } from "./design/Collaboration";
@@ -60,7 +60,7 @@ const Collaboration = () => {
               <div className="w-20 sm:w-[6rem] aspect-square m-auto p-[0.2rem] bg-conic-gradient rounded-full">
                 <div className="flex items-center justify-center w-full h-full bg-n-8 rounded-full">
                   <img
-                    src={logo}
+                    src="/wearecircleup/assets/circleimages/logo.svg"
                     width={32}
                     height={32}
                     alt="CircleUp Logo"

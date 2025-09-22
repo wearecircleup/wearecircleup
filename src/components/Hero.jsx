@@ -3,7 +3,7 @@ import { ScrollParallax } from "react-just-parallax";
 import Typewriter from "typewriter-effect";
 
 import { curve } from "../assets";
-import homeLanding from "../assets/circleimages/home-landing.png";
+// import homeLanding from "../assets/circleimages/home-landing.png";
 import { heroIcons } from "../constants";
 import Button from "./Button";
 import CompanyLogos from "./CompanyLogos";
@@ -69,7 +69,7 @@ const Hero = () => {
 
               <div className="aspect-[33/40] rounded-b-[0.9rem] overflow-hidden md:aspect-[688/490] lg:aspect-[1024/490]">
                 <img
-                  src={homeLanding}
+                  src="/wearecircleup/assets/circleimages/home-landing.png"
                   className="w-full h-full object-cover object-bottom pointer-events-none select-none"
                   width={1024}
                   height={490}

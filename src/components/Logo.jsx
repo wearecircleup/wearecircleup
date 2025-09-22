@@ -1,4 +1,4 @@
-import logo from "../assets/circleimages/logo.svg";
+// import logo from "../assets/circleimages/logo.svg";
 
 const Logo = ({ 
   className = "", 
@@ -13,7 +13,7 @@ const Logo = ({
       onClick={onClick}
     >
       <img
-        src={logo}
+        src="/wearecircleup/assets/circleimages/logo.svg"
         width={logoSize.width}
         height={logoSize.height}
         alt="CircleUp Logo"
