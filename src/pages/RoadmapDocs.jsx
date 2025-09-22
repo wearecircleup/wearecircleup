@@ -1,8 +1,45 @@
-import { useEffect, useRef, useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Header from "../components/Header";
-import Footer from "../components/Footer";
 import Section from "../components/Section";
+import Logo from "../components/Logo";
+import Footer from "../components/Footer";
 import ButtonGradient from "../assets/svg/ButtonGradient";
+
+// Help Carousel Component
+const HelpCarousel = () => {
+  const [currentImage, setCurrentImage] = useState(0);
+  const images = [
+    "/src/assets/circleimages/help-carrusel-1.png",
+    "/src/assets/circleimages/help-carrusel-2.png",
+    "/src/assets/circleimages/help-carrusel-3.png",
+    "/src/assets/circleimages/help-carrusel-4.png",
+    "/src/assets/circleimages/help-carrusel-5.png",
+    "/src/assets/circleimages/help-carrusel-6.png"
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % images.length);
+    }, 3000); // Change image every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [images.length]);
+
+  return (
+    <div className="relative w-full h-full">
+      {images.map((image, index) => (
+        <img
+          key={index}
+          src={image}
+          alt={`Help carousel ${index + 1}`}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+            index === currentImage ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+      ))}
+    </div>
+  );
+};
 
 const RoadmapDocs = ({ setCurrentPage }) => {
   const [activeSection, setActiveSection] = useState("introduction");
@@ -649,38 +686,45 @@ const RoadmapDocs = ({ setCurrentPage }) => {
         {/* Need help Section - Full width outside main content */}
         <div className="w-full bg-n-8 border-t border-n-6">
           <Section className="overflow-hidden">
+            {/* Background grid only on left side */}
+            <div className="absolute top-0 left-0 w-1/2 h-full opacity-40 z-0">
+              <img src="/src/assets/grid.png" alt="" className="w-full h-full object-cover" />
+            </div>
+            
             <div className="container relative z-2">
               <div className="relative z-1 grid gap-10 lg:grid-cols-2 items-center">
-                <div className="relat´{{{{{ive flex justify-center lg:justify-end">
-                  <div className="relative max-w-[28rem]">
-                    {/* Background gradient behind image */}
-                    <div className="absolute inset-0 opacity-50 z-0">
-                      <img src="/src/assets/gradient.png" alt="" className="w-small h-small object-cover" />
-                    </div>
-                    {/* Main image-3.png */}
-                    <div className="mb-10 -my-10 -mx-15 relative z-10">
-                      <img 
-                        className="w-full pointer-events-none select-none" 
-                        src="/src/assets/roadmap/image-3.png" 
-                        width={628} 
-                        height={426} 
-                        alt="Need help illustration"
-                      />
+                <div className="relative flex justify-center lg:justify-start">
+                  <div className="relative">
+                    {/* 3D Stacked boxes effect - spread out card deck */}
+                    <div className="relative">
+                      {/* Third card (back of deck) */}
+                      <div className="absolute top-8 left-12 w-[28rem] h-[28rem] bg-n-6/15 rounded-2xl transform rotate-12 shadow-lg"></div>
+                      {/* Second card (middle of deck) */}
+                      <div className="absolute top-5 left-8 w-[28rem] h-[28rem] bg-n-6/25 rounded-2xl transform rotate-6 shadow-lg"></div>
+                      {/* First card (almost top of deck) */}
+                      <div className="absolute top-2 left-4 w-[28rem] h-[28rem] bg-n-6/35 rounded-2xl transform rotate-3 shadow-lg"></div>
+                      {/* Front card with carousel images (top of deck) */}
+                      <div className="relative w-[28rem] h-[28rem] bg-n-8 rounded-2xl overflow-hidden shadow-2xl">
+                        <HelpCarousel />
+                        {/* Subtle overlay for better contrast */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-n-8/20 to-transparent"></div>
+                      </div>
                     </div>
                   </div>
+                </div>
                   
-                  {/* Voice input indicator */}
-                  <div className="absolute bottom-0 left-0 flex items-center bg-n-7 rounded-full px-4 py-2 border border-n-6">
-                    <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center mr-3">
-                      <span className="text-white text-xs">?</span>
-                    </div>
-                    <span className="text-n-3 text-sm">Ask anything</span>
-                    <div className="ml-4 flex space-x-1">
-                      <div className="w-1 h-4 bg-purple-500 rounded-full animate-pulse"></div>
-                      <div className="w-1 h-6 bg-purple-500 rounded-full animate-pulse"></div>
-                      <div className="w-1 h-4 bg-purple-500 rounded-full animate-pulse"></div>
-                      <div className="w-1 h-6 bg-purple-500 rounded-full animate-pulse"></div>
-                    </div>
+                
+                {/* Voice input indicator */}
+                <div className="absolute bottom-0 left-0 flex items-center bg-n-7 rounded-full px-4 py-2 border border-n-6">
+                  <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center mr-3">
+                    <span className="text-white text-xs">?</span>
+                  </div>
+                  <span className="text-n-3 text-sm">Ask anything</span>
+                  <div className="ml-4 flex space-x-1">
+                    <div className="w-1 h-4 bg-purple-500 rounded-full animate-pulse"></div>
+                    <div className="w-1 h-6 bg-purple-500 rounded-full animate-pulse"></div>
+                    <div className="w-1 h-4 bg-purple-500 rounded-full animate-pulse"></div>
+                    <div className="w-1 h-6 bg-purple-500 rounded-full animate-pulse"></div>
                   </div>
                 </div>
                 

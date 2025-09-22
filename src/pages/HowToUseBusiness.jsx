@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import NeedHelp from "../components/NeedHelp";
 import Section from "../components/Section";
-import Header from "../components/Header";
+import Logo from "../components/Logo";
 import Footer from "../components/Footer";
+import Header from "../components/Header";
 import ButtonGradient from "../assets/svg/ButtonGradient";
 import Button from "../components/Button";
+import { curve } from "../assets";
 
 const HowToUseBusiness = ({ setCurrentPage }) => {
   const [expandedFAQ, setExpandedFAQ] = useState(0);
@@ -12,53 +15,59 @@ const HowToUseBusiness = ({ setCurrentPage }) => {
   const steps = [
     {
       id: 0,
-      title: "Sign up",
-      description: "Create an account with Brainwave - AI chat app by providing your name, email address, and password. Once you sign up, you can start exploring the app.",
-      image: "/src/assets/services/service-3.png"
+      title: "Explora cómo apoyar",
+      description: "Si eres un café, biblioteca, entidad pública o empresa, cuéntanos qué puedes ofrecer: espacio, insumos/materiales, mentorías técnicas o tiempo profesional.",
+      image: "/src/assets/circleimages/aliado-sub-nav-1.png"
     },
     {
       id: 1,
-      title: "Connect with AI chatbot",
-      description: "Connect with the AI chatbot to start the conversation. The chatbot uses natural language processing to understand your queries and provide relevant responses.",
-      image: "/src/assets/roadmap/image-2.png"
+      title: "Define tu aporte",
+      description: "Acordamos duración, frecuencia y tipo de apoyo. En cafés: ticket de consumo simbólico o donación. En espacios públicos: horarios que aumenten su uso. En empresas: mentorías técnicas o materiales.",
+      image: "/src/assets/circleimages/aliado-sub-nav-2.png"
     },
     {
       id: 2,
-      title: "Get Personalized Advices",
-      description: "Based on the conversation with the AI chatbot, you will receive personalized recommendations related to your queries. The chatbot is trained to understand your preferences and provide customized suggestions.",
-      image: "/src/assets/services/service-3.png"
+      title: "Activamos sesiones",
+      description: "Coordinamos comunidad y facilitación; tú aportas el recurso. Sesiones prácticas e intergeneracionales de 1–2 horas (CBL), formato sencillo y cercano, sin trámites pesados.",
+      image: "/src/assets/circleimages/aliado-sub-nav-3.png"
     },
     {
       id: 3,
-      title: "Upgrade your plan",
-      description: "Upgrade your plan to access premium features and unlock the full potential of Brainwave. With the premium plan, you can enjoy unlimited conversations, priority support, and advanced AI capabilities.",
-      image: "/src/assets/roadmap/image-4.png"
+      title: "Reconocimiento y continuidad",
+      description: "Damos visibilidad en redes y web; contamos la historia y, si te gusta, repetimos o escalamos a otras sedes/temas para fortalecer la sostenibilidad del territorio.",
+      image: "/src/assets/circleimages/aliado-sub-nav-4.png"
     }
   ];
 
   const partnershipSteps = [
     {
       date: "PASO 1",
-      title: "Identificación de Oportunidades",
-      description: "Evaluamos juntos las necesidades de capacitación de tus empleados y cómo Circle Up puede complementar tu estrategia de desarrollo de talento.",
+      title: "Conversemos 15 minutos",
+      description: "Alineamos tu aporte (espacios, insumos o mentorías técnicas) con necesidades del territorio y definimos un piloto simple.",
       completed: true
     },
     {
       date: "PASO 2", 
-      title: "Diseño de Programa Personalizado",
-      description: "Creamos un programa de talleres específicos para tu organización, alineado con tus objetivos de RSE y desarrollo profesional.",
+      title: "Define tu aporte",
+      description: "En cafés: ticket simbólico (opcional) o donación; en espacios públicos: horarios de mayor uso; en empresas: mentorías técnicas o materiales.",
       completed: true
     },
     {
       date: "PASO 3",
-      title: "Implementación y Seguimiento", 
-      description: "Ejecutamos los talleres con métricas claras de impacto, reportes regulares y ajustes basados en retroalimentación.",
+      title: "Diseño CBL intergeneracional", 
+      description: "Co-diseñamos una sesión práctica de 1–2 h con enfoque de aprendizaje comunitario (CBL) y aprendizaje a lo largo de la vida (Lifelong). Roles claros, sin trámites pesados.",
       completed: true
     },
     {
       date: "PASO 4",
-      title: "Escalamiento y Expansión", 
-      description: "Expandimos el programa a más sedes, incorporamos nuevas temáticas y fortalecemos el impacto conjunto en la comunidad.",
+      title: "Activación en tu espacio", 
+      description: "Operamos la sesión en tu espacio. Tú aportas el recurso; nosotros llevamos a la comunidad y la facilitación.",
+      completed: true
+    },
+    {
+      date: "PASO 5",
+      title: "Visibilidad y sostenibilidad", 
+      description: "Publicamos tu apoyo en redes y en la web, documentamos la historia y definimos continuidad o réplica en otras sedes/temas.",
       completed: false
     }
   ];
@@ -67,55 +76,55 @@ const HowToUseBusiness = ({ setCurrentPage }) => {
     {
       name: "Carmen Delgado",
       role: "Directora de RSE - Banco Nacional",
-      text: "Nuestra alianza con Circle Up ha transformado nuestro programa de RSE. Los talleres de educación financiera han impactado a más de 500 familias en 6 meses. El ROI social es incalculable y nuestros empleados se sienten orgullosos de participar como voluntarios.",
+      text: "Aportamos horas de mentoría y materiales. Circle Up se encargó de la comunidad y la ejecución. Obtuvimos visibilidad en redes y web, y el equipo se sintió orgulloso de apoyar una causa local.",
       avatar: "/src/assets/benefits/image-2.png"
     },
     {
       name: "Ricardo Morales",
       role: "CEO - TechSolutions",
-      text: "Circle Up nos ayudó a crear un programa de mentoría donde nuestros desarrolladores enseñan programación básica en comunidades vulnerables. Ha mejorado el engagement de nuestro equipo y fortalecido nuestra marca empleadora.",
+      text: "Nuestros desarrolladores participaron como mentores. El proceso fue simple y la visibilidad del apoyo fue clara. Excelente para marca empleadora sin procesos pesados.",
       avatar: "/src/assets/benefits/image-2.png"
     },
     {
       name: "Ana Lucia Vega",
       role: "Gerente de Talento Humano - Retail Corp",
-      text: "Los talleres de habilidades blandas que facilitamos a través de Circle Up han sido un éxito. Nuestros gerentes desarrollan liderazgo mientras enseñan y la comunidad recibe capacitación de calidad. Es un win-win perfecto.",
+      text: "Donamos insumos y tiempo profesional. Circle Up reconoce el apoyo públicamente y eso nos ayuda a contar nuestra historia de impacto real con la comunidad.",
       avatar: "/src/assets/benefits/image-2.png"
     },
     {
       name: "José Manuel Torres",
       role: "Director de Sostenibilidad - Manufactura S.A.",
-      text: "Circle Up nos permitió llevar talleres de emprendimiento a las comunidades donde operamos. Hemos visto nacer 15 nuevos negocios locales y fortalecido nuestra licencia social para operar.",
+      text: "Usamos un salón en nuestra sede para activar sesiones abiertas. Vimos mayor uso del espacio y una relación más cercana con el barrio. La difusión fue muy valiosa.",
       avatar: "/src/assets/benefits/image-2.png"
     },
     {
       name: "Patricia Ruiz",
-      role: "Coordinadora de Voluntariado - Fundación Empresarial",
-      text: "La metodología de Circle Up es excepcional. Nos ayudaron a estructurar nuestro programa de voluntariado corporativo y ahora tenemos métricas claras de impacto. Nuestros colaboradores están más comprometidos que nunca.",
+      role: "Coordinadora de Alianzas - Fundación Empresarial",
+      text: "Aportamos materiales y mentores. La logística la llevó Circle Up y nosotros recibimos reconocimiento y contenidos para nuestras redes. Muy sencillo y efectivo.",
       avatar: "/src/assets/benefits/image-2.png"
     }
   ];
 
   const partnerFAQs = [
     {
-      question: "¿Qué beneficios obtiene mi empresa al aliarse con Circle Up?",
-      answer: "Tu empresa fortalece su programa de RSE con impacto medible, mejora el engagement de empleados a través del voluntariado corporativo, desarrolla habilidades de liderazgo en tu equipo y construye una reputación sólida en las comunidades donde opera."
+      question: "¿Qué tipos de apoyo son útiles?",
+      answer: "Espacios (cafés, bibliotecas, salones de empresas, espacios públicos), insumos/materiales (papelería, kits, refrigerios) y mentorías técnicas o tiempo profesional pro bono."
     },
     {
-      question: "¿Cómo se mide el impacto de la alianza?",
-      answer: "Utilizamos métricas cuantitativas (número de beneficiarios, horas de capacitación, empleados participantes) y cualitativas (historias de éxito, satisfacción de participantes, impacto en marca empleadora). Entregamos reportes trimestrales con resultados claros."
+      question: "¿Qué recibe mi organización a cambio?",
+      answer: "Visibilidad en nuestras redes y sitio web, historias de apoyo publicadas, y, según el caso, mayor uso del espacio (públicos) o más tráfico (cafeterías)."
     },
     {
-      question: "¿Qué inversión requiere una alianza?",
-      answer: "Ofrecemos modelos flexibles: cofinanciamiento de talleres, donación de horas de voluntariado corporativo, o patrocinio de programas completos. Diseñamos la propuesta según tu presupuesto y objetivos de RSE."
+      question: "¿Cómo funciona el ticket de consumo en cafés?",
+      answer: "En cafeterías se acuerda un ticket de consumo simbólico para asistentes. Si el aliado lo prefiere, puede donarlo. Buscamos que no sea barrera de acceso."
     },
     {
-      question: "¿Cómo participan nuestros empleados?",
-      answer: "Tus empleados pueden ser facilitadores de talleres (con nuestra capacitación), mentores de emprendedores, coordinadores de sede, o participar en actividades de voluntariado puntual. Adaptamos los roles a sus habilidades y disponibilidad."
+      question: "¿Qué requisitos tiene un espacio público o biblioteca?",
+      answer: "Capacidad para 15–20 personas, sillas/mesas básicas y horarios disponibles. El beneficio principal es aumentar su uso y cercanía con la comunidad."
     },
     {
-      question: "¿En qué ciudades podemos implementar?",
-      answer: "Actualmente operamos en las principales ciudades de Colombia y estamos expandiendo a Latinoamérica. Podemos implementar programas donde tu empresa tenga presencia, utilizando nuestra red de coordinadores locales y espacios comunitarios."
+      question: "¿Cuál es el compromiso de tiempo?",
+      answer: "Flexible. Puedes apoyar una sola sesión o una serie corta. Nos adaptamos a tu disponibilidad y repetimos si la experiencia te gusta."
     }
   ];
 
@@ -140,7 +149,7 @@ const HowToUseBusiness = ({ setCurrentPage }) => {
           <div className="container relative z-2">
             <div className="text-center mb-16">
               <div className="inline-block px-3 py-1 bg-n-7 rounded text-xs font-code font-bold tracking-wider uppercase text-n-4 mb-4">
-                [ HOW IT WORK: {String(activeStep + 1).padStart(2, '0')}. ]
+                [ CÓMO FUNCIONA: {String(activeStep + 1).padStart(2, '0')}. ]
               </div>
             </div>
 
@@ -172,13 +181,22 @@ const HowToUseBusiness = ({ setCurrentPage }) => {
               
               {/* Right side - Text Content */}
               <div className="relative">
+                {/* Logo in bottom right corner */}
+                <div className="absolute bottom-0 right-0 z-10">
+                  <Logo 
+                    logoSize={{ width: 48, height: 48 }}
+                    textSize="text-sm"
+                    showText={true}
+                  />
+                </div>
+                
                 <h2 className="h2 mb-6">{steps[activeStep].title}</h2>
                 <p className="body-1 text-n-4 mb-8 leading-relaxed">
                   {steps[activeStep].description}
                 </p>
                 
                 <button className="button relative inline-flex items-center justify-center h-11 transition-colors hover:text-color-1 px-7 text-n-8 mb-8">
-                  <span className="relative z-10">CONNECT NOW</span>
+                  <span className="relative z-10">INICIAR ALIANZA</span>
                   <svg className="absolute top-0 left-0" width="21" height="44" viewBox="0 0 21 44">
                     <path fill="white" stroke="white" strokeWidth="2" d="M21,43.00005 L8.11111,43.00005 C4.18375,43.00005 1,39.58105 1,35.36365 L1,8.63637 C1,4.41892 4.18375,1 8.11111,1 L21,1"></path>
                   </svg>
@@ -195,7 +213,7 @@ const HowToUseBusiness = ({ setCurrentPage }) => {
                   <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center mr-3">
                     <span className="text-white text-xs">?</span>
                   </div>
-                  <span className="text-n-3 text-sm">Ask anything</span>
+                  <span className="text-n-3 text-sm">¿Tienes dudas?</span>
                   <div className="ml-4 flex space-x-1">
                     <div className="w-1 h-4 bg-purple-500 rounded-full animate-pulse"></div>
                     <div className="w-1 h-6 bg-purple-500 rounded-full animate-pulse"></div>
@@ -257,18 +275,42 @@ const HowToUseBusiness = ({ setCurrentPage }) => {
 
         {/* Roadmap Section */}
         <Section className="overflow-hidden relative">
-          {/* Background elements */}
+          {/* Background elements with modern design */}
+          <div className="absolute inset-0 opacity-5">
+            <img src="/src/assets/grid.png" alt="" className="w-full h-full object-cover" />
+          </div>
+          
           <div className="container relative z-2">
-            <div className="text-center mb-16">
-              <h2 className="h2 mb-4">Proceso de Alianza Estratégica</h2>
-              <p className="body-1 text-n-4 max-w-3xl mx-auto">
-                Desde la identificación de oportunidades hasta el escalamiento del impacto. Cada paso está diseñado para maximizar el valor compartido entre tu empresa y la comunidad.
-              </p>
-              
-              <div className="mt-8">
-                <Button className="text-xs font-code font-bold tracking-wider uppercase">
-                  INICIAR ALIANZA
-                </Button>
+            <div className="flex justify-center mb-16">
+              <div className="relative max-w-[50rem] p-8 border border-n-1/10 rounded-3xl bg-n-8/80 backdrop-blur-sm">
+                {/* Quote icon */}
+                <div className="absolute top-6 left-8">
+                  <svg width="40" height="32" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 32V16C0 7.2 7.2 0 16 0V8C11.6 8 8 11.6 8 16V20H16V32H0ZM24 32V16C24 7.2 31.2 0 40 0V8C35.6 8 32 11.6 32 16V20H40V32H24Z" fill="#AC6AFF"/>
+                  </svg>
+                </div>
+                
+                {/* Content */}
+                <div className="pt-8">
+                  <p className="body-1 mb-8 text-n-1 font-mono">
+                    Somos una iniciativa de aprendizaje comunitario (CBL), intergeneracional y de aprendizaje a lo largo de la vida (Lifelong Learning), inicialmente financiada con recursos públicos y orientada a la sostenibilidad. Buscamos apoyos en especie: espacios, insumos/materiales y mentorías técnicas o tiempo profesional. A cambio, brindamos visibilidad en redes y en nuestra web, fortalecemos tu vínculo con la comunidad y aumentamos el uso de los espacios públicos o el tráfico en cafés.
+                  </p>
+                  
+                  {/* Author info */}
+                  <div className="flex items-center">
+                    <div className="mr-4">
+                      <Logo 
+                        logoSize={{ width: 48, height: 48 }}
+                        textSize="text-xs"
+                        showText={false}
+                      />
+                    </div>
+                    <div>
+                      <h6 className="h6 text-n-1">Circle Up Volunteer</h6>
+                      <p className="body-2 text-n-4">Director Proyecto</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             
@@ -313,9 +355,9 @@ const HowToUseBusiness = ({ setCurrentPage }) => {
         </Section>
 
         {/* Community Testimonials Section */}
-        <Section className="overflow-hidden relative">
+        {/* <Section className="overflow-hidden relative"> */}
           {/* Background elements */}
-          <div className="absolute inset-0 opacity-2">
+          {/* <div className="absolute inset-0 opacity-2">
             <img src="/src/assets/grid.png" alt="" className="w-full h-full object-cover" />
           </div>
           <div className="absolute bottom-0 left-0 w-full h-full opacity-6">
@@ -354,7 +396,7 @@ const HowToUseBusiness = ({ setCurrentPage }) => {
               </div>
             </div>
           </div>
-        </Section>
+        </Section> */}
 
         {/* FAQ Section */}
         <Section className="overflow-hidden relative">
@@ -437,7 +479,7 @@ const HowToUseBusiness = ({ setCurrentPage }) => {
               {/* Content */}
               <div className="relative z-10 text-center max-w-[40rem]">
                 <h2 className="h2 mb-6">
-                  Construye el futuro con{" "}
+                  Activa aprendizaje comunitario en tu territorio con{" "}
                   <span className="inline-block relative font-semibold">
                     Circle Up
                     <img
@@ -450,7 +492,7 @@ const HowToUseBusiness = ({ setCurrentPage }) => {
                   </span>
                 </h2>
                 <p className="body-1 mb-8 text-n-4">
-                  Transforma tu RSE en impacto real. Únete a nuestra red de empresas comprometidas con el desarrollo sostenible de las comunidades.
+                  Activa aprendizaje intergeneracional y uso vivo de espacios: cafés con más vida, bibliotecas con programación útil y personas aprendiendo durante toda la vida.
                 </p>
                 <button className="button relative inline-flex items-center justify-center h-11 transition-colors hover:text-color-1 px-7 text-n-8">
                   <span className="relative z-10">CONVERTIRSE EN ALIADO</span>
@@ -469,74 +511,23 @@ const HowToUseBusiness = ({ setCurrentPage }) => {
           </div>
         </Section>
 
-        {/* Need help Section */}
-        <Section className="overflow-hidden">
-          <div className="container relative z-2">
-            <div className="relative z-1 grid gap-10 lg:grid-cols-2 items-center">
-              <div className="relative flex justify-center lg:justify-end">
-                <div className="relative max-w-[28rem]">
-                  {/* Background gradient behind image */}
-                  <div className="absolute inset-0 opacity-50 z-0">
-                    <img src="/src/assets/gradient.png" alt="" className="w-small h-small object-cover" />
-                  </div>
-                  {/* Main image-3.png */}
-                  <div className="mb-10 -my-10 -mx-15 relative z-10">
-                    <img 
-                      className="w-full pointer-events-none select-none" 
-                      src="/src/assets/roadmap/image-3.png" 
-                      width={628} 
-                      height={426} 
-                      alt="Pricing illustration"
-                    />
-                  </div>
-                </div>
-                
-                {/* Voice input indicator */}
-                <div className="absolute bottom-0 left-0 flex items-center bg-n-7 rounded-full px-4 py-2 border border-n-6">
-                  <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center mr-3">
-                    <span className="text-white text-xs">?</span>
-                  </div>
-                  <span className="text-n-3 text-sm">Ask anything</span>
-                  <div className="ml-4 flex space-x-1">
-                    <div className="w-1 h-4 bg-purple-500 rounded-full animate-pulse"></div>
-                    <div className="w-1 h-6 bg-purple-500 rounded-full animate-pulse"></div>
-                    <div className="w-1 h-4 bg-purple-500 rounded-full animate-pulse"></div>
-                    <div className="w-1 h-6 bg-purple-500 rounded-full animate-pulse"></div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="relative">
-                <h1 className="h1 mb-6">¿Listo para ser aliado?</h1>
-                <p className="body-1 mb-8 text-n-4">
-                  Construyamos juntos un programa de impacto social sostenible
-                </p>
-                
-                <div className="space-y-6">
-                  <div className="flex items-center p-6 bg-n-7 rounded-xl border border-n-6">
-                    <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mr-4">
-                      <span className="text-white text-xl">💬</span>
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-n-1 mb-1">Red de Aliados</h3>
-                      <p className="text-n-4">Conecta con otras empresas comprometidas</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center p-6 bg-n-7 rounded-xl border border-n-6">
-                    <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mr-4">
-                      <span className="text-white text-xl">📧</span>
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-n-1 mb-1">Contáctanos</h3>
-                      <p className="text-color-1">aliados@circleup.org</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Section>
+        <NeedHelp 
+          title="¿Listo para ser aliado?"
+          subtitle="Construyamos juntos un programa de impacto social sostenible"
+          cards={[
+            {
+              icon: "💬",
+              title: "Tipos de apoyo que buscamos",
+              description: "Espacios, insumos/materiales y mentorías técnicas/tiempo profesional"
+            },
+            {
+              icon: "📧",
+              title: "Visibilidad y contacto",
+              description: "Publicamos tu apoyo en redes y en nuestra web.",
+              email: "aliados@circleup.org"
+            }
+          ]}
+        />
 
         <Footer />
       </div>

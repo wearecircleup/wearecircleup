@@ -1,38 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import NeedHelp from "../components/NeedHelp";
 import Section from "../components/Section";
-import Header from "../components/Header";
+import Logo from "../components/Logo";
 import Footer from "../components/Footer";
+import Header from "../components/Header";
 import ButtonGradient from "../assets/svg/ButtonGradient";
 import Button from "../components/Button";
+import { curve } from "../assets";
 
-const HowToUse = ({ setCurrentPage }) => {
+const HowToUseVolunteer = ({ setCurrentPage }) => {
   const [expandedFAQ, setExpandedFAQ] = useState(0);
   const [activeStep, setActiveStep] = useState(0);
 
   const steps = [
     {
       id: 0,
-      title: "Sign up",
-      description: "Create an account with Brainwave - AI chat app by providing your name, email address, and password. Once you sign up, you can start exploring the app.",
-      image: "/src/assets/services/service-3.png"
+      title: "Define tu rol",
+      description: "Cuéntanos qué sabes y a quién quieres apoyar. Desde 2 h al mes. No necesitas ser docente.",
+      image: "/src/assets/circleimages/vol-sub-nav-1.png"
     },
     {
       id: 1,
-      title: "Connect with AI chatbot",
-      description: "Connect with the AI chatbot to start the conversation. The chatbot uses natural language processing to understand your queries and provide relevant responses.",
-      image: "/src/assets/roadmap/image-2.png"
+      title: "Onboarding 90 min",
+      description: "Metodología, plantillas y tips. Quedas listo para tu primera sesión.",
+      image: "/src/assets/circleimages/vol-sub-nav-2.png"
     },
     {
       id: 2,
-      title: "Get Personalized Advices",
-      description: "Based on the conversation with the AI chatbot, you will receive personalized recommendations related to your queries. The chatbot is trained to understand your preferences and provide customized suggestions.",
-      image: "/src/assets/services/service-3.png"
+      title: "Primer taller acompañado",
+      description: "Sesión práctica de 1–2 h con apoyo de un coordinador. Tú pones el conocimiento; nosotros la logística y la comunidad.",
+      image: "/src/assets/circleimages/vol-sub-nav-3.png"
     },
     {
       id: 3,
-      title: "Upgrade your plan",
-      description: "Upgrade your plan to access premium features and unlock the full potential of Brainwave. With the premium plan, you can enjoy unlimited conversations, priority support, and advanced AI capabilities.",
-      image: "/src/assets/roadmap/image-4.png"
+      title: "Suma impacto",
+      description: "Itera con feedback, propone nuevos temas y, si quieres, mentoriza a nuevos voluntarios.",
+      image: "/src/assets/circleimages/vol-sub-nav-4.png"
     }
   ];
 
@@ -67,31 +70,31 @@ const HowToUse = ({ setCurrentPage }) => {
     {
       name: "Carlos Mendoza",
       role: "Voluntario Experto - Marketing",
-      text: "Ser voluntario en Circle Up me ha permitido devolver a la comunidad lo que la vida me dio. Ver cómo mis talleres de marketing digital transforman la vida de emprendedores locales no tiene precio. La plataforma hace que enseñar sea fácil y efectivo.",
+      text: "Facilité talleres de marketing digital con 15–25 asistentes. Con las plantillas y el acompañamiento, preparé cada sesión en menos de 1 hora y los emprendedores salieron con su plan de contenidos listo.",
       avatar: "/src/assets/benefits/image-2.png"
     },
     {
       name: "Ana Sofía Torres",
       role: "Coordinadora de Sede",
-      text: "Coordinar talleres en nuestra biblioteca ha sido increíble. Circle Up nos dio las herramientas para convertir nuestro espacio en un hub de aprendizaje. Los voluntarios son comprometidos y la metodología realmente funciona.",
+      text: "Activamos programación semanal en la biblioteca. Con la guía de Circle Up estructuramos la agenda y el registro; el espacio se usa más y llegan nuevos públicos.",
       avatar: "/src/assets/benefits/image-2.png"
     },
     {
       name: "Roberto Vásquez",
       role: "Voluntario - Finanzas Personales",
-      text: "Llevo 8 meses como voluntario y he visto resultados tangibles. Mis participantes han mejorado su relación con el dinero y algunos han iniciado sus propios negocios. La capacitación inicial fue excelente.",
+      text: "En 8 meses facilité 12 sesiones de finanzas personales. Los asistentes organizan su presupuesto y varios abrieron cuentas de ahorro por primera vez.",
       avatar: "/src/assets/benefits/image-2.png"
     },
     {
       name: "Lucía Ramírez",
       role: "Voluntaria - Habilidades Digitales",
-      text: "Enseñar Excel y herramientas digitales a adultos mayores ha sido mi experiencia más gratificante. Circle Up me dio la confianza y metodología para hacer que el aprendizaje sea divertido y accesible.",
+      text: "Diseñé un taller de Excel básico para adultos mayores. Usando ejemplos cotidianos, la mayoría completó su primera hoja de gastos y practicó fórmulas simples.",
       avatar: "/src/assets/benefits/image-2.png"
     },
     {
       name: "Diego Herrera",
       role: "Mentor de Voluntarios",
-      text: "Mentorizar a nuevos voluntarios es mi forma de multiplicar el impacto. Circle Up ha creado un sistema donde todos crecemos juntos: voluntarios, participantes y coordinadores. Es un ecosistema perfecto.",
+      text: "Acompaño a nuevos voluntarios en su primer taller. Con el esquema de observación y retroalimentación, la curva de aprendizaje es corta y en dos sesiones ya facilitan con autonomía.",
       avatar: "/src/assets/benefits/image-2.png"
     }
   ];
@@ -99,15 +102,15 @@ const HowToUse = ({ setCurrentPage }) => {
   const volunteerFAQs = [
     {
       question: "¿Qué requisitos necesito para ser voluntario?",
-      answer: "Necesitas experiencia profesional en el área que quieres enseñar, disponibilidad de al menos 4 horas mensuales, y ganas de compartir conocimientos. No requieres experiencia previa como instructor, nosotros te capacitamos en metodología de enseñanza comunitaria."
+      answer: "Necesitas experiencia profesional en el área que quieres enseñar, disponibilidad desde 2 horas mensuales y ganas de compartir conocimientos. No requieres experiencia previa como instructor: te capacitamos en metodología de enseñanza comunitaria."
     },
     {
       question: "¿Cómo funciona el proceso de capacitación?",
-      answer: "Después del registro, participas en una sesión de onboarding de 3 horas donde aprendes nuestra metodología, herramientas digitales y técnicas de facilitación. Luego realizas tu primer taller con acompañamiento de un coordinador experimentado."
+      answer: "Tras el registro, asistes a un onboarding de 90 minutos con metodología, herramientas y técnicas de facilitación. Tu primer taller lo haces acompañado por un coordinador experimentado."
     },
     {
       question: "¿Qué apoyo recibo como voluntario?",
-      answer: "Recibes capacitación inicial, materiales didácticos, acceso a nuestra plataforma tecnológica, acompañamiento de coordinadores, retroalimentación constante y oportunidades de crecimiento dentro del ecosistema."
+      answer: "Capacitación inicial, plantillas y checklists, materiales didácticos, acceso a plataforma, acompañamiento de coordinadores, retroalimentación constante y constancia digital de voluntariado."
     },
     {
       question: "¿Puedo elegir mi horario y ubicación?",
@@ -115,7 +118,7 @@ const HowToUse = ({ setCurrentPage }) => {
     },
     {
       question: "¿Cómo mido el impacto de mis talleres?",
-      answer: "Utilizamos métricas claras: asistencia, satisfacción de participantes, aplicación de conocimientos y seguimiento post-taller. Recibes reportes regulares sobre el impacto de tus sesiones y historias de éxito de tus participantes."
+      answer: "Tienes un tablero simple con 3 señales: asistencia, práctica aplicada y retroalimentación. Recibes constancia digital y recomendaciones concretas para mejorar."
     }
   ];
 
@@ -140,7 +143,7 @@ const HowToUse = ({ setCurrentPage }) => {
           <div className="container relative z-2">
             <div className="text-center mb-16">
               <div className="inline-block px-3 py-1 bg-n-7 rounded text-xs font-code font-bold tracking-wider uppercase text-n-4 mb-4">
-                [ HOW IT WORK: {String(activeStep + 1).padStart(2, '0')}. ]
+                [ CÓMO FUNCIONA: {String(activeStep + 1).padStart(2, '0')}. ]
               </div>
             </div>
 
@@ -172,13 +175,22 @@ const HowToUse = ({ setCurrentPage }) => {
               
               {/* Right side - Text Content */}
               <div className="relative">
+                {/* Logo in bottom right corner */}
+                <div className="absolute bottom-0 right-0 z-10">
+                  <Logo 
+                    logoSize={{ width: 48, height: 48 }}
+                    textSize="text-sm"
+                    showText={true}
+                  />
+                </div>
+                
                 <h2 className="h2 mb-6">{steps[activeStep].title}</h2>
                 <p className="body-1 text-n-4 mb-8 leading-relaxed">
                   {steps[activeStep].description}
                 </p>
                 
-                <button className="button relative inline-flex items-center justify-center h-11 transition-colors hover:text-color-1 px-7 text-n-8 mb-8">
-                  <span className="relative z-10">CONNECT NOW</span>
+                <button onClick={() => { window.location.href = 'mailto:voluntarios@circleup.org?subject=Quiero%20ser%20voluntario&body=Nombre%3A%0AExperiencia%3A%0ADisponibilidad%3A%0A'; }} className="button relative inline-flex items-center justify-center h-11 transition-colors hover:text-color-1 px-7 text-n-8 mb-8">
+                  <span className="relative z-10">APLICAR COMO VOLUNTARIO</span>
                   <svg className="absolute top-0 left-0" width="21" height="44" viewBox="0 0 21 44">
                     <path fill="white" stroke="white" strokeWidth="2" d="M21,43.00005 L8.11111,43.00005 C4.18375,43.00005 1,39.58105 1,35.36365 L1,8.63637 C1,4.41892 4.18375,1 8.11111,1 L21,1"></path>
                   </svg>
@@ -195,7 +207,7 @@ const HowToUse = ({ setCurrentPage }) => {
                   <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center mr-3">
                     <span className="text-white text-xs">?</span>
                   </div>
-                  <span className="text-n-3 text-sm">Ask anything</span>
+                  <span className="text-n-3 text-sm">¿Tienes dudas?</span>
                   <div className="ml-4 flex space-x-1">
                     <div className="w-1 h-4 bg-purple-500 rounded-full animate-pulse"></div>
                     <div className="w-1 h-6 bg-purple-500 rounded-full animate-pulse"></div>
@@ -257,18 +269,42 @@ const HowToUse = ({ setCurrentPage }) => {
 
         {/* Roadmap Section */}
         <Section className="overflow-hidden relative">
-          {/* Background elements */}
+          {/* Background elements with modern design */}
+          <div className="absolute inset-0 opacity-5">
+            <img src="/src/assets/grid.png" alt="" className="w-full h-full object-cover" />
+          </div>
+          
           <div className="container relative z-2">
-            <div className="text-center mb-16">
-              <h2 className="h2 mb-4">Tu Journey como Voluntario</h2>
-              <p className="body-1 text-n-4 max-w-3xl mx-auto">
-                Desde tu primer registro hasta convertirte en un mentor experimentado. Cada paso está diseñado para maximizar tu impacto en la comunidad.
-              </p>
-              
-              <div className="mt-8">
-                <Button className="text-xs font-code font-bold tracking-wider uppercase">
-                  COMENZAR AHORA
-                </Button>
+            <div className="flex justify-center mb-16">
+              <div className="relative max-w-[50rem] p-8 border border-n-1/10 rounded-3xl bg-n-8/80 backdrop-blur-sm">
+                {/* Quote icon */}
+                <div className="absolute top-6 left-8">
+                  <svg width="40" height="32" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 32V16C0 7.2 7.2 0 16 0V8C11.6 8 8 11.6 8 16V20H16V32H0ZM24 32V16C24 7.2 31.2 0 40 0V8C35.6 8 32 11.6 32 16V20H40V32H24Z" fill="#AC6AFF"/>
+                  </svg>
+                </div>
+                
+                {/* Content */}
+                <div className="pt-8">
+                  <p className="body-1 mb-8 text-n-1 font-mono">
+                    Facilita sesiones prácticas de 1–2 horas con plantillas y acompañamiento. Tú pones el conocimiento; nosotros la logística y la comunidad. Desde 2 horas al mes, sin experiencia previa como instructor.
+                  </p>
+                  
+                  {/* Author info */}
+                  <div className="flex items-center">
+                    <div className="mr-4">
+                      <Logo 
+                        logoSize={{ width: 48, height: 48 }}
+                        textSize="text-xs"
+                        showText={false}
+                      />
+                    </div>
+                    <div>
+                      <h6 className="h6 text-n-1">Circle Up Volunteer</h6>
+                      <p className="body-2 text-n-4">Coordinador Voluntarios</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             
@@ -313,9 +349,9 @@ const HowToUse = ({ setCurrentPage }) => {
         </Section>
 
         {/* Community Testimonials Section */}
-        <Section className="overflow-hidden relative">
+        {/* <Section className="overflow-hidden relative"> */}
           {/* Background elements */}
-          <div className="absolute inset-0 opacity-2">
+          {/* <div className="absolute inset-0 opacity-2">
             <img src="/src/assets/grid.png" alt="" className="w-full h-full object-cover" />
           </div>
           <div className="absolute bottom-0 left-0 w-full h-full opacity-6">
@@ -354,7 +390,7 @@ const HowToUse = ({ setCurrentPage }) => {
               </div>
             </div>
           </div>
-        </Section>
+        </Section> */}
 
         {/* FAQ Section */}
         <Section className="overflow-hidden relative">
@@ -437,7 +473,7 @@ const HowToUse = ({ setCurrentPage }) => {
               {/* Content */}
               <div className="relative z-10 text-center max-w-[40rem]">
                 <h2 className="h2 mb-6">
-                  Sé parte del futuro de{" "}
+                  Comparte tu experiencia con tu comunidad en{" "}
                   <span className="inline-block relative font-semibold">
                     Circle Up
                     <img
@@ -450,9 +486,9 @@ const HowToUse = ({ setCurrentPage }) => {
                   </span>
                 </h2>
                 <p className="body-1 mb-8 text-n-4">
-                  Transforma vidas compartiendo tu conocimiento. Únete a nuestra comunidad de voluntarios expertos y crea impacto real en tu comunidad.
+                  Facilita sesiones prácticas de 1–2 horas con plantillas y acompañamiento. Tú pones el conocimiento; nosotros la logística y la comunidad.
                 </p>
-                <button className="button relative inline-flex items-center justify-center h-11 transition-colors hover:text-color-1 px-7 text-n-8">
+                <button onClick={() => { window.location.href = 'mailto:voluntarios@circleup.org?subject=Quiero%20ser%20voluntario&body=Nombre%3A%0AExperiencia%3A%0ADisponibilidad%3A%0A'; }} className="button relative inline-flex items-center justify-center h-11 transition-colors hover:text-color-1 px-7 text-n-8">
                   <span className="relative z-10">APLICAR COMO VOLUNTARIO</span>
                   <svg className="absolute top-0 left-0" width="21" height="44" viewBox="0 0 21 44">
                     <path fill="white" stroke="white" strokeWidth="2" d="M21,43.00005 L8.11111,43.00005 C4.18375,43.00005 1,39.58105 1,35.36365 L1,8.63637 C1,4.41892 4.18375,1 8.11111,1 L21,1"></path>
@@ -469,74 +505,23 @@ const HowToUse = ({ setCurrentPage }) => {
           </div>
         </Section>
 
-        {/* Need help Section */}
-        <Section className="overflow-hidden">
-          <div className="container relative z-2">
-            <div className="relative z-1 grid gap-10 lg:grid-cols-2 items-center">
-              <div className="relative flex justify-center lg:justify-end">
-                <div className="relative max-w-[28rem]">
-                  {/* Background gradient behind image */}
-                  <div className="absolute inset-0 opacity-50 z-0">
-                    <img src="/src/assets/gradient.png" alt="" className="w-small h-small object-cover" />
-                  </div>
-                  {/* Main image-3.png */}
-                  <div className="mb-10 -my-10 -mx-15 relative z-10">
-                    <img 
-                      className="w-full pointer-events-none select-none" 
-                      src="/src/assets/roadmap/image-3.png" 
-                      width={628} 
-                      height={426} 
-                      alt="Pricing illustration"
-                    />
-                  </div>
-                </div>
-                
-                {/* Voice input indicator */}
-                <div className="absolute bottom-0 left-0 flex items-center bg-n-7 rounded-full px-4 py-2 border border-n-6">
-                  <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center mr-3">
-                    <span className="text-white text-xs">?</span>
-                  </div>
-                  <span className="text-n-3 text-sm">Ask anything</span>
-                  <div className="ml-4 flex space-x-1">
-                    <div className="w-1 h-4 bg-purple-500 rounded-full animate-pulse"></div>
-                    <div className="w-1 h-6 bg-purple-500 rounded-full animate-pulse"></div>
-                    <div className="w-1 h-4 bg-purple-500 rounded-full animate-pulse"></div>
-                    <div className="w-1 h-6 bg-purple-500 rounded-full animate-pulse"></div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="relative">
-                <h1 className="h1 mb-6">¿Necesitas apoyo?</h1>
-                <p className="body-1 mb-8 text-n-4">
-                  Estamos aquí para acompañarte en tu journey como voluntario
-                </p>
-                
-                <div className="space-y-6">
-                  <div className="flex items-center p-6 bg-n-7 rounded-xl border border-n-6">
-                    <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mr-4">
-                      <span className="text-white text-xl">💬</span>
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-n-1 mb-1">Únete a nuestra comunidad</h3>
-                      <p className="text-n-4">Conecta con otros voluntarios y coordinadores</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center p-6 bg-n-7 rounded-xl border border-n-6">
-                    <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mr-4">
-                      <span className="text-white text-xl">📧</span>
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-n-1 mb-1">Escríbenos</h3>
-                      <p className="text-color-1">voluntarios@circleup.org</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Section>
+        <NeedHelp 
+          title="¿Necesitas apoyo?"
+          subtitle="Estamos aquí para acompañarte en tu journey como voluntario"
+          cards={[
+            {
+              icon: "💬",
+              title: "Únete a nuestra comunidad",
+              description: "Conecta con otros voluntarios y coordinadores"
+            },
+            {
+              icon: "📧",
+              title: "Escríbenos",
+              description: "",
+              email: "voluntarios@circleup.org"
+            }
+          ]}
+        />
 
         <Footer />
       </div>
@@ -545,4 +530,4 @@ const HowToUse = ({ setCurrentPage }) => {
   );
 };
 
-export default HowToUse;
+export default HowToUseVolunteer;

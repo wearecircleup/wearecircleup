@@ -2,7 +2,8 @@ import { useRef } from "react";
 import { ScrollParallax } from "react-just-parallax";
 import Typewriter from "typewriter-effect";
 
-import { curve, heroBackground, robot } from "../assets";
+import { curve } from "../assets";
+import homeLanding from "../assets/circleimages/home-landing.png";
 import { heroIcons } from "../constants";
 import Button from "./Button";
 import CompanyLogos from "./CompanyLogos";
@@ -25,28 +26,8 @@ const Hero = () => {
       <div ref={parallaxRef} className="container relative">
         <div className="relative z-1 max-w-[62rem] mx-auto text-center mb-[4rem] md:mb-20 lg:mb-[6rem]">
           <h1 className="h1 mb-6">
-            Aprende para
-            <br />
-            <Typewriter
-              options={{
-                strings: [
-                  "La vida",
-                  "El trabajo",
-                  "Emprender",
-                  "Tecnología",
-                  "Comunicar",
-                  "Liderar",
-                ],
-                autoStart: true,
-                loop: true,
-              }}
-            />
-          </h1>
-
-          <p className="body-1 max-w-3xl mx-auto mb-6 text-n-2 lg:mb-8">
-            Comunidad de aprendizaje donde voluntarios que comparten conocimientos prácticos. Talleres con{" "}
             <span className="inline-block relative font-semibold">
-              Circle Up
+              Circle Up Volunteer
               <img
                 src={curve}
                 className="absolute top-full left-0 w-full xl:-mt-2 pointer-events-none select-none"
@@ -55,29 +36,47 @@ const Hero = () => {
                 alt="Curve"
               />
             </span>
-            {" "}y certificados de participación.
-          </p>
+          </h1>
+          
+          <div className="mt-8 mb-8">
+            <div className="text-4xl md:text-6xl lg:text-6xl font-mono text-n-1">
+              <Typewriter
+                options={{
+                  strings: [
+                    "Habilidades Digitales",
+                    "Inteligencia Artificial",
+                    "Finanzas Personales",
+                    "Diseño y Creatividad",
+                    "Liderazgo",
+                    "Comunicación Efectiva",
+                  ],
+                  autoStart: true,
+                  loop: true,
+                }}
+              />
+            </div>
+          </div>
 
-          <Button href="#roadmap" white>
-            Conoce más
-          </Button>
+          {/* Description paragraph removed */}
+
+          {/* Button removed */}
         </div>
 
-        <div className="relative max-w-[23rem] mx-auto md:max-w-5xl xl:mb-24">
+        <div className="relative max-w-[28rem] mx-auto md:max-w-6xl xl:mb-24">
           <div className="relative z-1 p-0.5 rounded-2xl bg-conic-gradient">
             <div className="relative bg-n-8 rounded-[1rem]">
               <div className="h-[1.4rem] bg-n-10 rounded-t-[0.9rem]" />
 
               <div className="aspect-[33/40] rounded-b-[0.9rem] overflow-hidden md:aspect-[688/490] lg:aspect-[1024/490]">
                 <img
-                  src={robot}
-                  className="w-full scale-[1.7] translate-y-[8%] md:scale-[1] md:-translate-y-[10%] lg:-translate-y-[23%] pointer-events-none select-none"
+                  src={homeLanding}
+                  className="w-full h-full object-cover object-bottom pointer-events-none select-none"
                   width={1024}
                   height={490}
-                  alt="AI"
+                  alt="Circle Up Home"
                 />
 
-                <Generating className="absolute left-4 right-4 bottom-5 md:left-1/2 md:right-auto md:bottom-8 md:w-[31rem] md:-translate-x-1/2" />
+                {/* Generating component removed */}
 
                 <ScrollParallax isAbsolutelyPositioned>
                   <ul className="hidden absolute -left-[5.5rem] bottom-[7.5rem] px-1 py-1 bg-n-9/40 backdrop-blur border border-n-1/10 rounded-2xl xl:flex">
@@ -89,27 +88,14 @@ const Hero = () => {
                   </ul>
                 </ScrollParallax>
 
-                <ScrollParallax isAbsolutelyPositioned>
-                  <Notification
-                    className="hidden absolute -right-[5.5rem] bottom-[11rem] w-[18rem] xl:flex"
-                    title="Taller disponible"
-                  />
-                </ScrollParallax>
+                {/* Notification component removed */}
               </div>
             </div>
 
             <Gradient />
           </div>
 
-          <div className="absolute -top-[54%] left-1/2 w-[234%] -translate-x-1/2 md:-top-[46%] md:w-[138%] lg:-top-[104%]">
-            <img
-              src={heroBackground}
-              className="w-full pointer-events-none select-none"
-              width={1440}
-              height={1800}
-              alt="Hero"
-            />
-          </div>
+          {/* Hero background image removed */}
 
           <BackgroundCircles />
         </div>

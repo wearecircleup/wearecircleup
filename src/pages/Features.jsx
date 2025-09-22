@@ -11,7 +11,7 @@ const Features = ({ setCurrentPage }) => {
     {
       id: 0,
       title: "Sign up",
-      description: "Create an account with Brainwave - AI chat app by providing your name, email address, and password. Once you sign up, you can start exploring the app.",
+      description: "Create an account with Circle Up Volunteer - community learning platform by providing your name, email address, and password. Once you sign up, you can start exploring the platform.",
       image: "/src/assets/services/service-3.png"
     },
     {
@@ -51,10 +51,10 @@ const Features = ({ setCurrentPage }) => {
                 <h1 className="h1 mb-6">
                   Main features
                   <br />
-                  of Brainwave
+                  of Circle Up Volunteer
                 </h1>
                 <p className="body-1 mb-6 text-n-4 lg:mb-8">
-                  Here are some of the core features of Brainwave that make it stand out from other chat applications
+                  Here are some of the core features of Circle Up Volunteer that make it stand out as a community-based learning platform
                 </p>
               </div>
               
@@ -96,7 +96,7 @@ const Features = ({ setCurrentPage }) => {
           </div>
         </Section>
 
-        {/* Testimonial Section */}
+        {/* Notes Section */}
         <Section className="overflow-hidden">
           <div className="container relative z-2">
             <div className="flex justify-center">
@@ -108,10 +108,10 @@ const Features = ({ setCurrentPage }) => {
                   </svg>
                 </div>
                 
-                {/* Testimonial content */}
+                {/* Notes content */}
                 <div className="pt-8">
                   <p className="body-1 mb-8 text-n-1 font-mono">
-                    Brainwave has been a game-changer for my business. The AI chatbot helps me stay on top of industry trends and provides me with customized recommendations that help me make informed decisions. It's like having a personal assistant at my fingertips. I would highly recommend this app to any entrepreneur looking to improve their productivity and efficiency.
+                    Circle Up Volunteer has been a game-changer for my professional development. The mentorship program and interactive workshops help me stay on top of industry trends and provide me with personalized guidance that helps me make informed career decisions. It's like having a community of experts at my fingertips. I would highly recommend this platform to anyone looking to improve their skills and expand their network.
                   </p>
                   
                   {/* Author info */}
@@ -120,8 +120,8 @@ const Features = ({ setCurrentPage }) => {
                       <span className="text-white font-semibold">DC</span>
                     </div>
                     <div>
-                      <h6 className="h6 text-n-1">David Chen</h6>
-                      <p className="body-2 text-n-4">Engineer</p>
+                      <h6 className="h6 text-n-1">Circle Up Volunteer</h6>
+                      <p className="body-2 text-n-4">Alianzas</p>
                     </div>
                   </div>
                 </div>
@@ -299,7 +299,7 @@ const Features = ({ setCurrentPage }) => {
                 <h2 className="h2 mb-6">
                   Be part of the future of{" "}
                   <span className="inline-block relative font-semibold">
-                    Brainwave
+                    Circle Up Volunteer
                     <img
                       src="/src/assets/hero/curve.png"
                       className="absolute top-full left-0 w-full xl:-mt-2 pointer-events-none select-none"
@@ -310,7 +310,7 @@ const Features = ({ setCurrentPage }) => {
                   </span>
                 </h2>
                 <p className="body-1 mb-8 text-n-4">
-                  Unleash the power of AI within Brainwave. Upgrade your productivity with Brainwave, the open AI chat app.
+                  Unleash the power of community learning within Circle Up Volunteer. Upgrade your skills and career with Circle Up Volunteer, the community-based learning platform.
                 </p>
                 <button className="button relative inline-flex items-center justify-center h-11 transition-colors hover:text-color-1 px-7 text-n-8">
                   <span className="relative z-10">GET STARTED</span>

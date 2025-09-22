@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Heading from "./Heading";
 import Section from "./Section";
+import Logo from "./Logo";
 import { curve } from "../assets";
 
 const Benefits = () => {
@@ -9,31 +10,52 @@ const Benefits = () => {
   const stakeholders = [
     {
       id: 0,
-      name: "María González",
-      role: "Participante",
-      text: "Los talleres me ayudaron a conseguir trabajo. Aprendí Excel y comunicación efectiva en solo 3 semanas. Ahora tengo las herramientas que necesitaba.",
-      image: "/src/assets/services/service-3.png"
+      name: "Biblioteca Central",
+      role: "Espacio de Aprendizaje",
+      text: "Un lugar tranquilo y acogedor donde puedes concentrarte en aprender nuevas habilidades con el apoyo de voluntarios expertos.",
+      image: "/src/assets/circleimages/home-carrusel-1.png"
     },
     {
       id: 1,
-      name: "Carlos Ramírez",
-      role: "Voluntario Experto", 
-      text: "Compartir mi experiencia en marketing digital con la comunidad ha sido increíble. Ver cómo las personas aplican lo aprendido en sus proyectos me motiva a seguir.",
-      image: "/src/assets/services/service-3.png"
+      name: "Café Comunitario",
+      role: "Espacio de Aprendizaje", 
+      text: "Aprende mientras disfrutas de un café. Un ambiente relajado perfecto para talleres de emprendimiento y networking.",
+      image: "/src/assets/circleimages/home-carrusel-2.png"
     },
     {
       id: 2,
-      name: "Ana Torres",
-      role: "Coordinadora de Sede",
-      text: "Nuestra biblioteca se ha convertido en un hub de aprendizaje. Los talleres traen vida a nuestro espacio y conectan a la comunidad de manera única.",
-      image: "/src/assets/services/service-3.png"
+      name: "Plaza Comunitaria",
+      role: "Espacio de Aprendizaje",
+      text: "Conecta con tu comunidad. Un espacio donde la tradición te permite crear experiencias de aprendizaje únicas y colaborativas.",
+      image: "/src/assets/circleimages/home-carrusel-3.png"
     },
     {
       id: 3,
-      name: "Luis Mendoza",
-      role: "Emprendedor",
-      text: "Circle Up me conectó con mentores y herramientas prácticas. Lancé mi negocio después de los talleres de emprendimiento y finanzas personales.",
-      image: "/src/assets/services/service-3.png"
+      name: "Espacio Natural",
+      role: "Espacio de Aprendizaje",
+      text: "Aprende en armonía. Un ambiente donde el arte, la creatividad y el conocimiento fluyen naturalmente bajo el cielo abierto.",
+      image: "/src/assets/circleimages/home-carrusel-4.png"
+    },
+    {
+      id: 4,
+      name: "Biblioteca Moderna",
+      role: "Espacio de Aprendizaje",
+      text: "Un espacio que eleva tu experiencia de aprendizaje. Perfecto para estudio colaborativo y talleres en un ambiente contemporáneo.",
+      image: "/src/assets/circleimages/home-carrusel-5.png"
+    },
+    {
+      id: 5,
+      name: "Plaza Patrimonial",
+      role: "Espacio de Aprendizaje",
+      text: "Aprende rodeado de historia y tradición. Un espacio donde el patrimonio cultural se convierte en talleres y memoria colectiva.",
+      image: "/src/assets/circleimages/home-carrusel-6.png"
+    },
+    {
+      id: 6,
+      name: "Ludoteca Creativa",
+      role: "Espacio de Aprendizaje",
+      text: "Un mundo de colores donde el juego se convierte en aprendizaje. Espacio diseñado para talleres lúdicos, desarrollo de habilidades sociales y creatividad.",
+      image: "/src/assets/circleimages/home-carrusel-7.png"
     }
   ];
 
@@ -67,7 +89,7 @@ const Benefits = () => {
           }
         />
 
-        {/* Testimonials Carousel Section */}
+        {/* Espacios de Aprendizaje Carousel Section */}
         <div className="relative">
           {/* Carousel container */}
           <div className="relative overflow-hidden">
@@ -91,11 +113,14 @@ const Benefits = () => {
                     </div>
                     
                     {/* Logo */}
-                    <div className="absolute top-6 left-6 flex items-center">
-                      <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center mr-3">
-                        <span className="text-white font-bold text-sm">C</span>
+                    <div className="absolute top-6 left-6">
+                      <div className="flex items-center gap-3 px-4 py-2 bg-black/60 backdrop-blur-sm rounded-lg border border-white/20">
+                        <Logo 
+                          logoSize={{ width: 40, height: 40 }}
+                          textSize="text-sm"
+                          showText={true}
+                        />
                       </div>
-                      <span className="text-white font-semibold">Circle Up</span>
                     </div>
                     
                     {/* User info */}
@@ -103,17 +128,20 @@ const Benefits = () => {
                       <h4 className="text-white font-semibold text-lg mb-1">{stakeholder.name}</h4>
                       <p className="text-gray-400 text-sm">{stakeholder.role}</p>
                     </div>
-                    
-                    {/* Testimonial text */}
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 max-w-[90%]">
-                      <div className="bg-n-7/90 backdrop-blur-sm border border-purple-500 rounded-xl p-6">
-                        <p className="text-white text-sm leading-relaxed mb-4">
-                          {stakeholder.text}
-                        </p>
-                        <button className="text-xs font-code font-bold tracking-wider uppercase border border-white/20 rounded px-4 py-2 text-white hover:bg-white/10 transition-colors">
-                          VER TALLERES
-                        </button>
+                  </div>
+                  
+                  {/* Floating text box positioned outside and overlapping */}
+                  <div className="relative -mt-40 ml-auto mr-4 w-2/5 z-10">
+                    <div className="bg-n-8/95 backdrop-blur-sm border border-n-1/10 rounded-2xl p-6 shadow-2xl">
+                      {/* Quote icon */}
+                      <div className="mb-4">
+                        <svg width="32" height="24" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M0 32V16C0 7.2 7.2 0 16 0V8C11.6 8 8 11.6 8 16V20H16V32H0ZM24 32V16C24 7.2 31.2 0 40 0V8C35.6 8 32 11.6 32 16V20H40V32H24Z" fill="#AC6AFF"/>
+                        </svg>
                       </div>
+                      <p className="body-1 text-n-1 font-mono leading-relaxed text-sm">
+                        {stakeholder.text}
+                      </p>
                     </div>
                   </div>
                 </div>

@@ -51,15 +51,37 @@ const Roadmap = () => (
                   </div>
 
                   <div className="mb-10 -my-10 -mx-15">
-                    <img
-                      className={`w-full ${
-                        item.status !== "done" && "animate-pulse"
-                      } pointer-events-none select-none`}
-                      src={item.imageUrl}
-                      width={628}
-                      height={426}
-                      alt={item.title}
-                    />
+                    {/* 3D Stacked boxes effect - spread out card deck */}
+                    <div className="relative flex justify-center">
+                      <div className="relative">
+                        {/* Third card (back of deck) */}
+                        <div className={`absolute top-6 left-8 bg-n-6/15 rounded-2xl transform rotate-6 shadow-lg ${
+                          item.id === "3" ? "w-[26rem] h-[26rem]" : "w-[24rem] h-[24rem]"
+                        }`}></div>
+                        {/* Second card (middle of deck) */}
+                        <div className={`absolute top-3 left-5 bg-n-6/25 rounded-2xl transform rotate-3 shadow-lg ${
+                          item.id === "3" ? "w-[26rem] h-[26rem]" : "w-[24rem] h-[24rem]"
+                        }`}></div>
+                        {/* First card (almost top of deck) */}
+                        <div className={`absolute top-1 left-2 bg-n-6/35 rounded-2xl transform rotate-1 shadow-lg ${
+                          item.id === "3" ? "w-[26rem] h-[26rem]" : "w-[24rem] h-[24rem]"
+                        }`}></div>
+                        {/* Front card with image (top of deck) */}
+                        <div className={`relative bg-n-8 rounded-2xl overflow-hidden shadow-2xl ${
+                          item.id === "3" ? "w-[26rem] h-[26rem]" : "w-[24rem] h-[24rem]"
+                        }`}>
+                          <img
+                            className={`w-full h-full object-contain ${
+                              item.status !== "done" && "animate-pulse"
+                            } pointer-events-none select-none`}
+                            src={item.imageUrl}
+                            alt={item.title}
+                          />
+                          {/* Subtle overlay for better contrast */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-n-8/20 to-transparent"></div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   <h4 className="h4 mb-4">{item.title}</h4>
                   <p className="body-2 text-n-4">{item.text}</p>
@@ -72,9 +94,6 @@ const Roadmap = () => (
         <Gradient />
       </div>
 
-      <div className="flex justify-center mt-12 md:mt-15 xl:mt-20">
-        <Button href="#">Únete a nosotros</Button>
-      </div>
     </div>
   </Section>
 );

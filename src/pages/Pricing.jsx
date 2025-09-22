@@ -12,28 +12,28 @@ const Pricing = ({ setCurrentPage }) => {
       id: 0,
       name: "Jane Smith",
       role: "UX Designer",
-      text: "I was blown away by the accuracy and speed of the AI chatbot on Brainwave. It was able to understand my queries and provide relevant recommendations in seconds.",
+      text: "I was blown away by the quality and accessibility of the mentorship program on Circle Up Volunteer. It was able to connect me with industry experts who provided relevant career guidance in real-time.",
       image: "/src/assets/services/service-3.png"
     },
     {
       id: 1,
       name: "Jane Doe",
       role: "UX Designer", 
-      text: "Brainwave has revolutionized the way I interact with digital assistants. The AI chatbot is able to understand my preferences and provide customized suggestions that are tailored to my needs. The app is user-friendly and intuitive, making it a joy to use.",
+      text: "Circle Up Volunteer has revolutionized the way I approach professional development. The platform is able to understand my career goals and provide customized learning paths that are tailored to my needs. The community is supportive and engaging, making it a joy to participate.",
       image: "/src/assets/services/service-3.png"
     },
     {
       id: 2,
       name: "Jane Smith",
       role: "UX Designer",
-      text: "The AI capabilities of Brainwave are truly impressive. It understands context and provides meaningful responses that help me be more productive.",
+      text: "The mentorship capabilities of Circle Up Volunteer are truly impressive. The volunteers understand context and provide meaningful guidance that helps me be more productive in my career.",
       image: "/src/assets/services/service-3.png"
     },
     {
       id: 3,
       name: "Jane Smith",
       role: "UX Designer", 
-      text: "Amazing experience with Brainwave! The interface is clean and the AI responses are incredibly accurate and helpful.",
+      text: "Amazing experience with Circle Up Volunteer! The interface is clean and the community responses are incredibly accurate and helpful.",
       image: "/src/assets/services/service-3.png"
     }
   ];
@@ -95,7 +95,7 @@ const Pricing = ({ setCurrentPage }) => {
                 </div>
                 <h1 className="h1 mb-6">Sign up</h1>
                 <p className="body-1 mb-8 text-n-4">
-                  Create an account with Brainwave - AI chat app by providing your name, email address, and password. Once you sign up, you can start exploring the app.
+                  Create an account with Circle Up Volunteer - community learning platform by providing your name, email address, and password. Once you sign up, you can start exploring the platform.
                 </p>
                 <button className="button relative inline-flex items-center justify-center h-11 transition-colors hover:text-color-1 px-7 text-n-8">
                   <span className="relative z-10">CONNECT NOW</span>
@@ -236,7 +236,7 @@ const Pricing = ({ setCurrentPage }) => {
                 <h2 className="h2 mb-6">
                   Be part of the future of{" "}
                   <span className="inline-block relative font-semibold">
-                    Brainwave
+                    Circle Up Volunteer
                     <img
                       src="/src/assets/hero/curve.png"
                       className="absolute top-full left-0 w-full xl:-mt-2 pointer-events-none select-none"
@@ -247,7 +247,7 @@ const Pricing = ({ setCurrentPage }) => {
                   </span>
                 </h2>
                 <p className="body-1 mb-8 text-n-4">
-                  Unleash the power of AI within Brainwave. Upgrade your productivity with Brainwave, the open AI chat app.
+                  Unleash the power of community learning within Circle Up Volunteer. Upgrade your skills and career with Circle Up Volunteer, the community-based learning platform.
                 </p>
                 <button className="button relative inline-flex items-center justify-center h-11 transition-colors hover:text-color-1 px-7 text-n-8">
                   <span className="relative z-10">GET STARTED</span>

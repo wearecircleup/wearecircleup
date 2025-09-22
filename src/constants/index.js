@@ -78,13 +78,13 @@ export const notificationImages = [notification4, notification3, notification2];
 
 export const companyLogos = [yourlogo, yourlogo, yourlogo, yourlogo, yourlogo];
 
-export const brainwaveServices = [
+export const circleUpServices = [
   "Mentorías personalizadas",
   "Talleres interactivos",
   "Certificaciones reconocidas",
 ];
 
-export const brainwaveServicesIcons = [
+export const circleUpServicesIcons = [
   recording03,
   recording01,
   disc02,
@@ -99,7 +99,7 @@ export const roadmap = [
     text: "Detectamos las brechas de conocimiento en la comunidad a través de encuestas y conversaciones directas con los participantes.",
     date: "Fase 1",
     status: "done",
-    imageUrl: roadmap1,
+    imageUrl: "/src/assets/circleimages/roadmap-1.png",
     colorful: true,
   },
   {
@@ -108,7 +108,7 @@ export const roadmap = [
     text: "Reclutamos voluntarios especialistas que comparten su experiencia profesional de manera accesible y práctica.",
     date: "Fase 2",
     status: "done",
-    imageUrl: roadmap2,
+    imageUrl: "/src/assets/circleimages/roadmap-2.png",
   },
   {
     id: "2",
@@ -116,7 +116,7 @@ export const roadmap = [
     text: "Organizamos sesiones presenciales en bibliotecas y espacios públicos donde se facilita el aprendizaje colaborativo.",
     date: "Fase 3",
     status: "progress",
-    imageUrl: roadmap3,
+    imageUrl: "/src/assets/circleimages/roadmap-3.png",
   },
   {
     id: "3",
@@ -124,7 +124,7 @@ export const roadmap = [
     text: "Acompañamos el progreso de cada participante y otorgamos certificaciones que validen sus nuevas competencias.",
     date: "Fase 4",
     status: "progress",
-    imageUrl: roadmap4,
+    imageUrl: "/src/assets/circleimages/roadmap-4.png",
   },
 ];
 
@@ -190,37 +190,37 @@ export const collabApps = [
 export const pricing = [
   {
     id: "0",
-    title: "Basic",
-    description: "AI chatbot, personalized recommendations",
+    title: "Participante",
+    description: "Acceso básico a talleres y mentorías comunitarias",
     price: "0",
     features: [
-      "An AI chatbot that can understand your queries",
-      "Personalized recommendations based on your preferences",
-      "Ability to explore the app and its features without any cost",
+      "Acceso a talleres comunitarios gratuitos",
+      "Conexión con mentores voluntarios",
+      "Certificaciones básicas de participación",
     ],
     premium: false,
   },
   {
     id: "1",
-    title: "Premium",
-    description: "Advanced AI chatbot, priority support, analytics dashboard",
-    price: "9.99",
+    title: "Voluntario",
+    description: "Herramientas para mentores y facilitadores de talleres",
+    price: "0",
     features: [
-      "An advanced AI chatbot that can understand complex queries",
-      "An analytics dashboard to track your conversations",
-      "Priority support to solve issues quickly",
+      "Panel de gestión de talleres",
+      "Herramientas de seguimiento de participantes",
+      "Acceso prioritario a recursos educativos",
     ],
     premium: true,
   },
   {
     id: "2",
-    title: "Enterprise",
-    description: "Custom AI chatbot, advanced analytics, dedicated account",
+    title: "Aliado",
+    description: "Colaboración institucional y patrocinio de programas",
     price: null,
     features: [
-      "An AI chatbot that can understand your queries",
-      "Personalized recommendations based on your preferences",
-      "Ability to explore the app and its features without any cost",
+      "Dashboard de impacto y métricas",
+      "Branding en talleres patrocinados",
+      "Reportes personalizados de alcance comunitario",
     ],
     premium: false,
   },
@@ -229,23 +229,23 @@ export const pricing = [
 export const benefits = [
   {
     id: "0",
-    title: "Ask anything",
-    text: "Lets users quickly find answers to their questions without having to search through multiple sources.",
+    title: "Aprende de Expertos",
+    text: "Conecta con profesionales voluntarios que comparten su experiencia de manera accesible y práctica.",
     backgroundUrl: "/src/assets/benefits/card-1.svg",
     iconUrl: benefitIcon1,
   },
   {
     id: "1",
-    title: "Improve everyday",
-    text: "The app uses natural language processing to understand user queries and provide accurate and relevant responses.",
+    title: "Mejora Continuamente",
+    text: "Participa en talleres interactivos donde la comunidad comparte conocimientos y experiencias reales.",
     backgroundUrl: "/src/assets/benefits/card-2.svg",
     iconUrl: benefitIcon2,
     light: true,
   },
   {
     id: "2",
-    title: "Connect everywhere",
-    text: "Connect with the AI chatbot from anywhere, on any device, making it more accessible and convenient.",
+    title: "Conecta en Comunidad",
+    text: "Accede a espacios de aprendizaje en bibliotecas y centros comunitarios cerca de ti.",
     backgroundUrl: "/src/assets/benefits/card-3.svg",
     iconUrl: benefitIcon3,
   },

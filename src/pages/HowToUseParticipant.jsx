@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import NeedHelp from "../components/NeedHelp";
 import Section from "../components/Section";
-import Header from "../components/Header";
+import Logo from "../components/Logo";
 import Footer from "../components/Footer";
+import Header from "../components/Header";
 import ButtonGradient from "../assets/svg/ButtonGradient";
 import Button from "../components/Button";
+import { curve } from "../assets";
 
 const HowToUseParticipant = ({ setCurrentPage }) => {
   const [expandedFAQ, setExpandedFAQ] = useState(0);
@@ -12,53 +15,53 @@ const HowToUseParticipant = ({ setCurrentPage }) => {
   const steps = [
     {
       id: 0,
-      title: "Sign up",
-      description: "Create an account with Brainwave - AI chat app by providing your name, email address, and password. Once you sign up, you can start exploring the app.",
-      image: "/src/assets/services/service-3.png"
+      title: "Encuentra tu taller",
+      description: "Explora temas útiles cerca de ti: habilidades para el trabajo, vida práctica y desarrollo personal. Todos los talleres son gratuitos y abiertos.",
+      image: "/src/assets/circleimages/par-sub-nav-1.png"
     },
     {
       id: 1,
-      title: "Connect with AI chatbot",
-      description: "Connect with the AI chatbot to start the conversation. The chatbot uses natural language processing to understand your queries and provide relevant responses.",
-      image: "/src/assets/roadmap/image-2.png"
+      title: "Inscríbete en 1 minuto",
+      description: "Reserva tu cupo con un formulario corto y recibe recordatorios. Si el taller es en café con ticket simbólico, te lo contamos antes para que decidas.",
+      image: "/src/assets/circleimages/par-sub-nav-2.png"
     },
     {
       id: 2,
-      title: "Get Personalized Advices",
-      description: "Based on the conversation with the AI chatbot, you will receive personalized recommendations related to your queries. The chatbot is trained to understand your preferences and provide customized suggestions.",
-      image: "/src/assets/services/service-3.png"
+      title: "Participa y crea algo",
+      description: "Sesiones prácticas de 1–2 horas donde haces, no solo escuchas. Te llevas algo concreto: un documento, un plan o una habilidad demostrable.",
+      image: "/src/assets/circleimages/par-sub-nav-3.png"
     },
     {
       id: 3,
-      title: "Upgrade your plan",
-      description: "Upgrade your plan to access premium features and unlock the full potential of Brainwave. With the premium plan, you can enjoy unlimited conversations, priority support, and advanced AI capabilities.",
-      image: "/src/assets/roadmap/image-4.png"
+      title: "Sigue aprendiendo",
+      description: "Recibe recursos, certificado digital y opciones para continuar. Si te animas, también puedes enseñar lo que sabes en el futuro.",
+      image: "/src/assets/circleimages/par-sub-nav-4.png"
     }
   ];
 
   const participationSteps = [
     {
       date: "PASO 1",
-      title: "Registro y Bienvenida",
-      description: "Regístrate en nuestra plataforma, completa tu perfil y recibe información sobre talleres disponibles en tu zona.",
+      title: "Registro en 1 minuto",
+      description: "Sin costo ni requisitos. Completa tu perfil y recibe el calendario por WhatsApp o email.",
       completed: true
     },
     {
       date: "PASO 2", 
-      title: "Selección de Talleres",
-      description: "Explora nuestro catálogo de talleres gratuitos y elige los que mejor se adapten a tus intereses y horarios.",
+      title: "Reserva tu cupo",
+      description: "Confirma con un clic. Si el taller es en café con ticket simbólico, te lo avisamos antes para que decidas.",
       completed: true
     },
     {
       date: "PASO 3",
-      title: "Participación Activa", 
-      description: "Asiste a los talleres, participa activamente, completa las actividades y conecta con otros participantes.",
+      title: "Taller práctico 1–2 h", 
+      description: "Haces algo concreto: CV, plan de presupuesto, portafolio o proyecto. Formato cercano e intergeneracional.",
       completed: true
     },
     {
       date: "PASO 4",
-      title: "Aplicación y Crecimiento", 
-      description: "Aplica lo aprendido en tu vida personal o profesional, comparte tu experiencia y continúa tu desarrollo.",
+      title: "Certificado y siguientes pasos", 
+      description: "Recibes certificado digital y recursos para continuar. Puedes volver a otros talleres o compartir lo aprendido.",
       completed: false
     }
   ];
@@ -67,31 +70,31 @@ const HowToUseParticipant = ({ setCurrentPage }) => {
     {
       name: "María González",
       role: "Madre de familia - Bogotá",
-      text: "Los talleres de educación financiera me ayudaron a organizar mi presupuesto familiar y ahorrar para la educación de mis hijos. Ahora entiendo mejor cómo manejar mi dinero y he logrado reducir mis deudas.",
+      text: "En 4 semanas reduje mis gastos 12% y abrí un ahorro programado. El formato paso a paso me ordenó.",
       avatar: "/src/assets/benefits/image-2.png"
     },
     {
       name: "Carlos Ramírez",
       role: "Emprendedor - Medellín",
-      text: "Gracias a Circle Up aprendí a estructurar mi plan de negocio. Los talleres de emprendimiento me dieron las herramientas para formalizar mi negocio de comidas rápidas. Ahora tengo 3 empleados y crecemos cada mes.",
+      text: "Con el plan de negocio, formalicé y contraté a 3 personas. Usé las plantillas para costos y precios.",
       avatar: "/src/assets/benefits/image-2.png"
     },
     {
       name: "Ana Sofía Herrera",
       role: "Estudiante universitaria - Cali",
-      text: "Los talleres de habilidades digitales me abrieron muchas puertas. Aprendí programación básica y diseño web. Ahora trabajo medio tiempo como freelancer mientras estudio y ayudo a mi familia económicamente.",
+      text: "Aprendí HTML/CSS básico y armé mi portafolio; ya hago trabajos freelance mientras estudio.",
       avatar: "/src/assets/benefits/image-2.png"
     },
     {
       name: "Pedro Martínez",
       role: "Trabajador independiente - Barranquilla",
-      text: "El taller de habilidades blandas cambió mi perspectiva profesional. Mejoré mi comunicación y liderazgo. Conseguí un mejor trabajo y ahora lidero un equipo de 8 personas en mi empresa.",
+      text: "Mejoré mi comunicación y conseguí un mejor contrato; ahora lidero un equipo de 8.",
       avatar: "/src/assets/benefits/image-2.png"
     },
     {
       name: "Lucía Vargas",
       role: "Ama de casa - Bucaramanga",
-      text: "Los talleres de desarrollo personal me ayudaron a recuperar mi autoestima y descubrir mis talentos. Ahora enseño repostería en mi comunidad y tengo mi propio negocio desde casa.",
+      text: "Volví a creer en mí. Hoy enseño repostería en mi barrio y vendo por encargo desde casa.",
       avatar: "/src/assets/benefits/image-2.png"
     }
   ];
@@ -99,23 +102,23 @@ const HowToUseParticipant = ({ setCurrentPage }) => {
   const participantFAQs = [
     {
       question: "¿Los talleres son completamente gratuitos?",
-      answer: "Sí, todos nuestros talleres son 100% gratuitos para los participantes. Están financiados por nuestros aliados empresariales y organizaciones que creen en el desarrollo comunitario."
+      answer: "Sí, 100% gratuitos. En cafés puede existir un ticket simbólico opcional; siempre te lo informamos antes."
     },
     {
       question: "¿Qué requisitos necesito para participar?",
-      answer: "Solo necesitas ganas de aprender y crecer. No importa tu nivel educativo, edad o experiencia previa. Nuestros talleres están diseñados para ser accesibles y adaptarse a diferentes perfiles de participantes."
+      answer: "Ninguno. Solo ganas de aprender. No importa tu edad o nivel educativo: los talleres son accesibles y prácticos."
     },
     {
       question: "¿Cómo me inscribo a los talleres?",
-      answer: "Puedes registrarte en nuestra plataforma web, visitarnos en nuestros puntos comunitarios, o contactarnos por WhatsApp. Te ayudaremos a elegir los talleres que mejor se adapten a tus necesidades y horarios."
+      answer: "En 1 minuto: formulario corto desde la agenda. También puedes inscribirte en puntos comunitarios o por WhatsApp."
     },
     {
       question: "¿Recibo algún certificado al completar los talleres?",
-      answer: "Sí, al completar cada taller recibes un certificado digital que puedes usar en tu hoja de vida. Algunos talleres también ofrecen certificaciones avaladas por instituciones educativas aliadas."
+      answer: "Sí, certificado digital por taller que puedes anexar a tu hoja de vida o LinkedIn."
     },
     {
       question: "¿Qué pasa si no puedo asistir a todas las sesiones?",
-      answer: "Entendemos que tienes responsabilidades. Ofrecemos flexibilidad en horarios, sesiones de recuperación y material de apoyo para que puedas completar tu aprendizaje a tu ritmo."
+      answer: "Hay horarios flexibles y material de apoyo. Puedes reprogramar y retomar cuando puedas."
     }
   ];
 
@@ -140,7 +143,7 @@ const HowToUseParticipant = ({ setCurrentPage }) => {
           <div className="container relative z-2">
             <div className="text-center mb-16">
               <div className="inline-block px-3 py-1 bg-n-7 rounded text-xs font-code font-bold tracking-wider uppercase text-n-4 mb-4">
-                [ HOW IT WORK: {String(activeStep + 1).padStart(2, '0')}. ]
+                [ CÓMO FUNCIONA: {String(activeStep + 1).padStart(2, '0')}. ]
               </div>
             </div>
 
@@ -172,13 +175,22 @@ const HowToUseParticipant = ({ setCurrentPage }) => {
               
               {/* Right side - Text Content */}
               <div className="relative">
+                {/* Logo in bottom right corner */}
+                <div className="absolute bottom-0 right-0 z-10">
+                  <Logo 
+                    logoSize={{ width: 48, height: 48 }}
+                    textSize="text-sm"
+                    showText={true}
+                  />
+                </div>
+                
                 <h2 className="h2 mb-6">{steps[activeStep].title}</h2>
                 <p className="body-1 text-n-4 mb-8 leading-relaxed">
                   {steps[activeStep].description}
                 </p>
                 
-                <button className="button relative inline-flex items-center justify-center h-11 transition-colors hover:text-color-1 px-7 text-n-8 mb-8">
-                  <span className="relative z-10">CONNECT NOW</span>
+                <button onClick={() => { window.location.href = 'mailto:participantes@circleup.org?subject=Quiero%20inscribirme&body=Nombre%3A%0ATaller%20de%20inter%C3%A9s%3A%0ACiudad%3A%0ATel%C3%A9fono%3A'; }} className="button relative inline-flex items-center justify-center h-11 transition-colors hover:text-color-1 px-7 text-n-8 mb-8">
+                  <span className="relative z-10">INSCRIBIRME GRATIS</span>
                   <svg className="absolute top-0 left-0" width="21" height="44" viewBox="0 0 21 44">
                     <path fill="white" stroke="white" strokeWidth="2" d="M21,43.00005 L8.11111,43.00005 C4.18375,43.00005 1,39.58105 1,35.36365 L1,8.63637 C1,4.41892 4.18375,1 8.11111,1 L21,1"></path>
                   </svg>
@@ -195,7 +207,7 @@ const HowToUseParticipant = ({ setCurrentPage }) => {
                   <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center mr-3">
                     <span className="text-white text-xs">?</span>
                   </div>
-                  <span className="text-n-3 text-sm">Ask anything</span>
+                  <span className="text-n-3 text-sm">¿Tienes dudas?</span>
                   <div className="ml-4 flex space-x-1">
                     <div className="w-1 h-4 bg-purple-500 rounded-full animate-pulse"></div>
                     <div className="w-1 h-6 bg-purple-500 rounded-full animate-pulse"></div>
@@ -257,18 +269,42 @@ const HowToUseParticipant = ({ setCurrentPage }) => {
 
         {/* Roadmap Section */}
         <Section className="overflow-hidden relative">
-          {/* Background elements */}
+          {/* Background elements with modern design */}
+          <div className="absolute inset-0 opacity-5">
+            <img src="/src/assets/grid.png" alt="" className="w-full h-full object-cover" />
+          </div>
+          
           <div className="container relative z-2">
-            <div className="text-center mb-16">
-              <h2 className="h2 mb-4">Tu Camino de Crecimiento Personal</h2>
-              <p className="body-1 text-n-4 max-w-3xl mx-auto">
-                Desde tu registro hasta la aplicación de nuevas habilidades. Cada paso está diseñado para maximizar tu desarrollo personal y profesional de forma gratuita y accesible.
-              </p>
-              
-              <div className="mt-8">
-                <Button className="text-xs font-code font-bold tracking-wider uppercase">
-                  COMENZAR AHORA
-                </Button>
+            <div className="flex justify-center mb-16">
+              <div className="relative max-w-[50rem] p-8 border border-n-1/10 rounded-3xl bg-n-8/80 backdrop-blur-sm">
+                {/* Quote icon */}
+                <div className="absolute top-6 left-8">
+                  <svg width="40" height="32" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 32V16C0 7.2 7.2 0 16 0V8C11.6 8 8 11.6 8 16V20H16V32H0ZM24 32V16C24 7.2 31.2 0 40 0V8C35.6 8 32 11.6 32 16V20H40V32H24Z" fill="#AC6AFF"/>
+                  </svg>
+                </div>
+                
+                {/* Content */}
+                <div className="pt-8">
+                  <p className="body-1 mb-8 text-n-1 font-mono">
+                    Talleres prácticos de 1–2 horas. Temas útiles para tu trabajo y vida. Sin requisitos. Inscripción en 1 minuto, certificado digital y flexibilidad para retomar cuando puedas.
+                  </p>
+                  
+                  {/* Author info */}
+                  <div className="flex items-center">
+                    <div className="mr-4">
+                      <Logo 
+                        logoSize={{ width: 48, height: 48 }}
+                        textSize="text-xs"
+                        showText={false}
+                      />
+                    </div>
+                    <div>
+                      <h6 className="h6 text-n-1">Circle Up Volunteer</h6>
+                      <p className="body-2 text-n-4">Coordinador Proyecto</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             
@@ -313,9 +349,9 @@ const HowToUseParticipant = ({ setCurrentPage }) => {
         </Section>
 
         {/* Community Testimonials Section */}
-        <Section className="overflow-hidden relative">
+        {/* <Section className="overflow-hidden relative"> */}
           {/* Background elements */}
-          <div className="absolute inset-0 opacity-2">
+          {/* <div className="absolute inset-0 opacity-2">
             <img src="/src/assets/grid.png" alt="" className="w-full h-full object-cover" />
           </div>
           <div className="absolute bottom-0 left-0 w-full h-full opacity-6">
@@ -354,7 +390,7 @@ const HowToUseParticipant = ({ setCurrentPage }) => {
               </div>
             </div>
           </div>
-        </Section>
+        </Section> */}
 
         {/* FAQ Section */}
         <Section className="overflow-hidden relative">
@@ -437,7 +473,7 @@ const HowToUseParticipant = ({ setCurrentPage }) => {
               {/* Content */}
               <div className="relative z-10 text-center max-w-[40rem]">
                 <h2 className="h2 mb-6">
-                  Construye el futuro con{" "}
+                  Aprende haciendo, gratis y cerca de ti con{" "}
                   <span className="inline-block relative font-semibold">
                     Circle Up
                     <img
@@ -450,9 +486,9 @@ const HowToUseParticipant = ({ setCurrentPage }) => {
                   </span>
                 </h2>
                 <p className="body-1 mb-8 text-n-4">
-                  Desarrolla nuevas habilidades, conecta con tu comunidad y transforma tu futuro. Todo de forma gratuita y a tu ritmo.
+                  Talleres prácticos de 1–2 horas. Temas útiles para tu trabajo y vida. Sin requisitos.
                 </p>
-                <button className="button relative inline-flex items-center justify-center h-11 transition-colors hover:text-color-1 px-7 text-n-8">
+                <button onClick={() => { window.location.href = 'mailto:participantes@circleup.org?subject=Quiero%20inscribirme&body=Nombre%3A%0ATaller%20de%20inter%C3%A9s%3A%0ACiudad%3A%0ATel%C3%A9fono%3A'; }} className="button relative inline-flex items-center justify-center h-11 transition-colors hover:text-color-1 px-7 text-n-8">
                   <span className="relative z-10">INSCRIBIRME GRATIS</span>
                   <svg className="absolute top-0 left-0" width="21" height="44" viewBox="0 0 21 44">
                     <path fill="white" stroke="white" strokeWidth="2" d="M21,43.00005 L8.11111,43.00005 C4.18375,43.00005 1,39.58105 1,35.36365 L1,8.63637 C1,4.41892 4.18375,1 8.11111,1 L21,1"></path>
@@ -469,74 +505,23 @@ const HowToUseParticipant = ({ setCurrentPage }) => {
           </div>
         </Section>
 
-        {/* Need help Section */}
-        <Section className="overflow-hidden">
-          <div className="container relative z-2">
-            <div className="relative z-1 grid gap-10 lg:grid-cols-2 items-center">
-              <div className="relative flex justify-center lg:justify-end">
-                <div className="relative max-w-[28rem]">
-                  {/* Background gradient behind image */}
-                  <div className="absolute inset-0 opacity-50 z-0">
-                    <img src="/src/assets/gradient.png" alt="" className="w-small h-small object-cover" />
-                  </div>
-                  {/* Main image-3.png */}
-                  <div className="mb-10 -my-10 -mx-15 relative z-10">
-                    <img 
-                      className="w-full pointer-events-none select-none" 
-                      src="/src/assets/roadmap/image-3.png" 
-                      width={628} 
-                      height={426} 
-                      alt="Pricing illustration"
-                    />
-                  </div>
-                </div>
-                
-                {/* Voice input indicator */}
-                <div className="absolute bottom-0 left-0 flex items-center bg-n-7 rounded-full px-4 py-2 border border-n-6">
-                  <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center mr-3">
-                    <span className="text-white text-xs">?</span>
-                  </div>
-                  <span className="text-n-3 text-sm">Ask anything</span>
-                  <div className="ml-4 flex space-x-1">
-                    <div className="w-1 h-4 bg-purple-500 rounded-full animate-pulse"></div>
-                    <div className="w-1 h-6 bg-purple-500 rounded-full animate-pulse"></div>
-                    <div className="w-1 h-4 bg-purple-500 rounded-full animate-pulse"></div>
-                    <div className="w-1 h-6 bg-purple-500 rounded-full animate-pulse"></div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="relative">
-                <h1 className="h1 mb-6">¿Listo para transformar tu vida?</h1>
-                <p className="body-1 mb-8 text-n-4">
-                  Únete a miles de personas que ya están creciendo con Circle Up
-                </p>
-                
-                <div className="space-y-6">
-                  <div className="flex items-center p-6 bg-n-7 rounded-xl border border-n-6">
-                    <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mr-4">
-                      <span className="text-white text-xl">💬</span>
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-n-1 mb-1">Comunidad de Aprendizaje</h3>
-                      <p className="text-n-4">Conecta con otros participantes y mentores</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center p-6 bg-n-7 rounded-xl border border-n-6">
-                    <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mr-4">
-                      <span className="text-white text-xl">📧</span>
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-n-1 mb-1">Inscríbete Ya</h3>
-                      <p className="text-color-1">participantes@circleup.org</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Section>
+        <NeedHelp 
+          title="¿Listo para transformar tu vida?"
+          subtitle="Únete a miles de personas que ya están creciendo con Circle Up"
+          cards={[
+            {
+              icon: "💬",
+              title: "Comunidad de Aprendizaje",
+              description: "Conecta con otros participantes y mentores"
+            },
+            {
+              icon: "📧",
+              title: "Inscríbete Ya",
+              description: "",
+              email: "participantes@circleup.org"
+            }
+          ]}
+        />
 
         <Footer />
       </div>

@@ -7,6 +7,7 @@ import {
   pause,
   play,
 } from "../../assets";
+import logo from "../../assets/circleimages/logo.svg";
 import ChatBubbleWing from "../../assets/svg/ChatBubbleWing";
 import { useEffect, useRef, useState } from "react";
 
@@ -59,10 +60,10 @@ export const VideoChatMessage = ({ isPlaying }) => {
       />
       <div className="absolute left-5 -bottom-[1.125rem] flex items-center justify-center w-[2.25rem] h-[2.25rem] bg-color-1 rounded-[0.75rem]">
         <img
-          src={brainwaveWhiteSymbol}
+          src={logo}
           width={26}
           height={26}
-          alt="Brainwave"
+          alt="CircleUp Logo"
         />
       </div>
       <div className="tagline absolute right-2.5 bottom-1 text-[0.625rem] text-n-3 uppercase">
