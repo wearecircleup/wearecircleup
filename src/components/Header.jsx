@@ -39,7 +39,10 @@ const Header = ({ setCurrentPage }) => {
           className="xl:mr-8" 
           logoSize={{ width: 60, height: 60 }}
           textSize="text-xl"
-          onClick={() => setCurrentPage && setCurrentPage('home')}
+          onClick={() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setCurrentPage && setCurrentPage('home');
+          }}
         />
 
         <nav
@@ -54,6 +57,9 @@ const Header = ({ setCurrentPage }) => {
                   key={item.id}
                   onClick={() => {
                     handleClick();
+                    // Scroll to top of page
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    
                     if (item.url === '/features') {
                       setCurrentPage && setCurrentPage('features');
                     } else if (item.url === '/pricing') {
