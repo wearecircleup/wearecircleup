@@ -18,7 +18,6 @@ const Home = ({ setCurrentPage }) => {
         <Benefits />
         <Collaboration />
         <Services />
-        <Pricing />
         <Roadmap />
         <div className="w-full bg-n-8 border-t border-n-6">
           <NeedHelp 

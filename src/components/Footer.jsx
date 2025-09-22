@@ -11,24 +11,6 @@ const Footer = () => {
           {new Date().getFullYear()}. All rights reserved.
         </p>
 
-        <ul className="flex gap-5 flex-wrap">
-          {socials.map((social) => (
-            <a
-              href={social.url}
-              key={social.id}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="flex items-center justify-center w-10 h-10 bg-n-7 rounded-full transition-colors hover:bg-n-6"
-            >
-              <img
-                src={social.iconUrl}
-                alt={social.title}
-                width={16}
-                height={16}
-              />
-            </a>
-          ))}
-        </ul>
       </div>
     </Section>
   );

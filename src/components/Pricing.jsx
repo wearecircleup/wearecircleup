@@ -28,6 +28,25 @@ const Pricing = () => {
           </div>
         </div>
 
+        <Heading
+          tag="Únete a Circle Up"
+          title="Conecta, aprende y crece sin costo"
+        />
+
+        <div className="relative">
+          <PricingList />
+          <LeftLine />
+          <RightLine />
+        </div>
+
+        <div className="flex justify-center mt-10">
+          <a
+            className="text-xs font-code font-bold tracking-wider uppercase border-b"
+            href="#pricing"
+          >
+            Ver más detalles
+          </a>
+        </div>
       </div>
     </Section>
   );

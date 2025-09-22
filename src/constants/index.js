@@ -60,12 +60,12 @@ export const navigation = [
   },
   {
     id: "5",
-    title: "Policies",
+    title: "Politicas",
     url: "/policies",
   },
   {
     id: "6",
-    title: "Source Code",
+    title: "Únete a Nosotros",
     url: links.sourceCode,
     onlyMobile: true,
     external: true,
