@@ -6,6 +6,7 @@ import HowToUseVolunteer from "./pages/HowToUseVolunteer";
 import HowToUseParticipant from "./pages/HowToUseParticipant";
 import RoadmapDocs from "./pages/RoadmapDocs";
 import PoliciesDocs from "./pages/PoliciesDocs";
+import Login from "./pages/Login";
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState('home');
@@ -20,6 +21,7 @@ const App = () => {
         {currentPage === 'participantes' && <HowToUseParticipant setCurrentPage={setCurrentPage} />}
         {currentPage === 'roadmap' && <RoadmapDocs setCurrentPage={setCurrentPage} />}
         {currentPage === 'policies' && <PoliciesDocs setCurrentPage={setCurrentPage} />}
+        {currentPage === 'login' && <Login setCurrentPage={setCurrentPage} />}
       </div>
     );
   } catch (error) {

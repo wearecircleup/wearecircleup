@@ -2,7 +2,7 @@ const Logo = ({
   className = "", 
   showText = true, 
   textSize = "text-xl", 
-  logoSize = { width: 40, height: 40 },
+  logoSize = { width: 35, height: 35 },
   onClick = null 
 }) => {
   return (

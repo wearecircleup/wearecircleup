@@ -130,7 +130,7 @@ const HowToUseParticipant = ({ setCurrentPage }) => {
         <HowItWorks 
           steps={steps}
           title="CÓMO FUNCIONA"
-          buttonText="INSCRIBIRME GRATIS"
+          buttonText="INSCRIBIRME"
           buttonAction={() => { window.location.href = 'mailto:participantes@circleup.org?subject=Quiero%20inscribirme&body=Nombre%3A%0ATaller%20de%20inter%C3%A9s%3A%0ACiudad%3A%0ATel%C3%A9fono%3A'; }}
         />
 

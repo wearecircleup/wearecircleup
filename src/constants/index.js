@@ -169,6 +169,55 @@ export const collabApps = [
     width: 32,
     height: 32,
   },
+  {
+    id: "5",
+    title: "Jellypod",
+    icon: "/wearecircleup/assets/circleimages/jellypod.png",
+    width: 32,
+    height: 32,
+  },
+  {
+    id: "6",
+    title: "Streamlit",
+    icon: "/wearecircleup/assets/circleimages/streamlit.png",
+    width: 32,
+    height: 32,
+  },
+  {
+    id: "7",
+    title: "ElevenLabs",
+    icon: "/wearecircleup/assets/circleimages/elevenlabs.png",
+    width: 32,
+    height: 32,
+  },
+  {
+    id: "8",
+    title: "WeasyPrint",
+    icon: "/wearecircleup/assets/circleimages/weasyprint.png",
+    width: 32,
+    height: 32,
+  },
+  {
+    id: "9",
+    title: "Windsurf",
+    icon: "/wearecircleup/assets/circleimages/windsurf.png",
+    width: 32,
+    height: 32,
+  },
+  {
+    id: "10",
+    title: "YouForm",
+    icon: "/wearecircleup/assets/circleimages/youform.png",
+    width: 32,
+    height: 32,
+  },
+  {
+    id: "11",
+    title: "Gamma",
+    icon: "/wearecircleup/assets/circleimages/gamma.png",
+    width: 32,
+    height: 32,
+  },
 ];
 
 export const pricing = [

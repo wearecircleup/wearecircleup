@@ -104,7 +104,13 @@ const Header = ({ setCurrentPage }) => {
           <HambugerMenu />
         </nav>
 
-        <Button className="hidden lg:flex" href={links.sourceCode} external>
+        <Button 
+          className="hidden lg:flex" 
+          onClick={() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setCurrentPage && setCurrentPage('login');
+          }}
+        >
           únete a nosotros
         </Button>
 

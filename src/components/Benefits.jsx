@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Heading from "./Heading";
 import Section from "./Section";
 import Logo from "./Logo";
@@ -7,6 +7,10 @@ import { curve } from "../assets";
 const Benefits = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+  const carouselRef = useRef(null);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -72,15 +76,48 @@ const Benefits = () => {
   ];
 
   const nextSlide = () => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
     setCurrentSlide((prev) => (prev + 1) % stakeholders.length);
+    setTimeout(() => setIsTransitioning(false), 500);
   };
 
   const prevSlide = () => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
     setCurrentSlide((prev) => (prev - 1 + stakeholders.length) % stakeholders.length);
+    setTimeout(() => setIsTransitioning(false), 500);
+  };
+
+  // Touch event handlers for mobile swipe
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    
+    const distance = touchStartX.current - touchEndX.current;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      nextSlide();
+    } else if (isRightSwipe) {
+      prevSlide();
+    }
+
+    // Reset touch positions
+    touchStartX.current = 0;
+    touchEndX.current = 0;
   };
 
   return (
-    <Section id="features">
+    <Section id="features" className="-mt-8 md:-mt-12 lg:-mt-16">
       <div className="container relative z-2">
         <Heading
           className="md:max-w-md lg:max-w-2xl"
@@ -104,7 +141,13 @@ const Benefits = () => {
         {/* Espacios de Aprendizaje Carousel Section */}
         <div className="relative">
           {/* Carousel container */}
-          <div className="relative overflow-hidden">
+          <div 
+            className="relative overflow-hidden"
+            ref={carouselRef}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
             <div 
               className="flex transition-transform duration-500 ease-in-out"
               style={{ 
@@ -112,8 +155,8 @@ const Benefits = () => {
               }}
             >
               {stakeholders.map((stakeholder, index) => (
-                <div key={stakeholder.id} className="w-full md:w-1/2 flex-shrink-0 px-2 md:px-4">
-                  <div className="relative h-[16rem] sm:h-[20rem] bg-n-8 rounded-xl overflow-hidden md:h-[25rem] border border-n-6">
+                <div key={stakeholder.id} className="w-full md:w-1/2 flex-shrink-0 px-2 md:px-4 touch-pan-y">
+                  <div className="relative h-[18rem] sm:h-[22rem] bg-n-8 rounded-xl overflow-hidden md:h-[25rem] border border-n-6 select-none">
                     {/* Background image */}
                     <div className="absolute inset-0">
                       <img
@@ -149,7 +192,7 @@ const Benefits = () => {
                   </div>
                   
                   {/* Floating text box - responsive positioning */}
-                  <div className="relative -mt-20 md:-mt-40 ml-4 mr-auto md:ml-auto md:mr-4 w-3/4 md:w-2/5 z-10">
+                  <div className="relative -mt-20 md:-mt-40 ml-4 mr-auto md:ml-auto md:mr-4 w-3/4 md:w-2/5 z-10 pointer-events-none">
                     <div className="bg-n-8/95 backdrop-blur-sm border border-n-1/10 rounded-xl md:rounded-2xl p-4 md:p-6 shadow-2xl">
                       {/* Quote icon */}
                       <div className="mb-3 md:mb-4">
@@ -171,7 +214,8 @@ const Benefits = () => {
           <div className="flex justify-center mt-6 md:mt-8 space-x-3 md:space-x-4">
             <button 
               onClick={prevSlide}
-              className="w-10 h-10 md:w-12 md:h-12 bg-n-7 border border-n-6 rounded-full flex items-center justify-center hover:bg-n-6 transition-colors"
+              disabled={isTransitioning}
+              className="w-10 h-10 md:w-12 md:h-12 bg-n-7 border border-n-6 rounded-full flex items-center justify-center hover:bg-n-6 transition-colors disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="md:w-6 md:h-6">
                 <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -179,7 +223,8 @@ const Benefits = () => {
             </button>
             <button 
               onClick={nextSlide}
-              className="w-10 h-10 md:w-12 md:h-12 bg-n-7 border border-n-6 rounded-full flex items-center justify-center hover:bg-n-6 transition-colors"
+              disabled={isTransitioning}
+              className="w-10 h-10 md:w-12 md:h-12 bg-n-7 border border-n-6 rounded-full flex items-center justify-center hover:bg-n-6 transition-colors disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="md:w-6 md:h-6">
                 <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -192,12 +237,20 @@ const Benefits = () => {
             {stakeholders.map((_, index) => (
               <button
                 key={index}
-                onClick={() => setCurrentSlide(index)}
-                className={`w-2 h-2 rounded-full transition-colors ${
+                onClick={() => !isTransitioning && setCurrentSlide(index)}
+                disabled={isTransitioning}
+                className={`w-2 h-2 rounded-full transition-colors touch-manipulation ${
                   index === currentSlide ? 'bg-color-1' : 'bg-n-6'
-                }`}
+                } disabled:opacity-50`}
               />
             ))}
+          </div>
+
+          {/* Swipe indicator for mobile */}
+          <div className="flex justify-center mt-2 md:hidden">
+            <p className="text-xs text-n-4 opacity-70">
+              Desliza para navegar
+            </p>
           </div>
         </div>
       </div>

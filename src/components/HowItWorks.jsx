@@ -35,13 +35,13 @@ const HowItWorks = ({
               {/* 3D Stacked boxes effect - responsive and centered */}
               <div className="relative">
                 {/* Third card (back of deck) */}
-                <div className="absolute -top-4 sm:-top-6 md:-top-8 -left-6 sm:-left-8 md:-left-12 w-[18rem] h-[14rem] sm:w-[22rem] sm:h-[16rem] md:w-[28rem] md:h-96 bg-n-6/15 rounded-xl md:rounded-2xl transform rotate-12 shadow-lg"></div>
+                <div className="absolute -top-4 sm:-top-6 md:-top-8 -left-6 sm:-left-8 md:-left-12 w-[19rem] h-[15rem] sm:w-[24rem] sm:h-[17rem] md:w-[32rem] md:h-[26rem] bg-n-6/15 rounded-xl md:rounded-2xl transform rotate-12 shadow-lg"></div>
                 {/* Second card (middle of deck) */}
-                <div className="absolute -top-2 sm:-top-3 md:-top-5 -left-4 sm:-left-5 md:-left-8 w-[18rem] h-[14rem] sm:w-[22rem] sm:h-[16rem] md:w-[28rem] md:h-96 bg-n-6/25 rounded-xl md:rounded-2xl transform rotate-6 shadow-lg"></div>
+                <div className="absolute -top-2 sm:-top-3 md:-top-5 -left-4 sm:-left-5 md:-left-8 w-[19rem] h-[15rem] sm:w-[24rem] sm:h-[17rem] md:w-[32rem] md:h-[26rem] bg-n-6/25 rounded-xl md:rounded-2xl transform rotate-6 shadow-lg"></div>
                 {/* First card (almost top of deck) */}
-                <div className="absolute -top-1 -left-2 md:-left-4 w-[18rem] h-[14rem] sm:w-[22rem] sm:h-[16rem] md:w-[28rem] md:h-96 bg-n-6/35 rounded-xl md:rounded-2xl transform rotate-3 shadow-lg"></div>
+                <div className="absolute -top-1 -left-2 md:-left-4 w-[19rem] h-[15rem] sm:w-[24rem] sm:h-[17rem] md:w-[32rem] md:h-[26rem] bg-n-6/35 rounded-xl md:rounded-2xl transform rotate-3 shadow-lg"></div>
                 {/* Front card with image (top of deck) - centered */}
-                <div className="relative w-[18rem] h-[14rem] sm:w-[22rem] sm:h-[16rem] md:w-[28rem] md:h-96 bg-n-7/90 rounded-xl md:rounded-2xl border border-n-6/50 overflow-hidden shadow-2xl backdrop-blur-sm z-10 mx-auto">
+                <div className="relative w-[19rem] h-[15rem] sm:w-[24rem] sm:h-[17rem] md:w-[32rem] md:h-[26rem] bg-n-7/90 rounded-xl md:rounded-2xl border border-n-6/50 overflow-hidden shadow-2xl backdrop-blur-sm z-10 mx-auto">
                   <img 
                     className="w-full h-full object-cover pointer-events-none select-none" 
                     src={steps[activeStep]?.image || ""}
@@ -56,14 +56,6 @@ const HowItWorks = ({
           
           {/* Right side - Text Content */}
           <div className="relative">
-            {/* Logo in bottom right corner - hidden on mobile */}
-            <div className="absolute bottom-0 right-0 z-10 hidden md:block">
-              <Logo 
-                logoSize={{ width: 48, height: 48 }}
-                textSize="text-sm"
-                showText={true}
-              />
-            </div>
             
             <h2 className="h2 mb-4 md:mb-6 text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center lg:text-left">
               {steps[activeStep]?.title || ""}
@@ -90,19 +82,14 @@ const HowItWorks = ({
               </button>
             </div>
 
-            {/* Voice input indicator - responsive */}
+            {/* Logo replacing the help button */}
             <div className="flex items-center justify-center lg:justify-start">
-              <div className="flex items-center bg-n-7 rounded-full px-3 sm:px-4 py-2 border border-n-6 w-fit text-xs sm:text-sm">
-                <div className="w-5 h-5 sm:w-6 sm:h-6 bg-purple-500 rounded-full flex items-center justify-center mr-2 sm:mr-3">
-                  <span className="text-white text-xs">?</span>
-                </div>
-                <span className="text-n-3">¿Tienes dudas?</span>
-                <div className="ml-2 sm:ml-4 flex space-x-1">
-                  <div className="w-1 h-3 sm:h-4 bg-purple-500 rounded-full animate-pulse"></div>
-                  <div className="w-1 h-4 sm:h-6 bg-purple-500 rounded-full animate-pulse"></div>
-                  <div className="w-1 h-3 sm:h-4 bg-purple-500 rounded-full animate-pulse"></div>
-                  <div className="w-1 h-4 sm:h-6 bg-purple-500 rounded-full animate-pulse"></div>
-                </div>
+              <div className="grayscale opacity-60 hover:opacity-80 transition-opacity duration-300">
+                <Logo
+                  logoSize={{ width: 48, height: 48 }}
+                  textSize="text-sm"
+                  showText={true}
+                />
               </div>
             </div>
           </div>
