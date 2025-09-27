@@ -50,48 +50,105 @@ const Collaboration = () => {
           </div>
         </div>
 
-        <div className="lg:ml-auto xl:w-[38rem] mt-8 lg:mt-4 px-4 lg:px-0">
-          <p className="body-2 mb-8 text-n-4 md:mb-16 lg:mb-32 lg:w-[32rem] lg:mx-auto text-center lg:text-left text-sm md:text-base">
+        <div className="lg:ml-auto xl:w-[50rem] mt-8 lg:mt-4 px-4 lg:px-0">
+          <p className="body-2 mb-8 text-n-4 md:mb-16 lg:mb-20 lg:w-[40rem] lg:mx-auto text-center lg:text-left text-sm md:text-base">
             {collabText}
           </p>
 
-          <div className="relative left-1/2 flex w-[18rem] sm:w-[22rem] aspect-square border border-n-6 rounded-full -translate-x-1/2 scale-75 sm:scale-90 md:scale-100">
-            <div className="flex w-48 sm:w-60 aspect-square m-auto border border-n-6 rounded-full">
-              <div className="w-20 sm:w-[6rem] aspect-square m-auto p-[0.2rem] bg-conic-gradient rounded-full">
-                <div className="flex items-center justify-center w-full h-full bg-n-8 rounded-full">
-                  <img
-                    src="/wearecircleup/assets/circleimages/logo.svg"
-                    width={32}
-                    height={32}
-                    alt="CircleUp Logo"
-                    className="sm:w-12 sm:h-12"
-                  />
+          <div className="relative flex items-center justify-center min-h-[40rem]">
+            {/* Decorative background circles inspired by CallToActionSection */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-[32rem] h-[32rem] border border-n-6 rounded-full opacity-60"></div>
+              <div className="absolute w-[26rem] h-[26rem] border border-n-6 rounded-full opacity-40"></div>
+              <div className="absolute w-[20rem] h-[20rem] border border-n-6 rounded-full opacity-30"></div>
+            </div>
+
+            {/* Enhanced floating decorative elements - more planets */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="relative block w-full h-full">
+                {/* Original decorative elements */}
+                <div className="absolute top-1/4 left-1/4 w-4 h-4 bg-gradient-to-b from-[#AC6AFF] to-[#1A1A32] rounded-full opacity-70 animate-pulse"></div>
+                <div className="absolute top-3/4 right-1/4 w-5 h-5 bg-gradient-to-b from-[#FFC876] to-[#1A1A32] rounded-full opacity-60 animate-pulse"></div>
+                <div className="absolute top-1/3 right-1/3 w-3 h-3 bg-gradient-to-b from-[#FF6B6B] to-[#1A1A32] rounded-full opacity-50 animate-pulse"></div>
+                <div className="absolute bottom-1/4 left-1/3 w-4 h-4 bg-gradient-to-b from-[#88E5BE] to-[#1A1A32] rounded-full opacity-60 animate-pulse"></div>
+                
+                {/* Additional decorative planets */}
+                <div className="absolute top-1/6 right-1/6 w-6 h-6 bg-gradient-to-b from-[#DD734F] to-[#1A1A32] rounded-full opacity-50 animate-pulse" style={{animationDelay: '0.5s'}}></div>
+                <div className="absolute bottom-1/6 right-1/2 w-3 h-3 bg-gradient-to-b from-[#B9AEDF] to-[#1A1A32] rounded-full opacity-60 animate-pulse" style={{animationDelay: '1s'}}></div>
+                <div className="absolute top-1/2 left-1/6 w-5 h-5 bg-gradient-to-b from-[#4ECDC4] to-[#1A1A32] rounded-full opacity-55 animate-pulse" style={{animationDelay: '1.5s'}}></div>
+                <div className="absolute bottom-1/3 right-1/5 w-4 h-4 bg-gradient-to-b from-[#FFE66D] to-[#1A1A32] rounded-full opacity-45 animate-pulse" style={{animationDelay: '2s'}}></div>
+                <div className="absolute top-2/3 left-1/5 w-3 h-3 bg-gradient-to-b from-[#FF8A80] to-[#1A1A32] rounded-full opacity-65 animate-pulse" style={{animationDelay: '0.8s'}}></div>
+                <div className="absolute top-1/5 left-1/2 w-2 h-2 bg-gradient-to-b from-[#81C784] to-[#1A1A32] rounded-full opacity-40 animate-pulse" style={{animationDelay: '1.2s'}}></div>
+                <div className="absolute bottom-1/5 left-1/4 w-4 h-4 bg-gradient-to-b from-[#CE93D8] to-[#1A1A32] rounded-full opacity-55 animate-pulse" style={{animationDelay: '1.8s'}}></div>
+                <div className="absolute top-3/5 right-1/8 w-3 h-3 bg-gradient-to-b from-[#FFAB91] to-[#1A1A32] rounded-full opacity-50 animate-pulse" style={{animationDelay: '0.3s'}}></div>
+              </span>
+            </div>
+
+            {/* Central logo with enhanced styling and full text */}
+            <div className="relative z-10 flex items-center justify-center w-56 h-56 sm:w-64 sm:h-64 bg-gradient-to-br from-n-7 to-n-8 rounded-3xl border-2 border-n-6 shadow-2xl">
+              <div className="flex items-center justify-center w-48 h-48 sm:w-56 sm:h-56 bg-conic-gradient rounded-3xl p-1">
+                <div className="flex items-center justify-center w-full h-full bg-n-8 rounded-3xl">
+                  <div className="flex flex-col items-center text-center">
+                    <img
+                      src="/wearecircleup/assets/circleimages/logo.svg"
+                      width={80}
+                      height={80}
+                      alt="CircleUp Logo"
+                      className="w-16 h-16 sm:w-20 sm:h-20 drop-shadow-lg mb-3"
+                    />
+                    <div className="flex flex-col items-center">
+                      <span className="font-bold text-white leading-tight text-lg sm:text-xl">
+                        CIRCLE UP
+                      </span>
+                      <span className="font-bold text-white leading-tight text-lg sm:text-xl">
+                        VOLUNTEER
+                      </span>
+                      <span className="text-xs sm:text-sm text-n-3 font-mono leading-tight mt-1">
+                        Community Based Learning
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <ul>
-              {collabApps.map((app, i) => (
-                <li
-                  key={app.id}
-                  className={`absolute top-0 left-1/2 h-1/2 -ml-[1.2rem] sm:-ml-[1.6rem] origin-bottom`}
-                  style={{ transform: `rotate(${i * 45}deg)` }}
-                >
+            {/* Tool names positioned around the center in a modern circular layout */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              {collabApps.map((app, i) => {
+                const angle = (i * 72) - 90; // Start from top and distribute evenly
+                const radius = 240; // Distance from center
+                const x = Math.cos((angle * Math.PI) / 180) * radius;
+                const y = Math.sin((angle * Math.PI) / 180) * radius;
+                
+                return (
                   <div
-                    className={`relative -top-[1.2rem] sm:-top-[1.6rem] flex w-[2.4rem] h-[2.4rem] sm:w-[3.2rem] sm:h-[3.2rem] bg-n-7 border border-n-1/15 rounded-xl animate-pulse`}
-                    style={{ transform: `rotate(-${i * 45}deg)` }}
+                    key={app.id}
+                    className="absolute"
+                    style={{
+                      transform: `translate(${x}px, ${y}px)`,
+                    }}
                   >
-                    <img
-                      src={app.icon}
-                      alt={app.title}
-                      width={app.height}
-                      height={app.height}
-                      className="m-auto w-4 h-4 sm:w-6 sm:h-6"
-                    />
+                    <div className="relative group cursor-pointer">
+                      <div className="bg-gradient-to-r from-n-8/90 to-n-7/90 backdrop-blur-sm border border-n-6/50 rounded-3xl px-8 py-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 hover:border-color-1/50">
+                        <span className="inline-block relative font-semibold text-lg text-n-1 whitespace-nowrap">
+                          {app.title}
+                          <img
+                            src={curve}
+                            className="absolute top-full left-0 w-full xl:-mt-1 pointer-events-none select-none opacity-80"
+                            width={120}
+                            height={12}
+                            alt="Curve"
+                          />
+                        </span>
+                      </div>
+                      
+                      {/* Subtle glow effect on hover */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-color-1/20 to-color-2/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-xl"></div>
+                    </div>
                   </div>
-                </li>
-              ))}
-            </ul>
+                );
+              })}
+            </div>
 
             <LeftCurve />
             <RightCurve />
