@@ -1,5 +1,3 @@
-// import logo from "../assets/circleimages/logo.svg";
-
 const Logo = ({ 
   className = "", 
   showText = true, 

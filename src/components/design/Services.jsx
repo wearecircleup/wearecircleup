@@ -69,7 +69,7 @@ export const VideoChatMessage = ({ isPlaying }) => {
       <div className="tagline absolute right-2.5 bottom-1 text-[0.625rem] text-n-3 uppercase">
         {isPlaying ? (
           <img
-            src="/wearecircleup/assets/loading.png"
+            src="/wearecircleup/assets/loading-01.svg"
             alt="Loading"
             className="w-4 h-4 animate-spin pointer-events-none select-none"
           />
@@ -104,7 +104,7 @@ export const VideoBar = ({ isPlaying, setIsPlaying }) => {
   return (
     <div className="absolute left-0 bottom-0 w-full flex items-center p-6">
       <img
-        src={isPlaying ? "/wearecircleup/assets/pause.svg" : "/wearecircleup/assets/play.svg"}
+        src={isPlaying ? "/wearecircleup/assets/recording-01.svg" : "/wearecircleup/assets/recording-03.svg"}
         width={24}
         height={24}
         alt="Play"

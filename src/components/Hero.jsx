@@ -3,13 +3,10 @@ import { ScrollParallax } from "react-just-parallax";
 import Typewriter from "typewriter-effect";
 
 import { curve } from "../assets";
-// import homeLanding from "../assets/circleimages/home-landing.png";
 import { heroIcons } from "../constants";
 import Button from "./Button";
 import CompanyLogos from "./CompanyLogos";
 import { BackgroundCircles, BottomLine, Gradient } from "./design/Hero";
-import Generating from "./Generating";
-import Notification from "./Notification";
 import Section from "./Section";
 
 const Hero = () => {
@@ -63,39 +60,6 @@ const Hero = () => {
         </div>
 
         <div className="relative max-w-[28rem] mx-auto md:max-w-6xl xl:mb-24">
-          <div className="relative z-1 p-0.5 rounded-2xl bg-conic-gradient">
-            <div className="relative bg-n-8 rounded-[1rem]">
-              <div className="h-[1.4rem] bg-n-10 rounded-t-[0.9rem]" />
-
-              <div className="aspect-[33/40] rounded-b-[0.9rem] overflow-hidden md:aspect-[688/490] lg:aspect-[1024/490]">
-                <img
-                  src="/wearecircleup/assets/circleimages/home-landing.png"
-                  className="w-full h-full object-cover object-bottom pointer-events-none select-none"
-                  width={1024}
-                  height={490}
-                  alt="Circle Up Home"
-                />
-
-                {/* Generating component removed */}
-
-                <ScrollParallax isAbsolutelyPositioned>
-                  <ul className="hidden absolute -left-[5.5rem] bottom-[7.5rem] px-1 py-1 bg-n-9/40 backdrop-blur border border-n-1/10 rounded-2xl xl:flex">
-                    {heroIcons.map((icon, index) => (
-                      <li className="p-5" key={index}>
-                        <img src={icon} width={24} height={25} alt={icon} />
-                      </li>
-                    ))}
-                  </ul>
-                </ScrollParallax>
-
-                {/* Notification component removed */}
-              </div>
-            </div>
-
-            <Gradient />
-          </div>
-
-          {/* Hero background image removed */}
 
           <BackgroundCircles />
         </div>

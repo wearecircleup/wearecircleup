@@ -1,26 +1,12 @@
-import brainwave from "./brainwave.svg";
 import check from "./check.svg";
-import brainwaveSymbol from "./brainwave-symbol.svg";
-import brainwaveWhiteSymbol from "./brainwave-symbol-white.svg";
-import play from "./play.svg";
-import pause from "./pause.svg";
 import gradient from "./gradient.png";
-import smallSphere from "./4-small.png";
 import grid from "./grid.png";
-import check2 from "./check-02.svg";
 import loading1 from "./loading-01.svg";
 import yourlogo from "./yourlogo.svg";
-import homeSmile from "./home-smile.svg";
-import file02 from "./file-02.svg";
 import searchMd from "./search-md.svg";
-import plusSquare from "./plus-square.svg";
 import recording03 from "./recording-03.svg";
 import recording01 from "./recording-01.svg";
-import disc02 from "./disc-02.svg";
-import chromecast from "./chrome-cast.svg";
 import sliders04 from "./sliders-04.svg";
-import loading from "./loading.png";
-import background from "./background.jpg";
 
 import curve from "./hero/curve.png";
 import robot from "./hero/robot.jpg";
@@ -28,14 +14,8 @@ import heroBackground from "./hero/hero-background.jpg";
 
 import curve1 from "./collaboration/curve-1.svg";
 import curve2 from "./collaboration/curve-2.svg";
-import discord from "./collaboration/discord.png";
-import figma from "./collaboration/snow.png";
-import framer from "./collaboration/framer.png";
-import notion from "./collaboration/notion.png";
-import photoshop from "./collaboration/photoshop.png";
-import protopie from "./collaboration/protopie.png";
-import raindrop from "./collaboration/raindrop.png";
-import slack from "./collaboration/eventbrite.jpg";
+// Collaboration assets removed - using curve-1.svg as placeholder
+import figma from "./collaboration/curve-1.svg";
 
 import service1 from "./services/service-1.png";
 import service2 from "./services/service-2.png";
@@ -53,10 +33,7 @@ import roadmap3 from "./roadmap/image-3.png";
 import roadmap4 from "./roadmap/image-4.png";
 import undone from "./roadmap/undone.svg";
 
-import notification1 from "./notification/image-1.png";
-import notification2 from "./notification/image-2.png";
-import notification3 from "./notification/image-3.png";
-import notification4 from "./notification/image-4.png";
+// Notification images removed
 
 import benefitCard1 from "./benefits/card-1.svg";
 import benefitCard2 from "./benefits/card-2.svg";
@@ -70,49 +47,57 @@ import benefitIcon3 from "./benefits/icon-3.svg";
 import benefitIcon4 from "./benefits/icon-4.svg";
 import benefitImage2 from "./benefits/image-2.png";
 
-import discordBlack from "./socials/discord.svg";
+// Discord social removed
 import facebook from "./socials/facebook.svg";
 import instagram from "./socials/instagram.svg";
 import telegram from "./socials/telegram.svg";
 import twitter from "./socials/twitter.svg";
 
+// Placeholders using existing assets
+const brainwaveSymbol = yourlogo;
+const brainwaveWhiteSymbol = yourlogo;
+const brainwave = yourlogo;
+const play = recording03;
+const pause = recording01;
+const smallSphere = gradient;
+const homeSmile = searchMd;
+const file02 = searchMd;
+const plusSquare = searchMd;
+const disc02 = searchMd;
+const chromecast = searchMd;
+const loading = loading1;
+const background = heroBackground;
+const discord = figma;
+const framer = figma;
+const notion = figma;
+const photoshop = figma;
+const protopie = figma;
+const raindrop = figma;
+const slack = figma;
+const notification1 = service1;
+const notification2 = service2;
+const notification3 = service3;
+const notification4 = service1;
+const discordBlack = facebook;
+const check2 = check;
+
 export {
-  brainwave,
   check,
   check2,
   loading1,
-  brainwaveSymbol,
-  brainwaveWhiteSymbol,
-  play,
-  pause,
   gradient,
-  smallSphere,
   grid,
   yourlogo,
-  homeSmile,
-  file02,
   searchMd,
-  plusSquare,
   recording03,
   recording01,
-  disc02,
-  chromecast,
   sliders04,
-  loading,
-  background,
   curve,
   robot,
   heroBackground,
   curve1,
   curve2,
-  discord,
   figma,
-  framer,
-  notion,
-  photoshop,
-  protopie,
-  raindrop,
-  slack,
   service1,
   service2,
   service3,
@@ -126,10 +111,6 @@ export {
   roadmap3,
   roadmap4,
   undone,
-  notification1,
-  notification2,
-  notification3,
-  notification4,
   benefitCard1,
   benefitCard2,
   benefitCard3,
@@ -141,9 +122,34 @@ export {
   benefitIcon3,
   benefitIcon4,
   benefitImage2,
-  discordBlack,
   facebook,
   instagram,
   telegram,
   twitter,
+  // Placeholders
+  brainwaveSymbol,
+  brainwaveWhiteSymbol,
+  brainwave,
+  play,
+  pause,
+  smallSphere,
+  homeSmile,
+  file02,
+  plusSquare,
+  disc02,
+  chromecast,
+  loading,
+  background,
+  discord,
+  framer,
+  notion,
+  photoshop,
+  protopie,
+  raindrop,
+  slack,
+  notification1,
+  notification2,
+  notification3,
+  notification4,
+  discordBlack,
 };

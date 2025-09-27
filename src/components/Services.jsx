@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { service1, service2, service3, check } from "../assets";
 import { circleUpServices, circleUpServicesIcons } from "../constants";
-import Generating from "./Generating";
 import Heading from "./Heading";
 import Section from "./Section";
 import { curve } from "../assets";

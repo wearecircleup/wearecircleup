@@ -1,45 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import Header from "../components/Header";
-import Section from "../components/Section";
-import Logo from "../components/Logo";
 import Footer from "../components/Footer";
 import ButtonGradient from "../assets/svg/ButtonGradient";
-
-// Help Carousel Component
-const HelpCarousel = () => {
-  const [currentImage, setCurrentImage] = useState(0);
-  const images = [
-    "/wearecircleup/assets/circleimages/help-carrusel-1.png",
-    "/wearecircleup/assets/circleimages/help-carrusel-2.png",
-    "/wearecircleup/assets/circleimages/help-carrusel-3.png",
-    "/wearecircleup/assets/circleimages/help-carrusel-4.png",
-    "/wearecircleup/assets/circleimages/help-carrusel-5.png",
-    "/wearecircleup/assets/circleimages/help-carrusel-6.png"
-  ];
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % images.length);
-    }, 3000); // Change image every 3 seconds
-
-    return () => clearInterval(interval);
-  }, [images.length]);
-
-  return (
-    <div className="relative w-full h-full">
-      {images.map((image, index) => (
-        <img
-          key={index}
-          src={image}
-          alt={`Help carousel ${index + 1}`}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
-            index === currentImage ? 'opacity-100' : 'opacity-0'
-          }`}
-        />
-      ))}
-    </div>
-  );
-};
+import NeedHelp from "../components/NeedHelp";
 
 const PoliciesDocs = ({ setCurrentPage }) => {
   const [activeSection, setActiveSection] = useState("privacy-policy");
@@ -932,83 +895,23 @@ const PoliciesDocs = ({ setCurrentPage }) => {
           </div>
         </div>
 
-        {/* Need help Section - Full width outside main content */}
-        <div className="w-full bg-n-8 border-t border-n-6">
-          <Section className="overflow-hidden">
-            {/* Background grid only on left side */}
-            <div className="absolute top-0 left-0 w-1/2 h-full opacity-40 z-0">
-              <img src="/src/assets/grid.png" alt="" className="w-full h-full object-cover" />
-            </div>
-            
-            <div className="container relative z-2">
-              <div className="relative z-1 grid gap-10 lg:grid-cols-2 items-center">
-                <div className="relative flex justify-center lg:justify-start">
-                  <div className="relative">
-                    {/* 3D Stacked boxes effect - spread out card deck */}
-                    <div className="relative">
-                      {/* Third card (back of deck) */}
-                      <div className="absolute top-8 left-12 w-[28rem] h-[28rem] bg-n-6/15 rounded-2xl transform rotate-12 shadow-lg"></div>
-                      {/* Second card (middle of deck) */}
-                      <div className="absolute top-5 left-8 w-[28rem] h-[28rem] bg-n-6/25 rounded-2xl transform rotate-6 shadow-lg"></div>
-                      {/* First card (almost top of deck) */}
-                      <div className="absolute top-2 left-4 w-[28rem] h-[28rem] bg-n-6/35 rounded-2xl transform rotate-3 shadow-lg"></div>
-                      {/* Front card with carousel images (top of deck) */}
-                      <div className="relative w-[28rem] h-[28rem] bg-n-8 rounded-2xl overflow-hidden shadow-2xl">
-                        <HelpCarousel />
-                        {/* Subtle overlay for better contrast */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-n-8/20 to-transparent"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                  
-                
-                {/* Voice input indicator */}
-                <div className="absolute bottom-0 left-0 flex items-center bg-n-7 rounded-full px-4 py-2 border border-n-6">
-                  <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center mr-3">
-                    <span className="text-white text-xs">?</span>
-                  </div>
-                  <span className="text-n-3 text-sm">Ask anything</span>
-                  <div className="ml-4 flex space-x-1">
-                    <div className="w-1 h-4 bg-purple-500 rounded-full animate-pulse"></div>
-                    <div className="w-1 h-6 bg-purple-500 rounded-full animate-pulse"></div>
-                    <div className="w-1 h-4 bg-purple-500 rounded-full animate-pulse"></div>
-                    <div className="w-1 h-6 bg-purple-500 rounded-full animate-pulse"></div>
-                  </div>
-                </div>
-                
-                <div className="relative">
-                  <h1 className="h1 mb-6">Need help?</h1>
-                  <p className="body-1 mb-8 text-n-4">
-                    Can't find your answer, contact us
-                  </p>
-                  
-                  <div className="space-y-6">
-                    <div className="flex items-center p-6 bg-n-7 rounded-xl border border-n-6">
-                      <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mr-4">
-                        <span className="text-white text-xl">💬</span>
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-n-1 mb-1">Join our community</h3>
-                        <p className="text-n-4">Discuss anything with other users</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center p-6 bg-n-7 rounded-xl border border-n-6">
-                      <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mr-4">
-                        <span className="text-white text-xl">📧</span>
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-n-1 mb-1">Email us</h3>
-                        <p className="text-color-1">hello@brainwave.com</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Section>
-        </div>
+        <NeedHelp 
+          title="¿Necesitas ayuda?"
+          subtitle="¿Tienes dudas sobre nuestras políticas? Estamos aquí para ayudarte"
+          cards={[
+            {
+              icon: "💬",
+              title: "Únete a nuestra comunidad",
+              description: "Conecta con otros miembros y resuelve dudas"
+            },
+            {
+              icon: "📧",
+              title: "Escríbenos",
+              description: "",
+              email: "legal@circleup.org"
+            }
+          ]}
+        />
 
         {/* Mobile sidebar overlay */}
         {isSidebarOpen && (

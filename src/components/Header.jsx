@@ -62,8 +62,6 @@ const Header = ({ setCurrentPage }) => {
                     
                     if (item.url === '/features') {
                       setCurrentPage && setCurrentPage('features');
-                    } else if (item.url === '/pricing') {
-                      setCurrentPage && setCurrentPage('pricing');
                     } else if (item.url === '/aliados') {
                       setCurrentPage && setCurrentPage('aliados');
                     } else if (item.url === '/voluntarios') {

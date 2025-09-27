@@ -4,24 +4,9 @@ import {
   benefitIcon3,
   benefitIcon4,
   benefitImage2,
-  chromecast,
-  disc02,
-  discord,
-  discordBlack,
   facebook,
   figma,
-  file02,
-  framer,
-  homeSmile,
   instagram,
-  notification2,
-  notification3,
-  notification4,
-  notion,
-  photoshop,
-  plusSquare,
-  protopie,
-  raindrop,
   recording01,
   recording03,
   roadmap1,
@@ -29,7 +14,6 @@ import {
   roadmap3,
   roadmap4,
   searchMd,
-  slack,
   sliders04,
   telegram,
   twitter,
@@ -72,9 +56,9 @@ export const navigation = [
   },
 ];
 
-export const heroIcons = [homeSmile, file02, searchMd, plusSquare];
+export const heroIcons = [searchMd, searchMd, searchMd, searchMd];
 
-export const notificationImages = [notification4, notification3, notification2];
+export const notificationImages = [];
 
 export const companyLogos = [yourlogo, yourlogo, yourlogo, yourlogo, yourlogo];
 
@@ -87,8 +71,8 @@ export const circleUpServices = [
 export const circleUpServicesIcons = [
   recording03,
   recording01,
-  disc02,
-  chromecast,
+  searchMd,
+  searchMd,
   sliders04,
 ];
 
@@ -160,28 +144,28 @@ export const collabApps = [
   {
     id: "1",
     title: "Eventbrite",
-    icon: notion,
+    icon: figma,
     width: 34,
     height: 36,
   },
   {
     id: "2",
     title: "Jellypod",
-    icon: discord,
+    icon: figma,
     width: 36,
     height: 28,
   },
   {
     id: "3",
     title: "Deepgram",
-    icon: slack,
+    icon: figma,
     width: 34,
     height: 35,
   },
   {
     id: "4",
     title: "GitHub Actions",
-    icon: photoshop,
+    icon: figma,
     width: 34,
     height: 34,
   },
@@ -252,12 +236,6 @@ export const benefits = [
 ];
 
 export const socials = [
-  {
-    id: "0",
-    title: "Discord",
-    iconUrl: discordBlack,
-    url: "#",
-  },
   {
     id: "1",
     title: "Twitter",

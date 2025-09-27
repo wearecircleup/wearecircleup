@@ -1,4 +1,4 @@
-import { brainwaveSymbol, check, curve } from "../assets";
+import { check, curve } from "../assets";
 // import logo from "../assets/circleimages/logo.svg";
 import { collabApps, collabContent, collabText } from "../constants";
 import Button from "./Button";
