@@ -131,7 +131,7 @@ const HowToUseVolunteer = ({ setCurrentPage }) => {
           steps={steps}
           title="CÓMO FUNCIONA"
           buttonText="APLICAR COMO VOLUNTARIO"
-          buttonAction={() => { window.location.href = 'mailto:voluntarios@circleup.org?subject=Quiero%20ser%20voluntario&body=Nombre%3A%0AExperiencia%3A%0ADisponibilidad%3A%0A'; }}
+          buttonAction={() => { window.location.href = 'mailto:hola@circleup.com.co?subject=Quiero%20ser%20voluntario&body=Nombre%3A%0AExperiencia%3A%0ADisponibilidad%3A%0A'; }}
         />
 
         <RoadmapSection 
@@ -150,7 +150,7 @@ const HowToUseVolunteer = ({ setCurrentPage }) => {
           title="Comparte tu experiencia con tu comunidad en"
           subtitle="Facilita sesiones prácticas de 1–2 horas con plantillas y acompañamiento. Tú pones el conocimiento; nosotros la logística y la comunidad."
           buttonText="APLICAR COMO VOLUNTARIO"
-          buttonAction={() => { window.location.href = 'mailto:voluntarios@circleup.org?subject=Quiero%20ser%20voluntario&body=Nombre%3A%0AExperiencia%3A%0ADisponibilidad%3A%0A'; }}
+          buttonAction={() => { window.location.href = 'mailto:hola@circleup.com.co?subject=Quiero%20ser%20voluntario&body=Nombre%3A%0AExperiencia%3A%0ADisponibilidad%3A%0A'; }}
         />
 
         <NeedHelp 
@@ -166,7 +166,7 @@ const HowToUseVolunteer = ({ setCurrentPage }) => {
               icon: "📧",
               title: "Escríbenos",
               description: "",
-              email: "voluntarios@circleup.org"
+              email: "hola@circleup.com.co"
             }
           ]}
         />

@@ -32,7 +32,7 @@ const Home = ({ setCurrentPage }) => {
                 icon: "📧",
                 title: "Escríbenos",
                 description: "",
-                email: "hola@circleup.org"
+                email: "hola@circleup.com.co"
               }
             ]}
           />

@@ -131,7 +131,7 @@ const HowToUseParticipant = ({ setCurrentPage }) => {
           steps={steps}
           title="CÓMO FUNCIONA"
           buttonText="INSCRIBIRME"
-          buttonAction={() => { window.location.href = 'mailto:participantes@circleup.org?subject=Quiero%20inscribirme&body=Nombre%3A%0ATaller%20de%20inter%C3%A9s%3A%0ACiudad%3A%0ATel%C3%A9fono%3A'; }}
+          buttonAction={() => { window.location.href = 'mailto:hola@circleup.com.co?subject=Quiero%20inscribirme&body=Nombre%3A%0ATaller%20de%20inter%C3%A9s%3A%0ACiudad%3A%0ATel%C3%A9fono%3A'; }}
         />
 
         <RoadmapSection 
@@ -194,7 +194,7 @@ const HowToUseParticipant = ({ setCurrentPage }) => {
           title="Aprende haciendo, gratis y cerca de ti con"
           subtitle="Talleres prácticos de 1–2 horas. Temas útiles para tu trabajo y vida. Sin requisitos."
           buttonText="INSCRIBIRME GRATIS"
-          buttonAction={() => { window.location.href = 'mailto:participantes@circleup.org?subject=Quiero%20inscribirme&body=Nombre%3A%0ATaller%20de%20inter%C3%A9s%3A%0ACiudad%3A%0ATel%C3%A9fono%3A'; }}
+          buttonAction={() => { window.location.href = 'mailto:hola@circleup.com.co?subject=Quiero%20inscribirme&body=Nombre%3A%0ATaller%20de%20inter%C3%A9s%3A%0ACiudad%3A%0ATel%C3%A9fono%3A'; }}
         />
 
         <NeedHelp 
@@ -210,7 +210,7 @@ const HowToUseParticipant = ({ setCurrentPage }) => {
               icon: "📧",
               title: "Inscríbete Ya",
               description: "",
-              email: "participantes@circleup.org"
+              email: "hola@circleup.com.co"
             }
           ]}
         />

@@ -659,7 +659,7 @@ const RoadmapDocs = ({ setCurrentPage }) => {
               icon: "📧",
               title: "Escríbenos",
               description: "",
-              email: "info@circleup.org"
+              email: "hola@circleup.com.co"
             }
           ]}
         />

@@ -173,7 +173,7 @@ const HowToUseBusiness = ({ setCurrentPage }) => {
               icon: "📧",
               title: "Visibilidad y contacto",
               description: "Publicamos tu apoyo en redes y en nuestra web.",
-              email: "aliados@circleup.org"
+              email: "hola@circleup.com.co"
             }
           ]}
         />

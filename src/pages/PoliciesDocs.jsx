@@ -908,7 +908,7 @@ const PoliciesDocs = ({ setCurrentPage }) => {
               icon: "📧",
               title: "Escríbenos",
               description: "",
-              email: "legal@circleup.org"
+              email: "hola@circleup.com.co"
             }
           ]}
         />
