@@ -85,7 +85,7 @@ const Collaboration = () => {
               <div className="flex items-center justify-center w-40 h-40 sm:w-48 sm:h-48 bg-conic-gradient rounded-full p-1">
                 <div className="flex items-center justify-center w-full h-full bg-n-8 rounded-full">
                   <img
-                    src="/wearecircleup/assets/circleimages/logo.svg"
+                    src="/assets/circleimages/logo.svg"
                     width={150}
                     height={150}
                     alt="CircleUp Logo"

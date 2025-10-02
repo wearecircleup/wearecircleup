@@ -19,7 +19,7 @@ const FAQ = ({
     <Section className={sectionClassName}>
       {/* Background elements */}
       <div className="absolute top-1/2 left-1/4 w-80 h-80 opacity-2 rotate-45">
-        <img src="/wearecircleup/assets/grid.png" alt="" className="w-full h-full object-cover" />
+        <img src="/assets/grid.png" alt="" className="w-full h-full object-cover" />
       </div>
 
       <div className={`container relative z-2 ${className}`}>

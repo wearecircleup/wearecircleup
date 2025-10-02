@@ -17,25 +17,25 @@ const HowToUseBusiness = ({ setCurrentPage }) => {
       id: 0,
       title: "Explora cómo apoyar",
       description: "Si eres un café, biblioteca, entidad pública o empresa, cuéntanos qué puedes ofrecer: espacio, insumos/materiales, mentorías técnicas o tiempo profesional.",
-      image: "/wearecircleup/assets/circleimages/aliado-sub-nav-1.png"
+      image: "/assets/circleimages/aliado-sub-nav-1.png"
     },
     {
       id: 1,
       title: "Define tu aporte",
       description: "Acordamos duración, frecuencia y tipo de apoyo. En cafés: ticket de consumo simbólico o donación. En espacios públicos: horarios que aumenten su uso. En empresas: mentorías técnicas o materiales.",
-      image: "/wearecircleup/assets/circleimages/aliado-sub-nav-2.png"
+      image: "/assets/circleimages/aliado-sub-nav-2.png"
     },
     {
       id: 2,
       title: "Activamos sesiones",
       description: "Coordinamos comunidad y facilitación; tú aportas el recurso. Sesiones prácticas e intergeneracionales de 1–2 horas (CBL), formato sencillo y cercano, sin trámites pesados.",
-      image: "/wearecircleup/assets/circleimages/aliado-sub-nav-3.png"
+      image: "/assets/circleimages/aliado-sub-nav-3.png"
     },
     {
       id: 3,
       title: "Reconocimiento y continuidad",
       description: "Damos visibilidad en redes y web; contamos la historia y, si te gusta, repetimos o escalamos a otras sedes/temas para fortalecer la sostenibilidad del territorio.",
-      image: "/wearecircleup/assets/circleimages/aliado-sub-nav-4.png"
+      image: "/assets/circleimages/aliado-sub-nav-4.png"
     }
   ];
 

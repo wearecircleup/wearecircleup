@@ -11,7 +11,7 @@ const Logo = ({
       onClick={onClick}
     >
       <img
-        src="/wearecircleup/assets/circleimages/logo.svg"
+        src="/assets/circleimages/logo.svg"
         width={logoSize.width}
         height={logoSize.height}
         alt="CircleUp Logo"
