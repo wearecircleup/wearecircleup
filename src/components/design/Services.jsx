@@ -1,5 +1,6 @@
 import ChatBubbleWing from "../../assets/svg/ChatBubbleWing";
 import { useEffect, useRef, useState } from "react";
+import Typewriter from "typewriter-effect";
 
 export const Gradient = () => {
   return (
