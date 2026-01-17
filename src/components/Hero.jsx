@@ -262,7 +262,7 @@ const Hero = () => {
         <div className="relative z-1 max-w-[62rem] mx-auto text-center mb-[1rem] md:mb-4 lg:mb-[1.5rem]">
           <h1 className="h1 mb-6">
             <span className="inline-block relative font-semibold">
-              Circle Up Volunteer
+              Circle Up Volunteering
               <img
                 src={curve}
                 className="absolute top-full left-0 w-full xl:-mt-2 pointer-events-none select-none"
