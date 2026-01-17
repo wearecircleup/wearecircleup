@@ -1,8 +1,8 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { disablePageScroll, enablePageScroll } from "scroll-lock";
 
-import MenuSvg from "../assets/svg/MenuSvg";
-import { links } from "../config";
+import { circleup } from "../assets";
 import { navigation } from "../constants";
 import Button from "./Button";
 import Logo from "./Logo";

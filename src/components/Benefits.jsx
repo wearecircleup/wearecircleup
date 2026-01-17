@@ -234,7 +234,7 @@ const Benefits = () => {
 
           {/* Dots indicator for mobile */}
           <div className="flex justify-center mt-4 space-x-2 md:hidden">
-            {stakeholders.map((_, index) => (
+              {benefits.map((_item, index) => (
               <button
                 key={index}
                 onClick={() => !isTransitioning && setCurrentSlide(index)}

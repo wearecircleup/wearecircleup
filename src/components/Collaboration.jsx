@@ -1,9 +1,7 @@
 import { check, curve } from "../assets";
-// import logo from "../assets/circleimages/logo.svg";
-import { collabApps, collabContent, collabText } from "../constants";
-import Button from "./Button";
-import { LeftCurve, RightCurve } from "./design/Collaboration";
 import Section from "./Section";
+import { collabApps, collabContent, collabText } from "../constants";
+import { LeftCurve, RightCurve } from "./design/Collaboration";
 
 const Collaboration = () => {
   return (
