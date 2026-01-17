@@ -6,21 +6,37 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 function buildPresentation() {
-  const SLIDES_JSON = process.env.SLIDES_JSON;
-  const USERNAME = process.env.USERNAME;
-  const PRESENTATION_ID = process.env.PRESENTATION_ID;
-  const TITLE = process.env.TITLE;
-  const THEME = process.env.THEME || 'modern';
-  const MODEL = process.env.MODEL || 'gpt-4o';
+  try {
+    const SLIDES_JSON = process.env.SLIDES_JSON;
+    const USERNAME = process.env.USERNAME;
+    const PRESENTATION_ID = process.env.PRESENTATION_ID;
+    const TITLE = process.env.TITLE;
+    const THEME = process.env.THEME || 'modern';
+    const MODEL = process.env.MODEL || 'gpt-4o';
 
-  if (!SLIDES_JSON || !USERNAME || !PRESENTATION_ID || !TITLE) {
-    throw new Error('SLIDES_JSON, USERNAME, PRESENTATION_ID, and TITLE are required');
-  }
+    console.log('Environment variables:');
+    console.log(`  SLIDES_JSON: ${SLIDES_JSON}`);
+    console.log(`  USERNAME: ${USERNAME}`);
+    console.log(`  PRESENTATION_ID: ${PRESENTATION_ID}`);
+    console.log(`  TITLE: ${TITLE}`);
+    console.log(`  THEME: ${THEME}`);
+    console.log(`  MODEL: ${MODEL}`);
 
-  console.log(`Building presentation: ${PRESENTATION_ID}`);
+    if (!SLIDES_JSON || !USERNAME || !PRESENTATION_ID || !TITLE) {
+      throw new Error('SLIDES_JSON, USERNAME, PRESENTATION_ID, and TITLE are required');
+    }
 
-  // Read slides
-  const slidesData = JSON.parse(fs.readFileSync(SLIDES_JSON, 'utf8'));
+    console.log(`\nBuilding presentation: ${PRESENTATION_ID}`);
+
+    // Check if file exists
+    if (!fs.existsSync(SLIDES_JSON)) {
+      throw new Error(`Slides file not found: ${SLIDES_JSON}`);
+    }
+
+    // Read slides
+    console.log(`Reading slides from: ${SLIDES_JSON}`);
+    const slidesData = JSON.parse(fs.readFileSync(SLIDES_JSON, 'utf8'));
+    console.log(`Loaded ${slidesData.slides.length} slides`);
   
   const rootDir = path.join(__dirname, '..', '..');
   
@@ -63,9 +79,31 @@ url: /presentations/public/${USERNAME}/${PRESENTATION_ID}.html
     html
   );
   
-  console.log(`✓ Metadata: presentations/metadata/${USERNAME}/${PRESENTATION_ID}.yaml`);
-  console.log(`✓ Content: presentations/content/${USERNAME}/${PRESENTATION_ID}.json`);
-  console.log(`✓ HTML: presentations/public/${USERNAME}/${PRESENTATION_ID}.html`);
+  console.log(`\n✓ Presentation built successfully!`);
+  console.log(`  Metadata: presentations/metadata/${USERNAME}/${PRESENTATION_ID}.yaml`);
+  console.log(`  Content: presentations/content/${USERNAME}/${PRESENTATION_ID}.json`);
+  console.log(`  HTML: presentations/public/${USERNAME}/${PRESENTATION_ID}.html`);
+  console.log(`\nFiles created in: ${rootDir}`);
+  
+  // Verify files exist
+  const metadataExists = fs.existsSync(path.join(metadataDir, `${PRESENTATION_ID}.yaml`));
+  const contentExists = fs.existsSync(path.join(contentDir, `${PRESENTATION_ID}.json`));
+  const htmlExists = fs.existsSync(path.join(publicDir, `${PRESENTATION_ID}.html`));
+  
+  console.log(`\nVerification:`);
+  console.log(`  Metadata file exists: ${metadataExists}`);
+  console.log(`  Content file exists: ${contentExists}`);
+  console.log(`  HTML file exists: ${htmlExists}`);
+  
+  if (!metadataExists || !contentExists || !htmlExists) {
+    throw new Error('Some files were not created successfully');
+  }
+  
+  } catch (error) {
+    console.error('\n❌ Error building presentation:');
+    console.error(error);
+    process.exit(1);
+  }
 }
 
 function generateHTML(slidesData, title, theme) {

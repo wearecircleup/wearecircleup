@@ -156,12 +156,25 @@ jobs:
           git config user.name "CircleUp Bot"
           git config user.email "bot@circleup.com.co"
       
+      - name: List generated files
+        run: |
+          echo "Checking generated files..."
+          ls -la presentations/ || echo "presentations/ directory not found"
+          find presentations/ -type f || echo "No files found in presentations/"
+      
       - name: Commit and push presentation
         run: |
+          echo "Adding files to git..."
           git add presentations/
+          
+          echo "Checking git status..."
+          git status
+          
           if git diff --staged --quiet; then
-            echo "No changes to commit"
+            echo "⚠️  No changes to commit"
+            exit 1
           else
+            echo "Committing changes..."
             git commit -m "feat(presentation): ${{ github.event.client_payload.presentation.title }}
             
             - User: ${{ needs.validate.outputs.user_id }}
@@ -171,7 +184,10 @@ jobs:
             - ID: ${{ github.event.client_payload.request_id }}
             
             [skip ci]"
+            
+            echo "Pushing to main..."
             git push origin main
+            echo "✓ Push successful"
           fi
       
       - name: Update status (success)

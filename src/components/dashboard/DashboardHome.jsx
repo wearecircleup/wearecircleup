@@ -15,8 +15,8 @@ const DashboardHome = ({ user, onNavigate }) => {
   const loadPresentations = async () => {
     setLoading(true);
     try {
-      // Fetch from GitHub repository
-      const remotePresentations = await PresentationsAPI.getUserPresentations(user.username || user.id);
+      // Fetch from GitHub repository (use user.id as it's what the workflow uses)
+      const remotePresentations = await PresentationsAPI.getUserPresentations(user.id);
       
       // Merge with localStorage (for processing status)
       const localKey = `presentations_${user.id}`;
