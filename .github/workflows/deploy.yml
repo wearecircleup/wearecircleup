@@ -53,6 +53,7 @@ jobs:
           VITE_BASE_URL: https://circleup.com.co
           VITE_GITHUB_APP_CLIENT_ID: ${{ secrets.VITE_GITHUB_APP_CLIENT_ID }}
           VITE_GITHUB_APP_REDIRECT_URI: https://circleup.com.co/auth/callback
+          VITE_GITHUB_PUBLIC_TOKEN: ${{ secrets.VITE_GITHUB_PUBLIC_TOKEN }}
           VITE_GITHUB_REPO_OWNER: wearecircleup
           VITE_GITHUB_REPO_NAME: wearecircleup
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

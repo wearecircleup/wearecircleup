@@ -2,15 +2,14 @@ import { ConfigService } from './config';
 import { GitHubAuthService } from './github';
 
 export class PresentationService {
-  private static config = ConfigService.getGitHubConfig();
-
   static async generatePresentation(formData: any): Promise<{ success: boolean; message: string }> {
     const user = GitHubAuthService.getUser();
     
     if (!user) {
-      throw new Error('User not authenticated');
+      throw new Error('Usuario no autenticado');
     }
 
+    const config = ConfigService.getGitHubConfig();
     const payload = {
       event_type: 'generate_presentation',
       client_payload: {
@@ -31,17 +30,14 @@ export class PresentationService {
     };
 
     try {
-      // Note: This requires a GitHub Personal Access Token with repo scope
-      // For MVP, we'll use the code from OAuth (stored in user object)
-      // In production, this should be handled by a backend endpoint
-      
+      // Trigger GitHub Actions workflow via repository_dispatch
       const response = await fetch(
-        `https://api.github.com/repos/${this.config.github.repository.owner}/${this.config.github.repository.name}/dispatches`,
+        `https://api.github.com/repos/${config.github.repository.owner}/${config.github.repository.name}/dispatches`,
         {
           method: 'POST',
           headers: {
             'Accept': 'application/vnd.github+json',
-            'Authorization': `Bearer ${(user as any).code}`, // Using OAuth code temporarily
+            'Authorization': `Bearer ${import.meta.env.VITE_GITHUB_PUBLIC_TOKEN || ''}`,
             'X-GitHub-Api-Version': '2022-11-28',
             'Content-Type': 'application/json'
           },
@@ -51,19 +47,44 @@ export class PresentationService {
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('GitHub API Error:', errorText);
-        throw new Error(`Failed to trigger workflow: ${response.status} ${response.statusText}`);
+        console.error('GitHub API Error:', response.status, errorText);
+        
+        // Fallback: Store in localStorage
+        const presentations = JSON.parse(localStorage.getItem('pending_presentations') || '[]');
+        presentations.push({
+          ...payload.client_payload,
+          timestamp: new Date().toISOString()
+        });
+        localStorage.setItem('pending_presentations', JSON.stringify(presentations));
+        
+        return {
+          success: false,
+          message: `Error al disparar workflow (${response.status}). ` +
+                   `Verifica que VITE_GITHUB_PUBLIC_TOKEN esté configurado correctamente en las variables de entorno.`
+        };
       }
 
+      // repository_dispatch returns 204 No Content on success
       return {
         success: true,
-        message: 'Presentación en proceso de generación. Te notificaremos cuando esté lista.'
+        message: `¡Presentación en proceso! El workflow se está ejecutando. ` +
+                 `Recibirás una notificación cuando esté lista (aprox. 2-3 minutos).`
       };
     } catch (error) {
       console.error('Error generating presentation:', error);
+      
+      // Store locally as fallback
+      const presentations = JSON.parse(localStorage.getItem('pending_presentations') || '[]');
+      presentations.push({
+        ...payload.client_payload,
+        timestamp: new Date().toISOString()
+      });
+      localStorage.setItem('pending_presentations', JSON.stringify(presentations));
+      
       return {
         success: false,
-        message: error instanceof Error ? error.message : 'Error desconocido al generar presentación'
+        message: 'Error de conexión. Tu presentación se guardó localmente. ' +
+                 'Revisa la consola del navegador para más detalles.'
       };
     }
   }
