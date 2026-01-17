@@ -1,33 +1,71 @@
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 function buildPresentation() {
   const SLIDES_JSON = process.env.SLIDES_JSON;
   const USERNAME = process.env.USERNAME;
-  const SLUG = process.env.SLUG;
+  const PRESENTATION_ID = process.env.PRESENTATION_ID;
+  const TITLE = process.env.TITLE;
   const THEME = process.env.THEME || 'modern';
+  const MODEL = process.env.MODEL || 'gpt-4o';
 
-  if (!SLIDES_JSON || !USERNAME || !SLUG) {
-    throw new Error('SLIDES_JSON, USERNAME, and SLUG are required');
+  if (!SLIDES_JSON || !USERNAME || !PRESENTATION_ID || !TITLE) {
+    throw new Error('SLIDES_JSON, USERNAME, PRESENTATION_ID, and TITLE are required');
   }
 
-  console.log(`Building presentation: ${SLUG}`);
+  console.log(`Building presentation: ${PRESENTATION_ID}`);
 
   // Read slides
   const slidesData = JSON.parse(fs.readFileSync(SLIDES_JSON, 'utf8'));
   
-  // Create presentation directory
-  const presentationDir = path.join(process.cwd(), 'presentations', USERNAME);
-  fs.mkdirSync(presentationDir, { recursive: true });
+  const rootDir = path.join(__dirname, '..', '..');
+  
+  // Create directory structure
+  const metadataDir = path.join(rootDir, 'presentations', 'metadata', USERNAME);
+  const contentDir = path.join(rootDir, 'presentations', 'content', USERNAME);
+  const publicDir = path.join(rootDir, 'presentations', 'public', USERNAME);
+  
+  fs.mkdirSync(metadataDir, { recursive: true });
+  fs.mkdirSync(contentDir, { recursive: true });
+  fs.mkdirSync(publicDir, { recursive: true });
 
-  // Generate HTML
-  const html = generateHTML(slidesData, SLUG, THEME);
+  // Save metadata (YAML format)
+  const metadata = `id: ${PRESENTATION_ID}
+title: "${TITLE}"
+author: ${USERNAME}
+theme: ${THEME}
+model: ${MODEL}
+slides_count: ${slidesData.slides.length}
+created_at: ${new Date().toISOString()}
+status: completed
+url: /presentations/public/${USERNAME}/${PRESENTATION_ID}.html
+`;
   
-  // Write HTML file
-  const htmlPath = path.join(presentationDir, `${SLUG}.html`);
-  fs.writeFileSync(htmlPath, html);
+  fs.writeFileSync(
+    path.join(metadataDir, `${PRESENTATION_ID}.yaml`),
+    metadata
+  );
   
-  console.log(`✓ Presentation built: ${htmlPath}`);
+  // Save content (JSON format)
+  fs.writeFileSync(
+    path.join(contentDir, `${PRESENTATION_ID}.json`),
+    JSON.stringify(slidesData, null, 2)
+  );
+
+  // Generate and save HTML
+  const html = generateHTML(slidesData, TITLE, THEME);
+  fs.writeFileSync(
+    path.join(publicDir, `${PRESENTATION_ID}.html`),
+    html
+  );
+  
+  console.log(`✓ Metadata: presentations/metadata/${USERNAME}/${PRESENTATION_ID}.yaml`);
+  console.log(`✓ Content: presentations/content/${USERNAME}/${PRESENTATION_ID}.json`);
+  console.log(`✓ HTML: presentations/public/${USERNAME}/${PRESENTATION_ID}.html`);
 }
 
 function generateHTML(slidesData, title, theme) {

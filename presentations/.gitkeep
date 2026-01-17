@@ -1,0 +1,8 @@
+# Presentations directory structure
+# This directory stores all generated presentations with persistence
+
+# Structure:
+# presentations/
+# ├── metadata/{user_id}/{presentation_id}.yaml  # Metadata + config
+# ├── content/{user_id}/{presentation_id}.json   # Slides content
+# └── public/{user_id}/{presentation_id}.html    # Rendered HTML

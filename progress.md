@@ -821,10 +821,74 @@ src/shared/utils/presentation.ts (API service)
 - Endpoint: `https://models.github.ai/inference/chat/completions`
 - Models: GPT-4o, Llama 3.1 70B, Phi-3 Medium
 - Model name format: `publisher/model-name` (e.g., `openai/gpt-4o`)
+- Authentication: Separate PAT with `models` scope (`GH_TOKEN_MODELS`)
 - Free tier usage
 - Structured JSON output
 - Speaker notes support
 - ES modules (import/export) for Node.js 20 compatibility
+
+### Fix 6: Persistent Presentation Storage
+
+**Date:** 2026-01-17
+
+**Problem:**
+- Workflow used temporary artifacts that expired
+- No persistence for generated presentations
+- Difficult to scale and manage multiple presentations
+- No structured metadata system
+
+**Solution:**
+- Implemented persistent storage with structured directories
+- Separated concerns: metadata (YAML), content (JSON), rendered (HTML)
+- Eliminated artifacts, commit directly to repository
+- Created utility script for listing presentations
+
+**Directory Structure:**
+```
+presentations/
+├── metadata/{user_id}/{presentation_id}.yaml  # Configuration and metadata
+├── content/{user_id}/{presentation_id}.json   # Raw slides data
+└── public/{user_id}/{presentation_id}.html    # Rendered presentation
+```
+
+**Metadata Format (YAML):**
+```yaml
+id: presentation-uuid
+title: "Presentation Title"
+author: username
+theme: modern
+model: gpt-4o
+slides_count: 10
+created_at: 2026-01-17T00:00:00.000Z
+status: completed
+url: /presentations/public/username/presentation-uuid.html
+```
+
+**Benefits:**
+- Permanent storage in Git repository
+- Easy to query and list presentations
+- Scalable architecture (thousands of presentations)
+- Renderer-agnostic (can regenerate HTML from JSON)
+- Version control for all presentations
+- No expiration or cleanup needed
+
+**Files Created:**
+```
+presentations/.gitkeep
+backend/scripts/list-presentations.js
+```
+
+**Files Modified:**
+```
+backend/scripts/build-presentation.js (persistence logic)
+.github/workflows/generate-presentation.yml (removed artifacts, direct commit)
+```
+
+**Workflow Changes:**
+- Merged `build-presentation` and `deploy` jobs into `build-and-deploy`
+- Removed all artifact upload/download steps
+- Direct commit to repository after build
+- Updated URLs to use persistent paths
 
 ### Notes
 

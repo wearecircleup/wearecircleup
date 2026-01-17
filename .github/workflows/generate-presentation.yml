@@ -113,14 +113,17 @@ jobs:
           path: /tmp/slides-${{ github.event.client_payload.request_id }}.json
           retention-days: 1
 
-  build-presentation:
-    name: Build Presentation
+  build-and-deploy:
+    name: Build and Deploy Presentation
     runs-on: ubuntu-latest
     needs: [validate, generate-content]
-    timeout-minutes: 3
+    timeout-minutes: 5
     
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN }}
       
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -137,69 +140,46 @@ jobs:
           name: slides-${{ github.event.client_payload.request_id }}
           path: /tmp
       
-      - name: Build Impress.js presentation
+      - name: Build presentation with persistence
         run: |
           node backend/scripts/build-presentation.js
         env:
           SLIDES_JSON: /tmp/slides-${{ github.event.client_payload.request_id }}.json
           USERNAME: ${{ needs.validate.outputs.user_id }}
-          SLUG: ${{ needs.validate.outputs.presentation_slug }}
+          PRESENTATION_ID: ${{ github.event.client_payload.request_id }}
+          TITLE: ${{ github.event.client_payload.presentation.title }}
           THEME: ${{ github.event.client_payload.presentation.theme }}
-      
-      - name: Upload presentation artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: presentation-${{ github.event.client_payload.request_id }}
-          path: presentations/${{ needs.validate.outputs.user_id }}/${{ needs.validate.outputs.presentation_slug }}
-          retention-days: 1
-
-  deploy:
-    name: Deploy Presentation
-    runs-on: ubuntu-latest
-    needs: [validate, build-presentation]
-    timeout-minutes: 3
-    
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Download presentation artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: presentation-${{ github.event.client_payload.request_id }}
-          path: presentations/${{ needs.validate.outputs.user_id }}/${{ needs.validate.outputs.presentation_slug }}
+          MODEL: ${{ github.event.client_payload.presentation.model }}
       
       - name: Configure Git
         run: |
           git config user.name "CircleUp Bot"
           git config user.email "bot@circleup.com.co"
       
-      - name: Commit presentation
+      - name: Commit and push presentation
         run: |
           git add presentations/
-          git commit -m "feat(presentation): add ${{ github.event.client_payload.presentation.title }}
-          
-          - User: ${{ needs.validate.outputs.user_id }}
-          - Slides: ${{ github.event.client_payload.presentation.numSlides }}
-          - Theme: ${{ github.event.client_payload.presentation.theme }}
-          - Model: ${{ github.event.client_payload.presentation.model }}
-          - Request ID: ${{ github.event.client_payload.request_id }}
-          
-          [skip ci]"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      
-      - name: Push changes
-        run: git push origin main
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "feat(presentation): ${{ github.event.client_payload.presentation.title }}
+            
+            - User: ${{ needs.validate.outputs.user_id }}
+            - Slides: ${{ github.event.client_payload.presentation.numSlides }}
+            - Theme: ${{ github.event.client_payload.presentation.theme }}
+            - Model: ${{ github.event.client_payload.presentation.model }}
+            - ID: ${{ github.event.client_payload.request_id }}
+            
+            [skip ci]"
+            git push origin main
+          fi
       
       - name: Update status (success)
         if: success()
         uses: actions/github-script@v7
         with:
           script: |
-            const url = `https://circleup.com.co/p/${{ needs.validate.outputs.user_id }}/${{ needs.validate.outputs.presentation_slug }}`;
+            const url = `https://circleup.com.co/presentations/public/${{ needs.validate.outputs.user_id }}/${{ github.event.client_payload.request_id }}.html`;
             
             await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
