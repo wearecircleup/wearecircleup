@@ -1,18 +1,61 @@
 import { useState, useEffect } from "react";
 import PresentationCard from "../PresentationCard";
 import Button from "../Button";
+import { PresentationsAPI } from "../../shared/utils/presentations-api";
 
 const DashboardHome = ({ user, onNavigate }) => {
   const [presentations, setPresentations] = useState([]);
   const [filter, setFilter] = useState('all'); // all, completed, processing
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load presentations from localStorage (mock data for now)
-    const stored = localStorage.getItem(`presentations_${user.id}`);
-    if (stored) {
-      setPresentations(JSON.parse(stored));
-    }
+    loadPresentations();
   }, [user.id]);
+
+  const loadPresentations = async () => {
+    setLoading(true);
+    try {
+      // Fetch from GitHub repository
+      const remotePresentations = await PresentationsAPI.getUserPresentations(user.username || user.id);
+      
+      // Merge with localStorage (for processing status)
+      const localKey = `presentations_${user.id}`;
+      const localData = localStorage.getItem(localKey);
+      const localPresentations = localData ? JSON.parse(localData) : [];
+      
+      // Create a map of remote presentations by ID
+      const remoteMap = new Map(remotePresentations.map(p => [p.id, p]));
+      
+      // Update local presentations with remote data if available
+      const merged = localPresentations.map(local => {
+        const remote = remoteMap.get(local.id);
+        if (remote) {
+          // Presentation completed, use remote data
+          remoteMap.delete(local.id);
+          return remote;
+        }
+        // Still processing or failed
+        return local;
+      });
+      
+      // Add any remote presentations not in local storage
+      remoteMap.forEach(remote => merged.push(remote));
+      
+      setPresentations(merged);
+      
+      // Update localStorage with merged data
+      localStorage.setItem(localKey, JSON.stringify(merged));
+    } catch (error) {
+      console.error('Error loading presentations:', error);
+      // Fallback to localStorage
+      const stored = localStorage.getItem(`presentations_${user.id}`);
+      if (stored) {
+        setPresentations(JSON.parse(stored));
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filteredPresentations = presentations.filter(p => {
     if (filter === 'all') return true;
@@ -76,7 +119,12 @@ const DashboardHome = ({ user, onNavigate }) => {
       </div>
 
       {/* Presentations Grid */}
-      {filteredPresentations.length > 0 ? (
+      {loading ? (
+        <div className="text-center py-16">
+          <div className="w-16 h-16 mx-auto mb-4 border-4 border-color-1 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-n-4">Cargando presentaciones...</p>
+        </div>
+      ) : filteredPresentations.length > 0 ? (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredPresentations.map(presentation => (
             <PresentationCard
