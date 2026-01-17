@@ -1,19 +1,18 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
 import Section from "../components/Section";
+import Button from "../components/Button";
 import { GitHubAuthService } from "../shared/utils/github";
 
-const AuthCallback = () => {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+const AuthCallback = ({ setCurrentPage }) => {
   const [status, setStatus] = useState('processing');
   const [error, setError] = useState('');
 
   useEffect(() => {
     const handleCallback = async () => {
-      const code = searchParams.get('code');
-      const state = searchParams.get('state');
-      const errorParam = searchParams.get('error');
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get('code');
+      const state = urlParams.get('state');
+      const errorParam = urlParams.get('error');
 
       if (errorParam) {
         setStatus('error');
@@ -34,19 +33,48 @@ const AuthCallback = () => {
       }
 
       try {
-        // In a real implementation, exchange code for token via backend
-        // For now, simulate successful auth
-        const mockUser = {
-          id: 'user_' + Date.now(),
-          username: 'github_user',
-          avatarUrl: 'https://github.com/identicons/user.png'
+        // Exchange code for user info via GitHub API
+        const response = await fetch(`https://github.com/login/oauth/access_token`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            client_id: import.meta.env.VITE_GITHUB_APP_CLIENT_ID,
+            client_secret: import.meta.env.VITE_GITHUB_APP_CLIENT_SECRET,
+            code: code,
+          })
+        });
+
+        const data = await response.json();
+        
+        if (data.error) {
+          throw new Error(data.error_description || 'Failed to exchange code');
+        }
+
+        // Get user info
+        const userResponse = await fetch('https://api.github.com/user', {
+          headers: {
+            'Authorization': `Bearer ${data.access_token}`,
+            'Accept': 'application/json',
+          }
+        });
+
+        const userData = await userResponse.json();
+
+        const user = {
+          id: userData.id.toString(),
+          username: userData.login,
+          avatarUrl: userData.avatar_url,
+          accessToken: data.access_token
         };
 
-        GitHubAuthService.setUser(mockUser);
+        GitHubAuthService.setUser(user);
         setStatus('success');
         
         setTimeout(() => {
-          navigate('/dashboard');
+          setCurrentPage('dashboard');
         }, 1500);
       } catch (err) {
         setStatus('error');
@@ -55,7 +83,7 @@ const AuthCallback = () => {
     };
 
     handleCallback();
-  }, [searchParams, navigate]);
+  }, [setCurrentPage]);
 
   return (
     <div className="min-h-screen bg-n-8 relative overflow-hidden">
@@ -103,12 +131,13 @@ const AuthCallback = () => {
               </div>
               <h2 className="text-2xl font-bold text-n-1">Authentication Failed</h2>
               <p className="text-n-4">{error}</p>
-              <button
-                onClick={() => navigate('/auth')}
-                className="mt-4 px-6 py-2 bg-color-1 text-white rounded-lg hover:bg-color-1/80 transition"
+              <Button
+                onClick={() => setCurrentPage('login')}
+                className="mt-4"
+                white
               >
                 Try Again
-              </button>
+              </Button>
             </div>
           )}
         </div>

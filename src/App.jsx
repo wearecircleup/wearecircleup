@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Home from "./pages/Home";
 import Features from "./pages/Features";
 import HowToUseBusiness from "./pages/HowToUseBusiness";
@@ -7,9 +7,18 @@ import HowToUseParticipant from "./pages/HowToUseParticipant";
 import RoadmapDocs from "./pages/RoadmapDocs";
 import PoliciesDocs from "./pages/PoliciesDocs";
 import Login from "./pages/Login";
+import AuthCallback from "./pages/AuthCallback";
+import Dashboard from "./pages/Dashboard";
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState('home');
+
+  useEffect(() => {
+    // Detect OAuth callback
+    if (window.location.pathname === '/auth/callback') {
+      setCurrentPage('auth-callback');
+    }
+  }, []);
 
   try {
     return (
@@ -22,6 +31,8 @@ const App = () => {
         {currentPage === 'roadmap' && <RoadmapDocs setCurrentPage={setCurrentPage} />}
         {currentPage === 'policies' && <PoliciesDocs setCurrentPage={setCurrentPage} />}
         {currentPage === 'login' && <Login setCurrentPage={setCurrentPage} />}
+        {currentPage === 'auth-callback' && <AuthCallback setCurrentPage={setCurrentPage} />}
+        {currentPage === 'dashboard' && <Dashboard setCurrentPage={setCurrentPage} />}
       </div>
     );
   } catch (error) {
