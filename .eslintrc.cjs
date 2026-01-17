@@ -3,8 +3,15 @@ module.exports = {
   env: { 
     browser: true, 
     es2020: true,
-    node: true,
-    vitest: true
+    node: true
+  },
+  globals: {
+    describe: 'readonly',
+    test: 'readonly',
+    expect: 'readonly',
+    vi: 'readonly',
+    beforeEach: 'readonly',
+    afterEach: 'readonly'
   },
   extends: [
     "eslint:recommended",
