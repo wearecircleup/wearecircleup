@@ -890,6 +890,55 @@ backend/scripts/build-presentation.js (persistence logic)
 - Direct commit to repository after build
 - Updated URLs to use persistent paths
 
+### Fix 7: Dashboard Synchronization with GitHub
+
+**Date:** 2026-01-17
+
+**Problem:**
+- Dashboard used only localStorage for presentations
+- No synchronization with GitHub repository
+- Completed presentations didn't appear in Dashboard
+- No way to fetch presentations from remote storage
+
+**Solution:**
+- Created `PresentationsAPI` service to fetch from GitHub
+- Implemented hybrid sync: GitHub (completed) + localStorage (processing)
+- Automatic status updates when presentations complete
+- YAML parsing for metadata retrieval
+
+**Files Created:**
+```
+src/shared/utils/presentations-api.ts
+```
+
+**Files Modified:**
+```
+src/components/dashboard/DashboardHome.jsx (API integration)
+```
+
+**API Features:**
+- Fetches metadata from `presentations/metadata/{user}/` via GitHub API
+- Parses YAML files to extract presentation info
+- Merges remote (completed) with local (processing) presentations
+- Updates localStorage cache automatically
+- Handles 404 gracefully (no presentations yet)
+
+**Sync Logic:**
+1. Fetch all `.yaml` files from GitHub for user
+2. Parse each YAML to get metadata
+3. Load localStorage presentations
+4. Merge: GitHub data overrides local if ID matches
+5. Add any GitHub-only presentations
+6. Update localStorage with merged data
+7. Display in Dashboard with correct status
+
+**Benefits:**
+- Real-time sync with repository
+- Presentations persist across devices
+- Automatic status updates (processing → completed)
+- No manual refresh needed after workflow completes
+- Fallback to localStorage if GitHub API fails
+
 ### Notes
 
 - All configuration uses environment variable interpolation
