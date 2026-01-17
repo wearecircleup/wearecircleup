@@ -3,6 +3,7 @@ import Section from "../components/Section";
 import Button from "../components/Button";
 import { GitHubAuthService } from "../shared/utils/github";
 import { presentationFormSchema } from "../shared/schemas/presentation.schema";
+import { PresentationService } from "../shared/utils/presentation";
 
 const Dashboard = ({ setCurrentPage }) => {
   const user = GitHubAuthService.getUser();
@@ -20,6 +21,7 @@ const Dashboard = ({ setCurrentPage }) => {
   });
   const [errors, setErrors] = useState({});
   const [isGenerating, setIsGenerating] = useState(false);
+  const [notification, setNotification] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -52,21 +54,53 @@ const Dashboard = ({ setCurrentPage }) => {
       const validated = presentationFormSchema.parse(formData);
       setErrors({});
       setIsGenerating(true);
+      setNotification(null);
       
-      console.log("Generating presentation:", validated);
+      // Disparar el workflow de GitHub Actions
+      const result = await PresentationService.generatePresentation(validated);
       
-      setTimeout(() => {
-        setIsGenerating(false);
-        alert("Presentation generation started! You'll be notified when it's ready.");
-      }, 2000);
+      setIsGenerating(false);
+      
+      if (result.success) {
+        setNotification({
+          type: 'success',
+          message: result.message
+        });
+        
+        // Limpiar formulario después de éxito
+        setFormData({
+          title: "",
+          description: "",
+          numSlides: 10,
+          theme: "modern",
+          model: "gpt-4o",
+          options: {
+            includeSpeakerNotes: true,
+            addReferences: false,
+            tone: "professional"
+          }
+        });
+      } else {
+        setNotification({
+          type: 'error',
+          message: result.message
+        });
+      }
       
     } catch (error) {
+      setIsGenerating(false);
+      
       if (error.errors) {
         const newErrors = {};
         error.errors.forEach(err => {
           newErrors[err.path[0]] = err.message;
         });
         setErrors(newErrors);
+      } else {
+        setNotification({
+          type: 'error',
+          message: 'Error al validar el formulario'
+        });
       }
     }
   };
@@ -78,31 +112,97 @@ const Dashboard = ({ setCurrentPage }) => {
 
   return (
     <div className="min-h-screen bg-n-8 relative overflow-hidden">
+      {/* Background grid pattern */}
       <div className="absolute inset-0 opacity-5">
         <img src="./assets/grid.png" alt="" className="w-full h-full object-cover" />
       </div>
       
+      {/* Stars background */}
       <div className="absolute inset-0 opacity-20">
         <img src="./assets/hero/stars.svg" alt="" className="w-full h-full object-cover" />
       </div>
+
+      {/* Floating decorative elements */}
+      <div className="absolute top-10 left-10 lg:top-20 lg:left-20 w-20 h-20 lg:w-32 lg:h-32 bg-gradient-to-r from-color-1/20 to-color-2/20 rounded-full blur-xl"></div>
+      <div className="absolute top-32 right-16 lg:top-40 lg:right-32 w-16 h-16 lg:w-24 lg:h-24 bg-gradient-to-r from-color-2/20 to-color-3/20 rounded-full blur-xl"></div>
+      <div className="absolute bottom-32 left-16 lg:bottom-32 lg:left-32 w-12 h-12 lg:w-20 lg:h-20 bg-gradient-to-r from-color-3/20 to-color-1/20 rounded-full blur-xl"></div>
 
       <Section className="min-h-screen py-6 lg:py-10">
         <div className="container max-w-7xl mx-auto px-4">
           
           {/* Header */}
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4">
             <div>
-              <h1 className="text-3xl lg:text-4xl font-bold text-n-1 mb-2">
-                Create Presentation
+              <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-n-1 mb-2">
+                Crear Presentación{" "}
+                <span className="inline-block relative">
+                  con AI
+                  <svg
+                    className="absolute top-full left-0 w-full xl:-mt-2"
+                    width="200"
+                    height="12"
+                    viewBox="0 0 624 28"
+                    fill="none"
+                  >
+                    <path
+                      d="M1 26.5C43 13.5 123.5 0.5 312 0.5C500.5 0.5 581 13.5 623 26.5"
+                      stroke="url(#gradient)"
+                      strokeWidth="2"
+                    />
+                    <defs>
+                      <linearGradient id="gradient" x1="1" y1="26.5" x2="623" y2="26.5">
+                        <stop stopColor="#AC6AFF" />
+                        <stop offset="1" stopColor="#FFC876" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </span>
               </h1>
-              <p className="text-n-4">
-                Welcome back, <span className="text-color-1">{user?.username || 'User'}</span>
+              <p className="text-n-4 text-base lg:text-lg">
+                Bienvenido de nuevo, <span className="text-color-1 font-medium">{user?.username || 'Usuario'}</span>
               </p>
             </div>
-            <Button onClick={handleLogout} white>
-              Logout
-            </Button>
+            <div className="flex gap-3">
+              <Button onClick={() => setCurrentPage('home')} className="text-sm lg:text-base">
+                ← Inicio
+              </Button>
+              <Button onClick={handleLogout} white className="text-sm lg:text-base">
+                Cerrar Sesión
+              </Button>
+            </div>
           </div>
+
+          {/* Notification */}
+          {notification && (
+            <div className={`mb-6 p-4 rounded-xl border ${
+              notification.type === 'success' 
+                ? 'bg-green-500/10 border-green-500/50 text-green-400' 
+                : 'bg-red-500/10 border-red-500/50 text-red-400'
+            } backdrop-blur-sm`}>
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0 mt-0.5">
+                  {notification.type === 'success' ? (
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd"/>
+                    </svg>
+                  )}
+                </div>
+                <p className="flex-1">{notification.message}</p>
+                <button 
+                  onClick={() => setNotification(null)}
+                  className="flex-shrink-0 opacity-70 hover:opacity-100 transition-opacity"
+                >
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Form */}
           <div className="relative">
@@ -115,14 +215,14 @@ const Dashboard = ({ setCurrentPage }) => {
                 {/* Title */}
                 <div>
                   <label className="block text-n-1 font-medium mb-2">
-                    Presentation Title *
+                    Título de la Presentación *
                   </label>
                   <input
                     type="text"
                     name="title"
                     value={formData.title}
                     onChange={handleInputChange}
-                    placeholder="e.g., Climate Action 2026"
+                    placeholder="ej., Acción Climática 2026"
                     className={`w-full bg-n-8/50 border ${errors.title ? 'border-red-500' : 'border-n-1/10'} rounded-xl py-3 lg:py-4 px-4 text-n-1 placeholder-n-4 focus:border-color-1 focus:outline-none transition-colors`}
                   />
                   {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
@@ -131,13 +231,13 @@ const Dashboard = ({ setCurrentPage }) => {
                 {/* Description */}
                 <div>
                   <label className="block text-n-1 font-medium mb-2">
-                    Description *
+                    Descripción *
                   </label>
                   <textarea
                     name="description"
                     value={formData.description}
                     onChange={handleInputChange}
-                    placeholder="Describe what your presentation should cover..."
+                    placeholder="Describe de qué debería tratar tu presentación..."
                     rows="4"
                     className={`w-full bg-n-8/50 border ${errors.description ? 'border-red-500' : 'border-n-1/10'} rounded-xl py-3 lg:py-4 px-4 text-n-1 placeholder-n-4 focus:border-color-1 focus:outline-none transition-colors resize-none`}
                   />
@@ -150,7 +250,7 @@ const Dashboard = ({ setCurrentPage }) => {
                   {/* Number of Slides */}
                   <div>
                     <label className="block text-n-1 font-medium mb-2">
-                      Number of Slides *
+                      Número de Diapositivas *
                     </label>
                     <input
                       type="number"
@@ -167,7 +267,7 @@ const Dashboard = ({ setCurrentPage }) => {
                   {/* Theme */}
                   <div>
                     <label className="block text-n-1 font-medium mb-2">
-                      Theme *
+                      Tema *
                     </label>
                     <select
                       name="theme"
@@ -175,16 +275,16 @@ const Dashboard = ({ setCurrentPage }) => {
                       onChange={handleInputChange}
                       className="w-full bg-n-8/50 border border-n-1/10 rounded-xl py-3 lg:py-4 px-4 text-n-1 focus:border-color-1 focus:outline-none transition-colors"
                     >
-                      <option value="modern">Modern</option>
-                      <option value="academic">Academic</option>
-                      <option value="minimal">Minimal</option>
+                      <option value="modern">Moderno</option>
+                      <option value="academic">Académico</option>
+                      <option value="minimal">Minimalista</option>
                     </select>
                   </div>
 
                   {/* Model */}
                   <div>
                     <label className="block text-n-1 font-medium mb-2">
-                      AI Model *
+                      Modelo de AI *
                     </label>
                     <select
                       name="model"
@@ -192,7 +292,7 @@ const Dashboard = ({ setCurrentPage }) => {
                       onChange={handleInputChange}
                       className="w-full bg-n-8/50 border border-n-1/10 rounded-xl py-3 lg:py-4 px-4 text-n-1 focus:border-color-1 focus:outline-none transition-colors"
                     >
-                      <option value="gpt-4o">GPT-4o (Recommended)</option>
+                      <option value="gpt-4o">GPT-4o (Recomendado)</option>
                       <option value="meta-llama/Llama-3.1-70B-Instruct">Llama 3.1 70B</option>
                       <option value="microsoft/Phi-3-medium-128k-instruct">Phi-3 Medium</option>
                     </select>
@@ -201,7 +301,7 @@ const Dashboard = ({ setCurrentPage }) => {
                   {/* Tone */}
                   <div>
                     <label className="block text-n-1 font-medium mb-2">
-                      Tone
+                      Tono
                     </label>
                     <select
                       name="options.tone"
@@ -209,9 +309,9 @@ const Dashboard = ({ setCurrentPage }) => {
                       onChange={handleInputChange}
                       className="w-full bg-n-8/50 border border-n-1/10 rounded-xl py-3 lg:py-4 px-4 text-n-1 focus:border-color-1 focus:outline-none transition-colors"
                     >
-                      <option value="professional">Professional</option>
+                      <option value="professional">Profesional</option>
                       <option value="casual">Casual</option>
-                      <option value="academic">Academic</option>
+                      <option value="academic">Académico</option>
                     </select>
                   </div>
                 </div>
@@ -219,7 +319,7 @@ const Dashboard = ({ setCurrentPage }) => {
                 {/* Options */}
                 <div className="space-y-3">
                   <label className="block text-n-1 font-medium mb-2">
-                    Additional Options
+                    Opciones Adicionales
                   </label>
                   
                   <label className="flex items-center space-x-3 cursor-pointer">
@@ -230,7 +330,7 @@ const Dashboard = ({ setCurrentPage }) => {
                       onChange={handleInputChange}
                       className="w-5 h-5 rounded border-n-1/10 bg-n-8/50 text-color-1 focus:ring-color-1"
                     />
-                    <span className="text-n-3">Include speaker notes</span>
+                    <span className="text-n-3">Incluir notas del presentador</span>
                   </label>
 
                   <label className="flex items-center space-x-3 cursor-pointer">
@@ -241,7 +341,7 @@ const Dashboard = ({ setCurrentPage }) => {
                       onChange={handleInputChange}
                       className="w-5 h-5 rounded border-n-1/10 bg-n-8/50 text-color-1 focus:ring-color-1"
                     />
-                    <span className="text-n-3">Add references</span>
+                    <span className="text-n-3">Agregar referencias</span>
                   </label>
                 </div>
 
@@ -259,10 +359,10 @@ const Dashboard = ({ setCurrentPage }) => {
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        Generating...
+                        Generando...
                       </span>
                     ) : (
-                      'Generate Presentation'
+                      'Generar Presentación'
                     )}
                   </Button>
                 </div>

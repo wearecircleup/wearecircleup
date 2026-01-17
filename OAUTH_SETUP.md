@@ -15,15 +15,14 @@ Ve a: https://github.com/settings/developers
 
 **Application name**: CircleUp
 
-**Homepage URL**: 
-- Development: `http://localhost:5173`
-- Production: `https://circleup.com.co`
+**Homepage URL**: `https://circleup.com.co`
 
-**Authorization callback URL** (agregar AMBAS):
+**Authorization callback URL** (SOLO UNA):
 ```
-http://localhost:5173/auth/callback
 https://circleup.com.co/auth/callback
 ```
+
+**IMPORTANTE**: GitHub OAuth Apps solo permiten **UNA** callback URL. Para desarrollo local, usa la URL de producción ya que el `redirect_uri` se construye dinámicamente desde `VITE_BASE_URL`.
 
 ### 2. Obtener Credenciales
 
@@ -31,7 +30,18 @@ Después de crear la app, obtendrás:
 - **Client ID**: Identificador público (se puede exponer en el frontend)
 - **Client Secret**: Secreto privado (NUNCA exponerlo, solo en GitHub Secrets)
 
-### 3. Configurar GitHub Secrets
+### 3. Crear Personal Access Token (PAT)
+
+Para que el Dashboard pueda disparar workflows, necesitas un PAT con permisos:
+
+1. Ve a: https://github.com/settings/tokens
+2. Click en "Generate new token (classic)"
+3. Selecciona los scopes:
+   - `repo` (acceso completo a repositorios)
+   - `workflow` (ejecutar workflows)
+4. Copia el token generado
+
+### 4. Configurar GitHub Secrets
 
 En tu repositorio: `Settings > Secrets and variables > Actions`
 
@@ -39,12 +49,15 @@ Agregar estos secrets:
 
 ```
 VITE_GITHUB_APP_CLIENT_ID=tu_client_id_aqui
-GH_TOKEN=tu_github_personal_access_token
+GH_TOKEN=tu_personal_access_token_con_repo_y_workflow
 ```
 
-**Nota**: El `GH_APP_CLIENT_SECRET` NO se usa en el frontend. Solo se necesitaría en un backend para intercambiar el código por un token de acceso.
+**CRÍTICO**: El `GH_TOKEN` debe tener permisos `repo` y `workflow` para:
+1. Ejecutar el workflow `generate-presentation.yml` 
+2. Acceder a GitHub Models API
+3. Hacer commits de las presentaciones generadas
 
-### 4. Configurar Variables de Entorno Locales
+### 5. Configurar Variables de Entorno Locales
 
 Crea un archivo `.env` en la raíz del proyecto:
 
@@ -53,10 +66,11 @@ Crea un archivo `.env` en la raíz del proyecto:
 VITE_APP_ENV=development
 VITE_BASE_URL=http://localhost:5173
 VITE_GITHUB_APP_CLIENT_ID=tu_client_id_aqui
-VITE_GITHUB_APP_REDIRECT_URI=http://localhost:5173/auth/callback
 VITE_GITHUB_REPO_OWNER=wearecircleup
 VITE_GITHUB_REPO_NAME=wearecircleup
 ```
+
+**Nota**: El `redirect_uri` se construye automáticamente como `${VITE_BASE_URL}/auth/callback`
 
 ## Cómo Funciona el Sistema de Redirección
 
