@@ -23,7 +23,7 @@ const Benefits = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const stakeholders = [
+  const benefits = [
     {
       id: 0,
       name: "Biblioteca Central",
@@ -78,14 +78,14 @@ const Benefits = () => {
   const nextSlide = () => {
     if (isTransitioning) return;
     setIsTransitioning(true);
-    setCurrentSlide((prev) => (prev + 1) % stakeholders.length);
+    setCurrentSlide((prev) => (prev + 1) % benefits.length);
     setTimeout(() => setIsTransitioning(false), 500);
   };
 
   const prevSlide = () => {
     if (isTransitioning) return;
     setIsTransitioning(true);
-    setCurrentSlide((prev) => (prev - 1 + stakeholders.length) % stakeholders.length);
+    setCurrentSlide((prev) => (prev - 1 + benefits.length) % benefits.length);
     setTimeout(() => setIsTransitioning(false), 500);
   };
 
@@ -154,19 +154,19 @@ const Benefits = () => {
                 transform: `translateX(-${currentSlide * (isMobile ? 100 : 50)}%)` 
               }}
             >
-              {stakeholders.map((stakeholder, index) => (
-                <div key={stakeholder.id} className="w-full md:w-1/2 flex-shrink-0 px-2 md:px-4 touch-pan-y">
+              {benefits.map((benefit) => (
+                <div key={benefit.id} className="w-full md:w-1/2 flex-shrink-0 px-2 md:px-4 touch-pan-y">
                   <div className="relative h-[18rem] sm:h-[22rem] bg-n-8 rounded-xl overflow-hidden md:h-[25rem] border border-n-6 select-none">
                     {/* Background image */}
                     <div className="absolute inset-0">
                       <img
-                        src={stakeholder.image}
+                        src={benefit.image}
                         className="w-full h-full object-cover pointer-events-none select-none"
                         width={520}
                         height={400}
                         alt="Background"
                         onError={(e) => {
-                          console.log('Image failed to load:', stakeholder.image);
+                          console.log('Image failed to load:', benefit.image);
                           e.target.style.display = 'none';
                         }}
                       />
@@ -186,8 +186,8 @@ const Benefits = () => {
                     
                     {/* User info */}
                     <div className="absolute bottom-4 left-4 md:bottom-6 md:left-6">
-                      <h4 className="text-white font-semibold text-base md:text-lg mb-1">{stakeholder.name}</h4>
-                      <p className="text-gray-400 text-xs md:text-sm">{stakeholder.role}</p>
+                      <h4 className="text-white font-semibold text-base md:text-lg mb-1">{benefit.name}</h4>
+                      <p className="text-gray-400 text-xs md:text-sm">{benefit.role}</p>
                     </div>
                   </div>
                   
@@ -201,7 +201,7 @@ const Benefits = () => {
                         </svg>
                       </div>
                       <p className="body-1 text-n-1 font-mono leading-relaxed text-xs md:text-sm">
-                        {stakeholder.text}
+                        {benefit.text}
                       </p>
                     </div>
                   </div>

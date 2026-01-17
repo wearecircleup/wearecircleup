@@ -57,6 +57,7 @@ import twitter from "./socials/twitter.svg";
 const brainwaveSymbol = yourlogo;
 const brainwaveWhiteSymbol = yourlogo;
 const brainwave = yourlogo;
+const circleup = yourlogo;
 const play = recording03;
 const pause = recording01;
 const smallSphere = gradient;
@@ -130,6 +131,7 @@ export {
   brainwaveSymbol,
   brainwaveWhiteSymbol,
   brainwave,
+  circleup,
   play,
   pause,
   smallSphere,

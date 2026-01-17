@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
 import { disablePageScroll, enablePageScroll } from "scroll-lock";
 
-import { circleup } from "../assets";
 import { navigation } from "../constants";
 import Button from "./Button";
 import Logo from "./Logo";
+import MenuSvg from "./design/Header";
 import { HambugerMenu } from "./design/Header";
 
 const Header = ({ setCurrentPage }) => {
