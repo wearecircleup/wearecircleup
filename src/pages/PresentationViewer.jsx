@@ -4,35 +4,13 @@ import { PresentationsAPI } from '../shared/utils/presentations-api';
 const PresentationViewer = () => {
   // Extract userId and presentationId from URL
   const pathname = window.location.pathname;
-  const match = pathname.match(/^\/p\/([^\/]+)\/([^\/]+)/);
+  const match = pathname.match(/^\/p\/([^/]+)\/([^/]+)/);
   const userId = match ? match[1] : null;
   const presentationId = match ? match[2] : null;
   const [slides, setSlides] = useState(null);
-  const [metadata, setMetadata] = useState(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  useEffect(() => {
-    loadPresentation();
-  }, [userId, presentationId]);
-
-  useEffect(() => {
-    const handleKeyPress = (e) => {
-      if (e.key === 'ArrowRight' || e.key === ' ') {
-        nextSlide();
-      } else if (e.key === 'ArrowLeft') {
-        prevSlide();
-      } else if (e.key === 'Home') {
-        setCurrentSlide(0);
-      } else if (e.key === 'End') {
-        setCurrentSlide(slides?.length - 1 || 0);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [slides, currentSlide]);
 
   const loadPresentation = async () => {
     try {
@@ -44,13 +22,17 @@ const PresentationViewer = () => {
       }
 
       setSlides(content.slides);
-      setMetadata(content.metadata || {});
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadPresentation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId, presentationId]);
 
   const nextSlide = () => {
     if (slides && currentSlide < slides.length - 1) {
@@ -63,6 +45,28 @@ const PresentationViewer = () => {
       setCurrentSlide(currentSlide - 1);
     }
   };
+
+  useEffect(() => {
+    const handleKeyPress = (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        if (slides && currentSlide < slides.length - 1) {
+          setCurrentSlide(currentSlide + 1);
+        }
+      } else if (e.key === 'ArrowLeft') {
+        if (currentSlide > 0) {
+          setCurrentSlide(currentSlide - 1);
+        }
+      } else if (e.key === 'Home') {
+        setCurrentSlide(0);
+      } else if (e.key === 'End') {
+        setCurrentSlide(slides?.length - 1 || 0);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [slides, currentSlide]);
+
 
   if (loading) {
     return (

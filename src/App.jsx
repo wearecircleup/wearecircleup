@@ -19,7 +19,7 @@ const App = () => {
     const pathname = window.location.pathname;
     
     // Handle presentation viewer
-    const presentationMatch = pathname.match(/^\/p\/([^\/]+)\/([^\/]+)/);
+    const presentationMatch = pathname.match(/^\/p\/([^/]+)\/([^/]+)/);
     if (presentationMatch) {
       setCurrentPage('presentation-viewer');
       return;
@@ -39,7 +39,6 @@ const App = () => {
     return (
       <div>
         {currentPage === 'home' && <Home setCurrentPage={setCurrentPage} />}
-        {currentPage === 'features' && <Features setCurrentPage={setCurrentPage} />}
         {currentPage === 'aliados' && <HowToUseBusiness setCurrentPage={setCurrentPage} />}
         {currentPage === 'voluntarios' && <HowToUseVolunteer setCurrentPage={setCurrentPage} />}
         {currentPage === 'participantes' && <HowToUseParticipant setCurrentPage={setCurrentPage} />}
