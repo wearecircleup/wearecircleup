@@ -9,10 +9,14 @@ const AuthCallback = ({ setCurrentPage }) => {
 
   useEffect(() => {
     const handleCallback = async () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const code = urlParams.get('code');
-      const state = urlParams.get('state');
-      const errorParam = urlParams.get('error');
+      // Try to get params from hash first (GitHub Pages), then from search (local dev)
+      const hash = window.location.hash.substring(1);
+      const hashParams = new URLSearchParams(hash.includes('?') ? hash.split('?')[1] : '');
+      const searchParams = new URLSearchParams(window.location.search);
+      
+      const code = hashParams.get('code') || searchParams.get('code');
+      const state = hashParams.get('state') || searchParams.get('state');
+      const errorParam = hashParams.get('error') || searchParams.get('error');
 
       if (errorParam) {
         setStatus('error');

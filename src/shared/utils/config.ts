@@ -21,12 +21,15 @@ export class ConfigService {
   }
   
   public static getGitHubConfig() {
+    // Use production URL as base, GitHub OAuth allows same host with different paths
+    const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:5173';
+    
     return {
       github: {
         app: {
           clientId: import.meta.env.VITE_GITHUB_APP_CLIENT_ID || '',
-          redirectUri: import.meta.env.VITE_GITHUB_APP_REDIRECT_URI || 'http://localhost:5173/auth/callback',
-          scopes: ['repo', 'workflow']
+          redirectUri: `${baseUrl}/auth/callback`,
+          scopes: ['read:user', 'user:email']
         },
         api: {
           baseUrl: 'https://api.github.com',

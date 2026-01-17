@@ -14,8 +14,16 @@ const App = () => {
   const [currentPage, setCurrentPage] = useState('home');
 
   useEffect(() => {
-    // Detect OAuth callback
-    if (window.location.pathname === '/auth/callback') {
+    // Detect OAuth callback from hash or pathname
+    const hash = window.location.hash.substring(1); // Remove #
+    const pathname = window.location.pathname;
+    
+    // Handle hash routing (for GitHub Pages)
+    if (hash === 'auth-callback' || hash.startsWith('auth-callback?')) {
+      setCurrentPage('auth-callback');
+    }
+    // Handle path routing (for local dev)
+    else if (pathname === '/auth/callback') {
       setCurrentPage('auth-callback');
     }
   }, []);
