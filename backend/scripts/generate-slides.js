@@ -13,7 +13,16 @@ async function generateSlides() {
     throw new Error('DESCRIPTION is required');
   }
 
-  console.log(`Generating ${NUM_SLIDES} slides with ${MODEL}...`);
+  // Map model names to correct GitHub Models format
+  const modelMap = {
+    'gpt-4o': 'openai/gpt-4o',
+    'meta-llama/Llama-3.1-70B-Instruct': 'meta/llama-3.1-70b-instruct',
+    'microsoft/Phi-3-medium-128k-instruct': 'microsoft/phi-3-medium-128k-instruct'
+  };
+  
+  const githubModel = modelMap[MODEL] || MODEL;
+  
+  console.log(`Generating ${NUM_SLIDES} slides with ${githubModel}...`);
 
   // Call GitHub Models API
   const response = await fetch('https://models.github.ai/inference/chat/completions', {
@@ -25,7 +34,7 @@ async function generateSlides() {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      model: MODEL,
+      model: githubModel,
       messages: [
         {
           role: 'system',

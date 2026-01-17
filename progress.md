@@ -820,9 +820,11 @@ src/shared/utils/presentation.ts (API service)
 **GitHub Models Integration:**
 - Endpoint: `https://models.github.ai/inference/chat/completions`
 - Models: GPT-4o, Llama 3.1 70B, Phi-3 Medium
+- Model name format: `publisher/model-name` (e.g., `openai/gpt-4o`)
 - Free tier usage
 - Structured JSON output
 - Speaker notes support
+- ES modules (import/export) for Node.js 20 compatibility
 
 ### Notes
 
