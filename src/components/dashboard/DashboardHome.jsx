@@ -57,10 +57,10 @@ const DashboardHome = ({ user, onNavigate }) => {
       {/* Filters */}
       <div className="flex gap-2 overflow-x-auto pb-2">
         {[
-          { key: 'all', label: 'Todas', icon: '📊' },
-          { key: 'completed', label: 'Completadas', icon: '✓' },
-          { key: 'processing', label: 'En proceso', icon: '⏳' }
-        ].map(({ key, label, icon }) => (
+          { key: 'all', label: 'Todas' },
+          { key: 'completed', label: 'Completadas' },
+          { key: 'processing', label: 'En proceso' }
+        ].map(({ key, label }) => (
           <button
             key={key}
             onClick={() => setFilter(key)}
@@ -70,7 +70,7 @@ const DashboardHome = ({ user, onNavigate }) => {
                 : 'bg-n-7/50 text-n-4 hover:bg-n-7 hover:text-n-2'
             }`}
           >
-            {icon} {label}
+            {label}
           </button>
         ))}
       </div>

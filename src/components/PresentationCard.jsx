@@ -23,9 +23,9 @@ const PresentationCard = ({ presentation, onOpen, onDelete }) => {
         
         {/* Status badge */}
         <div className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-medium border backdrop-blur-sm ${statusColors[status] || statusColors.processing}`}>
-          {status === 'completed' && '✓ Completada'}
-          {status === 'processing' && '⏳ Procesando'}
-          {status === 'failed' && '✗ Error'}
+          {status === 'completed' && 'Completada'}
+          {status === 'processing' && 'Procesando'}
+          {status === 'failed' && 'Error'}
         </div>
       </div>
 

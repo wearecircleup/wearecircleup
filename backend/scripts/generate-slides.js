@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 async function generateSlides() {
   const MODEL = process.env.MODEL || 'gpt-4o';

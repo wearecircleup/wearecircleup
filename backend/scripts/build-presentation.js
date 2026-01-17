@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 function buildPresentation() {
   const SLIDES_JSON = process.env.SLIDES_JSON;
