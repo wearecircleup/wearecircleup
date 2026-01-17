@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["models"],
+  "properties": {
+    "models": {
+      "type": "object",
+      "required": ["endpoint", "primary", "fallback", "retry"],
+      "properties": {
+        "endpoint": {
+          "type": "string"
+        },
+        "primary": {
+          "type": "object",
+          "required": ["name", "maxTokens", "temperature"],
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "maxTokens": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "temperature": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2
+            }
+          }
+        },
+        "fallback": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "maxTokens", "temperature"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "maxTokens": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "temperature": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 2
+              }
+            }
+          }
+        },
+        "retry": {
+          "type": "object",
+          "required": ["maxAttempts", "backoffMs", "backoffMultiplier"],
+          "properties": {
+            "maxAttempts": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "backoffMs": {
+              "type": "integer",
+              "minimum": 100
+            },
+            "backoffMultiplier": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      }
+    }
+  }
+}

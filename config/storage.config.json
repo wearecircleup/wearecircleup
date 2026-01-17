@@ -1,0 +1,13 @@
+{
+  "storage": {
+    "presentationsPath": "presentations",
+    "indexPath": "presentations/.index",
+    "templatesPath": "presentations/.templates",
+    "maxFileSize": 10485760,
+    "allowedExtensions": [".html", ".css", ".js", ".json", ".webp", ".avif"],
+    "versioning": {
+      "enabled": true,
+      "maxVersions": 10
+    }
+  }
+}

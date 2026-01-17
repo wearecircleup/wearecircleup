@@ -1,28 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Section from "../components/Section";
 import Button from "../components/Button";
+import { GitHubAuthService } from "../shared/utils/github";
 
 const Login = ({ setCurrentPage }) => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: ""
-  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+  useEffect(() => {
+    // Check if user is already authenticated
+    setIsAuthenticated(GitHubAuthService.isAuthenticated());
+  }, []);
+
+  const handleGitHubLogin = () => {
+    setIsLoading(true);
+    window.location.href = GitHubAuthService.getAuthUrl();
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Here you would typically handle the form submission
-    console.log("Form submitted:", formData);
-    // For now, just show an alert
-    alert("¡Gracias por unirte a Circle Up! Pronto nos pondremos en contacto contigo.");
+  const handleGoToDashboard = () => {
+    setCurrentPage('dashboard');
   };
 
   return (
@@ -56,16 +52,15 @@ const Login = ({ setCurrentPage }) => {
             {/* Left side - Text content */}
             <div className="text-center lg:text-left order-2 lg:order-1">
               <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 lg:mb-6 text-n-1 leading-tight">
-                Únete a la revolución del{" "}
+                Crea presentaciones{" "}
                 <span className="inline-block relative">
-                  aprendizaje colaborativo
+                  con AI
                   <svg
                     className="absolute top-full left-0 w-full xl:-mt-2"
                     width="624"
                     height="28"
                     viewBox="0 0 624 28"
                     fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
                       d="M1 26.5C43 13.5 123.5 0.5 312 0.5C500.5 0.5 581 13.5 623 26.5"
@@ -73,123 +68,150 @@ const Login = ({ setCurrentPage }) => {
                       strokeWidth="2"
                     />
                     <defs>
-                      <linearGradient
-                        id="gradient"
-                        x1="1"
-                        y1="26.5"
-                        x2="623"
-                        y2="26.5"
-                        gradientUnits="userSpaceOnUse"
-                      >
+                      <linearGradient id="gradient" x1="1" y1="26.5" x2="623" y2="26.5">
                         <stop stopColor="#AC6AFF" />
                         <stop offset="1" stopColor="#FFC876" />
                       </linearGradient>
                     </defs>
                   </svg>
                 </span>{" "}
-                con Circle Up
+                en segundos
               </h1>
               
               <p className="text-base lg:text-lg text-n-4 mb-6 lg:mb-12 max-w-lg mx-auto lg:mx-0 leading-relaxed">
-                Comienza tu experiencia con Circle Up - la plataforma que conecta 
-                conocimiento, comunidad y oportunidades de crecimiento en tu ciudad.
+                Genera presentaciones profesionales con GitHub Models API. 
+                Sin costos, sin configuración. Solo conecta tu cuenta de GitHub y comienza.
               </p>
 
-              {/* Back to home button */}
-              <div className="hidden lg:block">
+              <div className="hidden lg:block space-y-4">
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 rounded-full bg-color-1/20 flex items-center justify-center flex-shrink-0 mt-1">
+                    <svg className="w-4 h-4 text-color-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-n-2 font-medium">100% Gratis</p>
+                    <p className="text-n-4 text-sm">Usa GitHub Models API sin costo</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 rounded-full bg-color-2/20 flex items-center justify-center flex-shrink-0 mt-1">
+                    <svg className="w-4 h-4 text-color-2" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-n-2 font-medium">Múltiples modelos AI</p>
+                    <p className="text-n-4 text-sm">GPT-4o, Llama 3.1, Phi-3</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 rounded-full bg-color-3/20 flex items-center justify-center flex-shrink-0 mt-1">
+                    <svg className="w-4 h-4 text-color-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-n-2 font-medium">Generación automática</p>
+                    <p className="text-n-4 text-sm">De idea a presentación en minutos</p>
+                  </div>
+                </div>
+
                 <Button
                   onClick={() => setCurrentPage('home')}
                   white
-                  className="mb-4"
+                  className="mt-6"
                 >
                   ← Volver al inicio
                 </Button>
               </div>
             </div>
 
-            {/* Right side - Login form */}
+            {/* Right side - Auth card */}
             <div className="relative order-1 lg:order-2">
-              {/* 3D Stacked effect like HowItWorks */}
               <div className="relative">
-                {/* Third card (back) */}
                 <div className="absolute -top-3 -left-6 w-full h-full bg-n-6/15 rounded-2xl transform rotate-6 shadow-lg"></div>
-                {/* Second card (middle) */}
                 <div className="absolute -top-2 -left-3 w-full h-full bg-n-6/25 rounded-2xl transform rotate-3 shadow-lg"></div>
-                {/* First card (almost top) */}
                 <div className="absolute -top-1 -left-1 w-full h-full bg-n-6/35 rounded-2xl transform rotate-1 shadow-lg"></div>
-                {/* Main form card */}
+                
                 <div className="relative bg-n-7/90 backdrop-blur-sm border border-n-6/50 rounded-2xl p-6 lg:p-12 shadow-2xl z-10">
-                <form onSubmit={handleSubmit} className="space-y-4 lg:space-y-6">
-                  
-                  {/* Name input */}
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="#8C8C8C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" stroke="#8C8C8C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </div>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      placeholder="Nombre completo"
-                      className="w-full bg-n-8/50 border border-n-1/10 rounded-xl py-3 lg:py-4 pl-11 lg:pl-12 pr-4 text-n-1 placeholder-n-4 focus:border-color-1 focus:outline-none transition-colors text-sm lg:text-base"
-                      required
-                    />
-                  </div>
+                  {!isAuthenticated ? (
+                    <div className="text-center space-y-6">
+                      <div className="flex justify-center">
+                        <div className="w-20 h-20 bg-gradient-to-r from-color-1 to-color-2 rounded-2xl flex items-center justify-center">
+                          <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                          </svg>
+                        </div>
+                      </div>
 
-                  {/* Email input */}
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="#8C8C8C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <polyline points="22,6 12,13 2,6" stroke="#8C8C8C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </div>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      placeholder="Correo electrónico"
-                      className="w-full bg-n-8/50 border border-n-1/10 rounded-xl py-3 lg:py-4 pl-11 lg:pl-12 pr-4 text-n-1 placeholder-n-4 focus:border-color-1 focus:outline-none transition-colors text-sm lg:text-base"
-                      required
-                    />
-                  </div>
+                      <div>
+                        <h2 className="text-2xl font-bold text-n-1 mb-2">Únete a Circle Up</h2>
+                        <p className="text-n-4 text-sm">
+                          Conecta tu cuenta de GitHub para acceder a la plataforma
+                        </p>
+                      </div>
 
-                  {/* Password input */}
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="#8C8C8C" strokeWidth="2"/>
-                        <circle cx="12" cy="16" r="1" fill="#8C8C8C"/>
-                        <path d="M7 11V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V11" stroke="#8C8C8C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </div>
-                    <input
-                      type="password"
-                      name="password"
-                      value={formData.password}
-                      onChange={handleInputChange}
-                      placeholder="Contraseña"
-                      className="w-full bg-n-8/50 border border-n-1/10 rounded-xl py-3 lg:py-4 pl-11 lg:pl-12 pr-4 text-n-1 placeholder-n-4 focus:border-color-1 focus:outline-none transition-colors text-sm lg:text-base"
-                      required
-                    />
-                  </div>
+                      <div className="space-y-4">
+                        <Button
+                          onClick={handleGitHubLogin}
+                          className="w-full"
+                          white
+                          disabled={isLoading}
+                        >
+                          {isLoading ? (
+                            <span className="flex items-center justify-center">
+                              <svg className="animate-spin -ml-1 mr-3 h-5 w-5" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                              </svg>
+                              Conectando...
+                            </span>
+                          ) : (
+                            <span className="flex items-center justify-center">
+                              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="mr-2">
+                                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                              </svg>
+                              Continuar con GitHub
+                            </span>
+                          )}
+                        </Button>
 
-                  {/* Submit button */}
-                  <div className="pt-2">
-                    <Button
-                      type="submit"
-                      className="w-full text-sm lg:text-base"
-                      white
-                    >
-                      ÚNETE AHORA
-                    </Button>
-                  </div>
-                </form>
+                        <p className="text-xs text-n-4">
+                          Al continuar, aceptas usar GitHub Models API para generar presentaciones.
+                          Completamente gratis, sin costos ocultos.
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-center space-y-6">
+                      <div className="flex justify-center">
+                        <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center">
+                          <svg className="w-8 h-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                        </div>
+                      </div>
+
+                      <div>
+                        <h2 className="text-2xl font-bold text-n-1 mb-2">¡Ya estás conectado!</h2>
+                        <p className="text-n-4 text-sm">
+                          Tu sesión está activa. Accede al dashboard para crear presentaciones.
+                        </p>
+                      </div>
+
+                      <Button
+                        onClick={handleGoToDashboard}
+                        className="w-full"
+                        white
+                      >
+                        Ir al Dashboard
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

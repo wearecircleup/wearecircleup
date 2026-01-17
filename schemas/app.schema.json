@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["app"],
+  "properties": {
+    "app": {
+      "type": "object",
+      "required": ["name", "version", "environment", "baseUrl"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "environment": {
+          "type": "string"
+        },
+        "baseUrl": {
+          "type": "string"
+        }
+      }
+    },
+    "features": {
+      "type": "object",
+      "properties": {
+        "auth": {
+          "type": "boolean"
+        },
+        "presentations": {
+          "type": "boolean"
+        },
+        "analytics": {
+          "type": "boolean"
+        }
+      }
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "maxSlidesPerPresentation": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "maxPresentationsPerDay": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "maxDescriptionLength": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  }
+}

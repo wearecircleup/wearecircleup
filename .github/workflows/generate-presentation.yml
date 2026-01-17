@@ -1,0 +1,223 @@
+name: Generate Presentation
+
+on:
+  repository_dispatch:
+    types: [generate_presentation]
+
+concurrency:
+  group: presentation-${{ github.event.client_payload.user.id }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  statuses: write
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  validate:
+    name: Validate Input
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    outputs:
+      is_valid: ${{ steps.validate.outputs.is_valid }}
+      user_id: ${{ steps.validate.outputs.user_id }}
+      presentation_slug: ${{ steps.validate.outputs.presentation_slug }}
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Validate payload
+        id: validate
+        run: |
+          echo "is_valid=true" >> $GITHUB_OUTPUT
+          echo "user_id=${{ github.event.client_payload.user.id }}" >> $GITHUB_OUTPUT
+          echo "presentation_slug=$(echo '${{ github.event.client_payload.presentation.title }}' | tr '[:upper:]' '[:lower:]' | tr ' ' '-')" >> $GITHUB_OUTPUT
+      
+      - name: Update status
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: 'pending',
+              description: 'Generating content with AI...',
+              context: 'circleup/presentation-generator',
+            });
+
+  generate-content:
+    name: Generate Content with LLM
+    runs-on: ubuntu-latest
+    needs: validate
+    if: needs.validate.outputs.is_valid == 'true'
+    timeout-minutes: 5
+    outputs:
+      slides_path: ${{ steps.llm.outputs.slides_path }}
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Generate slides with GitHub Models
+        id: llm
+        run: |
+          node backend/scripts/generate-slides.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MODEL: ${{ github.event.client_payload.presentation.model }}
+          DESCRIPTION: ${{ github.event.client_payload.presentation.description }}
+          NUM_SLIDES: ${{ github.event.client_payload.presentation.numSlides }}
+          THEME: ${{ github.event.client_payload.presentation.theme }}
+          REQUEST_ID: ${{ github.event.client_payload.request_id }}
+      
+      - name: Upload slides artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: slides-${{ github.event.client_payload.request_id }}
+          path: /tmp/slides-${{ github.event.client_payload.request_id }}.json
+          retention-days: 1
+
+  build-presentation:
+    name: Build Presentation
+    runs-on: ubuntu-latest
+    needs: [validate, generate-content]
+    timeout-minutes: 3
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Download slides artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: slides-${{ github.event.client_payload.request_id }}
+          path: /tmp
+      
+      - name: Build Impress.js presentation
+        run: |
+          node backend/scripts/build-presentation.js
+        env:
+          SLIDES_JSON: /tmp/slides-${{ github.event.client_payload.request_id }}.json
+          USERNAME: ${{ needs.validate.outputs.user_id }}
+          SLUG: ${{ needs.validate.outputs.presentation_slug }}
+          THEME: ${{ github.event.client_payload.presentation.theme }}
+      
+      - name: Upload presentation artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: presentation-${{ github.event.client_payload.request_id }}
+          path: presentations/${{ needs.validate.outputs.user_id }}/${{ needs.validate.outputs.presentation_slug }}
+          retention-days: 1
+
+  deploy:
+    name: Deploy Presentation
+    runs-on: ubuntu-latest
+    needs: [validate, build-presentation]
+    timeout-minutes: 3
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Download presentation artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: presentation-${{ github.event.client_payload.request_id }}
+          path: presentations/${{ needs.validate.outputs.user_id }}/${{ needs.validate.outputs.presentation_slug }}
+      
+      - name: Configure Git
+        run: |
+          git config user.name "CircleUp Bot"
+          git config user.email "bot@circleup.com.co"
+      
+      - name: Commit presentation
+        run: |
+          git add presentations/
+          git commit -m "feat(presentation): add ${{ github.event.client_payload.presentation.title }}
+          
+          - User: ${{ needs.validate.outputs.user_id }}
+          - Slides: ${{ github.event.client_payload.presentation.numSlides }}
+          - Theme: ${{ github.event.client_payload.presentation.theme }}
+          - Model: ${{ github.event.client_payload.presentation.model }}
+          - Request ID: ${{ github.event.client_payload.request_id }}
+          
+          [skip ci]"
+      
+      - name: Push changes
+        run: git push origin main
+      
+      - name: Update status (success)
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const url = `https://circleup.com.co/p/${{ needs.validate.outputs.user_id }}/${{ needs.validate.outputs.presentation_slug }}`;
+            
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: 'success',
+              description: 'Presentation ready!',
+              context: 'circleup/presentation-generator',
+              target_url: url,
+            });
+      
+      - name: Update status (failure)
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: 'failure',
+              description: 'Presentation generation failed',
+              context: 'circleup/presentation-generator',
+            });

@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["storage"],
+  "properties": {
+    "storage": {
+      "type": "object",
+      "required": ["presentationsPath", "indexPath", "templatesPath", "maxFileSize", "allowedExtensions", "versioning"],
+      "properties": {
+        "presentationsPath": {
+          "type": "string",
+          "minLength": 1
+        },
+        "indexPath": {
+          "type": "string",
+          "minLength": 1
+        },
+        "templatesPath": {
+          "type": "string",
+          "minLength": 1
+        },
+        "maxFileSize": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "allowedExtensions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^\\."
+          }
+        },
+        "versioning": {
+          "type": "object",
+          "required": ["enabled", "maxVersions"],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "maxVersions": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      }
+    }
+  }
+}

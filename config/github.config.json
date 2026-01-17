@@ -1,0 +1,18 @@
+{
+  "github": {
+    "app": {
+      "clientId": "${GITHUB_APP_CLIENT_ID}",
+      "redirectUri": "${GITHUB_APP_REDIRECT_URI}",
+      "scopes": ["repo", "workflow"]
+    },
+    "api": {
+      "baseUrl": "https://api.github.com",
+      "version": "2022-11-28",
+      "timeout": 30000
+    },
+    "repository": {
+      "owner": "${GITHUB_REPO_OWNER}",
+      "name": "${GITHUB_REPO_NAME}"
+    }
+  }
+}
