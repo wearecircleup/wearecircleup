@@ -30,6 +30,19 @@ export class PresentationService {
     };
 
     try {
+      const token = import.meta.env.VITE_GITHUB_PUBLIC_TOKEN;
+      
+      // Debug logs
+      console.log('🔍 Debug Info:');
+      console.log('- Token exists:', !!token);
+      console.log('- Token length:', token?.length || 0);
+      console.log('- Repo:', `${config.github.repository.owner}/${config.github.repository.name}`);
+      console.log('- Payload:', payload);
+      
+      if (!token) {
+        throw new Error('VITE_GITHUB_PUBLIC_TOKEN no está configurado. Verifica tu archivo .env o las variables de entorno del build.');
+      }
+      
       // Trigger GitHub Actions workflow via repository_dispatch
       const response = await fetch(
         `https://api.github.com/repos/${config.github.repository.owner}/${config.github.repository.name}/dispatches`,
@@ -37,7 +50,7 @@ export class PresentationService {
           method: 'POST',
           headers: {
             'Accept': 'application/vnd.github+json',
-            'Authorization': `Bearer ${import.meta.env.VITE_GITHUB_PUBLIC_TOKEN || ''}`,
+            'Authorization': `Bearer ${token}`,
             'X-GitHub-Api-Version': '2022-11-28',
             'Content-Type': 'application/json'
           },
