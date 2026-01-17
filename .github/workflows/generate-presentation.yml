@@ -99,7 +99,7 @@ jobs:
         run: |
           node backend/scripts/generate-slides.js
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN_MODELS }}
           MODEL: ${{ github.event.client_payload.presentation.model }}
           DESCRIPTION: ${{ github.event.client_payload.presentation.description }}
           NUM_SLIDES: ${{ github.event.client_payload.presentation.numSlides }}
