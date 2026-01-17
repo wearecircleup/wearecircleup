@@ -698,6 +698,132 @@ npm run type-check
 - Create admin dashboard
 - Add export options (PDF, PowerPoint)
 
+### Fix 3: GitHub OAuth Callback for SPA
+
+**Problem:**
+- GitHub Pages returns 404 for `/auth/callback` route
+- SPA routing doesn't work on static hosting
+
+**Solution:**
+- Implemented SPA redirect system with `404.html`
+- Added script in `index.html` to restore original URL
+- Updated `App.jsx` to detect callback from hash or pathname
+- Updated `AuthCallback.jsx` to extract params from both sources
+
+**Files Created:**
+```
+public/404.html (SPA redirect handler)
+```
+
+**Files Modified:**
+```
+index.html (added SPA redirect script)
+App.jsx (enhanced callback detection)
+AuthCallback.jsx (dual param extraction)
+```
+
+### Fix 4: Dashboard Refactoring - Modular Platform
+
+**Date:** 2026-01-17
+
+**Problem:**
+- Dashboard was a single form without navigation
+- No way to view/manage generated presentations
+- Lacked platform feel and user experience
+
+**Solution:**
+- Refactored Dashboard into modular platform with navigation
+- Created reusable components following DRY principles
+- Implemented presentation library with filtering
+- Integrated impress.js for dynamic presentations
+
+**Architecture:**
+```
+Dashboard (Container)
+├── DashboardHome (Presentation Library)
+│   ├── PresentationCard (Reusable)
+│   ├── Filters (all/completed/processing)
+│   └── Empty State
+└── CreatePresentation (Form View)
+    ├── Form Fields
+    ├── Validation
+    └── Notifications
+```
+
+**Files Created:**
+```
+src/components/PresentationCard.jsx
+src/components/dashboard/DashboardHome.jsx
+src/components/dashboard/CreatePresentation.jsx
+```
+
+**Files Modified:**
+```
+src/pages/Dashboard.jsx (refactored to container)
+backend/scripts/build-presentation.js (impress.js integration)
+```
+
+**Key Features:**
+- **Navigation**: Switch between home and create views
+- **Presentation Library**: Grid view with cards
+- **Filtering**: All, completed, processing states
+- **Status Tracking**: Visual indicators (✓, ⏳, ✗)
+- **Local Storage**: Presentations saved per user
+- **Impress.js**: Dynamic 3D presentations with rotation
+- **Themes**: Modern, Academic, Minimal with custom colors
+- **Branding**: CircleUp logo and colors throughout
+
+**Component Reusability:**
+- `PresentationCard`: Used in library grid
+- `DashboardHome`: Manages presentation list
+- `CreatePresentation`: Extracted form logic
+- All components accept props for flexibility
+
+### Fix 5: Workflow Integration
+
+**Problem:**
+- Frontend couldn't trigger GitHub Actions workflows
+- 401 errors when calling GitHub API
+- OAuth code cannot be used for API calls
+
+**Solution:**
+- Created backend scripts for AI generation
+- Implemented `repository_dispatch` trigger
+- Added debug logging for troubleshooting
+- Integrated GitHub Models API
+
+**Files Created:**
+```
+backend/scripts/generate-slides.js (AI content generation)
+backend/scripts/build-presentation.js (HTML builder)
+src/shared/utils/presentation.ts (API service)
+```
+
+**Files Modified:**
+```
+.github/workflows/generate-presentation.yml (added models: read)
+.github/workflows/deploy.yml (added VITE_GITHUB_PUBLIC_TOKEN)
+```
+
+**Workflow Flow:**
+1. User fills form in Dashboard
+2. Frontend calls `PresentationService.generatePresentation()`
+3. Service triggers `repository_dispatch` event
+4. GitHub Actions workflow executes:
+   - Validates input
+   - Calls GitHub Models API (GPT-4o/Llama/Phi-3)
+   - Generates slides JSON
+   - Builds impress.js HTML
+   - Commits to repository
+5. User can access presentation via URL
+
+**GitHub Models Integration:**
+- Endpoint: `https://models.github.ai/inference/chat/completions`
+- Models: GPT-4o, Llama 3.1 70B, Phi-3 Medium
+- Free tier usage
+- Structured JSON output
+- Speaker notes support
+
 ### Notes
 
 - All configuration uses environment variable interpolation
@@ -707,3 +833,6 @@ npm run type-check
 - Config-driven topology (zero hardcoding)
 - ES modules throughout (import/export syntax)
 - Scripts compatible with Node.js 20 LTS
+- Component reusability and modularization enforced
+- Impress.js for dynamic 3D presentations
+- GitHub Models API for AI content generation
