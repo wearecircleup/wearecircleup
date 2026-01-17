@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import Home from "./pages/Home";
-import Features from "./pages/Features";
+import Dashboard from "./pages/Dashboard";
 import HowToUseBusiness from "./pages/HowToUseBusiness";
 import HowToUseVolunteer from "./pages/HowToUseVolunteer";
 import HowToUseParticipant from "./pages/HowToUseParticipant";
+import PresentationViewer from "./pages/PresentationViewer";
 import RoadmapDocs from "./pages/RoadmapDocs";
 import PoliciesDocs from "./pages/PoliciesDocs";
 import Login from "./pages/Login";
 import AuthCallback from "./pages/AuthCallback";
-import Dashboard from "./pages/Dashboard";
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState('home');
@@ -17,6 +17,13 @@ const App = () => {
     // Detect OAuth callback from hash or pathname
     const hash = window.location.hash.substring(1); // Remove #
     const pathname = window.location.pathname;
+    
+    // Handle presentation viewer
+    const presentationMatch = pathname.match(/^\/p\/([^\/]+)\/([^\/]+)/);
+    if (presentationMatch) {
+      setCurrentPage('presentation-viewer');
+      return;
+    }
     
     // Handle hash routing (for GitHub Pages)
     if (hash === 'auth-callback' || hash.startsWith('auth-callback?')) {
@@ -41,6 +48,7 @@ const App = () => {
         {currentPage === 'login' && <Login setCurrentPage={setCurrentPage} />}
         {currentPage === 'auth-callback' && <AuthCallback setCurrentPage={setCurrentPage} />}
         {currentPage === 'dashboard' && <Dashboard setCurrentPage={setCurrentPage} />}
+        {currentPage === 'presentation-viewer' && <PresentationViewer />}
       </div>
     );
   } catch (error) {

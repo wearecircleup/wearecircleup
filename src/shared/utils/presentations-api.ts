@@ -91,9 +91,6 @@ export class PresentationsAPI {
         }
       });
 
-      const owner = import.meta.env.VITE_GITHUB_REPO_OWNER || 'wearecircleup';
-      const repo = import.meta.env.VITE_GITHUB_REPO_NAME || 'wearecircleup';
-      
       return {
         id: metadata.id || '',
         title: metadata.title || 'Untitled',
@@ -104,7 +101,7 @@ export class PresentationsAPI {
         slides_count: parseInt(metadata.slides_count) || 0,
         created_at: metadata.created_at || new Date().toISOString(),
         status: metadata.status || 'completed',
-        url: `https://${owner}.github.io/${repo}${metadata.url}`,
+        url: `/p/${metadata.author}/${metadata.id}`,
         thumbnail: undefined
       };
     } catch (error) {
