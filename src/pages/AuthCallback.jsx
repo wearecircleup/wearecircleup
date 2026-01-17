@@ -33,41 +33,16 @@ const AuthCallback = ({ setCurrentPage }) => {
       }
 
       try {
-        // Exchange code for user info via GitHub API
-        const response = await fetch(`https://github.com/login/oauth/access_token`, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            client_id: import.meta.env.VITE_GITHUB_APP_CLIENT_ID,
-            client_secret: import.meta.env.VITE_GITHUB_APP_CLIENT_SECRET,
-            code: code,
-          })
-        });
-
-        const data = await response.json();
+        // For MVP: Store code temporarily and simulate auth
+        // In production, this should call a backend endpoint that exchanges the code
+        // using CLIENT_SECRET securely on the server side
         
-        if (data.error) {
-          throw new Error(data.error_description || 'Failed to exchange code');
-        }
-
-        // Get user info
-        const userResponse = await fetch('https://api.github.com/user', {
-          headers: {
-            'Authorization': `Bearer ${data.access_token}`,
-            'Accept': 'application/json',
-          }
-        });
-
-        const userData = await userResponse.json();
-
+        // Simulate successful authentication
         const user = {
-          id: userData.id.toString(),
-          username: userData.login,
-          avatarUrl: userData.avatar_url,
-          accessToken: data.access_token
+          id: code.substring(0, 8), // Use part of code as temporary ID
+          username: 'CircleUp User',
+          avatarUrl: 'https://github.com/identicons/circleup.png',
+          code: code // Store code for later backend exchange
         };
 
         GitHubAuthService.setUser(user);
