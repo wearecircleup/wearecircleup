@@ -55,7 +55,9 @@ jobs:
       
       - name: Save content JSON
         run: |
-          echo '${{ toJson(github.event.client_payload.slides) }}' > presentations/content/${{ github.event.client_payload.user }}/${{ github.event.client_payload.presentationId }}.json
+          cat > presentations/content/${{ github.event.client_payload.user }}/${{ github.event.client_payload.presentationId }}.json << 'EOF'
+          {"slides":${{ toJson(github.event.client_payload.slides) }}}
+          EOF
       
       - name: Save HTML
         env:
