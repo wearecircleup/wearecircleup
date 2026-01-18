@@ -998,6 +998,165 @@ src/constants/index.js (mobile menu URL)
 - Symmetric and balanced button layout
 - Clear navigation flow from marketing site to app
 
+### Fix 9: Vercel OAuth Implementation and User Isolation
+
+**Date:** 2026-01-18
+
+**Problem:**
+- Critical security flaw: All users saw CircleUP organization's data
+- `user.username` always returned "CircleUP" instead of authenticated user
+- No user isolation: presentations shared across all accounts
+- OAuth code exchange attempted in frontend (insecure)
+- Used `VITE_GITHUB_PUBLIC_TOKEN` (organization token) instead of user's token
+
+**Root Cause:**
+GitHub OAuth requires backend to exchange authorization code for access token using `CLIENT_SECRET`. Frontend was using CircleUP's public token to fetch user data, causing all users to appear as "CircleUP".
+
+**Solution:**
+- Migrated from Netlify to Vercel for serverless functions
+- Created `api/github-auth.js` serverless function for secure OAuth token exchange
+- Updated `AuthCallback.jsx` to call `/api/github-auth` instead of using public token
+- Modified `GitHubAuthService` to store user's personal access token
+- Each user now gets their own token and data isolation
+
+**Files Created:**
+```
+api/github-auth.js (Vercel serverless function)
+vercel.json (Vercel configuration)
+VERCEL_DEPLOYMENT.md (deployment guide)
+```
+
+**Files Modified:**
+```
+src/pages/AuthCallback.jsx (OAuth flow via backend)
+src/shared/utils/github.ts (added getUserToken method)
+.env.example (added GITHUB_APP_CLIENT_SECRET)
+SECURITY_ISSUE.md (updated for Vercel)
+```
+
+**OAuth Flow:**
+```
+User → GitHub OAuth → Callback with code → 
+Vercel Function (with CLIENT_SECRET) → 
+Exchange code for user's token → 
+Fetch user's data with their token → 
+Store in localStorage → Dashboard
+```
+
+**Security Improvements:**
+1. ✅ `CLIENT_SECRET` never exposed to frontend
+2. ✅ Token exchange happens on Vercel backend
+3. ✅ Each user has their own access token
+4. ✅ Data isolation by `user.login`
+5. ✅ State parameter for CSRF protection
+6. ✅ Presentations stored per user: `presentations_${user.login}`
+
+**Deployment:**
+- Platform: Vercel
+- Domains: `circleup.com.co`, `wearecircleup.vercel.app`
+- Serverless function: Node.js 24.x
+- Status: Production ready
+
+**Testing Results:**
+- ✅ Multiple GitHub accounts tested
+- ✅ Each user sees only their own presentations
+- ✅ `user.username` shows correct authenticated user
+- ✅ No data leakage between accounts
+- ✅ OAuth flow works correctly with CSRF protection
+
+**Benefits:**
+- Secure OAuth implementation following best practices
+- True multi-user support with data isolation
+- Scalable serverless architecture
+- Zero-cost infrastructure (Vercel free tier)
+- Automatic HTTPS and global CDN
+
+## Phase 10: Hybrid Architecture Migration
+
+**Status:** IN PROGRESS
+**Date:** 2026-01-18
+
+### Objective
+
+Migrate presentation generation from GitHub Actions to Vercel Functions to solve:
+1. Dependency caching (eliminate npm install on every run)
+2. Concurrent user support (50+ simultaneous users without queuing)
+
+### Architecture Decision
+
+**Current (GitHub Actions):**
+- Time per presentation: 170 seconds (npm install + LLM + build + commit)
+- Concurrent limit: 20 jobs
+- Monthly capacity: 666 presentations
+- 50 simultaneous users: 30 queued, potential failures
+
+**Target (Hybrid):**
+- Vercel Functions: LLM generation + HTML build (10 seconds)
+- GitHub Actions: Only git commits (background, 20 seconds)
+- Concurrent limit: Unlimited
+- Monthly capacity: 36,000 presentations
+- 50 simultaneous users: All succeed in parallel
+
+### LLM Model Strategy
+
+**GitHub Models API (Free Tier):**
+- gpt-4o (openai/gpt-4o)
+- Llama 3.1 70B (meta/llama-3.1-70b-instruct)
+- Phi-3 Medium (microsoft/phi-3-medium-128k-instruct)
+- Cost: 0 COP (free tier)
+- Authentication: GitHub token with models scope
+
+**Vercel Free Tier Limits:**
+- 100 GB-hours compute/month
+- Unlimited concurrent functions
+- Max duration per function: 10 seconds (Hobby), 60 seconds (Pro)
+- 1,000 serverless invocations/day (Hobby)
+
+### Implementation Plan
+
+**Step 1: Create Vercel Function for LLM Generation**
+- File: api/generate-presentation.js
+- Responsibility: Call GitHub Models API, generate slides JSON
+- Dependencies: Pre-bundled in Vercel deployment
+- Testing: Single presentation generation
+- Status: COMPLETED
+- Changes:
+  - Created api/generate-presentation.js with GitHub Models integration
+  - Supports all 3 models: gpt-4o, Llama 3.1 70B, Phi-3 Medium
+  - Multi-language support: es-LA, en-US, pt-BR
+  - Configured maxDuration: 60 seconds in vercel.json
+  - CORS headers configured for frontend access
+  - Error handling for API failures and JSON parsing
+
+**Step 2: Add HTML Build to Vercel Function**
+- Migrate: backend/scripts/build-presentation.js logic
+- Output: In-memory HTML generation
+- Testing: Verify HTML output matches current format
+
+**Step 3: Simplify GitHub Action**
+- New workflow: save-presentation.yml
+- Responsibility: Only receive HTML/JSON and commit to repo
+- Trigger: repository_dispatch from Vercel Function
+- Testing: Verify git commits work correctly
+
+**Step 4: Update Frontend**
+- Modify: CreatePresentation.jsx
+- Change: Call /api/generate-presentation instead of repository_dispatch
+- Testing: End-to-end presentation creation
+
+**Step 5: Concurrency Testing**
+- Test: Multiple simultaneous users
+- Verify: No queuing, all succeed
+- Monitor: Vercel function logs and performance
+
+### Exit Criteria
+
+- Presentation generation completes in under 15 seconds
+- 10 simultaneous users all succeed without queuing
+- GitHub Models API calls work from Vercel Function
+- Git commits still work via simplified GitHub Action
+- No increase in costs (stay within free tiers)
+
 ### Notes
 
 - All configuration uses environment variable interpolation
@@ -1013,3 +1172,5 @@ src/constants/index.js (mobile menu URL)
 - Fully responsive design with mobile-first approach
 - Touch/swipe support for mobile presentations
 - External redirect to marketing site (circleup.com.co)
+- Vercel serverless functions for secure OAuth
+- User data isolation by GitHub login

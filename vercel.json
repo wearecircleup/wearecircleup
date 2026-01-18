@@ -8,6 +8,14 @@
       "destination": "/index.html"
     }
   ],
+  "functions": {
+    "api/generate-presentation.js": {
+      "maxDuration": 60
+    },
+    "api/github-auth.js": {
+      "maxDuration": 10
+    }
+  },
   "headers": [
     {
       "source": "/api/(.*)",
