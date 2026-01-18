@@ -50,9 +50,8 @@ export const navigation = [
   {
     id: "6",
     title: "Únete a Nosotros",
-    url: links.sourceCode,
+    url: "/login",
     onlyMobile: true,
-    external: true,
   },
 ];
 
