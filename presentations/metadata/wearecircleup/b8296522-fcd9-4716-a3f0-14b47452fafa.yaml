@@ -1,0 +1,9 @@
+id: b8296522-fcd9-4716-a3f0-14b47452fafa
+title: "Microchips China"
+author: wearecircleup
+theme: modern
+model: gpt-4o
+slides_count: 10
+created_at: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
+status: completed
+url: /presentations/public/wearecircleup/b8296522-fcd9-4716-a3f0-14b47452fafa.html
