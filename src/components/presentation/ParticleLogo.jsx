@@ -149,8 +149,14 @@ function ParticleCanvas({ imageUrl }) {
           const g = Math.min(255, particle.g * colorBoost);
           const b = Math.min(255, particle.b * colorBoost);
           
-          // Draw particle with variable opacity
+          // Calculate opacity based on mouse distance
+          const dx = mouseRef.current.x - particle.x;
+          const dy = mouseRef.current.y - particle.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          const maxDistance = 120;
           const opacity = Math.max(0.6, 1 - distance / (maxDistance * 2));
+          
+          // Draw particle
           ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${opacity})`;
           ctx.beginPath();
           ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
