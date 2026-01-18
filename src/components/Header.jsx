@@ -73,6 +73,8 @@ const Header = ({ setCurrentPage }) => {
                       setCurrentPage && setCurrentPage('roadmap');
                     } else if (item.url === '/policies') {
                       setCurrentPage && setCurrentPage('policies');
+                    } else if (item.url === '/login') {
+                      setCurrentPage && setCurrentPage('login');
                     } else {
                       setCurrentPage && setCurrentPage('home');
                     }
