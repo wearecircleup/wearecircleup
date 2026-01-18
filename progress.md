@@ -1146,6 +1146,15 @@ Migrate presentation generation from GitHub Actions to Vercel Functions to solve
 - Responsibility: Only receive HTML/JSON and commit to repo
 - Trigger: repository_dispatch from Vercel Function
 - Testing: Verify git commits work correctly
+- Status: COMPLETED
+- Changes:
+  - Created .github/workflows/save-presentation.yml (simplified workflow)
+  - Only handles file creation and git commits (no LLM, no npm install)
+  - Receives HTML and JSON from Vercel Function via repository_dispatch
+  - Timeout: 3 minutes (vs 12 minutes in old workflow)
+  - Updated api/generate-presentation.js to trigger save workflow
+  - Function returns immediately with presentationId and URL
+  - Git commit happens asynchronously in background
 
 **Step 4: Update Frontend**
 - Modify: CreatePresentation.jsx

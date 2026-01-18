@@ -133,11 +133,59 @@ Do NOT include speaker notes. Only title and content array for each slide.`
 
     console.log(`[${user.login}] HTML generated successfully`);
 
-    // Return slides data and HTML
+    // Generate presentation ID
+    const presentationId = crypto.randomUUID();
+
+    // Trigger GitHub Action to save to repository
+    const repoOwner = process.env.GITHUB_REPO_OWNER || 'wearecircleup';
+    const repoName = process.env.GITHUB_REPO_NAME || 'wearecircleup';
+    
+    try {
+      const dispatchResponse = await fetch(
+        `https://api.github.com/repos/${repoOwner}/${repoName}/dispatches`,
+        {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/vnd.github+json',
+            'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
+            'X-GitHub-Api-Version': '2022-11-28',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            event_type: 'save_presentation',
+            client_payload: {
+              user: user.login,
+              presentationId: presentationId,
+              html: html,
+              slides: slidesData.slides,
+              metadata: {
+                title: presentationTitle,
+                theme: selectedTheme,
+                model: selectedModel,
+                language: selectedLanguage,
+                slideCount: slidesData.slides.length
+              }
+            }
+          })
+        }
+      );
+
+      if (!dispatchResponse.ok) {
+        console.error(`[${user.login}] Failed to trigger save workflow: ${dispatchResponse.status}`);
+      } else {
+        console.log(`[${user.login}] Save workflow triggered successfully`);
+      }
+    } catch (dispatchError) {
+      console.error(`[${user.login}] Error triggering save workflow:`, dispatchError);
+    }
+
+    // Return slides data and HTML immediately
     return res.status(200).json({
       success: true,
+      presentationId: presentationId,
       slides: slidesData.slides,
       html: html,
+      url: `/p/${user.login}/${presentationId}`,
       metadata: {
         title: presentationTitle,
         theme: selectedTheme,

@@ -1,0 +1,109 @@
+name: Save Presentation
+
+on:
+  repository_dispatch:
+    types: [save_presentation]
+
+concurrency:
+  group: save-${{ github.event.client_payload.user }}-${{ github.event.client_payload.presentationId }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  save:
+    name: Save Presentation to Repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN }}
+      
+      - name: Validate payload
+        run: |
+          if [ -z "${{ github.event.client_payload.user }}" ]; then
+            echo "Error: user is required"
+            exit 1
+          fi
+          if [ -z "${{ github.event.client_payload.presentationId }}" ]; then
+            echo "Error: presentationId is required"
+            exit 1
+          fi
+          if [ -z "${{ github.event.client_payload.html }}" ]; then
+            echo "Error: html is required"
+            exit 1
+          fi
+          echo "Validation passed"
+      
+      - name: Create directory structure
+        run: |
+          mkdir -p presentations/metadata/${{ github.event.client_payload.user }}
+          mkdir -p presentations/content/${{ github.event.client_payload.user }}
+          mkdir -p presentations/public/${{ github.event.client_payload.user }}
+      
+      - name: Save metadata
+        run: |
+          cat > presentations/metadata/${{ github.event.client_payload.user }}/${{ github.event.client_payload.presentationId }}.yaml << 'EOF'
+          id: ${{ github.event.client_payload.presentationId }}
+          title: "${{ github.event.client_payload.metadata.title }}"
+          author: ${{ github.event.client_payload.user }}
+          theme: ${{ github.event.client_payload.metadata.theme }}
+          model: ${{ github.event.client_payload.metadata.model }}
+          slides_count: ${{ github.event.client_payload.metadata.slideCount }}
+          created_at: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          status: completed
+          url: /presentations/public/${{ github.event.client_payload.user }}/${{ github.event.client_payload.presentationId }}.html
+          EOF
+      
+      - name: Save content JSON
+        run: |
+          echo '${{ toJson(github.event.client_payload.slides) }}' > presentations/content/${{ github.event.client_payload.user }}/${{ github.event.client_payload.presentationId }}.json
+      
+      - name: Save HTML
+        run: |
+          cat > presentations/public/${{ github.event.client_payload.user }}/${{ github.event.client_payload.presentationId }}.html << 'HTMLEOF'
+          ${{ github.event.client_payload.html }}
+          HTMLEOF
+      
+      - name: Verify files
+        run: |
+          echo "Verifying generated files..."
+          ls -lh presentations/metadata/${{ github.event.client_payload.user }}/${{ github.event.client_payload.presentationId }}.yaml
+          ls -lh presentations/content/${{ github.event.client_payload.user }}/${{ github.event.client_payload.presentationId }}.json
+          ls -lh presentations/public/${{ github.event.client_payload.user }}/${{ github.event.client_payload.presentationId }}.html
+          echo "All files created successfully"
+      
+      - name: Configure Git
+        run: |
+          git config user.name "CircleUp Bot"
+          git config user.email "bot@circleup.com.co"
+      
+      - name: Commit and push
+        run: |
+          git add presentations/
+          
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+            exit 1
+          fi
+          
+          git commit -m "feat(presentation): ${{ github.event.client_payload.metadata.title }}
+
+          - User: ${{ github.event.client_payload.user }}
+          - Slides: ${{ github.event.client_payload.metadata.slideCount }}
+          - Theme: ${{ github.event.client_payload.metadata.theme }}
+          - Model: ${{ github.event.client_payload.metadata.model }}
+          - ID: ${{ github.event.client_payload.presentationId }}
+          
+          Generated via Vercel Function
+          [skip ci]"
+          
+          git push origin main
+          echo "Presentation saved successfully"
