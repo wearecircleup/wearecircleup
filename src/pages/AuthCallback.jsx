@@ -37,44 +37,28 @@ const AuthCallback = ({ setCurrentPage }) => {
       }
 
       try {
-        // Exchange code for access token and get user info
-        // Note: In production, token exchange should happen on backend with CLIENT_SECRET
-        // For now, we'll use the code to get user info via GitHub API
-        
-        // Get user info from GitHub API using the code
-        // We'll use a public token to fetch user data after OAuth
-        const token = import.meta.env.VITE_GITHUB_PUBLIC_TOKEN;
-        
-        if (!token) {
-          throw new Error('VITE_GITHUB_PUBLIC_TOKEN not configured');
-        }
-
-        // Fetch authenticated user data
-        const userResponse = await fetch('https://api.github.com/user', {
+        // Exchange code for access token via backend function
+        // This is secure because CLIENT_SECRET stays on the server
+        const authResponse = await fetch('/.netlify/functions/github-auth', {
+          method: 'POST',
           headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/vnd.github+json',
-            'X-GitHub-Api-Version': '2022-11-28'
-          }
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ code, state })
         });
 
-        if (!userResponse.ok) {
-          throw new Error('Failed to fetch user data from GitHub');
+        if (!authResponse.ok) {
+          const errorData = await authResponse.json();
+          throw new Error(errorData.error || 'Authentication failed');
         }
 
-        const userData = await userResponse.json();
+        const { user, accessToken } = await authResponse.json();
         
-        // Use login as the stable identifier
-        const user = {
-          id: userData.id.toString(),
-          login: userData.login, // GitHub username - stable identifier
-          username: userData.name || userData.login,
-          email: userData.email,
-          avatarUrl: userData.avatar_url,
-          code: code
-        };
-
-        GitHubAuthService.setUser(user);
+        // Store user data and their personal access token
+        GitHubAuthService.setUser({
+          ...user,
+          accessToken // Store user's token for API calls
+        });
         setStatus('success');
         
         setTimeout(() => {

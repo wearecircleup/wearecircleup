@@ -939,6 +939,65 @@ src/components/dashboard/DashboardHome.jsx (API integration)
 - No manual refresh needed after workflow completes
 - Fallback to localStorage if GitHub API fails
 
+### Fix 8: UI/UX Improvements and Responsive Design
+
+**Date:** 2026-01-18
+
+**Problem:**
+- Inconsistent branding (CircleUp vs Circle Up)
+- Mobile menu not connected to Login page
+- Duplicate buttons in Login page
+- Accessibility button design didn't match dashboard button
+- Presentations not fully responsive
+- No touch swipe support for slides on mobile
+
+**Solution:**
+- Fixed branding to "Circle Up" throughout the app
+- Connected mobile menu "Únete a Nosotros" to Login page
+- Added curve underline design to Dashboard title
+- Redesigned accessibility button to match "Volver al Dashboard"
+- Made presentation cards fully responsive (grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4)
+- Added touch/swipe support for presentation slides
+- Implemented click-outside to close accessibility menu
+- Fixed duplicate "Volver al inicio" button in Login
+- Updated Login buttons to redirect to https://circleup.com.co/
+
+**Files Modified:**
+```
+src/pages/Dashboard.jsx (branding, curve design)
+src/pages/Login.jsx (button fixes, external redirect)
+src/pages/PresentationViewer.jsx (accessibility button, touch support)
+src/components/Header.jsx (mobile menu routing)
+src/components/PresentationCard.jsx (responsive design)
+src/components/dashboard/DashboardHome.jsx (responsive grid)
+src/constants/index.js (mobile menu URL)
+```
+
+**Key Features:**
+- **Branding**: Consistent "Circle Up" with curve underline on Dashboard
+- **Mobile Navigation**: Menu button connects to Login page
+- **Responsive Presentations**: 
+  - Desktop: 4 columns
+  - Laptop: 3 columns
+  - Tablet: 2 columns
+  - Mobile: 1 column
+- **Touch Support**: Swipe left/right to navigate slides
+- **Accessibility**: 
+  - Button matches dashboard design (white Button component)
+  - Menu closes on click outside
+  - Positioned as dropdown below button
+- **Login Page**:
+  - Single "Volver al inicio" button for desktop (hidden lg:block)
+  - Single button for mobile (lg:hidden)
+  - Both redirect to https://circleup.com.co/
+
+**Benefits:**
+- Consistent user experience across devices
+- Better mobile usability with touch gestures
+- Professional branding with curve design
+- Symmetric and balanced button layout
+- Clear navigation flow from marketing site to app
+
 ### Notes
 
 - All configuration uses environment variable interpolation
@@ -951,3 +1010,6 @@ src/components/dashboard/DashboardHome.jsx (API integration)
 - Component reusability and modularization enforced
 - Impress.js for dynamic 3D presentations
 - GitHub Models API for AI content generation
+- Fully responsive design with mobile-first approach
+- Touch/swipe support for mobile presentations
+- External redirect to marketing site (circleup.com.co)

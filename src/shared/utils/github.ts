@@ -30,13 +30,18 @@ export class GitHubAuthService {
     return !!localStorage.getItem('github_user');
   }
 
-  static getUser(): { id: string; login: string; username: string; email?: string; avatarUrl: string } | null {
+  static getUser(): { id: string; login: string; username: string; email?: string; avatarUrl: string; accessToken?: string } | null {
     const user = localStorage.getItem('github_user');
     return user ? JSON.parse(user) : null;
   }
 
-  static setUser(user: { id: string; login: string; username: string; email?: string; avatarUrl: string }): void {
+  static setUser(user: { id: string; login: string; username: string; email?: string; avatarUrl: string; accessToken?: string }): void {
     localStorage.setItem('github_user', JSON.stringify(user));
+  }
+  
+  static getUserToken(): string | null {
+    const user = this.getUser();
+    return user?.accessToken || null;
   }
 
   static logout(): void {
