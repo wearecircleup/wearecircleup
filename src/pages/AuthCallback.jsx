@@ -78,6 +78,8 @@ const AuthCallback = ({ setCurrentPage }) => {
         setStatus('success');
         
         setTimeout(() => {
+          // Clear URL and redirect to dashboard
+          window.history.replaceState({}, '', '/');
           setCurrentPage('dashboard');
         }, 1500);
       } catch (err) {

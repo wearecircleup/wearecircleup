@@ -11,7 +11,8 @@ const Dashboard = ({ setCurrentPage }) => {
 
   const handleLogout = () => {
     GitHubAuthService.logout();
-    setCurrentPage('home');
+    // Redirect to root URL to clear any callback parameters
+    window.location.href = '/';
   };
 
   const handleNavigate = (view) => {
