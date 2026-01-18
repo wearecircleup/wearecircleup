@@ -9,17 +9,24 @@ const PresentationCard = ({ presentation, onOpen, onDelete }) => {
 
   return (
     <div className="group relative bg-n-7/90 backdrop-blur-sm border border-n-6/50 rounded-xl overflow-hidden hover:border-color-1/50 transition-all duration-300">
-      {/* Thumbnail */}
-      <div className="relative h-48 bg-gradient-to-br from-color-1/20 to-color-2/20 overflow-hidden">
-        {thumbnail ? (
-          <img src={thumbnail} alt={title} className="w-full h-full object-cover" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <svg className="w-16 h-16 text-n-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-            </svg>
-          </div>
-        )}
+      {/* Thumbnail with quote */}
+      <div className="relative h-48 bg-gradient-to-br from-n-8 via-n-7 to-n-8 overflow-hidden border-b border-n-6/50">
+        {/* Background decoration */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-color-1 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-color-2 rounded-full blur-3xl"></div>
+        </div>
+        
+        {/* Quote content */}
+        <div className="relative h-full flex flex-col items-center justify-center p-6 text-center">
+          <svg className="w-8 h-8 text-color-1/50 mb-3" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+          </svg>
+          <p className="text-n-2 text-sm font-medium line-clamp-3 italic">
+            {description || title}
+          </p>
+          <div className="mt-3 w-12 h-0.5 bg-gradient-to-r from-color-1 to-color-2 rounded-full"></div>
+        </div>
         
         {/* Status badge */}
         <div className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-medium border backdrop-blur-sm ${statusColors[status] || statusColors.processing}`}>

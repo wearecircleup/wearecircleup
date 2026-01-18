@@ -28,16 +28,25 @@ const DashboardHome = ({ user, onNavigate }) => {
       const remoteMap = new Map(remotePresentations.map(p => [p.id, p]));
       
       // Update local presentations with remote data if available
-      const merged = localPresentations.map(local => {
-        const remote = remoteMap.get(local.id);
-        if (remote) {
-          // Presentation completed, use remote data
-          remoteMap.delete(local.id);
-          return remote;
-        }
-        // Still processing or failed
-        return local;
-      });
+      const merged = localPresentations
+        .map(local => {
+          const remote = remoteMap.get(local.id);
+          if (remote) {
+            // Presentation completed, use remote data and remove from map
+            remoteMap.delete(local.id);
+            return remote;
+          }
+          // Still processing or failed - keep local version
+          return local;
+        })
+        .filter(p => {
+          // Remove "processing" if a completed version exists in remote
+          if (p.status === 'processing') {
+            // Check if this presentation is now completed in remote
+            return !remotePresentations.some(r => r.id === p.id && r.status === 'completed');
+          }
+          return true;
+        });
       
       // Add any remote presentations not in local storage
       remoteMap.forEach(remote => merged.push(remote));
@@ -88,14 +97,27 @@ const DashboardHome = ({ user, onNavigate }) => {
           </p>
         </div>
         
-        <Button onClick={() => onNavigate('create')} white>
-          <span className="flex items-center gap-2">
+        <div className="flex gap-3">
+          <button
+            onClick={loadPresentations}
+            className="px-4 py-2 bg-n-6 hover:bg-n-5 text-n-1 rounded-lg transition-all flex items-center gap-2"
+            title="Refrescar presentaciones"
+          >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
-            Nueva Presentación
-          </span>
-        </Button>
+            Refrescar
+          </button>
+          
+          <Button onClick={() => onNavigate('create')} white>
+            <span className="flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              Nueva Presentación
+            </span>
+          </Button>
+        </div>
       </div>
 
       {/* Filters */}

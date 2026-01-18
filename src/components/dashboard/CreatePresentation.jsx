@@ -8,36 +8,21 @@ const CreatePresentation = ({ user, onBack, onSuccess }) => {
     title: "",
     description: "",
     numSlides: 10,
+    language: "es-LA",
     theme: "modern",
-    model: "gpt-4o",
-    options: {
-      includeSpeakerNotes: true,
-      addReferences: false,
-      tone: "professional"
-    }
+    model: "gpt-4o"
   });
   const [errors, setErrors] = useState({});
   const [isGenerating, setIsGenerating] = useState(false);
   const [notification, setNotification] = useState(null);
 
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type } = e.target;
     
-    if (name.startsWith('options.')) {
-      const optionKey = name.split('.')[1];
-      setFormData(prev => ({
-        ...prev,
-        options: {
-          ...prev.options,
-          [optionKey]: type === 'checkbox' ? checked : value
-        }
-      }));
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: type === 'number' ? parseInt(value) : value
-      }));
-    }
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'number' ? parseInt(value) : value
+    }));
     
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: undefined }));
@@ -79,13 +64,9 @@ const CreatePresentation = ({ user, onBack, onSuccess }) => {
           title: "",
           description: "",
           numSlides: 10,
+          language: "es-LA",
           theme: "modern",
-          model: "gpt-4o",
-          options: {
-            includeSpeakerNotes: true,
-            addReferences: false,
-            tone: "professional"
-          }
+          model: "gpt-4o"
         });
         
         // Notify parent
@@ -223,6 +204,23 @@ const CreatePresentation = ({ user, onBack, onSuccess }) => {
               {errors.numSlides && <p className="text-red-500 text-sm mt-1">{errors.numSlides}</p>}
             </div>
 
+            {/* Language */}
+            <div>
+              <label className="block text-n-1 font-medium mb-2">
+                Idioma de Salida *
+              </label>
+              <select
+                name="language"
+                value={formData.language}
+                onChange={handleInputChange}
+                className="w-full bg-n-8/50 border border-n-1/10 rounded-xl py-3 lg:py-4 px-4 text-n-1 focus:border-color-1 focus:outline-none transition-colors"
+              >
+                <option value="es-LA">Español (Latino)</option>
+                <option value="en-US">Inglés (USA)</option>
+                <option value="pt-BR">Português (Brasil)</option>
+              </select>
+            </div>
+
             {/* Theme */}
             <div>
               <label className="block text-n-1 font-medium mb-2">
@@ -256,53 +254,8 @@ const CreatePresentation = ({ user, onBack, onSuccess }) => {
                 <option value="microsoft/Phi-3-medium-128k-instruct">Phi-3 Medium</option>
               </select>
             </div>
-
-            {/* Tone */}
-            <div>
-              <label className="block text-n-1 font-medium mb-2">
-                Tono
-              </label>
-              <select
-                name="options.tone"
-                value={formData.options.tone}
-                onChange={handleInputChange}
-                className="w-full bg-n-8/50 border border-n-1/10 rounded-xl py-3 lg:py-4 px-4 text-n-1 focus:border-color-1 focus:outline-none transition-colors"
-              >
-                <option value="professional">Profesional</option>
-                <option value="casual">Casual</option>
-                <option value="academic">Académico</option>
-              </select>
-            </div>
           </div>
 
-          {/* Options */}
-          <div className="space-y-3">
-            <label className="block text-n-1 font-medium mb-2">
-              Opciones Adicionales
-            </label>
-            
-            <label className="flex items-center space-x-3 cursor-pointer">
-              <input
-                type="checkbox"
-                name="options.includeSpeakerNotes"
-                checked={formData.options.includeSpeakerNotes}
-                onChange={handleInputChange}
-                className="w-5 h-5 rounded border-n-1/10 bg-n-8/50 text-color-1 focus:ring-color-1"
-              />
-              <span className="text-n-3">Incluir notas del presentador</span>
-            </label>
-
-            <label className="flex items-center space-x-3 cursor-pointer">
-              <input
-                type="checkbox"
-                name="options.addReferences"
-                checked={formData.options.addReferences}
-                onChange={handleInputChange}
-                className="w-5 h-5 rounded border-n-1/10 bg-n-8/50 text-color-1 focus:ring-color-1"
-              />
-              <span className="text-n-3">Agregar referencias</span>
-            </label>
-          </div>
 
           {/* Submit Button */}
           <div className="pt-4">
