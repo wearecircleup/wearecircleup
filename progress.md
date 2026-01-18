@@ -1182,12 +1182,28 @@ Migrate presentation generation from GitHub Actions to Vercel Functions to solve
   - Fixed JSON format: wrapped slides array in object with "slides" property
   - PresentationViewer now correctly loads presentation content
 
+**Step 6: Migrate Delete to Vercel Function**
+- Create: api/delete-presentation.js
+- Update: PresentationsAPI.deletePresentation
+- Update: delete-presentation.yml workflow
+- Remove: VITE_GITHUB_PUBLIC_TOKEN dependency
+- Status: COMPLETED
+- Changes:
+  - Created api/delete-presentation.js Vercel Function
+  - Updated delete-presentation.yml to use correct payload fields
+  - Migrated PresentationsAPI.deletePresentation to call Vercel Function
+  - Removed VITE_GITHUB_PUBLIC_TOKEN from frontend
+  - Configured maxDuration: 10 seconds in vercel.json
+  - Complete architecture consistency (all operations via Vercel)
+
 ### Exit Criteria
 
 - Presentation generation completes in under 15 seconds
 - 10 simultaneous users all succeed without queuing
 - GitHub Models API calls work from Vercel Function
 - Git commits still work via simplified GitHub Action
+- Delete operations work via Vercel Function
+- No VITE_GITHUB_PUBLIC_TOKEN in frontend
 - No increase in costs (stay within free tiers)
 
 ### Notes

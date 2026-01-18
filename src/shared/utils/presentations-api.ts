@@ -142,52 +142,31 @@ export class PresentationsAPI {
   }
 
   /**
-   * Delete a presentation from GitHub
+   * Delete a presentation via Vercel Function
    */
   static async deletePresentation(username: string, presentationId: string, title: string): Promise<{ success: boolean; message: string }> {
     try {
-      const token = import.meta.env.VITE_GITHUB_PUBLIC_TOKEN;
-      const owner = import.meta.env.VITE_GITHUB_REPO_OWNER || 'wearecircleup';
-      const repo = import.meta.env.VITE_GITHUB_REPO_NAME || 'wearecircleup';
-
-      if (!token) {
-        throw new Error('VITE_GITHUB_PUBLIC_TOKEN not configured');
-      }
-
-      const payload = {
-        event_type: 'delete_presentation',
-        client_payload: {
-          user: {
-            login: username
-          },
-          presentation_id: presentationId,
-          title: title
-        }
-      };
-
-      const response = await fetch(
-        `https://api.github.com/repos/${owner}/${repo}/dispatches`,
-        {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/vnd.github+json',
-            'Authorization': `Bearer ${token}`,
-            'X-GitHub-Api-Version': '2022-11-28',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        }
-      );
+      const response = await fetch('/api/delete-presentation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username,
+          presentationId,
+          title
+        })
+      });
 
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('GitHub API Error:', response.status, errorText);
-        throw new Error(`Failed to delete presentation: ${response.status}`);
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || 'Failed to delete presentation');
       }
 
+      const result = await response.json();
       return {
-        success: true,
-        message: 'Presentación eliminada correctamente'
+        success: result.success,
+        message: result.message
       };
     } catch (error) {
       console.error('Error deleting presentation:', error);
