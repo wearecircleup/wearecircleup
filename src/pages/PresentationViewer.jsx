@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { PresentationsAPI } from '../shared/utils/presentations-api';
 import Button from '../components/Button';
+import Logo from '../components/Logo';
 
-const PresentationViewer = () => {
+const PresentationViewer = ({ setCurrentPage }) => {
   // Extract userId and presentationId from URL
   const pathname = window.location.pathname;
   const match = pathname.match(/^\/p\/([^/]+)\/([^/]+)/);
@@ -191,11 +192,13 @@ const PresentationViewer = () => {
         </button>
       </div>
 
-      {/* Back to Dashboard button */}
+      {/* Logo - Top Left */}
       <div className="fixed top-6 left-6 z-[100]">
-        <Button onClick={() => window.location.href = '/dashboard'} white>
-          ← Volver al Dashboard
-        </Button>
+        <Logo 
+          logoSize={{ width: 28, height: 28 }}
+          textSize="text-sm"
+          onClick={() => setCurrentPage('dashboard')}
+        />
       </div>
 
       {/* Accessibility Button */}

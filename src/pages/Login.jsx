@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Section from "../components/Section";
 import Button from "../components/Button";
+import Logo from "../components/Logo";
 import { GitHubAuthService } from "../shared/utils/github";
 
 const Login = ({ setCurrentPage }) => {
@@ -47,6 +48,14 @@ const Login = ({ setCurrentPage }) => {
 
       <Section className="min-h-screen flex items-center justify-center py-6 lg:py-10">
         <div className="container max-w-6xl mx-auto px-4">
+          {/* Logo - Top Center */}
+          <div className="flex justify-center mb-8 lg:mb-12">
+            <Logo 
+              logoSize={{ width: 40, height: 40 }}
+              textSize="text-lg"
+            />
+          </div>
+
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-20 items-center">
             
             {/* Left side - Text content */}

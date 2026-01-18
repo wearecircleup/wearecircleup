@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Section from "../components/Section";
 import Button from "../components/Button";
+import Logo from "../components/Logo";
 import { GitHubAuthService } from "../shared/utils/github";
 import DashboardHome from "../components/dashboard/DashboardHome";
 import CreatePresentation from "../components/dashboard/CreatePresentation";
@@ -44,6 +45,14 @@ const Dashboard = ({ setCurrentPage }) => {
       <Section className="min-h-screen py-6 lg:py-10">
         <div className="container max-w-7xl mx-auto px-4">
           
+          {/* Logo - Top Left */}
+          <div className="mb-6">
+            <Logo 
+              logoSize={{ width: 32, height: 32 }}
+              textSize="text-base"
+            />
+          </div>
+
           {/* Header */}
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4">
             <div>

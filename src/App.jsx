@@ -47,7 +47,7 @@ const App = () => {
         {currentPage === 'login' && <Login setCurrentPage={setCurrentPage} />}
         {currentPage === 'auth-callback' && <AuthCallback setCurrentPage={setCurrentPage} />}
         {currentPage === 'dashboard' && <Dashboard setCurrentPage={setCurrentPage} />}
-        {currentPage === 'presentation-viewer' && <PresentationViewer />}
+        {currentPage === 'presentation-viewer' && <PresentationViewer setCurrentPage={setCurrentPage} />}
       </div>
     );
   } catch (error) {
