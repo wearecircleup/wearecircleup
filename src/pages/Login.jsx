@@ -129,6 +129,13 @@ const Login = ({ setCurrentPage }) => {
                   </div>
                 </div>
 
+                <Button
+                  onClick={() => window.location.href = 'https://circleup.com.co/'}
+                  white
+                  className="mt-6 hidden lg:block"
+                >
+                  ← Volver al inicio
+                </Button>
               </div>
             </div>
 
@@ -221,7 +228,7 @@ const Login = ({ setCurrentPage }) => {
             {/* Mobile back button */}
             <div className="lg:hidden text-center mt-6">
               <Button
-                onClick={() => setCurrentPage('home')}
+                onClick={() => window.location.href = 'https://circleup.com.co/'}
                 white
                 className="text-sm"
               >
