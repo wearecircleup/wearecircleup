@@ -27,8 +27,8 @@ function ParticleCanvas({ imageUrl }) {
       const tempCanvas = document.createElement('canvas');
       const tempCtx = tempCanvas.getContext('2d');
       
-      // Scale image to fit screen while maintaining aspect ratio - almost full viewport
-      const scale = Math.min(canvas.width / img.width, canvas.height / img.height) * 0.8;
+      // Scale image to fit screen while maintaining aspect ratio
+      const scale = Math.min(canvas.width / img.width, canvas.height / img.height) * 0.7;
       const width = Math.floor(img.width * scale);
       const height = Math.floor(img.height * scale);
       
@@ -39,9 +39,9 @@ function ParticleCanvas({ imageUrl }) {
       const imageData = tempCtx.getImageData(0, 0, width, height);
       const pixels = imageData.data;
       
-      // Create particles - optimized for performance
+      // Create particles - highly optimized
       const particles = [];
-      const gap = 3; // Balance between detail and performance
+      const gap = 5; // Larger gap for better performance
       
       for (let y = 0; y < height; y += gap) {
         for (let x = 0; x < width; x += gap) {
@@ -53,7 +53,7 @@ function ParticleCanvas({ imageUrl }) {
           
           // Only visible pixels - exclude black background
           const brightness = (r + g + b) / 3;
-          if (alpha > 50 && brightness > 20) {
+          if (alpha > 50 && brightness > 30) {
             particles.push({
               x: x + (canvas.width - width) / 2,
               y: y + (canvas.height - height) / 2,
@@ -62,10 +62,7 @@ function ParticleCanvas({ imageUrl }) {
               r: r,
               g: g,
               b: b,
-              size: 2.5,
-              vx: 0,
-              vy: 0,
-              ease: 0.2
+              size: 2
             });
           }
         }
@@ -73,52 +70,34 @@ function ParticleCanvas({ imageUrl }) {
       
       particlesRef.current = particles;
       
-      // Animation loop - smooth natural movement
+      // Animation loop - simple and fast
       const animate = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'rgba(20, 20, 30, 0.1)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
         
         particles.forEach(particle => {
-          // Calculate distance from mouse
+          // Mouse interaction - simple repulsion
           const dx = mouseRef.current.x - particle.x;
           const dy = mouseRef.current.y - particle.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
-          const maxDistance = 150;
+          const maxDistance = 100;
           
-          // Mouse repulsion with smooth easing
           if (distance < maxDistance) {
             const force = (maxDistance - distance) / maxDistance;
             const angle = Math.atan2(dy, dx);
-            const repelX = Math.cos(angle) * force * 8;
-            const repelY = Math.sin(angle) * force * 8;
-            
-            particle.vx -= repelX;
-            particle.vy -= repelY;
+            particle.x -= Math.cos(angle) * force * 3;
+            particle.y -= Math.sin(angle) * force * 3;
+          } else {
+            // Return to base position
+            const dxBase = particle.x - particle.baseX;
+            const dyBase = particle.y - particle.baseY;
+            particle.x -= dxBase * 0.1;
+            particle.y -= dyBase * 0.1;
           }
           
-          // Spring back to original position
-          const dxBase = particle.baseX - particle.x;
-          const dyBase = particle.baseY - particle.y;
-          
-          particle.vx += dxBase * 0.05;
-          particle.vy += dyBase * 0.05;
-          
-          // Apply friction
-          particle.vx *= 0.85;
-          particle.vy *= 0.85;
-          
-          // Update position
-          particle.x += particle.vx;
-          particle.y += particle.vy;
-          
-          // Draw particle with subtle glow
-          const alpha = Math.min(1, Math.max(0.6, 1 - distance / maxDistance));
-          ctx.shadowBlur = 4;
-          ctx.shadowColor = `rgba(${particle.r}, ${particle.g}, ${particle.b}, 0.3)`;
-          ctx.fillStyle = `rgba(${particle.r}, ${particle.g}, ${particle.b}, ${alpha})`;
-          ctx.beginPath();
-          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.shadowBlur = 0;
+          // Draw particle - simple and fast
+          ctx.fillStyle = `rgba(${particle.r}, ${particle.g}, ${particle.b}, 0.8)`;
+          ctx.fillRect(particle.x, particle.y, particle.size, particle.size);
         });
         
         animationRef.current = requestAnimationFrame(animate);
