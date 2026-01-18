@@ -1132,6 +1132,14 @@ Migrate presentation generation from GitHub Actions to Vercel Functions to solve
 - Migrate: backend/scripts/build-presentation.js logic
 - Output: In-memory HTML generation
 - Testing: Verify HTML output matches current format
+- Status: COMPLETED
+- Changes:
+  - Migrated generateHTML function to api/generate-presentation.js
+  - Function now returns both slides JSON and complete HTML
+  - Supports all 3 themes: modern, academic, minimal
+  - Impress.js integration with 3D positioning
+  - Theme colors and styling preserved
+  - No file system operations (pure in-memory generation)
 
 **Step 3: Simplify GitHub Action**
 - New workflow: save-presentation.yml
