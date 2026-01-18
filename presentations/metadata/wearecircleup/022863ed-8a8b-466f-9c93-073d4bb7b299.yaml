@@ -1,9 +1,0 @@
-id: 022863ed-8a8b-466f-9c93-073d4bb7b299
-title: "Alimentos malos"
-author: wearecircleup
-theme: modern
-model: gpt-4o
-slides_count: 10
-created_at: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
-status: completed
-url: /presentations/public/wearecircleup/022863ed-8a8b-466f-9c93-073d4bb7b299.html
