@@ -5,6 +5,7 @@ async function generateSlides() {
   const MODEL = process.env.MODEL || 'gpt-4o';
   const DESCRIPTION = process.env.DESCRIPTION;
   const NUM_SLIDES = parseInt(process.env.NUM_SLIDES) || 10;
+  const LANGUAGE = process.env.LANGUAGE || 'es-LA';
   const THEME = process.env.THEME || 'modern';
   const REQUEST_ID = process.env.REQUEST_ID;
   const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
@@ -22,7 +23,15 @@ async function generateSlides() {
   
   const githubModel = modelMap[MODEL] || MODEL;
   
-  console.log(`Generating ${NUM_SLIDES} slides with ${githubModel}...`);
+  const languageNames = {
+    'es-LA': 'español latino',
+    'en-US': 'English (US)',
+    'pt-BR': 'português brasileiro'
+  };
+  
+  const outputLanguage = languageNames[LANGUAGE] || 'español latino';
+  
+  console.log(`Generating ${NUM_SLIDES} slides with ${githubModel} in ${outputLanguage}...`);
 
   // Call GitHub Models API
   const response = await fetch('https://models.github.ai/inference/chat/completions', {
@@ -38,22 +47,25 @@ async function generateSlides() {
       messages: [
         {
           role: 'system',
-          content: 'Eres un experto en crear presentaciones profesionales. Genera contenido estructurado en formato JSON.'
+          content: `You are an expert in creating professional presentations. Generate structured content in JSON format. Always respond in ${outputLanguage}.`
         },
         {
           role: 'user',
-          content: `Crea ${NUM_SLIDES} diapositivas sobre: ${DESCRIPTION}. 
+          content: `Create ${NUM_SLIDES} slides about: ${DESCRIPTION}
+
+IMPORTANT: All content must be in ${outputLanguage}.
           
-Responde SOLO con un JSON válido en este formato:
+Respond ONLY with valid JSON in this format:
 {
   "slides": [
     {
-      "title": "Título de la diapositiva",
-      "content": ["Punto 1", "Punto 2", "Punto 3"],
-      "notes": "Notas del presentador (opcional)"
+      "title": "Slide title",
+      "content": ["Point 1", "Point 2", "Point 3"]
     }
   ]
-}`
+}
+
+Do NOT include speaker notes. Only title and content array for each slide.`
         }
       ],
       temperature: 0.7,

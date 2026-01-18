@@ -56,9 +56,9 @@ const PresentationCard = ({ presentation, onOpen, onDelete }) => {
           <button
             onClick={() => onOpen(presentation)}
             disabled={status !== 'completed'}
-            className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${
+            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
               status === 'completed'
-                ? 'bg-color-1 text-n-1 hover:bg-color-1/90'
+                ? 'bg-gradient-to-r from-color-1 to-color-2 text-n-1 hover:from-color-1/90 hover:to-color-2/90 shadow-md'
                 : 'bg-n-6 text-n-4 cursor-not-allowed'
             }`}
           >

@@ -103,6 +103,7 @@ jobs:
           MODEL: ${{ github.event.client_payload.presentation.model }}
           DESCRIPTION: ${{ github.event.client_payload.presentation.description }}
           NUM_SLIDES: ${{ github.event.client_payload.presentation.numSlides }}
+          LANGUAGE: ${{ github.event.client_payload.presentation.language }}
           THEME: ${{ github.event.client_payload.presentation.theme }}
           REQUEST_ID: ${{ github.event.client_payload.request_id }}
       

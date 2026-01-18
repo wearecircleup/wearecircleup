@@ -102,88 +102,78 @@ const PresentationViewer = () => {
   const progress = ((currentSlide + 1) / slides.length) * 100;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-n-8 via-n-7 to-n-8 relative overflow-hidden">
+    <div className="fixed inset-0 bg-gradient-to-br from-n-8 via-n-7 to-n-8 overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-color-1 rounded-full blur-3xl"></div>
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-color-2 rounded-full blur-3xl"></div>
       </div>
 
-      {/* Main content */}
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center p-8">
-        <div className="max-w-5xl w-full">
-          {/* Slide content */}
-          <div className="bg-n-7/50 backdrop-blur-xl border border-n-6/50 rounded-3xl p-16 shadow-2xl">
-            <h1 className="text-6xl font-bold mb-12 bg-gradient-to-r from-color-1 to-color-2 bg-clip-text text-transparent">
+      {/* Main content - Full screen */}
+      <div className="relative z-10 h-screen flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 lg:px-24 py-20">
+        <div className="w-full h-full max-w-7xl flex items-center justify-center">
+          {/* Slide content - Responsive sizing */}
+          <div className="w-full h-full flex flex-col justify-center bg-n-7/50 backdrop-blur-xl border border-n-6/50 rounded-3xl p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 shadow-2xl">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 sm:mb-8 md:mb-10 lg:mb-12 bg-gradient-to-r from-color-1 to-color-2 bg-clip-text text-transparent leading-tight">
               {slide.title}
             </h1>
             
-            <div className="space-y-6">
+            <div className="space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6 flex-1 flex flex-col justify-center">
               {slide.content.map((point, index) => (
                 <div
                   key={index}
-                  className="flex items-start gap-4 text-2xl text-n-2 animate-fadeIn"
+                  className="flex items-start gap-3 sm:gap-4 text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-n-2 animate-fadeIn"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <span className="text-color-1 font-bold">•</span>
-                  <p>{point}</p>
+                  <span className="text-color-1 font-bold flex-shrink-0">•</span>
+                  <p className="leading-relaxed">{point}</p>
                 </div>
               ))}
             </div>
-
-            {slide.notes && (
-              <div className="mt-12 p-6 bg-n-6/30 border-l-4 border-color-2 rounded-lg">
-                <p className="text-n-4 italic">{slide.notes}</p>
-              </div>
-            )}
           </div>
 
-          {/* Navigation */}
-          <div className="mt-8 flex items-center justify-between">
-            <button
-              onClick={prevSlide}
-              disabled={currentSlide === 0}
-              className="px-6 py-3 bg-n-6 hover:bg-n-5 disabled:opacity-30 disabled:cursor-not-allowed rounded-lg transition-all"
-            >
-              <svg className="w-6 h-6 text-n-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
+        </div>
+      </div>
 
-            <div className="flex items-center gap-4">
-              <span className="text-n-3 text-lg">
-                {currentSlide + 1} / {slides.length}
-              </span>
-              <div className="w-64 h-2 bg-n-6 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-color-1 to-color-2 transition-all duration-300"
-                  style={{ width: `${progress}%` }}
-                ></div>
-              </div>
-            </div>
+      {/* Navigation - Fixed at bottom */}
+      <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 flex items-center gap-4 bg-n-7/90 backdrop-blur-xl border border-n-6/50 rounded-2xl px-6 py-4 shadow-2xl">
+        <button
+          onClick={prevSlide}
+          disabled={currentSlide === 0}
+          className="p-2 bg-n-6 hover:bg-n-5 disabled:opacity-30 disabled:cursor-not-allowed rounded-lg transition-all"
+        >
+          <svg className="w-5 h-5 text-n-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
 
-            <button
-              onClick={nextSlide}
-              disabled={currentSlide === slides.length - 1}
-              className="px-6 py-3 bg-n-6 hover:bg-n-5 disabled:opacity-30 disabled:cursor-not-allowed rounded-lg transition-all"
-            >
-              <svg className="w-6 h-6 text-n-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
-
-          {/* Keyboard hints */}
-          <div className="mt-6 text-center text-n-4 text-sm">
-            Usa las flechas ← → o la barra espaciadora para navegar
+        <div className="flex items-center gap-3">
+          <span className="text-n-3 text-sm font-medium whitespace-nowrap">
+            {currentSlide + 1} / {slides.length}
+          </span>
+          <div className="w-32 sm:w-48 md:w-64 h-2 bg-n-6 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-color-1 to-color-2 transition-all duration-300"
+              style={{ width: `${progress}%` }}
+            ></div>
           </div>
         </div>
+
+        <button
+          onClick={nextSlide}
+          disabled={currentSlide === slides.length - 1}
+          className="p-2 bg-n-6 hover:bg-n-5 disabled:opacity-30 disabled:cursor-not-allowed rounded-lg transition-all"
+        >
+          <svg className="w-5 h-5 text-n-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
       </div>
 
       {/* Back to Dashboard button */}
       <button
         onClick={() => window.location.href = '/dashboard'}
-        className="fixed top-6 left-6 z-50 px-4 py-2 bg-n-6/80 hover:bg-n-5 backdrop-blur-sm border border-n-5 rounded-lg transition-all flex items-center gap-2 text-n-1"
+        className="fixed top-6 left-6 z-50 px-5 py-3 bg-gradient-to-r from-color-1 to-color-2 hover:from-color-1/90 hover:to-color-2/90 rounded-lg transition-all flex items-center gap-2 text-n-1 font-semibold shadow-lg"
       >
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
