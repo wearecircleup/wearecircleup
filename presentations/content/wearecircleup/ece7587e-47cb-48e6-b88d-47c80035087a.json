@@ -1,0 +1,60 @@
+{
+  "slides": [
+    {
+      "title": "Introducción a la Analítica de Datos",
+      "content": [
+        "Definición de analítica de datos",
+        "Importancia en la toma de decisiones",
+        "Áreas donde se aplica la analítica de datos"
+      ]
+    },
+    {
+      "title": "Tipos de Analítica de Datos",
+      "content": [
+        "Analítica descriptiva: qué ocurrió",
+        "Analítica predictiva: qué podría ocurrir",
+        "Analítica prescriptiva: qué se debería hacer"
+      ]
+    },
+    {
+      "title": "Proceso de la Analítica de Datos",
+      "content": [
+        "Recolección de datos",
+        "Limpieza y preparación de datos",
+        "Análisis e interpretación de resultados"
+      ]
+    },
+    {
+      "title": "Herramientas de Analítica de Datos",
+      "content": [
+        "Microsoft Excel y Google Sheets",
+        "Lenguajes de programación: Python, R",
+        "Plataformas: Tableau, Power BI"
+      ]
+    },
+    {
+      "title": "Beneficios de la Analítica de Datos",
+      "content": [
+        "Mejora en la toma de decisiones",
+        "Identificación de oportunidades de negocio",
+        "Optimización de procesos y recursos"
+      ]
+    },
+    {
+      "title": "Desafíos en la Analítica de Datos",
+      "content": [
+        "Manejo de grandes volúmenes de datos",
+        "Garantizar la calidad de los datos",
+        "Cumplimiento de normativas y privacidad"
+      ]
+    },
+    {
+      "title": "Futuro de la Analítica de Datos",
+      "content": [
+        "Integración con inteligencia artificial",
+        "Aumento en el uso de datos en tiempo real",
+        "Mayor accesibilidad para pequeñas empresas"
+      ]
+    }
+  ]
+}
