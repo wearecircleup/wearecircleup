@@ -1,248 +1,140 @@
-import { useRef, useMemo, useEffect } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useTexture } from '@react-three/drei';
-import * as THREE from 'three';
+import { useRef, useEffect } from 'react';
 
-// Vertex shader for particle positioning and mouse interaction
-const vertexShader = `
-  uniform sampler2D uTexture;
-  uniform sampler2D uDisplacement;
-  uniform float uTime;
-  uniform vec2 uMouse;
-  uniform float uRadius;
-  uniform float uStrength;
-  
-  attribute vec2 aCoordinates;
-  attribute float aSpeed;
-  attribute float aOffset;
-  attribute float aDirection;
-  attribute float aPress;
-  
-  varying vec3 vColor;
-  
-  void main() {
-    vec3 colorTexture = texture2D(uTexture, aCoordinates).rgb;
-    
-    // Only show particles where there's actual image data
-    if(colorTexture.r < 0.1 && colorTexture.g < 0.1 && colorTexture.b < 0.1) {
-      gl_Position = vec4(0.0, 0.0, 0.0, 0.0);
-      return;
-    }
-    
-    vec3 pos = position;
-    
-    // Mouse displacement
-    vec3 displacement = texture2D(uDisplacement, aCoordinates).rgb;
-    float displacementForce = displacement.r;
-    
-    pos.z += displacementForce * uStrength * aPress;
-    pos.x += cos(aDirection) * displacementForce * uStrength * aPress * 0.3;
-    pos.y += sin(aDirection) * displacementForce * uStrength * aPress * 0.3;
-    
-    // Floating animation
-    pos.z += sin(uTime * aSpeed + aOffset) * 0.05;
-    
-    vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-    gl_Position = projectionMatrix * mvPosition;
-    
-    // Particle size based on distance
-    gl_PointSize = 2.5 * (1.0 / -mvPosition.z);
-    
-    vColor = colorTexture;
-  }
-`;
-
-// Fragment shader for particle coloring
-const fragmentShader = `
-  varying vec3 vColor;
-  
-  void main() {
-    // Circular particle shape
-    vec2 center = gl_PointCoord - 0.5;
-    float dist = length(center);
-    
-    if(dist > 0.5) discard;
-    
-    // Soft edges
-    float alpha = 1.0 - smoothstep(0.3, 0.5, dist);
-    
-    gl_FragColor = vec4(vColor, alpha);
-  }
-`;
-
-function Particles({ imageUrl }) {
-  const meshRef = useRef();
-  const displacementCanvasRef = useRef();
-  const displacementTextureRef = useRef();
+function ParticleCanvas({ imageUrl }) {
+  const canvasRef = useRef(null);
+  const particlesRef = useRef([]);
   const mouseRef = useRef({ x: 0, y: 0 });
-  const prevMouseRef = useRef({ x: 0, y: 0 });
-  const { size, viewport } = useThree();
-  
-  // Load the logo texture
-  const texture = useTexture(imageUrl);
-  
-  // Create displacement canvas for mouse interaction
+  const animationRef = useRef(null);
+
   useEffect(() => {
-    const canvas = document.createElement('canvas');
-    canvas.width = 256;
-    canvas.height = 256;
-    displacementCanvasRef.current = canvas;
-    
-    const displacementTexture = new THREE.CanvasTexture(canvas);
-    displacementTextureRef.current = displacementTexture;
-    
-    return () => {
-      displacementTexture.dispose();
-    };
-  }, []);
-  
-  // Create particle system
-  const { geometry, material } = useMemo(() => {
-    if (!texture.image) return { geometry: null, material: null };
-    
-    const img = texture.image;
-    const width = 128; // Reduced for performance
-    const height = Math.floor((img.height / img.width) * width);
-    
-    // Create canvas to read pixel data
-    const canvas = document.createElement('canvas');
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
     const ctx = canvas.getContext('2d');
-    canvas.width = width;
-    canvas.height = height;
-    ctx.drawImage(img, 0, 0, width, height);
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
     
-    ctx.getImageData(0, 0, width, height);
-    
-    const numParticles = width * height;
-    const positions = new Float32Array(numParticles * 3);
-    const coordinates = new Float32Array(numParticles * 2);
-    const speeds = new Float32Array(numParticles);
-    const offsets = new Float32Array(numParticles);
-    const directions = new Float32Array(numParticles);
-    const press = new Float32Array(numParticles);
-    
-    let index = 0;
-    
-    for (let i = 0; i < height; i++) {
-      for (let j = 0; j < width; j++) {
-        
-        // Position in 3D space (centered)
-        positions[index * 3 + 0] = (j / width - 0.5) * viewport.width;
-        positions[index * 3 + 1] = -(i / height - 0.5) * viewport.height;
-        positions[index * 3 + 2] = 0;
-        
-        // UV coordinates for texture sampling
-        coordinates[index * 2 + 0] = j / width;
-        coordinates[index * 2 + 1] = i / height;
-        
-        // Random attributes for animation
-        speeds[index] = Math.random() * 0.5 + 0.5;
-        offsets[index] = Math.random() * Math.PI * 2;
-        directions[index] = Math.random() * Math.PI * 2;
-        press[index] = Math.random() * 0.5 + 0.5;
-        
-        index++;
+    // Set canvas size
+    const updateSize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    updateSize();
+    window.addEventListener('resize', updateSize);
+
+    img.onload = () => {
+      // Create temporary canvas to read pixels
+      const tempCanvas = document.createElement('canvas');
+      const tempCtx = tempCanvas.getContext('2d');
+      
+      // Scale image to fit screen while maintaining aspect ratio
+      const scale = Math.min(canvas.width / img.width, canvas.height / img.height) * 0.6;
+      const width = img.width * scale;
+      const height = img.height * scale;
+      
+      tempCanvas.width = width;
+      tempCanvas.height = height;
+      tempCtx.drawImage(img, 0, 0, width, height);
+      
+      const imageData = tempCtx.getImageData(0, 0, width, height);
+      const pixels = imageData.data;
+      
+      // Create particles from non-transparent pixels
+      const particles = [];
+      const gap = 3; // Sample every 3 pixels for performance
+      
+      for (let y = 0; y < height; y += gap) {
+        for (let x = 0; x < width; x += gap) {
+          const index = (y * width + x) * 4;
+          const alpha = pixels[index + 3];
+          
+          if (alpha > 128) { // Only visible pixels
+            particles.push({
+              x: x + (canvas.width - width) / 2,
+              y: y + (canvas.height - height) / 2,
+              baseX: x + (canvas.width - width) / 2,
+              baseY: y + (canvas.height - height) / 2,
+              r: pixels[index],
+              g: pixels[index + 1],
+              b: pixels[index + 2],
+              size: Math.random() * 2 + 1,
+              speedX: Math.random() * 0.5 - 0.25,
+              speedY: Math.random() * 0.5 - 0.25,
+              density: Math.random() * 30 + 30
+            });
+          }
+        }
       }
-    }
+      
+      particlesRef.current = particles;
+      
+      // Animation loop
+      const animate = () => {
+        ctx.fillStyle = 'rgba(20, 20, 30, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        particles.forEach(particle => {
+          // Mouse interaction
+          const dx = mouseRef.current.x - particle.x;
+          const dy = mouseRef.current.y - particle.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          const forceDirectionX = dx / distance;
+          const forceDirectionY = dy / distance;
+          const maxDistance = 100;
+          const force = (maxDistance - distance) / maxDistance;
+          
+          if (distance < maxDistance) {
+            const directionX = forceDirectionX * force * particle.density;
+            const directionY = forceDirectionY * force * particle.density;
+            particle.x -= directionX;
+            particle.y -= directionY;
+          } else {
+            // Return to base position
+            if (particle.x !== particle.baseX) {
+              const dx = particle.x - particle.baseX;
+              particle.x -= dx / 10;
+            }
+            if (particle.y !== particle.baseY) {
+              const dy = particle.y - particle.baseY;
+              particle.y -= dy / 10;
+            }
+          }
+          
+          // Draw particle
+          ctx.fillStyle = `rgba(${particle.r}, ${particle.g}, ${particle.b}, 0.8)`;
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        
+        animationRef.current = requestAnimationFrame(animate);
+      };
+      
+      animate();
+    };
     
-    const geom = new THREE.BufferGeometry();
-    geom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geom.setAttribute('aCoordinates', new THREE.BufferAttribute(coordinates, 2));
-    geom.setAttribute('aSpeed', new THREE.BufferAttribute(speeds, 1));
-    geom.setAttribute('aOffset', new THREE.BufferAttribute(offsets, 1));
-    geom.setAttribute('aDirection', new THREE.BufferAttribute(directions, 1));
-    geom.setAttribute('aPress', new THREE.BufferAttribute(press, 1));
+    img.src = imageUrl;
     
-    const mat = new THREE.ShaderMaterial({
-      uniforms: {
-        uTexture: { value: texture },
-        uDisplacement: { value: displacementTextureRef.current },
-        uTime: { value: 0 },
-        uMouse: { value: new THREE.Vector2(0, 0) },
-        uRadius: { value: 0.15 },
-        uStrength: { value: 0.5 }
-      },
-      vertexShader,
-      fragmentShader,
-      transparent: true,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending
-    });
-    
-    return { geometry: geom, material: mat };
-  }, [texture, viewport]);
-  
-  // Mouse interaction
-  useEffect(() => {
+    // Mouse move handler
     const handleMouseMove = (e) => {
       mouseRef.current = {
-        x: (e.clientX / size.width) * 2 - 1,
-        y: -(e.clientY / size.height) * 2 + 1
+        x: e.clientX,
+        y: e.clientY
       };
     };
     
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [size]);
-  
-  // Animation loop
-  useFrame((state) => {
-    if (!meshRef.current || !material) return;
+    canvas.addEventListener('mousemove', handleMouseMove);
     
-    material.uniforms.uTime.value = state.clock.elapsedTime;
-    
-    // Update displacement texture based on mouse movement
-    if (displacementCanvasRef.current) {
-      const canvas = displacementCanvasRef.current;
-      const ctx = canvas.getContext('2d');
-      
-      // Fade out previous displacement
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      
-      // Draw new displacement at mouse position
-      const mouseX = ((mouseRef.current.x + 1) / 2) * canvas.width;
-      const mouseY = ((1 - mouseRef.current.y) / 2) * canvas.height;
-      
-      const prevMouseX = ((prevMouseRef.current.x + 1) / 2) * canvas.width;
-      const prevMouseY = ((1 - prevMouseRef.current.y) / 2) * canvas.height;
-      
-      const dx = mouseX - prevMouseX;
-      const dy = mouseY - prevMouseY;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      
-      if (distance > 1) {
-        const gradient = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 50);
-        gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-        
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    return () => {
+      window.removeEventListener('resize', updateSize);
+      canvas.removeEventListener('mousemove', handleMouseMove);
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
       }
-      
-      prevMouseRef.current = { ...mouseRef.current };
-      
-      if (displacementTextureRef.current) {
-        displacementTextureRef.current.needsUpdate = true;
-      }
-    }
-  });
-  
-  const pointsObject = useMemo(() => {
-    if (!geometry || !material) return null;
-    return new THREE.Points(geometry, material);
-  }, [geometry, material]);
-  
-  useEffect(() => {
-    if (meshRef.current && geometry && material) {
-      meshRef.current.geometry = geometry;
-      meshRef.current.material = material;
-    }
-  }, [geometry, material]);
-  
-  if (!pointsObject) return null;
-  
-  return <primitive ref={meshRef} object={pointsObject} />;
+    };
+  }, [imageUrl]);
+
+  return <canvas ref={canvasRef} className="absolute inset-0 z-10" />;
 }
 
 export default function ParticleLogo() {
@@ -283,14 +175,8 @@ export default function ParticleLogo() {
         }}
       />
       
-      {/* Canvas for 3D particles */}
-      <Canvas
-        camera={{ position: [0, 0, 3], fov: 75 }}
-        className="absolute inset-0 z-10"
-        style={{ pointerEvents: 'auto' }}
-      >
-        <Particles imageUrl="/assets/circleimages/logodark-background.png" />
-      </Canvas>
+      {/* Particle Canvas - Logo as particles */}
+      <ParticleCanvas imageUrl="/assets/circleimages/logodark-background.png" />
       
       {/* Text overlay with backdrop */}
       <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
