@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { PresentationsAPI } from '../shared/utils/presentations-api';
 import Button from '../components/Button';
 import Logo from '../components/Logo';
@@ -19,6 +19,7 @@ const PresentationViewer = ({ setCurrentPage }) => {
   const [menuLanguage, setMenuLanguage] = useState('es'); // en, es, pt
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+  const menuRef = useRef(null);
 
   const loadPresentation = async () => {
     try {
@@ -80,6 +81,18 @@ const PresentationViewer = ({ setCurrentPage }) => {
     setTouchStart(0);
     setTouchEnd(0);
   };
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target) && showAccessibilityMenu) {
+        setShowAccessibilityMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showAccessibilityMenu]);
 
   useEffect(() => {
     const handleKeyPress = (e) => {
@@ -243,20 +256,22 @@ const PresentationViewer = ({ setCurrentPage }) => {
       </div>
 
       {/* Accessibility Button */}
-      <button
-        onClick={() => setShowAccessibilityMenu(!showAccessibilityMenu)}
-        className="fixed top-6 right-6 z-[100] bg-white hover:bg-gray-100 text-gray-800 rounded-lg px-4 py-3 shadow-2xl transition-all flex items-center gap-2 border border-gray-200"
-        title="Accessibility Settings"
-      >
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-        <span className="font-semibold text-lg">Aa</span>
-      </button>
+      <div className="fixed top-6 right-6 z-[100]" ref={menuRef}>
+        <Button 
+          onClick={() => setShowAccessibilityMenu(!showAccessibilityMenu)}
+          white
+        >
+          <span className="flex items-center gap-2">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <span className="font-semibold">Aa</span>
+          </span>
+        </Button>
 
-      {/* Accessibility Controls Panel */}
-      {showAccessibilityMenu && (
-      <div className="fixed top-20 right-6 z-[100] bg-n-8/95 backdrop-blur-xl border border-n-6/50 rounded-2xl p-6 shadow-2xl w-80 animate-fadeIn">
+        {/* Accessibility Controls Panel */}
+        {showAccessibilityMenu && (
+        <div className="absolute top-full mt-2 right-0 bg-n-8/95 backdrop-blur-xl border border-n-6/50 rounded-2xl p-6 shadow-2xl w-80 animate-fadeIn">
         {/* Language Selector */}
         <div className="flex justify-end gap-1 mb-4">
           <button
@@ -389,6 +404,7 @@ const PresentationViewer = ({ setCurrentPage }) => {
 
       </div>
       )}
+      </div>
 
       {/* Circle Up branding */}
       <div className="absolute bottom-6 right-6 text-n-4 text-sm opacity-50">

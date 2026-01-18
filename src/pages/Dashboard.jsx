@@ -71,7 +71,7 @@ const Dashboard = ({ setCurrentPage }) => {
                 </span>
               </h1>
               <p className="text-n-4 text-base lg:text-lg">
-                Bienvenido, <span className="text-color-1 font-medium">{user?.username || 'Usuario'}</span> de <span className="font-semibold text-n-1">Circle Up Volunteer</span>
+                Bienvenido, <span className="text-color-1 font-medium">{user?.username || 'Usuario'}</span>
               </p>
             </div>
             <div className="flex gap-3">
