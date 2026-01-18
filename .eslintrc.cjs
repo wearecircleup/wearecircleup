@@ -41,5 +41,6 @@ module.exports = {
     "no-unused-vars": "warn",
     "react/no-unescaped-entities": "off",
     "react-hooks/exhaustive-deps": "warn",
+    "react/no-unknown-property": ["error", { "ignore": ["object"] }],
   },
 };

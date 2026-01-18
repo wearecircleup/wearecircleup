@@ -228,9 +228,21 @@ function Particles({ imageUrl }) {
     }
   });
   
-  if (!geometry || !material) return null;
+  const pointsObject = useMemo(() => {
+    if (!geometry || !material) return null;
+    return new THREE.Points(geometry, material);
+  }, [geometry, material]);
   
-  return <primitive ref={meshRef} object={new THREE.Points(geometry, material)} />;
+  useEffect(() => {
+    if (meshRef.current && geometry && material) {
+      meshRef.current.geometry = geometry;
+      meshRef.current.material = material;
+    }
+  }, [geometry, material]);
+  
+  if (!pointsObject) return null;
+  
+  return <primitive ref={meshRef} object={pointsObject} />;
 }
 
 export default function ParticleLogo() {
