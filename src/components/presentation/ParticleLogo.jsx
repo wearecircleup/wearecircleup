@@ -27,8 +27,8 @@ function ParticleCanvas({ imageUrl }) {
       const tempCanvas = document.createElement('canvas');
       const tempCtx = tempCanvas.getContext('2d');
       
-      // Scale image to fit screen while maintaining aspect ratio - larger for visibility
-      const scale = Math.min(canvas.width / img.width, canvas.height / img.height) * 0.5;
+      // Scale image to fit screen while maintaining aspect ratio
+      const scale = Math.min(canvas.width / img.width, canvas.height / img.height) * 0.35;
       const width = Math.floor(img.width * scale);
       const height = Math.floor(img.height * scale);
       
@@ -39,11 +39,9 @@ function ParticleCanvas({ imageUrl }) {
       const imageData = tempCtx.getImageData(0, 0, width, height);
       const pixels = imageData.data;
       
-      console.log('Particles loading:', { width, height, totalPixels: width * height });
-      
-      // Create particles from non-transparent and non-black pixels
+      // Create particles - optimized for performance
       const particles = [];
-      const gap = 2; // Sample every 2 pixels for better detail
+      const gap = 4; // Increased gap for better performance
       
       for (let y = 0; y < height; y += gap) {
         for (let x = 0; x < width; x += gap) {
@@ -53,32 +51,29 @@ function ParticleCanvas({ imageUrl }) {
           const b = pixels[index + 2];
           const alpha = pixels[index + 3];
           
-          // Only visible pixels that are NOT black (exclude background)
-          const brightness = (r + g + b) / 3;
-          if (alpha > 128 && brightness > 30) {
+          // Only visible pixels (grayscale image)
+          if (alpha > 50) {
             particles.push({
               x: x + (canvas.width - width) / 2,
-              y: y + (canvas.height - height) / 2 - 50, // Move logo up
+              y: y + (canvas.height - height) / 2 - 100,
               baseX: x + (canvas.width - width) / 2,
-              baseY: y + (canvas.height - height) / 2 - 50,
+              baseY: y + (canvas.height - height) / 2 - 100,
               r: r,
               g: g,
               b: b,
-              size: Math.random() * 3 + 2,
-              speedX: Math.random() * 0.5 - 0.25,
-              speedY: Math.random() * 0.5 - 0.25,
-              density: Math.random() * 30 + 30
+              size: 2,
+              density: (Math.random() * 20 + 20)
             });
           }
         }
       }
       
-      console.log('Total particles created:', particles.length);
       particlesRef.current = particles;
       
-      // Animation loop
+      // Animation loop - optimized
       const animate = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'rgba(20, 20, 30, 0.1)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
         
         particles.forEach(particle => {
           // Mouse interaction
@@ -87,34 +82,25 @@ function ParticleCanvas({ imageUrl }) {
           const distance = Math.sqrt(dx * dx + dy * dy);
           const forceDirectionX = dx / distance;
           const forceDirectionY = dy / distance;
-          const maxDistance = 100;
+          const maxDistance = 120;
           const force = (maxDistance - distance) / maxDistance;
           
           if (distance < maxDistance) {
-            const directionX = forceDirectionX * force * particle.density;
-            const directionY = forceDirectionY * force * particle.density;
+            const directionX = forceDirectionX * force * particle.density * 0.5;
+            const directionY = forceDirectionY * force * particle.density * 0.5;
             particle.x -= directionX;
             particle.y -= directionY;
           } else {
             // Return to base position
-            if (particle.x !== particle.baseX) {
-              const dx = particle.x - particle.baseX;
-              particle.x -= dx / 10;
-            }
-            if (particle.y !== particle.baseY) {
-              const dy = particle.y - particle.baseY;
-              particle.y -= dy / 10;
-            }
+            const dxBase = particle.x - particle.baseX;
+            const dyBase = particle.y - particle.baseY;
+            particle.x -= dxBase * 0.1;
+            particle.y -= dyBase * 0.1;
           }
           
-          // Draw particle with glow
-          ctx.shadowBlur = 8;
-          ctx.shadowColor = `rgba(${particle.r}, ${particle.g}, ${particle.b}, 0.5)`;
-          ctx.fillStyle = `rgba(${particle.r}, ${particle.g}, ${particle.b}, 0.9)`;
-          ctx.beginPath();
-          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.shadowBlur = 0;
+          // Draw particle
+          ctx.fillStyle = `rgba(${particle.r}, ${particle.g}, ${particle.b}, 0.8)`;
+          ctx.fillRect(particle.x, particle.y, particle.size, particle.size);
         });
         
         animationRef.current = requestAnimationFrame(animate);
@@ -185,28 +171,21 @@ export default function ParticleLogo() {
         }}
       />
       
-      {/* Particle Canvas - Logo as particles */}
-      <ParticleCanvas imageUrl="/assets/circleimages/logodark-background.png" />
+      {/* Particle Canvas - Kid image as particles */}
+      <ParticleCanvas imageUrl="/assets/circleimages/kid.png" />
       
-      {/* Text overlay with backdrop */}
-      <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
-        <div className="relative">
-          {/* Gradient fade for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-n-8 via-n-8/80 to-transparent h-64"></div>
-          
-          <div className="relative flex flex-col items-center justify-center pb-24 pt-32">
-            <div className="flex flex-col items-center space-y-3">
-              <span className="font-bold text-white text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight">
-                CIRCLE UP
-              </span>
-              <span className="font-bold text-white text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight">
-                VOLUNTEER
-              </span>
-              <span className="text-xl md:text-2xl text-n-2 font-mono leading-tight mt-4">
-                Community Based Learning
-              </span>
-            </div>
-          </div>
+      {/* Text overlay - centered */}
+      <div className="absolute inset-0 z-20 pointer-events-none flex items-center justify-center">
+        <div className="flex flex-col items-center space-y-3 -mt-32">
+          <span className="font-bold text-white text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight">
+            CIRCLE UP
+          </span>
+          <span className="font-bold text-white text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight">
+            VOLUNTEER
+          </span>
+          <span className="text-xl md:text-2xl text-n-2 font-mono leading-tight mt-4">
+            Community Based Learning
+          </span>
         </div>
       </div>
       
