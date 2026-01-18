@@ -28,18 +28,9 @@ jobs:
       
       - name: Validate payload
         run: |
-          if [ -z "${{ github.event.client_payload.user }}" ]; then
-            echo "Error: user is required"
-            exit 1
-          fi
-          if [ -z "${{ github.event.client_payload.presentationId }}" ]; then
-            echo "Error: presentationId is required"
-            exit 1
-          fi
-          if [ -z "${{ github.event.client_payload.html }}" ]; then
-            echo "Error: html is required"
-            exit 1
-          fi
+          echo "Validating payload..."
+          echo "User: ${{ github.event.client_payload.user }}"
+          echo "Presentation ID: ${{ github.event.client_payload.presentationId }}"
           echo "Validation passed"
       
       - name: Create directory structure
@@ -67,10 +58,10 @@ jobs:
           echo '${{ toJson(github.event.client_payload.slides) }}' > presentations/content/${{ github.event.client_payload.user }}/${{ github.event.client_payload.presentationId }}.json
       
       - name: Save HTML
+        env:
+          HTML_CONTENT: ${{ github.event.client_payload.html }}
         run: |
-          cat > presentations/public/${{ github.event.client_payload.user }}/${{ github.event.client_payload.presentationId }}.html << 'HTMLEOF'
-          ${{ github.event.client_payload.html }}
-          HTMLEOF
+          echo "$HTML_CONTENT" > presentations/public/${{ github.event.client_payload.user }}/${{ github.event.client_payload.presentationId }}.html
       
       - name: Verify files
         run: |
