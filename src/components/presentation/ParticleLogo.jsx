@@ -161,7 +161,7 @@ function ParticleCanvas({ imageUrl }) {
     };
   }, [imageUrl]);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 z-10" />;
+  return <canvas ref={canvasRef} className="absolute inset-0 z-5" />;
 }
 
 export default function ParticleLogo() {
@@ -180,9 +180,9 @@ export default function ParticleLogo() {
         }}
       />
       
-      {/* Grid overlay - behind particles */}
+      {/* Grid overlay - over particles */}
       <div 
-        className="absolute inset-0 opacity-20 z-0"
+        className="absolute inset-0 opacity-20 z-10 pointer-events-none"
         style={{
           backgroundImage: 'url(/assets/grid.png)',
           backgroundSize: 'cover',
@@ -211,7 +211,7 @@ export default function ParticleLogo() {
       {/* Text overlay - top positioned */}
       <div className="absolute top-0 left-0 right-0 z-20 pointer-events-none pt-16">
         <div className="flex flex-col items-center space-y-3">
-          <span className="font-semibold text-white text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight">
+          <span className="font-thin text-white text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight">
             CIRCLE UP
           </span>
           <span className="font-extrabold text-white text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight">
