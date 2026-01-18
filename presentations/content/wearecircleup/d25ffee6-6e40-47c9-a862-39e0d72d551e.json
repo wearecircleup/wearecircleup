@@ -1,0 +1,84 @@
+{
+  "slides": [
+    {
+      "title": "Introdução ao SQL",
+      "content": [
+        "SQL significa Structured Query Language",
+        "Linguagem usada para gerenciar bancos de dados relacionais",
+        "Permite criar, consultar, atualizar e excluir dados"
+      ]
+    },
+    {
+      "title": "História do SQL",
+      "content": [
+        "Desenvolvido na década de 1970 pela IBM",
+        "Baseado no modelo relacional de Edgar F. Codd",
+        "Tornado padrão pela ANSI em 1986"
+      ]
+    },
+    {
+      "title": "Principais Comandos SQL",
+      "content": [
+        "SELECT: Usado para consultar dados",
+        "INSERT: Adiciona novos registros",
+        "UPDATE: Atualiza registros existentes"
+      ]
+    },
+    {
+      "title": "Comandos de Definição de Dados (DDL)",
+      "content": [
+        "CREATE: Cria tabelas ou bancos de dados",
+        "ALTER: Modifica a estrutura de tabelas",
+        "DROP: Remove tabelas ou bancos de dados"
+      ]
+    },
+    {
+      "title": "Comandos de Manipulação de Dados (DML)",
+      "content": [
+        "INSERT: Insere novos dados",
+        "UPDATE: Modifica dados existentes",
+        "DELETE: Remove dados de uma tabela"
+      ]
+    },
+    {
+      "title": "Cláusulas Importantes no SQL",
+      "content": [
+        "WHERE: Filtra registros com base em condições",
+        "GROUP BY: Agrupa registros para análise",
+        "ORDER BY: Ordena os resultados"
+      ]
+    },
+    {
+      "title": "Funções Agregadas no SQL",
+      "content": [
+        "COUNT: Conta o número de registros",
+        "SUM: Soma valores numéricos",
+        "AVG: Calcula a média de valores"
+      ]
+    },
+    {
+      "title": "Joins no SQL",
+      "content": [
+        "INNER JOIN: Retorna registros com correspondência em ambas as tabelas",
+        "LEFT JOIN: Retorna todos os registros da tabela à esquerda e correspondências da direita",
+        "RIGHT JOIN: Retorna todos os registros da tabela à direita e correspondências da esquerda"
+      ]
+    },
+    {
+      "title": "Vantagens do SQL",
+      "content": [
+        "Fácil de aprender e usar",
+        "Altamente padronizado e amplamente adotado",
+        "Permite manipulação eficiente de grandes volumes de dados"
+      ]
+    },
+    {
+      "title": "Aplicações do SQL",
+      "content": [
+        "Usado em bancos de dados como MySQL, PostgreSQL e SQL Server",
+        "Fundamental para análise de dados e BI",
+        "Essencial para o desenvolvimento de sistemas e aplicações web"
+      ]
+    }
+  ]
+}
