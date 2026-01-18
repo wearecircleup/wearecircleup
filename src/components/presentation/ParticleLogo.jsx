@@ -28,7 +28,7 @@ function ParticleCanvas({ imageUrl }) {
       const tempCtx = tempCanvas.getContext('2d');
       
       // Scale image to fit screen while maintaining aspect ratio
-      const scale = Math.min(canvas.width / img.width, canvas.height / img.height) * 0.6;
+      const scale = Math.min(canvas.width / img.width, canvas.height / img.height) * 0.4;
       const width = img.width * scale;
       const height = img.height * scale;
       
@@ -39,25 +39,30 @@ function ParticleCanvas({ imageUrl }) {
       const imageData = tempCtx.getImageData(0, 0, width, height);
       const pixels = imageData.data;
       
-      // Create particles from non-transparent pixels
+      // Create particles from non-transparent and non-black pixels
       const particles = [];
-      const gap = 3; // Sample every 3 pixels for performance
+      const gap = 2; // Sample every 2 pixels for better detail
       
       for (let y = 0; y < height; y += gap) {
         for (let x = 0; x < width; x += gap) {
           const index = (y * width + x) * 4;
+          const r = pixels[index];
+          const g = pixels[index + 1];
+          const b = pixels[index + 2];
           const alpha = pixels[index + 3];
           
-          if (alpha > 128) { // Only visible pixels
+          // Only visible pixels that are NOT black (exclude background)
+          const brightness = (r + g + b) / 3;
+          if (alpha > 128 && brightness > 30) {
             particles.push({
               x: x + (canvas.width - width) / 2,
               y: y + (canvas.height - height) / 2,
               baseX: x + (canvas.width - width) / 2,
               baseY: y + (canvas.height - height) / 2,
-              r: pixels[index],
-              g: pixels[index + 1],
-              b: pixels[index + 2],
-              size: Math.random() * 2 + 1,
+              r: r,
+              g: g,
+              b: b,
+              size: Math.random() * 2.5 + 1.5,
               speedX: Math.random() * 0.5 - 0.25,
               speedY: Math.random() * 0.5 - 0.25,
               density: Math.random() * 30 + 30
@@ -70,8 +75,7 @@ function ParticleCanvas({ imageUrl }) {
       
       // Animation loop
       const animate = () => {
-        ctx.fillStyle = 'rgba(20, 20, 30, 0.05)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         
         particles.forEach(particle => {
           // Mouse interaction
@@ -100,11 +104,14 @@ function ParticleCanvas({ imageUrl }) {
             }
           }
           
-          // Draw particle
-          ctx.fillStyle = `rgba(${particle.r}, ${particle.g}, ${particle.b}, 0.8)`;
+          // Draw particle with glow
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = `rgba(${particle.r}, ${particle.g}, ${particle.b}, 0.5)`;
+          ctx.fillStyle = `rgba(${particle.r}, ${particle.g}, ${particle.b}, 0.9)`;
           ctx.beginPath();
           ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
           ctx.fill();
+          ctx.shadowBlur = 0;
         });
         
         animationRef.current = requestAnimationFrame(animate);
@@ -184,20 +191,20 @@ export default function ParticleLogo() {
           {/* Gradient fade for text readability */}
           <div className="absolute inset-0 bg-gradient-to-t from-n-8 via-n-8/80 to-transparent h-64"></div>
           
-          <div className="relative flex flex-col items-center justify-center pb-16 pt-32">
-            <div className="flex flex-col items-center space-y-1">
-              <span className="font-bold text-white text-5xl md:text-6xl lg:text-7xl leading-tight tracking-tight">
+          <div className="relative flex flex-col items-center justify-center pb-20 pt-32">
+            <div className="flex flex-col items-center space-y-2">
+              <span className="font-bold text-white text-4xl md:text-5xl lg:text-6xl leading-tight tracking-tight">
                 CIRCLE UP
               </span>
-              <span className="font-bold text-white text-5xl md:text-6xl lg:text-7xl leading-tight tracking-tight">
+              <span className="font-bold text-white text-4xl md:text-5xl lg:text-6xl leading-tight tracking-tight">
                 VOLUNTEER
               </span>
-              <div className="mt-6 flex items-center gap-3">
-                <div className="h-px w-12 bg-gradient-to-r from-transparent via-color-1 to-transparent"></div>
-                <span className="text-base md:text-lg text-n-3 font-mono leading-tight">
+              <div className="mt-8 flex items-center gap-4">
+                <div className="h-px w-16 bg-gradient-to-r from-transparent via-color-1 to-transparent"></div>
+                <span className="text-lg md:text-xl lg:text-2xl text-n-2 font-mono leading-tight">
                   Community Based Learning
                 </span>
-                <div className="h-px w-12 bg-gradient-to-r from-transparent via-color-2 to-transparent"></div>
+                <div className="h-px w-16 bg-gradient-to-r from-transparent via-color-2 to-transparent"></div>
               </div>
             </div>
           </div>
