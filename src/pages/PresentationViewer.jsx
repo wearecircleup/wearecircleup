@@ -156,8 +156,8 @@ const PresentationViewer = () => {
         </div>
       </div>
 
-      {/* Navigation - Fixed at bottom */}
-      <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 flex items-center gap-4 bg-n-7/90 backdrop-blur-xl border border-n-6/50 rounded-2xl px-6 py-4 shadow-2xl">
+      {/* Navigation controls - Bottom center */}
+      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center gap-4 bg-n-7/90 backdrop-blur-xl border border-n-6/50 rounded-2xl px-6 py-3 shadow-2xl">
         <button
           onClick={prevSlide}
           disabled={currentSlide === 0}
@@ -192,7 +192,7 @@ const PresentationViewer = () => {
       </div>
 
       {/* Back to Dashboard button */}
-      <div className="fixed top-6 left-6 z-50">
+      <div className="fixed top-6 left-6 z-[100]">
         <Button onClick={() => window.location.href = '/dashboard'} white>
           ← Volver al Dashboard
         </Button>
@@ -201,7 +201,7 @@ const PresentationViewer = () => {
       {/* Accessibility Button */}
       <button
         onClick={() => setShowAccessibilityMenu(!showAccessibilityMenu)}
-        className="fixed top-6 right-6 z-50 group relative bg-n-1 hover:bg-n-2 text-n-8 rounded-xl p-3 shadow-2xl transition-all"
+        className="fixed top-6 right-6 z-[100] group relative bg-n-1 hover:bg-n-2 text-n-8 rounded-xl p-3 shadow-2xl transition-all"
         title="Accessibility Settings"
       >
         <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -212,7 +212,7 @@ const PresentationViewer = () => {
 
       {/* Accessibility Controls Panel */}
       {showAccessibilityMenu && (
-      <div className="fixed top-20 right-6 z-50 bg-n-8/95 backdrop-blur-xl border border-n-6/50 rounded-2xl p-6 shadow-2xl w-80 animate-fadeIn">
+      <div className="fixed top-20 right-6 z-[100] bg-n-8/95 backdrop-blur-xl border border-n-6/50 rounded-2xl p-6 shadow-2xl w-80 animate-fadeIn">
         {/* Language Selector */}
         <div className="flex justify-end gap-1 mb-4">
           <button

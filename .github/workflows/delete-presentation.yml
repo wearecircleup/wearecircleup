@@ -79,6 +79,11 @@ jobs:
             
             [skip ci]"
             
+            # Pull latest changes before pushing to avoid conflicts
+            echo "Pulling latest changes..."
+            git pull --rebase origin main
+            
+            echo "Pushing to main..."
             git push origin main
             echo "✓ Deletion committed and pushed"
           fi
