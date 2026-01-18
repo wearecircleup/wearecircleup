@@ -27,8 +27,8 @@ function ParticleCanvas({ imageUrl }) {
       const tempCanvas = document.createElement('canvas');
       const tempCtx = tempCanvas.getContext('2d');
       
-      // Scale image to fit screen while maintaining aspect ratio
-      const scale = Math.min(canvas.width / img.width, canvas.height / img.height) * 0.7;
+      // Scale image to fit screen while maintaining aspect ratio - larger
+      const scale = Math.min(canvas.width / img.width, canvas.height / img.height) * 0.85;
       const width = Math.floor(img.width * scale);
       const height = Math.floor(img.height * scale);
       
@@ -62,7 +62,7 @@ function ParticleCanvas({ imageUrl }) {
               r: r,
               g: g,
               b: b,
-              size: Math.random() * 2.5 + 1.5, // Variable size
+              size: Math.random() * 2 + 0.8, // Smaller variable size
               vx: 0,
               vy: 0,
               mass: Math.random() * 3 + 0.5, // Different mass for momentum
@@ -78,8 +78,7 @@ function ParticleCanvas({ imageUrl }) {
       
       // Animation loop - dynamic and fluid
       const animate = () => {
-        ctx.fillStyle = 'rgba(20, 20, 30, 0.15)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         
         particles.forEach(particle => {
           // Mouse interaction with momentum
@@ -93,31 +92,37 @@ function ParticleCanvas({ imageUrl }) {
             const angle = Math.atan2(dy, dx);
             // Add chaos to make movement unpredictable
             const chaosAngle = angle + (Math.random() - 0.5) * particle.chaos;
-            // Apply force based on mass (heavier = slower)
-            particle.vx -= Math.cos(chaosAngle) * force * (5 / particle.mass);
-            particle.vy -= Math.sin(chaosAngle) * force * (5 / particle.mass);
+            // Apply force based on mass (heavier = slower) - reduced speed
+            particle.vx -= Math.cos(chaosAngle) * force * (3 / particle.mass);
+            particle.vy -= Math.sin(chaosAngle) * force * (3 / particle.mass);
             // Add random perpendicular movement
-            particle.vx += Math.cos(chaosAngle + Math.PI / 2) * (Math.random() - 0.5) * particle.chaos;
-            particle.vy += Math.sin(chaosAngle + Math.PI / 2) * (Math.random() - 0.5) * particle.chaos;
+            particle.vx += Math.cos(chaosAngle + Math.PI / 2) * (Math.random() - 0.5) * particle.chaos * 0.5;
+            particle.vy += Math.sin(chaosAngle + Math.PI / 2) * (Math.random() - 0.5) * particle.chaos * 0.5;
           }
           
-          // Spring back to base with momentum
+          // Spring back to base with momentum - slower return
           const dxBase = particle.baseX - particle.x;
           const dyBase = particle.baseY - particle.y;
-          particle.vx += dxBase * 0.03;
-          particle.vy += dyBase * 0.03;
+          particle.vx += dxBase * 0.02;
+          particle.vy += dyBase * 0.02;
           
-          // Apply individual friction
-          particle.vx *= particle.friction;
-          particle.vy *= particle.friction;
+          // Apply individual friction - more friction for slower movement
+          particle.vx *= particle.friction * 0.95;
+          particle.vy *= particle.friction * 0.95;
           
           // Update position
           particle.x += particle.vx;
           particle.y += particle.vy;
           
+          // Enhance color spectrum - more whites and darker tones
+          const colorBoost = 1.3;
+          const r = Math.min(255, particle.r * colorBoost);
+          const g = Math.min(255, particle.g * colorBoost);
+          const b = Math.min(255, particle.b * colorBoost);
+          
           // Draw particle with variable opacity
-          const opacity = Math.max(0.5, 1 - distance / (maxDistance * 2));
-          ctx.fillStyle = `rgba(${particle.r}, ${particle.g}, ${particle.b}, ${opacity})`;
+          const opacity = Math.max(0.6, 1 - distance / (maxDistance * 2));
+          ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${opacity})`;
           ctx.beginPath();
           ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
           ctx.fill();
@@ -156,9 +161,12 @@ function ParticleCanvas({ imageUrl }) {
 export default function ParticleLogo() {
   return (
     <div className="relative w-full h-screen bg-n-8 overflow-hidden">
+      {/* Darker overlay for contrast */}
+      <div className="absolute inset-0 bg-black/40 z-0"></div>
+      
       {/* Background gradient - behind particles */}
       <div 
-        className="absolute inset-0 opacity-40 z-0"
+        className="absolute inset-0 opacity-30 z-0"
         style={{
           backgroundImage: 'url(/assets/gradient.png)',
           backgroundSize: 'cover',
@@ -168,7 +176,7 @@ export default function ParticleLogo() {
       
       {/* Grid overlay - behind particles */}
       <div 
-        className="absolute inset-0 opacity-15 z-0"
+        className="absolute inset-0 opacity-10 z-0"
         style={{
           backgroundImage: 'url(/assets/grid.png)',
           backgroundSize: 'cover',
