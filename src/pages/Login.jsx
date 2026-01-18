@@ -48,11 +48,11 @@ const Login = ({ setCurrentPage }) => {
 
       <Section className="min-h-screen flex items-center justify-center py-6 lg:py-10">
         <div className="container max-w-6xl mx-auto px-4">
-          {/* Logo - Top Center */}
-          <div className="flex justify-center mb-8 lg:mb-12">
+          {/* Logo - Top Left */}
+          <div className="mb-8 lg:mb-12">
             <Logo 
-              logoSize={{ width: 40, height: 40 }}
-              textSize="text-lg"
+              logoSize={{ width: 50, height: 50 }}
+              textSize="text-xl"
             />
           </div>
 

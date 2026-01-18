@@ -120,7 +120,7 @@ const PresentationViewer = ({ setCurrentPage }) => {
         <div className="w-full h-full max-w-7xl flex items-center justify-center">
           {/* Slide content - Responsive sizing with accessibility */}
           <div 
-            className={`w-full h-full flex flex-col justify-center bg-n-7/50 backdrop-blur-xl border border-n-6/50 rounded-3xl p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 shadow-2xl ${
+            className={`relative w-full h-full flex flex-col justify-center bg-n-7/50 backdrop-blur-xl border border-n-6/50 rounded-3xl p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 shadow-2xl ${
               fontFamily === 'serif' ? 'font-serif' : fontFamily === 'mono' ? 'font-mono' : 'font-sans'
             }`}
           >
@@ -151,6 +151,15 @@ const PresentationViewer = ({ setCurrentPage }) => {
                   <p className="leading-relaxed">{point}</p>
                 </div>
               ))}
+            </div>
+
+            {/* Logo - Bottom Left inside presentation */}
+            <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6">
+              <Logo 
+                logoSize={{ width: 24, height: 24 }}
+                textSize="text-xs"
+                className="opacity-60 hover:opacity-100 transition-opacity"
+              />
             </div>
           </div>
 
@@ -192,13 +201,11 @@ const PresentationViewer = ({ setCurrentPage }) => {
         </button>
       </div>
 
-      {/* Logo - Top Left */}
+      {/* Back to Dashboard button */}
       <div className="fixed top-6 left-6 z-[100]">
-        <Logo 
-          logoSize={{ width: 28, height: 28 }}
-          textSize="text-sm"
-          onClick={() => setCurrentPage('dashboard')}
-        />
+        <Button onClick={() => setCurrentPage('dashboard')} white>
+          ← Volver al Dashboard
+        </Button>
       </div>
 
       {/* Accessibility Button */}
