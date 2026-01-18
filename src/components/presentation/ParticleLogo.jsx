@@ -54,11 +54,13 @@ function ParticleCanvas({ imageUrl }) {
           // Only visible pixels - exclude black background
           const brightness = (r + g + b) / 3;
           if (alpha > 50 && brightness > 30) {
+            const offsetX = (Math.random() - 0.5) * 3;
+            const offsetY = (Math.random() - 0.5) * 3;
             particles.push({
-              x: x + (canvas.width - width) / 2,
-              y: y + (canvas.height - height) / 2,
-              baseX: x + (canvas.width - width) / 2,
-              baseY: y + (canvas.height - height) / 2,
+              x: x + (canvas.width - width) / 2 + offsetX,
+              y: y + (canvas.height - height) / 2 + offsetY,
+              baseX: x + (canvas.width - width) / 2 + offsetX,
+              baseY: y + (canvas.height - height) / 2 + offsetY,
               r: r,
               g: g,
               b: b,
@@ -68,7 +70,9 @@ function ParticleCanvas({ imageUrl }) {
               mass: Math.random() * 3 + 0.5, // Different mass for momentum
               friction: Math.random() * 0.15 + 0.8, // Variable friction
               randomAngle: Math.random() * Math.PI * 2, // Random angle for unpredictable movement
-              chaos: Math.random() * 0.5 + 0.5 // Chaos factor for unpredictability
+              chaos: Math.random() * 0.5 + 0.5, // Chaos factor for unpredictability
+              offsetX: (Math.random() - 0.5) * 3, // Random offset for overlap
+              offsetY: (Math.random() - 0.5) * 3 // Random offset for overlap
             });
           }
         }
@@ -161,12 +165,12 @@ function ParticleCanvas({ imageUrl }) {
 export default function ParticleLogo() {
   return (
     <div className="relative w-full h-screen bg-n-8 overflow-hidden">
-      {/* Darker overlay for contrast */}
-      <div className="absolute inset-0 bg-black/40 z-0"></div>
+      {/* Much darker overlay for contrast */}
+      <div className="absolute inset-0 bg-black/70 z-0"></div>
       
       {/* Background gradient - behind particles */}
       <div 
-        className="absolute inset-0 opacity-30 z-0"
+        className="absolute inset-0 opacity-20 z-0"
         style={{
           backgroundImage: 'url(/assets/gradient.png)',
           backgroundSize: 'cover',
@@ -176,7 +180,7 @@ export default function ParticleLogo() {
       
       {/* Grid overlay - behind particles */}
       <div 
-        className="absolute inset-0 opacity-10 z-0"
+        className="absolute inset-0 opacity-8 z-0"
         style={{
           backgroundImage: 'url(/assets/grid.png)',
           backgroundSize: 'cover',
