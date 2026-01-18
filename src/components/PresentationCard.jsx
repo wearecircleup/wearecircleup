@@ -1,5 +1,5 @@
 const PresentationCard = ({ presentation, onOpen, onDelete }) => {
-  const { title, description, theme, createdAt, thumbnail, status } = presentation;
+  const { title, description, theme, createdAt, status } = presentation;
   
   const statusColors = {
     completed: 'bg-green-500/20 text-green-400 border-green-500/50',

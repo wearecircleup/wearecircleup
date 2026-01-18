@@ -157,7 +157,7 @@ const DashboardHome = ({ user, onNavigate }) => {
               key={presentation.id}
               presentation={presentation}
               onOpen={handleOpenPresentation}
-              onDelete={handleDeletePresentation}
+              onDelete={handleDelete}
             />
           ))}
         </div>
