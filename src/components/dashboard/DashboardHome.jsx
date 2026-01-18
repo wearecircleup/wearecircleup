@@ -27,20 +27,14 @@ const DashboardHome = ({ user, onNavigate }) => {
       // Create a map of remote presentations by ID
       const remoteMap = new Map(remotePresentations.map(p => [p.id, p]));
       
-      // Filter out processing presentations that are now completed in remote
+      // Filter local presentations: only keep if exists in remote OR is processing
       const validLocalPresentations = localPresentations.filter(local => {
-        // If it's processing, check if there's a completed version in remote
+        // Keep if it's processing (not yet in GitHub)
         if (local.status === 'processing') {
-          // Check by title AND description (more reliable than ID for matching)
-          const remoteVersion = remotePresentations.find(r => 
-            r.title === local.title && 
-            r.description === local.description &&
-            r.status === 'completed'
-          );
-          // Remove if found completed in remote
-          return !remoteVersion;
+          return true;
         }
-        return true;
+        // Keep only if exists in remote (completed presentations)
+        return remoteMap.has(local.id);
       });
       
       // Update local presentations with remote data if available
@@ -52,7 +46,7 @@ const DashboardHome = ({ user, onNavigate }) => {
             remoteMap.delete(local.id);
             return remote;
           }
-          // Still processing or failed - keep local version
+          // Still processing - keep local version
           return local;
         });
       
@@ -61,7 +55,7 @@ const DashboardHome = ({ user, onNavigate }) => {
       
       setPresentations(merged);
       
-      // Update localStorage with merged data
+      // Update localStorage with merged data (this removes deleted presentations)
       localStorage.setItem(localKey, JSON.stringify(merged));
     } catch (error) {
       console.error('Error loading presentations:', error);
@@ -101,8 +95,12 @@ const DashboardHome = ({ user, onNavigate }) => {
 
         if (!result.success) {
           console.error('Failed to delete from GitHub:', result.message);
-          // Optionally show error to user but keep it removed from UI
           alert('La presentación se eliminó localmente, pero hubo un error al eliminarla del servidor. Contacta soporte si persiste.');
+        } else {
+          // Wait a bit for GitHub to process, then reload from server
+          setTimeout(() => {
+            loadPresentations();
+          }, 3000);
         }
       } catch (error) {
         console.error('Error deleting presentation:', error);
