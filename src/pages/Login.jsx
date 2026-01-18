@@ -129,13 +129,6 @@ const Login = ({ setCurrentPage }) => {
                   </div>
                 </div>
 
-                <Button
-                  onClick={() => setCurrentPage('home')}
-                  white
-                  className="mt-6 w-full sm:w-auto"
-                >
-                  ← Volver al inicio
-                </Button>
               </div>
             </div>
 
