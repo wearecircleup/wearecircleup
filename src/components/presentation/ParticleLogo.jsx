@@ -1,4 +1,25 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
+
+// Array of images in presentation folder
+const PRESENTATION_IMAGES = [
+  '/assets/circleimages/presentation/care-elder.png',
+  '/assets/circleimages/presentation/enjoy.png',
+  '/assets/circleimages/presentation/football.png',
+  '/assets/circleimages/presentation/friends.png',
+  '/assets/circleimages/presentation/grandchild.png',
+  '/assets/circleimages/presentation/hands.png',
+  '/assets/circleimages/presentation/happiness.png',
+  '/assets/circleimages/presentation/heart.png',
+  '/assets/circleimages/presentation/hug.png',
+  '/assets/circleimages/presentation/kid.png',
+  '/assets/circleimages/presentation/power.png',
+  '/assets/circleimages/presentation/recycle.png',
+  '/assets/circleimages/presentation/sharing.png',
+  '/assets/circleimages/presentation/smile.png',
+  '/assets/circleimages/presentation/support.png',
+  '/assets/circleimages/presentation/volunteer-team.png',
+  '/assets/circleimages/presentation/waving.png'
+];
 
 function ParticleCanvas({ imageUrl }) {
   const canvasRef = useRef(null);
@@ -194,8 +215,18 @@ function ParticleCanvas({ imageUrl }) {
 }
 
 export default function ParticleLogo() {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const handleClick = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % PRESENTATION_IMAGES.length);
+  };
+
   return (
-    <div className="relative w-full h-screen overflow-hidden" style={{ backgroundColor: '#110f19' }}>
+    <div 
+      className="relative w-full h-screen overflow-hidden cursor-pointer" 
+      style={{ backgroundColor: '#110f19' }}
+      onClick={handleClick}
+    >
       {/* Much darker overlay for contrast */}
       <div className="absolute inset-0 bg-black/60 z-0"></div>
       
@@ -234,8 +265,8 @@ export default function ParticleLogo() {
         }}
       />
       
-      {/* Particle Canvas - Kid image as particles - above backgrounds */}
-      <ParticleCanvas imageUrl="/assets/circleimages/kid.png" />
+      {/* Particle Canvas - Dynamic image as particles - above backgrounds */}
+      <ParticleCanvas imageUrl={PRESENTATION_IMAGES[currentImageIndex]} />
       
       {/* Text overlay - top positioned */}
       <div className="absolute top-0 left-0 right-0 z-20 pointer-events-none pt-16">
