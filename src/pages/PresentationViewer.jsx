@@ -312,7 +312,7 @@ const PresentationViewer = () => {
           <div className="flex gap-2">
             <button
               onClick={() => setFontSize('small')}
-              className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all ${
+              className={`flex-1 py-2.5 px-2 rounded-xl text-sm font-medium transition-all ${
                 fontSize === 'small'
                   ? 'bg-n-1 text-n-8'
                   : 'bg-n-7 text-n-3 hover:bg-n-6'
@@ -322,7 +322,7 @@ const PresentationViewer = () => {
             </button>
             <button
               onClick={() => setFontSize('normal')}
-              className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all ${
+              className={`flex-1 py-2.5 px-2 rounded-xl text-sm font-medium transition-all ${
                 fontSize === 'normal'
                   ? 'bg-n-1 text-n-8'
                   : 'bg-n-7 text-n-3 hover:bg-n-6'
@@ -332,7 +332,7 @@ const PresentationViewer = () => {
             </button>
             <button
               onClick={() => setFontSize('large')}
-              className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all ${
+              className={`flex-1 py-2.5 px-2 rounded-xl text-sm font-medium transition-all ${
                 fontSize === 'large'
                   ? 'bg-n-1 text-n-8'
                   : 'bg-n-7 text-n-3 hover:bg-n-6'
@@ -343,21 +343,6 @@ const PresentationViewer = () => {
           </div>
         </div>
 
-        {/* Preview Section */}
-        <div>
-          <h3 className="text-n-1 text-xs font-bold uppercase tracking-wider mb-3">
-            {menuLanguage === 'en' ? 'PREVIEW' : menuLanguage === 'pt' ? 'VISUALIZAÇÃO' : 'VISTA PREVIA'}
-          </h3>
-          <div className={`p-4 bg-n-7 rounded-xl ${
-            fontFamily === 'serif' ? 'font-serif' : fontFamily === 'mono' ? 'font-mono' : 'font-sans'
-          }`}>
-            <p className={`text-n-2 ${
-              fontSize === 'small' ? 'text-sm' : fontSize === 'large' ? 'text-lg' : 'text-base'
-            }`}>
-              The quick brown fox jumps over the lazy dog
-            </p>
-          </div>
-        </div>
       </div>
       )}
 
