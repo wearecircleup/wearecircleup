@@ -1,0 +1,84 @@
+name: Delete Presentation
+
+on:
+  repository_dispatch:
+    types: [delete_presentation]
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  delete:
+    name: Delete Presentation Files
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN }}
+      
+      - name: Delete presentation files
+        run: |
+          USERNAME="${{ github.event.client_payload.user.login }}"
+          PRESENTATION_ID="${{ github.event.client_payload.presentation_id }}"
+          
+          echo "Deleting presentation: $PRESENTATION_ID for user: $USERNAME"
+          
+          # Delete metadata
+          if [ -f "presentations/metadata/$USERNAME/$PRESENTATION_ID.yaml" ]; then
+            rm "presentations/metadata/$USERNAME/$PRESENTATION_ID.yaml"
+            echo "✓ Deleted metadata"
+          fi
+          
+          # Delete content
+          if [ -f "presentations/content/$USERNAME/$PRESENTATION_ID.json" ]; then
+            rm "presentations/content/$USERNAME/$PRESENTATION_ID.json"
+            echo "✓ Deleted content"
+          fi
+          
+          # Delete HTML
+          if [ -f "presentations/public/$USERNAME/$PRESENTATION_ID.html" ]; then
+            rm "presentations/public/$USERNAME/$PRESENTATION_ID.html"
+            echo "✓ Deleted HTML"
+          fi
+          
+          # Check if user directories are empty and remove them
+          if [ -d "presentations/metadata/$USERNAME" ] && [ -z "$(ls -A presentations/metadata/$USERNAME)" ]; then
+            rmdir "presentations/metadata/$USERNAME"
+            echo "✓ Removed empty metadata directory"
+          fi
+          
+          if [ -d "presentations/content/$USERNAME" ] && [ -z "$(ls -A presentations/content/$USERNAME)" ]; then
+            rmdir "presentations/content/$USERNAME"
+            echo "✓ Removed empty content directory"
+          fi
+          
+          if [ -d "presentations/public/$USERNAME" ] && [ -z "$(ls -A presentations/public/$USERNAME)" ]; then
+            rmdir "presentations/public/$USERNAME"
+            echo "✓ Removed empty public directory"
+          fi
+      
+      - name: Configure Git
+        run: |
+          git config user.name "CircleUp Bot"
+          git config user.email "bot@circleup.com.co"
+      
+      - name: Commit and push deletion
+        run: |
+          git add presentations/
+          
+          if git diff --staged --quiet; then
+            echo "⚠️  No files to delete (already removed or not found)"
+          else
+            git commit -m "chore: delete presentation ${{ github.event.client_payload.presentation_id }}
+            
+            - User: ${{ github.event.client_payload.user.login }}
+            - Title: ${{ github.event.client_payload.title }}
+            
+            [skip ci]"
+            
+            git push origin main
+            echo "✓ Deletion committed and pushed"
+          fi

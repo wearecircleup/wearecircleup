@@ -14,6 +14,8 @@ const PresentationViewer = () => {
   const [error, setError] = useState(null);
   const [fontSize, setFontSize] = useState('normal'); // small, normal, large
   const [fontFamily, setFontFamily] = useState('sans'); // sans, serif, mono
+  const [showAccessibilityMenu, setShowAccessibilityMenu] = useState(false);
+  const [menuLanguage, setMenuLanguage] = useState('es'); // en, es, pt
 
   const loadPresentation = async () => {
     try {
@@ -196,11 +198,54 @@ const PresentationViewer = () => {
         </Button>
       </div>
 
+      {/* Accessibility Button */}
+      <button
+        onClick={() => setShowAccessibilityMenu(!showAccessibilityMenu)}
+        className="fixed top-6 right-6 z-50 group relative bg-n-1 hover:bg-n-2 text-n-8 rounded-xl p-3 shadow-2xl transition-all"
+        title="Accessibility Settings"
+      >
+        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+        <span className="absolute -bottom-1 -right-1 bg-color-1 text-n-1 text-xs font-bold px-1.5 py-0.5 rounded-full">Aa</span>
+      </button>
+
       {/* Accessibility Controls Panel */}
-      <div className="fixed top-20 right-6 z-50 bg-n-8/95 backdrop-blur-xl border border-n-6/50 rounded-2xl p-6 shadow-2xl w-80">
+      {showAccessibilityMenu && (
+      <div className="fixed top-20 right-6 z-50 bg-n-8/95 backdrop-blur-xl border border-n-6/50 rounded-2xl p-6 shadow-2xl w-80 animate-fadeIn">
+        {/* Language Selector */}
+        <div className="flex justify-end gap-1 mb-4">
+          <button
+            onClick={() => setMenuLanguage('en')}
+            className={`px-2 py-1 text-xs font-medium rounded transition-all ${
+              menuLanguage === 'en' ? 'bg-color-1 text-n-1' : 'text-n-4 hover:text-n-2'
+            }`}
+          >
+            EN
+          </button>
+          <button
+            onClick={() => setMenuLanguage('es')}
+            className={`px-2 py-1 text-xs font-medium rounded transition-all ${
+              menuLanguage === 'es' ? 'bg-color-1 text-n-1' : 'text-n-4 hover:text-n-2'
+            }`}
+          >
+            ES
+          </button>
+          <button
+            onClick={() => setMenuLanguage('pt')}
+            className={`px-2 py-1 text-xs font-medium rounded transition-all ${
+              menuLanguage === 'pt' ? 'bg-color-1 text-n-1' : 'text-n-4 hover:text-n-2'
+            }`}
+          >
+            PT
+          </button>
+        </div>
+
         {/* Font Family Section */}
         <div className="mb-6">
-          <h3 className="text-n-1 text-xs font-bold uppercase tracking-wider mb-3">FONT FAMILY</h3>
+          <h3 className="text-n-1 text-xs font-bold uppercase tracking-wider mb-3">
+            {menuLanguage === 'en' ? 'FONT FAMILY' : menuLanguage === 'pt' ? 'FAMÍLIA DA FONTE' : 'FAMILIA DE FUENTE'}
+          </h3>
           <div className="flex gap-2">
             <button
               onClick={() => setFontFamily('sans')}
@@ -227,7 +272,9 @@ const PresentationViewer = () => {
 
         {/* Font Size Section */}
         <div className="mb-6">
-          <h3 className="text-n-1 text-xs font-bold uppercase tracking-wider mb-3">FONT SIZE</h3>
+          <h3 className="text-n-1 text-xs font-bold uppercase tracking-wider mb-3">
+            {menuLanguage === 'en' ? 'FONT SIZE' : menuLanguage === 'pt' ? 'TAMANHO DA FONTE' : 'TAMAÑO DE FUENTE'}
+          </h3>
           
           {/* Size Slider */}
           <div className="flex items-center justify-between mb-3">
@@ -241,7 +288,11 @@ const PresentationViewer = () => {
             </button>
             <div className="flex-1 mx-4 text-center">
               <div className="text-n-1 font-semibold">
-                {fontSize === 'small' ? 'Small' : fontSize === 'large' ? 'Large' : 'Medium'}
+                {fontSize === 'small' 
+                  ? (menuLanguage === 'en' ? 'Small' : menuLanguage === 'pt' ? 'Pequeno' : 'Pequeño')
+                  : fontSize === 'large' 
+                  ? (menuLanguage === 'en' ? 'Large' : menuLanguage === 'pt' ? 'Grande' : 'Grande')
+                  : (menuLanguage === 'en' ? 'Medium' : menuLanguage === 'pt' ? 'Médio' : 'Mediano')}
               </div>
               <div className="text-n-4 text-xs">
                 {fontSize === 'small' ? '14px' : fontSize === 'large' ? '20px' : '16px'}
@@ -267,7 +318,7 @@ const PresentationViewer = () => {
                   : 'bg-n-7 text-n-3 hover:bg-n-6'
               }`}
             >
-              Small
+              {menuLanguage === 'en' ? 'Small' : menuLanguage === 'pt' ? 'Pequeno' : 'Pequeño'}
             </button>
             <button
               onClick={() => setFontSize('normal')}
@@ -277,7 +328,7 @@ const PresentationViewer = () => {
                   : 'bg-n-7 text-n-3 hover:bg-n-6'
               }`}
             >
-              Medium
+              {menuLanguage === 'en' ? 'Medium' : menuLanguage === 'pt' ? 'Médio' : 'Mediano'}
             </button>
             <button
               onClick={() => setFontSize('large')}
@@ -287,14 +338,16 @@ const PresentationViewer = () => {
                   : 'bg-n-7 text-n-3 hover:bg-n-6'
               }`}
             >
-              Large
+              {menuLanguage === 'en' ? 'Large' : menuLanguage === 'pt' ? 'Grande' : 'Grande'}
             </button>
           </div>
         </div>
 
         {/* Preview Section */}
         <div>
-          <h3 className="text-n-1 text-xs font-bold uppercase tracking-wider mb-3">PREVIEW</h3>
+          <h3 className="text-n-1 text-xs font-bold uppercase tracking-wider mb-3">
+            {menuLanguage === 'en' ? 'PREVIEW' : menuLanguage === 'pt' ? 'VISUALIZAÇÃO' : 'VISTA PREVIA'}
+          </h3>
           <div className={`p-4 bg-n-7 rounded-xl ${
             fontFamily === 'serif' ? 'font-serif' : fontFamily === 'mono' ? 'font-mono' : 'font-sans'
           }`}>
@@ -306,6 +359,7 @@ const PresentationViewer = () => {
           </div>
         </div>
       </div>
+      )}
 
       {/* CircleUp branding */}
       <div className="absolute bottom-6 right-6 text-n-4 text-sm opacity-50">

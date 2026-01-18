@@ -84,11 +84,29 @@ const DashboardHome = ({ user, onNavigate }) => {
     window.open(presentation.url, '_blank');
   };
 
-  const handleDelete = (presentation) => {
-    if (confirm(`¿Eliminar "${presentation.title}"?`)) {
-      const updated = presentations.filter(p => p.id !== presentation.id);
-      setPresentations(updated);
-      localStorage.setItem(`presentations_${user.login}`, JSON.stringify(updated));
+  const handleDelete = async (presentation) => {
+    if (confirm(`¿Eliminar "${presentation.title}"? Esta acción no se puede deshacer.`)) {
+      try {
+        // Remove from UI immediately for better UX
+        const updated = presentations.filter(p => p.id !== presentation.id);
+        setPresentations(updated);
+        localStorage.setItem(`presentations_${user.login}`, JSON.stringify(updated));
+
+        // Trigger deletion in GitHub
+        const result = await PresentationsAPI.deletePresentation(
+          user.login,
+          presentation.id,
+          presentation.title
+        );
+
+        if (!result.success) {
+          console.error('Failed to delete from GitHub:', result.message);
+          // Optionally show error to user but keep it removed from UI
+          alert('La presentación se eliminó localmente, pero hubo un error al eliminarla del servidor. Contacta soporte si persiste.');
+        }
+      } catch (error) {
+        console.error('Error deleting presentation:', error);
+      }
     }
   };
 
