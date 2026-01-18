@@ -82,7 +82,9 @@ function ParticleCanvas({ imageUrl }) {
       
       // Animation loop - dynamic and fluid
       const animate = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Dark background for particles
+        ctx.fillStyle = '#110f19';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
         
         particles.forEach(particle => {
           // Mouse interaction with momentum
@@ -159,14 +161,14 @@ function ParticleCanvas({ imageUrl }) {
     };
   }, [imageUrl]);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 z-10" style={{ mixBlendMode: 'screen' }} />;
+  return <canvas ref={canvasRef} className="absolute inset-0 z-10" />;
 }
 
 export default function ParticleLogo() {
   return (
-    <div className="relative w-full h-screen bg-n-8 overflow-hidden">
+    <div className="relative w-full h-screen overflow-hidden" style={{ backgroundColor: '#110f19' }}>
       {/* Much darker overlay for contrast */}
-      <div className="absolute inset-0 bg-black/70 z-0"></div>
+      <div className="absolute inset-0 bg-black/60 z-0"></div>
       
       {/* Background gradient - behind particles */}
       <div 
@@ -180,7 +182,7 @@ export default function ParticleLogo() {
       
       {/* Grid overlay - behind particles */}
       <div 
-        className="absolute inset-0 opacity-8 z-0"
+        className="absolute inset-0 opacity-20 z-0"
         style={{
           backgroundImage: 'url(/assets/grid.png)',
           backgroundSize: 'cover',
@@ -209,10 +211,10 @@ export default function ParticleLogo() {
       {/* Text overlay - top positioned */}
       <div className="absolute top-0 left-0 right-0 z-20 pointer-events-none pt-16">
         <div className="flex flex-col items-center space-y-3">
-          <span className="font-bold text-white text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight">
+          <span className="font-semibold text-white text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight">
             CIRCLE UP
           </span>
-          <span className="font-bold text-white text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight">
+          <span className="font-extrabold text-white text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight">
             VOLUNTEER
           </span>
           <span className="text-xl md:text-2xl text-n-2 font-mono leading-tight mt-4">
