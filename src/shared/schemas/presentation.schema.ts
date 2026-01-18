@@ -14,6 +14,10 @@ export const presentationFormSchema = z.object({
     .min(5, 'Minimum 5 slides')
     .max(50, 'Maximum 50 slides'),
   
+  language: z.enum(['es-LA', 'en-US', 'pt-BR'], {
+    errorMap: () => ({ message: 'Please select a valid language' })
+  }),
+  
   theme: z.enum(['modern', 'academic', 'minimal'], {
     errorMap: () => ({ message: 'Please select a valid theme' })
   }),
@@ -24,12 +28,6 @@ export const presentationFormSchema = z.object({
     'microsoft/Phi-3-medium-128k-instruct'
   ], {
     errorMap: () => ({ message: 'Please select a valid model' })
-  }),
-  
-  options: z.object({
-    includeSpeakerNotes: z.boolean(),
-    addReferences: z.boolean(),
-    tone: z.enum(['professional', 'casual', 'academic'])
   })
 });
 
