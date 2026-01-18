@@ -27,8 +27,8 @@ function ParticleCanvas({ imageUrl }) {
       const tempCanvas = document.createElement('canvas');
       const tempCtx = tempCanvas.getContext('2d');
       
-      // Scale image to fit screen while maintaining aspect ratio
-      const scale = Math.min(canvas.width / img.width, canvas.height / img.height) * 0.35;
+      // Scale image to fit screen while maintaining aspect ratio - almost full viewport
+      const scale = Math.min(canvas.width / img.width, canvas.height / img.height) * 0.8;
       const width = Math.floor(img.width * scale);
       const height = Math.floor(img.height * scale);
       
@@ -41,7 +41,7 @@ function ParticleCanvas({ imageUrl }) {
       
       // Create particles - optimized for performance
       const particles = [];
-      const gap = 4; // Increased gap for better performance
+      const gap = 3; // Balance between detail and performance
       
       for (let y = 0; y < height; y += gap) {
         for (let x = 0; x < width; x += gap) {
@@ -51,18 +51,21 @@ function ParticleCanvas({ imageUrl }) {
           const b = pixels[index + 2];
           const alpha = pixels[index + 3];
           
-          // Only visible pixels (grayscale image)
-          if (alpha > 50) {
+          // Only visible pixels - exclude black background
+          const brightness = (r + g + b) / 3;
+          if (alpha > 50 && brightness > 20) {
             particles.push({
               x: x + (canvas.width - width) / 2,
-              y: y + (canvas.height - height) / 2 - 100,
+              y: y + (canvas.height - height) / 2,
               baseX: x + (canvas.width - width) / 2,
-              baseY: y + (canvas.height - height) / 2 - 100,
+              baseY: y + (canvas.height - height) / 2,
               r: r,
               g: g,
               b: b,
-              size: 2,
-              density: (Math.random() * 20 + 20)
+              size: 2.5,
+              vx: 0,
+              vy: 0,
+              ease: 0.2
             });
           }
         }
@@ -70,37 +73,52 @@ function ParticleCanvas({ imageUrl }) {
       
       particlesRef.current = particles;
       
-      // Animation loop - optimized
+      // Animation loop - smooth natural movement
       const animate = () => {
-        ctx.fillStyle = 'rgba(20, 20, 30, 0.1)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         
         particles.forEach(particle => {
-          // Mouse interaction
+          // Calculate distance from mouse
           const dx = mouseRef.current.x - particle.x;
           const dy = mouseRef.current.y - particle.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
-          const forceDirectionX = dx / distance;
-          const forceDirectionY = dy / distance;
-          const maxDistance = 120;
-          const force = (maxDistance - distance) / maxDistance;
+          const maxDistance = 150;
           
+          // Mouse repulsion with smooth easing
           if (distance < maxDistance) {
-            const directionX = forceDirectionX * force * particle.density * 0.5;
-            const directionY = forceDirectionY * force * particle.density * 0.5;
-            particle.x -= directionX;
-            particle.y -= directionY;
-          } else {
-            // Return to base position
-            const dxBase = particle.x - particle.baseX;
-            const dyBase = particle.y - particle.baseY;
-            particle.x -= dxBase * 0.1;
-            particle.y -= dyBase * 0.1;
+            const force = (maxDistance - distance) / maxDistance;
+            const angle = Math.atan2(dy, dx);
+            const repelX = Math.cos(angle) * force * 8;
+            const repelY = Math.sin(angle) * force * 8;
+            
+            particle.vx -= repelX;
+            particle.vy -= repelY;
           }
           
-          // Draw particle
-          ctx.fillStyle = `rgba(${particle.r}, ${particle.g}, ${particle.b}, 0.8)`;
-          ctx.fillRect(particle.x, particle.y, particle.size, particle.size);
+          // Spring back to original position
+          const dxBase = particle.baseX - particle.x;
+          const dyBase = particle.baseY - particle.y;
+          
+          particle.vx += dxBase * 0.05;
+          particle.vy += dyBase * 0.05;
+          
+          // Apply friction
+          particle.vx *= 0.85;
+          particle.vy *= 0.85;
+          
+          // Update position
+          particle.x += particle.vx;
+          particle.y += particle.vy;
+          
+          // Draw particle with subtle glow
+          const alpha = Math.min(1, Math.max(0.6, 1 - distance / maxDistance));
+          ctx.shadowBlur = 4;
+          ctx.shadowColor = `rgba(${particle.r}, ${particle.g}, ${particle.b}, 0.3)`;
+          ctx.fillStyle = `rgba(${particle.r}, ${particle.g}, ${particle.b}, ${alpha})`;
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
         });
         
         animationRef.current = requestAnimationFrame(animate);
@@ -174,9 +192,9 @@ export default function ParticleLogo() {
       {/* Particle Canvas - Kid image as particles */}
       <ParticleCanvas imageUrl="/assets/circleimages/kid.png" />
       
-      {/* Text overlay - centered */}
-      <div className="absolute inset-0 z-20 pointer-events-none flex items-center justify-center">
-        <div className="flex flex-col items-center space-y-3 -mt-32">
+      {/* Text overlay - top positioned */}
+      <div className="absolute top-0 left-0 right-0 z-20 pointer-events-none pt-16">
+        <div className="flex flex-col items-center space-y-3">
           <span className="font-bold text-white text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight">
             CIRCLE UP
           </span>
