@@ -31,9 +31,14 @@ const DashboardHome = ({ user, onNavigate }) => {
       const validLocalPresentations = localPresentations.filter(local => {
         // If it's processing, check if there's a completed version in remote
         if (local.status === 'processing') {
-          const remoteVersion = remotePresentations.find(r => r.id === local.id);
-          // Keep only if NOT found in remote or if remote is also processing
-          return !remoteVersion || remoteVersion.status === 'processing';
+          // Check by title AND description (more reliable than ID for matching)
+          const remoteVersion = remotePresentations.find(r => 
+            r.title === local.title && 
+            r.description === local.description &&
+            r.status === 'completed'
+          );
+          // Remove if found completed in remote
+          return !remoteVersion;
         }
         return true;
       });

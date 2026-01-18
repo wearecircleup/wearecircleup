@@ -51,7 +51,7 @@ const CreatePresentation = ({ user, onBack, onSuccess }) => {
         // Save to localStorage
         const presentations = JSON.parse(localStorage.getItem(`presentations_${user.login}`) || '[]');
         presentations.unshift({
-          id: crypto.randomUUID(),
+          id: result.requestId || crypto.randomUUID(), // Use same ID from workflow
           ...validated,
           status: 'processing',
           createdAt: new Date().toISOString(),

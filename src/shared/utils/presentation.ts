@@ -2,7 +2,7 @@ import { ConfigService } from './config';
 import { GitHubAuthService } from './github';
 
 export class PresentationService {
-  static async generatePresentation(formData: any): Promise<{ success: boolean; message: string }> {
+  static async generatePresentation(formData: any): Promise<{ success: boolean; message: string; requestId?: string }> {
     const user = GitHubAuthService.getUser();
     
     if (!user) {
@@ -81,6 +81,7 @@ export class PresentationService {
       // repository_dispatch returns 204 No Content on success
       return {
         success: true,
+        requestId: payload.client_payload.request_id, // Return ID for tracking
         message: `¡Presentación en proceso! El workflow se está ejecutando. ` +
                  `Recibirás una notificación cuando esté lista (aprox. 2-3 minutos).`
       };
