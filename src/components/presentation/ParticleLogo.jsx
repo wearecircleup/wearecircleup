@@ -56,23 +56,32 @@ function ParticleCanvas({ imageUrl }) {
           if (alpha > 50 && brightness > 30) {
             const offsetX = (Math.random() - 0.5) * 3;
             const offsetY = (Math.random() - 0.5) * 3;
+            const baseX = x + (canvas.width - width) / 2 + offsetX;
+            const baseY = y + (canvas.height - height) / 2 + offsetY;
+            
+            // Random starting position from all directions
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * 800 + 400;
+            const startX = baseX + Math.cos(angle) * distance;
+            const startY = baseY + Math.sin(angle) * distance;
+            
             particles.push({
-              x: x + (canvas.width - width) / 2 + offsetX,
-              y: y + (canvas.height - height) / 2 + offsetY,
-              baseX: x + (canvas.width - width) / 2 + offsetX,
-              baseY: y + (canvas.height - height) / 2 + offsetY,
+              x: startX,
+              y: startY,
+              baseX: baseX,
+              baseY: baseY,
               r: r,
               g: g,
               b: b,
-              size: Math.random() * 2 + 0.8, // Smaller variable size
+              size: Math.random() * 2 + 0.8,
               vx: 0,
               vy: 0,
-              mass: Math.random() * 3 + 0.5, // Different mass for momentum
-              friction: Math.random() * 0.15 + 0.8, // Variable friction
-              randomAngle: Math.random() * Math.PI * 2, // Random angle for unpredictable movement
-              chaos: Math.random() * 0.5 + 0.5, // Chaos factor for unpredictability
-              offsetX: (Math.random() - 0.5) * 3, // Random offset for overlap
-              offsetY: (Math.random() - 0.5) * 3 // Random offset for overlap
+              mass: Math.random() * 3 + 0.5,
+              friction: Math.random() * 0.15 + 0.8,
+              randomAngle: Math.random() * Math.PI * 2,
+              chaos: Math.random() * 0.5 + 0.5,
+              forming: true, // Flag for initial formation
+              formProgress: 0 // Progress of formation (0 to 1)
             });
           }
         }
@@ -87,34 +96,48 @@ function ParticleCanvas({ imageUrl }) {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
         particles.forEach(particle => {
-          // Mouse interaction with momentum
-          const dx = mouseRef.current.x - particle.x;
-          const dy = mouseRef.current.y - particle.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          const maxDistance = 120;
-          
-          if (distance < maxDistance) {
-            const force = (maxDistance - distance) / maxDistance;
-            const angle = Math.atan2(dy, dx);
-            // Add chaos to make movement unpredictable
-            const chaosAngle = angle + (Math.random() - 0.5) * particle.chaos;
-            // Apply force based on mass (heavier = slower) - reduced speed
-            particle.vx -= Math.cos(chaosAngle) * force * (3 / particle.mass);
-            particle.vy -= Math.sin(chaosAngle) * force * (3 / particle.mass);
-            // Add random perpendicular movement
-            particle.vx += Math.cos(chaosAngle + Math.PI / 2) * (Math.random() - 0.5) * particle.chaos * 0.5;
-            particle.vy += Math.sin(chaosAngle + Math.PI / 2) * (Math.random() - 0.5) * particle.chaos * 0.5;
+          // Initial formation animation
+          if (particle.forming) {
+            particle.formProgress += 0.008; // Moderate speed for formation
+            
+            if (particle.formProgress >= 1) {
+              particle.forming = false;
+              particle.formProgress = 1;
+            }
+            
+            // Ease-out animation
+            const easeProgress = 1 - Math.pow(1 - particle.formProgress, 3);
+            const dxForm = particle.baseX - particle.x;
+            const dyForm = particle.baseY - particle.y;
+            particle.x += dxForm * 0.05 * easeProgress;
+            particle.y += dyForm * 0.05 * easeProgress;
+          } else {
+            // Normal mouse interaction after formation
+            const dx = mouseRef.current.x - particle.x;
+            const dy = mouseRef.current.y - particle.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const maxDistance = 120;
+            
+            if (distance < maxDistance) {
+              const force = (maxDistance - distance) / maxDistance;
+              const angle = Math.atan2(dy, dx);
+              const chaosAngle = angle + (Math.random() - 0.5) * particle.chaos;
+              particle.vx -= Math.cos(chaosAngle) * force * (3 / particle.mass);
+              particle.vy -= Math.sin(chaosAngle) * force * (3 / particle.mass);
+              particle.vx += Math.cos(chaosAngle + Math.PI / 2) * (Math.random() - 0.5) * particle.chaos * 0.5;
+              particle.vy += Math.sin(chaosAngle + Math.PI / 2) * (Math.random() - 0.5) * particle.chaos * 0.5;
+            }
+            
+            // Spring back to base
+            const dxBase = particle.baseX - particle.x;
+            const dyBase = particle.baseY - particle.y;
+            particle.vx += dxBase * 0.02;
+            particle.vy += dyBase * 0.02;
+            
+            // Apply friction
+            particle.vx *= particle.friction * 0.95;
+            particle.vy *= particle.friction * 0.95;
           }
-          
-          // Spring back to base with momentum - slower return
-          const dxBase = particle.baseX - particle.x;
-          const dyBase = particle.baseY - particle.y;
-          particle.vx += dxBase * 0.02;
-          particle.vy += dyBase * 0.02;
-          
-          // Apply individual friction - more friction for slower movement
-          particle.vx *= particle.friction * 0.95;
-          particle.vy *= particle.friction * 0.95;
           
           // Update position
           particle.x += particle.vx;
