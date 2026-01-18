@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biologia Avanzada - CircleUp</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/impress.js@2.0.0/css/impress-common.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0E0C15;
+      color: #ffffff;
+      overflow: hidden;
+    }
+    
+    .step {
+      width: 1000px;
+      padding: 60px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid #AC6AFF;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+    }
+    
+    .step h2 {
+      color: #AC6AFF;
+      font-size: 3em;
+      margin-bottom: 0.5em;
+      font-weight: bold;
+      background: linear-gradient(135deg, #AC6AFF, #FFC876);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .step .content p {
+      font-size: 1.5em;
+      line-height: 1.6;
+      margin: 0.5em 0;
+      color: #e0e0e0;
+    }
+    
+    .step .notes {
+      margin-top: 2em;
+      padding: 1em;
+      background: rgba(0, 0, 0, 0.2);
+      border-left: 4px solid #FFC876;
+      font-size: 1em;
+      font-style: italic;
+      color: #FFC876;
+    }
+    
+    .impress-enabled .step {
+      opacity: 0.3;
+      transition: opacity 1s;
+    }
+    
+    .impress-enabled .step.active {
+      opacity: 1;
+    }
+    
+    /* CircleUp branding */
+    .branding {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      font-size: 0.8em;
+      color: #FFC876;
+      opacity: 0.5;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <div id="impress">
+    
+    <div class="step slide" data-x="0" data-y="0" data-rotate="0">
+      <h2>Introducción a la Biología Avanzada</h2>
+      <div class="content">
+        <p>• Definición de biología avanzada</p>
+        <p>• Importancia en la investigación científica</p>
+        <p>• Áreas principales de estudio</p>
+      </div>
+      <div class="notes">Enfatizar el impacto de la biología avanzada en la medicina, ecología y biotecnología.</div>
+    </div>
+
+    <div class="step slide" data-x="1200" data-y="0" data-rotate="15">
+      <h2>Genómica y Biología Molecular</h2>
+      <div class="content">
+        <p>• Estudio de los genes y su expresión</p>
+        <p>• Técnicas de secuenciación de última generación</p>
+        <p>• Aplicaciones en terapia génica y edición de genes</p>
+      </div>
+      <div class="notes">Destacar CRISPR como una herramienta revolucionaria.</div>
+    </div>
+
+    <div class="step slide" data-x="2400" data-y="0" data-rotate="0">
+      <h2>Biología Celular</h2>
+      <div class="content">
+        <p>• Estructura y función de las células</p>
+        <p>• Organización de orgánulos intracelulares</p>
+        <p>• Procesos clave: mitosis, meiosis y apoptosis</p>
+      </div>
+      <div class="notes">Explicar cómo las células son la unidad básica de la vida.</div>
+    </div>
+
+    <div class="step slide" data-x="0" data-y="800" data-rotate="15">
+      <h2>Biotecnología y Bioingeniería</h2>
+      <div class="content">
+        <p>• Uso de organismos para desarrollar productos</p>
+        <p>• Producción de medicamentos biológicos</p>
+        <p>• Ingeniería de tejidos y órganos</p>
+      </div>
+      <div class="notes">Ejemplo: Cómo se producen las vacunas a través de la biotecnología.</div>
+    </div>
+
+    <div class="step slide" data-x="1200" data-y="800" data-rotate="0">
+      <h2>Ecología Molecular</h2>
+      <div class="content">
+        <p>• Estudio de interacciones entre organismos a nivel molecular</p>
+        <p>• Impacto del cambio climático en la biodiversidad</p>
+        <p>• Análisis de comunidades microbianas</p>
+      </div>
+      <div class="notes">Resaltar la importancia de la ecología molecular en la conservación de especies.</div>
+    </div>
+
+    <div class="step slide" data-x="2400" data-y="800" data-rotate="15">
+      <h2>Biología del Desarrollo</h2>
+      <div class="content">
+        <p>• Procesos de diferenciación celular</p>
+        <p>• Estudio de las etapas embrionarias</p>
+        <p>• Implicaciones en enfermedades congénitas</p>
+      </div>
+      <div class="notes">Mencionar cómo el estudio del desarrollo ayuda a entender defectos genéticos.</div>
+    </div>
+
+    <div class="step slide" data-x="0" data-y="1600" data-rotate="0">
+      <h2>Neurobiología y Ciencias Cognitivas</h2>
+      <div class="content">
+        <p>• Estructura y función del sistema nervioso</p>
+        <p>• Mecanismos de aprendizaje y memoria</p>
+        <p>• Relación entre biología y comportamiento</p>
+      </div>
+      <div class="notes">Explicar cómo la neurobiología está avanzando en la comprensión de enfermedades como el Alzheimer.</div>
+    </div>
+
+    <div class="step slide" data-x="1200" data-y="1600" data-rotate="15">
+      <h2>Biología Sintética</h2>
+      <div class="content">
+        <p>• Diseño de sistemas biológicos artificiales</p>
+        <p>• Creación de nuevos organismos funcionales</p>
+        <p>• Aplicaciones en energía y medio ambiente</p>
+      </div>
+      <div class="notes">Ejemplo: Bacterias diseñadas para degradar plásticos.</div>
+    </div>
+
+    <div class="step slide" data-x="2400" data-y="1600" data-rotate="0">
+      <h2>Evolución Molecular</h2>
+      <div class="content">
+        <p>• Cambios en el ADN a lo largo del tiempo</p>
+        <p>• Relación entre evolución y adaptación</p>
+        <p>• Estudio de linajes ancestrales</p>
+      </div>
+      <div class="notes">Resaltar ejemplos de evolución en acción, como la resistencia a antibióticos.</div>
+    </div>
+
+    <div class="step slide" data-x="0" data-y="2400" data-rotate="15">
+      <h2>Conclusiones y Futuro de la Biología Avanzada</h2>
+      <div class="content">
+        <p>• Resumen de los avances recientes</p>
+        <p>• Retos éticos en biología avanzada</p>
+        <p>• Perspectivas futuras en investigación</p>
+      </div>
+      <div class="notes">Invitar al público a reflexionar sobre el impacto ético y social de los avances biológicos.</div>
+    </div>
+    
+    <!-- Final slide -->
+    <div class="step" data-x="4800" data-y="0" data-scale="2">
+      <h2>¡Gracias!</h2>
+      <div class="content">
+        <p>Presentación generada con CircleUp AI</p>
+        <p style="font-size: 0.8em; color: #FFC876;">Powered by GitHub Models</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="branding">CircleUp</div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/impress.js@2.0.0/js/impress.js"></script>
+  <script>
+    impress().init();
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        impress().goto(0);
+      }
+    });
+  </script>
+</body>
+</html>
