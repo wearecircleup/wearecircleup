@@ -41,7 +41,7 @@ function ParticleCanvas({ imageUrl }) {
       
       // Create particles - highly optimized
       const particles = [];
-      const gap = 5; // Larger gap for better performance
+      const gap = 7; // Larger gap for more separation and better performance
       
       for (let y = 0; y < height; y += gap) {
         for (let x = 0; x < width; x += gap) {
@@ -62,11 +62,13 @@ function ParticleCanvas({ imageUrl }) {
               r: r,
               g: g,
               b: b,
-              size: Math.random() * 2 + 1.5, // Variable size
+              size: Math.random() * 2.5 + 1.5, // Variable size
               vx: 0,
               vy: 0,
-              mass: Math.random() * 2 + 1, // Different mass for momentum
-              friction: Math.random() * 0.1 + 0.85 // Variable friction
+              mass: Math.random() * 3 + 0.5, // Different mass for momentum
+              friction: Math.random() * 0.15 + 0.8, // Variable friction
+              randomAngle: Math.random() * Math.PI * 2, // Random angle for unpredictable movement
+              chaos: Math.random() * 0.5 + 0.5 // Chaos factor for unpredictability
             });
           }
         }
@@ -89,9 +91,14 @@ function ParticleCanvas({ imageUrl }) {
           if (distance < maxDistance) {
             const force = (maxDistance - distance) / maxDistance;
             const angle = Math.atan2(dy, dx);
+            // Add chaos to make movement unpredictable
+            const chaosAngle = angle + (Math.random() - 0.5) * particle.chaos;
             // Apply force based on mass (heavier = slower)
-            particle.vx -= Math.cos(angle) * force * (4 / particle.mass);
-            particle.vy -= Math.sin(angle) * force * (4 / particle.mass);
+            particle.vx -= Math.cos(chaosAngle) * force * (5 / particle.mass);
+            particle.vy -= Math.sin(chaosAngle) * force * (5 / particle.mass);
+            // Add random perpendicular movement
+            particle.vx += Math.cos(chaosAngle + Math.PI / 2) * (Math.random() - 0.5) * particle.chaos;
+            particle.vy += Math.sin(chaosAngle + Math.PI / 2) * (Math.random() - 0.5) * particle.chaos;
           }
           
           // Spring back to base with momentum
@@ -143,15 +150,15 @@ function ParticleCanvas({ imageUrl }) {
     };
   }, [imageUrl]);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 z-10" />;
+  return <canvas ref={canvasRef} className="absolute inset-0 z-10" style={{ mixBlendMode: 'screen' }} />;
 }
 
 export default function ParticleLogo() {
   return (
     <div className="relative w-full h-screen bg-n-8 overflow-hidden">
-      {/* Background gradient */}
+      {/* Background gradient - behind particles */}
       <div 
-        className="absolute inset-0 opacity-50"
+        className="absolute inset-0 opacity-40 z-0"
         style={{
           backgroundImage: 'url(/assets/gradient.png)',
           backgroundSize: 'cover',
@@ -159,9 +166,9 @@ export default function ParticleLogo() {
         }}
       />
       
-      {/* Grid overlay */}
+      {/* Grid overlay - behind particles */}
       <div 
-        className="absolute inset-0 opacity-20"
+        className="absolute inset-0 opacity-15 z-0"
         style={{
           backgroundImage: 'url(/assets/grid.png)',
           backgroundSize: 'cover',
@@ -184,7 +191,7 @@ export default function ParticleLogo() {
         }}
       />
       
-      {/* Particle Canvas - Kid image as particles */}
+      {/* Particle Canvas - Kid image as particles - above backgrounds */}
       <ParticleCanvas imageUrl="/assets/circleimages/kid.png" />
       
       {/* Text overlay - top positioned */}
