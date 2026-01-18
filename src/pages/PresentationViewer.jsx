@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { PresentationsAPI } from '../shared/utils/presentations-api';
+import Button from '../components/Button';
 
 const PresentationViewer = () => {
   // Extract userId and presentationId from URL
@@ -11,6 +12,8 @@ const PresentationViewer = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [fontSize, setFontSize] = useState('normal'); // small, normal, large
+  const [fontFamily, setFontFamily] = useState('sans'); // sans, serif, mono
 
   const loadPresentation = async () => {
     try {
@@ -112,9 +115,19 @@ const PresentationViewer = () => {
       {/* Main content - Full screen */}
       <div className="relative z-10 h-screen flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 lg:px-24 py-20">
         <div className="w-full h-full max-w-7xl flex items-center justify-center">
-          {/* Slide content - Responsive sizing */}
-          <div className="w-full h-full flex flex-col justify-center bg-n-7/50 backdrop-blur-xl border border-n-6/50 rounded-3xl p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 shadow-2xl">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 sm:mb-8 md:mb-10 lg:mb-12 bg-gradient-to-r from-color-1 to-color-2 bg-clip-text text-transparent leading-tight">
+          {/* Slide content - Responsive sizing with accessibility */}
+          <div 
+            className={`w-full h-full flex flex-col justify-center bg-n-7/50 backdrop-blur-xl border border-n-6/50 rounded-3xl p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 shadow-2xl ${
+              fontFamily === 'serif' ? 'font-serif' : fontFamily === 'mono' ? 'font-mono' : 'font-sans'
+            }`}
+          >
+            <h1 className={`font-bold mb-6 sm:mb-8 md:mb-10 lg:mb-12 bg-gradient-to-r from-color-1 to-color-2 bg-clip-text text-transparent leading-tight ${
+              fontSize === 'small'
+                ? 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl'
+                : fontSize === 'large'
+                ? 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl'
+                : 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl'
+            }`}>
               {slide.title}
             </h1>
             
@@ -122,7 +135,13 @@ const PresentationViewer = () => {
               {slide.content.map((point, index) => (
                 <div
                   key={index}
-                  className="flex items-start gap-3 sm:gap-4 text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-n-2 animate-fadeIn"
+                  className={`flex items-start gap-3 sm:gap-4 text-n-2 animate-fadeIn ${
+                    fontSize === 'small'
+                      ? 'text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl'
+                      : fontSize === 'large'
+                      ? 'text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl'
+                      : 'text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl'
+                  }`}
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <span className="text-color-1 font-bold flex-shrink-0">•</span>
@@ -171,18 +190,122 @@ const PresentationViewer = () => {
       </div>
 
       {/* Back to Dashboard button */}
-      <button
-        onClick={() => window.location.href = '/dashboard'}
-        className="fixed top-6 left-6 z-50 group relative"
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-color-1 via-color-2 to-color-1 rounded-xl opacity-100 group-hover:opacity-80 transition-opacity"></div>
-        <div className="relative bg-n-8 m-[2px] rounded-[10px] px-6 py-3 flex items-center gap-2 text-n-1 font-semibold">
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-          Volver al Dashboard
+      <div className="fixed top-6 left-6 z-50">
+        <Button onClick={() => window.location.href = '/dashboard'} white>
+          ← Volver al Dashboard
+        </Button>
+      </div>
+
+      {/* Accessibility Controls Panel */}
+      <div className="fixed top-20 right-6 z-50 bg-n-8/95 backdrop-blur-xl border border-n-6/50 rounded-2xl p-6 shadow-2xl w-80">
+        {/* Font Family Section */}
+        <div className="mb-6">
+          <h3 className="text-n-1 text-xs font-bold uppercase tracking-wider mb-3">FONT FAMILY</h3>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setFontFamily('sans')}
+              className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all ${
+                fontFamily === 'sans'
+                  ? 'bg-n-1 text-n-8'
+                  : 'bg-n-7 text-n-3 hover:bg-n-6'
+              }`}
+            >
+              Sans Serif
+            </button>
+            <button
+              onClick={() => setFontFamily('serif')}
+              className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all ${
+                fontFamily === 'serif'
+                  ? 'bg-n-1 text-n-8'
+                  : 'bg-n-7 text-n-3 hover:bg-n-6'
+              }`}
+            >
+              Serif
+            </button>
+          </div>
         </div>
-      </button>
+
+        {/* Font Size Section */}
+        <div className="mb-6">
+          <h3 className="text-n-1 text-xs font-bold uppercase tracking-wider mb-3">FONT SIZE</h3>
+          
+          {/* Size Slider */}
+          <div className="flex items-center justify-between mb-3">
+            <button
+              onClick={() => setFontSize(fontSize === 'normal' ? 'small' : fontSize === 'large' ? 'normal' : 'small')}
+              className="p-2 rounded-lg bg-n-7 hover:bg-n-6 text-n-1 transition-all"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+              </svg>
+            </button>
+            <div className="flex-1 mx-4 text-center">
+              <div className="text-n-1 font-semibold">
+                {fontSize === 'small' ? 'Small' : fontSize === 'large' ? 'Large' : 'Medium'}
+              </div>
+              <div className="text-n-4 text-xs">
+                {fontSize === 'small' ? '14px' : fontSize === 'large' ? '20px' : '16px'}
+              </div>
+            </div>
+            <button
+              onClick={() => setFontSize(fontSize === 'small' ? 'normal' : fontSize === 'normal' ? 'large' : 'large')}
+              className="p-2 rounded-lg bg-n-7 hover:bg-n-6 text-n-1 transition-all"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Size Buttons */}
+          <div className="flex gap-2">
+            <button
+              onClick={() => setFontSize('small')}
+              className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all ${
+                fontSize === 'small'
+                  ? 'bg-n-1 text-n-8'
+                  : 'bg-n-7 text-n-3 hover:bg-n-6'
+              }`}
+            >
+              Small
+            </button>
+            <button
+              onClick={() => setFontSize('normal')}
+              className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all ${
+                fontSize === 'normal'
+                  ? 'bg-n-1 text-n-8'
+                  : 'bg-n-7 text-n-3 hover:bg-n-6'
+              }`}
+            >
+              Medium
+            </button>
+            <button
+              onClick={() => setFontSize('large')}
+              className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all ${
+                fontSize === 'large'
+                  ? 'bg-n-1 text-n-8'
+                  : 'bg-n-7 text-n-3 hover:bg-n-6'
+              }`}
+            >
+              Large
+            </button>
+          </div>
+        </div>
+
+        {/* Preview Section */}
+        <div>
+          <h3 className="text-n-1 text-xs font-bold uppercase tracking-wider mb-3">PREVIEW</h3>
+          <div className={`p-4 bg-n-7 rounded-xl ${
+            fontFamily === 'serif' ? 'font-serif' : fontFamily === 'mono' ? 'font-mono' : 'font-sans'
+          }`}>
+            <p className={`text-n-2 ${
+              fontSize === 'small' ? 'text-sm' : fontSize === 'large' ? 'text-lg' : 'text-base'
+            }`}>
+              The quick brown fox jumps over the lazy dog
+            </p>
+          </div>
+        </div>
+      </div>
 
       {/* CircleUp branding */}
       <div className="absolute bottom-6 right-6 text-n-4 text-sm opacity-50">
