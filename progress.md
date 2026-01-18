@@ -1160,6 +1160,15 @@ Migrate presentation generation from GitHub Actions to Vercel Functions to solve
 - Modify: CreatePresentation.jsx
 - Change: Call /api/generate-presentation instead of repository_dispatch
 - Testing: End-to-end presentation creation
+- Status: COMPLETED
+- Changes:
+  - Modified PresentationService.generatePresentation to call /api/generate-presentation
+  - Removed GitHub Actions repository_dispatch logic
+  - Removed VITE_GITHUB_PUBLIC_TOKEN dependency from frontend
+  - Updated CreatePresentation.jsx to handle immediate response
+  - Presentations now marked as 'completed' immediately (not 'processing')
+  - User sees result in ~10 seconds instead of 2-3 minutes
+  - Simplified error handling (no localStorage fallback needed)
 
 **Step 5: Concurrency Testing**
 - Test: Multiple simultaneous users

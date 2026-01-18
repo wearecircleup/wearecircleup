@@ -48,14 +48,14 @@ const CreatePresentation = ({ user, onBack, onSuccess }) => {
           message: result.message
         });
         
-        // Save to localStorage
+        // Save to localStorage with completed status
         const presentations = JSON.parse(localStorage.getItem(`presentations_${user.login}`) || '[]');
         presentations.unshift({
-          id: result.requestId || crypto.randomUUID(), // Use same ID from workflow
+          id: result.requestId,
           ...validated,
-          status: 'processing',
+          status: 'completed',
           createdAt: new Date().toISOString(),
-          url: null
+          url: result.url
         });
         localStorage.setItem(`presentations_${user.login}`, JSON.stringify(presentations));
         
