@@ -1,4 +1,3 @@
-import { ConfigService } from './config';
 import { GitHubAuthService } from './github';
 
 export class PresentationService {
