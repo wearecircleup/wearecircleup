@@ -9,6 +9,7 @@ import RoadmapDocs from "./pages/RoadmapDocs";
 import PoliciesDocs from "./pages/PoliciesDocs";
 import Login from "./pages/Login";
 import AuthCallback from "./pages/AuthCallback";
+import ParticleLogoTest from "./pages/ParticleLogoTest";
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState('home');
@@ -17,6 +18,12 @@ const App = () => {
     // Detect OAuth callback from hash or pathname
     const hash = window.location.hash.substring(1); // Remove #
     const pathname = window.location.pathname;
+    
+    // Handle particle logo test
+    if (pathname === '/particle-test') {
+      setCurrentPage('particle-test');
+      return;
+    }
     
     // Handle presentation viewer
     const presentationMatch = pathname.match(/^\/p\/([^/]+)\/([^/]+)/);
@@ -48,6 +55,7 @@ const App = () => {
         {currentPage === 'auth-callback' && <AuthCallback setCurrentPage={setCurrentPage} />}
         {currentPage === 'dashboard' && <Dashboard setCurrentPage={setCurrentPage} />}
         {currentPage === 'presentation-viewer' && <PresentationViewer setCurrentPage={setCurrentPage} />}
+        {currentPage === 'particle-test' && <ParticleLogoTest />}
       </div>
     );
   } catch (error) {
