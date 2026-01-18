@@ -36,14 +36,14 @@ GitHub OAuth requires a **backend** to securely exchange the authorization code 
 
 ## Solution Implemented
 
-### 1. Netlify Serverless Function
+### 1. Vercel Serverless Function
 
-Created `netlify/functions/github-auth.js` to handle OAuth token exchange securely on the backend.
+Created `api/github-auth.js` to handle OAuth token exchange securely on the backend.
 
 **Flow:**
 ```
 User → GitHub OAuth → Callback with code → 
-Netlify Function (with CLIENT_SECRET) → 
+Vercel Function (with CLIENT_SECRET) → 
 Exchange code for user's token → 
 Fetch user's data with their token → 
 Return to frontend
@@ -51,11 +51,11 @@ Return to frontend
 
 ### 2. Updated AuthCallback.jsx
 
-Now calls the Netlify function instead of using CircleUP's token:
+Now calls the Vercel function instead of using CircleUP's token:
 
 ```javascript
 // ✅ CORRECT: Exchange code via backend
-const authResponse = await fetch('/.netlify/functions/github-auth', {
+const authResponse = await fetch('/api/github-auth', {
   method: 'POST',
   body: JSON.stringify({ code, state })
 });
@@ -77,9 +77,9 @@ GitHubAuthService.setUser({
 
 ## Deployment Requirements
 
-### Environment Variables (Netlify)
+### Environment Variables (Vercel)
 
-Add to Netlify dashboard:
+Add to Vercel dashboard:
 
 ```bash
 GITHUB_APP_CLIENT_ID=your_client_id
@@ -105,11 +105,12 @@ Update redirect URIs in GitHub OAuth App settings:
 ## Files Modified
 
 ```
-netlify/functions/github-auth.js (NEW)
-netlify.toml (NEW)
+api/github-auth.js (NEW)
+vercel.json (NEW)
 src/pages/AuthCallback.jsx (MODIFIED)
 src/shared/utils/github.ts (MODIFIED)
 .env.example (MODIFIED)
+VERCEL_DEPLOYMENT.md (NEW)
 ```
 
 ## Security Best Practices Applied
@@ -123,7 +124,7 @@ src/shared/utils/github.ts (MODIFIED)
 
 ## Next Steps
 
-1. Deploy to Netlify with environment variables configured
+1. Deploy to Vercel with environment variables configured
 2. Test with multiple GitHub accounts
 3. Consider implementing token refresh mechanism
 4. Add token expiration handling
@@ -133,5 +134,5 @@ src/shared/utils/github.ts (MODIFIED)
 ## References
 
 - [GitHub OAuth Documentation](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps)
-- [Netlify Functions](https://docs.netlify.com/functions/overview/)
+- [Vercel Serverless Functions](https://vercel.com/docs/functions/serverless-functions)
 - [OAuth 2.0 Security Best Practices](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics)
