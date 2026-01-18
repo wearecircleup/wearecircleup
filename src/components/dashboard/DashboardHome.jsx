@@ -79,10 +79,16 @@ const DashboardHome = ({ user, onNavigate }) => {
   };
 
   const handleDelete = async (presentation) => {
-    if (confirm(`¿Eliminar "${presentation.title}"? Esta acción no se puede deshacer.`)) {
+    const confirmMessage = `¿Eliminar "${presentation.title}"?\n\nEsta acción no se puede deshacer.\n\nNota: La presentación puede tardar hasta 30 segundos en desaparecer completamente del repositorio.`;
+    
+    if (confirm(confirmMessage)) {
       try {
-        // Remove from UI immediately for better UX
-        const updated = presentations.filter(p => p.id !== presentation.id);
+        // Mark presentation as deleting
+        const updated = presentations.map(p => 
+          p.id === presentation.id 
+            ? { ...p, status: 'deleting' }
+            : p
+        );
         setPresentations(updated);
         localStorage.setItem(`presentations_${user.login}`, JSON.stringify(updated));
 
@@ -95,15 +101,28 @@ const DashboardHome = ({ user, onNavigate }) => {
 
         if (!result.success) {
           console.error('Failed to delete from GitHub:', result.message);
-          alert('La presentación se eliminó localmente, pero hubo un error al eliminarla del servidor. Contacta soporte si persiste.');
+          alert('Hubo un error al eliminar la presentación del servidor. Por favor intenta nuevamente.');
+          
+          // Restore original status on error
+          const restored = presentations.map(p => 
+            p.id === presentation.id 
+              ? { ...p, status: presentation.status }
+              : p
+          );
+          setPresentations(restored);
+          localStorage.setItem(`presentations_${user.login}`, JSON.stringify(restored));
         } else {
-          // Wait a bit for GitHub to process, then reload from server
+          // Wait for GitHub Action to complete, then reload
           setTimeout(() => {
             loadPresentations();
-          }, 3000);
+          }, 5000);
         }
       } catch (error) {
         console.error('Error deleting presentation:', error);
+        alert('Error de conexión al eliminar la presentación. Por favor intenta nuevamente.');
+        
+        // Restore on error
+        loadPresentations();
       }
     }
   };

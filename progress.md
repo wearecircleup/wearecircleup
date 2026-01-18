@@ -1195,6 +1195,11 @@ Migrate presentation generation from GitHub Actions to Vercel Functions to solve
   - Removed VITE_GITHUB_PUBLIC_TOKEN from frontend
   - Configured maxDuration: 10 seconds in vercel.json
   - Complete architecture consistency (all operations via Vercel)
+  - Added 'deleting' status to prevent multiple delete triggers
+  - Delete button disabled during deletion process
+  - Confirmation message warns user about 30-second delay
+  - UI shows "Eliminando..." status during deletion
+  - Error handling restores original state if deletion fails
 
 ### Exit Criteria
 

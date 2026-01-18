@@ -4,7 +4,8 @@ const PresentationCard = ({ presentation, onOpen, onDelete }) => {
   const statusColors = {
     completed: 'bg-green-500/20 text-green-400 border-green-500/50',
     processing: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/50',
-    failed: 'bg-red-500/20 text-red-400 border-red-500/50'
+    failed: 'bg-red-500/20 text-red-400 border-red-500/50',
+    deleting: 'bg-orange-500/20 text-orange-400 border-orange-500/50'
   };
 
   return (
@@ -33,6 +34,7 @@ const PresentationCard = ({ presentation, onOpen, onDelete }) => {
           {status === 'completed' && 'Completada'}
           {status === 'processing' && 'Procesando'}
           {status === 'failed' && 'Error'}
+          {status === 'deleting' && 'Eliminando...'}
         </div>
       </div>
 
@@ -65,6 +67,10 @@ const PresentationCard = ({ presentation, onOpen, onDelete }) => {
                   Abrir
                 </div>
               </>
+            ) : status === 'deleting' ? (
+              <div className="bg-n-6 rounded-lg py-2 sm:py-3 px-3 sm:px-4 text-n-4 text-sm sm:text-base font-semibold">
+                Eliminando...
+              </div>
             ) : (
               <div className="bg-n-6 rounded-lg py-2 sm:py-3 px-3 sm:px-4 text-n-4 text-sm sm:text-base font-semibold">
                 Procesando...
@@ -75,7 +81,13 @@ const PresentationCard = ({ presentation, onOpen, onDelete }) => {
           {onDelete && (
             <button
               onClick={() => onDelete(presentation)}
-              className="p-2 rounded-lg border border-n-6 text-n-4 hover:border-red-500/50 hover:text-red-400 transition-all flex-shrink-0"
+              disabled={status === 'deleting'}
+              className={`p-2 rounded-lg border border-n-6 text-n-4 transition-all flex-shrink-0 ${
+                status === 'deleting' 
+                  ? 'opacity-50 cursor-not-allowed' 
+                  : 'hover:border-red-500/50 hover:text-red-400'
+              }`}
+              title={status === 'deleting' ? 'Eliminación en proceso...' : 'Eliminar presentación'}
             >
               <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
