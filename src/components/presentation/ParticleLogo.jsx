@@ -27,10 +27,10 @@ function ParticleCanvas({ imageUrl }) {
       const tempCanvas = document.createElement('canvas');
       const tempCtx = tempCanvas.getContext('2d');
       
-      // Scale image to fit screen while maintaining aspect ratio
-      const scale = Math.min(canvas.width / img.width, canvas.height / img.height) * 0.4;
-      const width = img.width * scale;
-      const height = img.height * scale;
+      // Scale image to fit screen while maintaining aspect ratio - larger for visibility
+      const scale = Math.min(canvas.width / img.width, canvas.height / img.height) * 0.5;
+      const width = Math.floor(img.width * scale);
+      const height = Math.floor(img.height * scale);
       
       tempCanvas.width = width;
       tempCanvas.height = height;
@@ -38,6 +38,8 @@ function ParticleCanvas({ imageUrl }) {
       
       const imageData = tempCtx.getImageData(0, 0, width, height);
       const pixels = imageData.data;
+      
+      console.log('Particles loading:', { width, height, totalPixels: width * height });
       
       // Create particles from non-transparent and non-black pixels
       const particles = [];
@@ -56,13 +58,13 @@ function ParticleCanvas({ imageUrl }) {
           if (alpha > 128 && brightness > 30) {
             particles.push({
               x: x + (canvas.width - width) / 2,
-              y: y + (canvas.height - height) / 2,
+              y: y + (canvas.height - height) / 2 - 50, // Move logo up
               baseX: x + (canvas.width - width) / 2,
-              baseY: y + (canvas.height - height) / 2,
+              baseY: y + (canvas.height - height) / 2 - 50,
               r: r,
               g: g,
               b: b,
-              size: Math.random() * 2.5 + 1.5,
+              size: Math.random() * 3 + 2,
               speedX: Math.random() * 0.5 - 0.25,
               speedY: Math.random() * 0.5 - 0.25,
               density: Math.random() * 30 + 30
@@ -71,6 +73,7 @@ function ParticleCanvas({ imageUrl }) {
         }
       }
       
+      console.log('Total particles created:', particles.length);
       particlesRef.current = particles;
       
       // Animation loop
@@ -191,21 +194,17 @@ export default function ParticleLogo() {
           {/* Gradient fade for text readability */}
           <div className="absolute inset-0 bg-gradient-to-t from-n-8 via-n-8/80 to-transparent h-64"></div>
           
-          <div className="relative flex flex-col items-center justify-center pb-20 pt-32">
-            <div className="flex flex-col items-center space-y-2">
-              <span className="font-bold text-white text-4xl md:text-5xl lg:text-6xl leading-tight tracking-tight">
+          <div className="relative flex flex-col items-center justify-center pb-24 pt-32">
+            <div className="flex flex-col items-center space-y-3">
+              <span className="font-bold text-white text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight">
                 CIRCLE UP
               </span>
-              <span className="font-bold text-white text-4xl md:text-5xl lg:text-6xl leading-tight tracking-tight">
+              <span className="font-bold text-white text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight">
                 VOLUNTEER
               </span>
-              <div className="mt-8 flex items-center gap-4">
-                <div className="h-px w-16 bg-gradient-to-r from-transparent via-color-1 to-transparent"></div>
-                <span className="text-lg md:text-xl lg:text-2xl text-n-2 font-mono leading-tight">
-                  Community Based Learning
-                </span>
-                <div className="h-px w-16 bg-gradient-to-r from-transparent via-color-2 to-transparent"></div>
-              </div>
+              <span className="text-xl md:text-2xl text-n-2 font-mono leading-tight mt-4">
+                Community Based Learning
+              </span>
             </div>
           </div>
         </div>
