@@ -238,29 +238,78 @@ function Particles({ imageUrl }) {
 
 export default function ParticleLogo() {
   return (
-    <div className="relative w-full h-screen bg-gradient-to-br from-n-8 via-n-7 to-n-8">
+    <div className="relative w-full h-screen bg-n-8 overflow-hidden">
+      {/* Background gradient */}
+      <div 
+        className="absolute inset-0 opacity-40"
+        style={{
+          backgroundImage: 'url(/assets/gradient.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      />
+      
+      {/* Grid overlay */}
+      <div 
+        className="absolute inset-0 opacity-10"
+        style={{
+          backgroundImage: 'url(/public/assets/grid.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      />
+      
+      {/* Decorative circles */}
+      <div className="absolute top-20 right-20 w-96 h-96 bg-color-1 rounded-full blur-3xl opacity-20 animate-pulse"></div>
+      <div className="absolute bottom-20 left-20 w-96 h-96 bg-color-2 rounded-full blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }}></div>
+      
+      {/* Decorative image - subtle */}
+      <div 
+        className="absolute bottom-0 right-0 w-1/3 h-1/3 opacity-5"
+        style={{
+          backgroundImage: 'url(/assets/roadmap/image-3.png)',
+          backgroundSize: 'contain',
+          backgroundPosition: 'bottom right',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
+      
       {/* Canvas for 3D particles */}
       <Canvas
         camera={{ position: [0, 0, 3], fov: 75 }}
-        className="absolute inset-0"
+        className="absolute inset-0 z-10"
       >
         <Particles imageUrl="/assets/circleimages/logodark-background.png" />
       </Canvas>
       
-      {/* Text overlay */}
-      <div className="absolute bottom-20 left-0 right-0 flex flex-col items-center justify-center z-10 pointer-events-none">
-        <div className="flex flex-col items-center">
-          <span className="font-bold text-white text-4xl md:text-5xl lg:text-6xl leading-tight">
-            CIRCLE UP
-          </span>
-          <span className="font-bold text-white text-4xl md:text-5xl lg:text-6xl leading-tight">
-            VOLUNTEER
-          </span>
-          <span className="text-xl md:text-2xl text-n-3 font-mono leading-tight mt-4">
-            Community Based Learning
-          </span>
+      {/* Text overlay with backdrop */}
+      <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
+        <div className="relative">
+          {/* Gradient fade for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-n-8 via-n-8/80 to-transparent h-64"></div>
+          
+          <div className="relative flex flex-col items-center justify-center pb-16 pt-32">
+            <div className="flex flex-col items-center space-y-2">
+              <span className="font-bold text-white text-5xl md:text-6xl lg:text-7xl leading-tight tracking-tight">
+                CIRCLE UP
+              </span>
+              <span className="font-bold text-white text-5xl md:text-6xl lg:text-7xl leading-tight tracking-tight">
+                VOLUNTEER
+              </span>
+              <div className="mt-6 flex items-center gap-3">
+                <div className="h-px w-12 bg-gradient-to-r from-transparent via-color-1 to-transparent"></div>
+                <span className="text-xl md:text-2xl text-n-3 font-mono leading-tight">
+                  Community Based Learning
+                </span>
+                <div className="h-px w-12 bg-gradient-to-r from-transparent via-color-2 to-transparent"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+      
+      {/* Subtle border glow */}
+      <div className="absolute inset-0 border-2 border-color-1/10 pointer-events-none z-30"></div>
     </div>
   );
 }

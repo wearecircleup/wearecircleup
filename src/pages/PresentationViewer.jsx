@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { PresentationsAPI } from '../shared/utils/presentations-api';
 import Button from '../components/Button';
 import Logo from '../components/Logo';
+import ParticleLogo from '../components/presentation/ParticleLogo';
 
 const PresentationViewer = ({ setCurrentPage }) => {
   // Extract userId and presentationId from URL
@@ -44,7 +45,8 @@ const PresentationViewer = ({ setCurrentPage }) => {
   }, [userId, presentationId]);
 
   const nextSlide = () => {
-    if (currentSlide < slides.length - 1) {
+    // Total slides = 1 (ParticleLogo) + slides.length
+    if (currentSlide < slides.length) {
       setCurrentSlide(currentSlide + 1);
     }
   };
@@ -97,7 +99,7 @@ const PresentationViewer = ({ setCurrentPage }) => {
   useEffect(() => {
     const handleKeyPress = (e) => {
       if (e.key === 'ArrowRight' || e.key === ' ') {
-        if (slides && currentSlide < slides.length - 1) {
+        if (slides && currentSlide < slides.length) {
           setCurrentSlide(currentSlide + 1);
         }
       } else if (e.key === 'ArrowLeft') {
@@ -146,31 +148,40 @@ const PresentationViewer = ({ setCurrentPage }) => {
     );
   }
 
-  const slide = slides[currentSlide];
-  const progress = ((currentSlide + 1) / slides.length) * 100;
+  // Adjust for ParticleLogo as first slide
+  const slide = currentSlide === 0 ? null : slides[currentSlide - 1];
+  const totalSlides = slides.length + 1; // +1 for ParticleLogo
+  const progress = ((currentSlide + 1) / totalSlides) * 100;
 
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-n-8 via-n-7 to-n-8 overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-color-1 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-color-2 rounded-full blur-3xl"></div>
-      </div>
+      {/* Show ParticleLogo as first slide (slide 0) */}
+      {currentSlide === 0 ? (
+        <div className="relative z-10 h-screen">
+          <ParticleLogo />
+        </div>
+      ) : (
+        <>
+          {/* Background decoration */}
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-color-1 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-color-2 rounded-full blur-3xl"></div>
+          </div>
 
-      {/* Main content - Full screen */}
-      <div 
-        className="relative z-10 h-screen flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 lg:px-24 py-20"
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
-        <div className="w-full h-full max-w-7xl flex items-center justify-center">
-          {/* Slide content - Responsive sizing with accessibility */}
+          {/* Main content - Full screen */}
           <div 
-            className={`relative w-full h-full flex flex-col justify-center bg-n-7/50 backdrop-blur-xl border border-n-6/50 rounded-3xl p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 shadow-2xl ${
-              fontFamily === 'serif' ? 'font-serif' : fontFamily === 'mono' ? 'font-mono' : 'font-sans'
-            }`}
+            className="relative z-10 h-screen flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 lg:px-24 py-20"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
           >
+            <div className="w-full h-full max-w-7xl flex items-center justify-center">
+              {/* Slide content - Responsive sizing with accessibility */}
+              <div 
+                className={`relative w-full h-full flex flex-col justify-center bg-n-7/50 backdrop-blur-xl border border-n-6/50 rounded-3xl p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 shadow-2xl ${
+                  fontFamily === 'serif' ? 'font-serif' : fontFamily === 'mono' ? 'font-mono' : 'font-sans'
+                }`}
+              >
             <h1 className={`font-bold mb-6 sm:mb-8 md:mb-10 lg:mb-12 bg-gradient-to-r from-color-1 to-color-2 bg-clip-text text-transparent leading-tight ${
               fontSize === 'small'
                 ? 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl'
@@ -212,6 +223,8 @@ const PresentationViewer = ({ setCurrentPage }) => {
 
         </div>
       </div>
+        </>
+      )}
 
       {/* Navigation controls - Bottom center */}
       <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center gap-4 bg-n-7/90 backdrop-blur-xl border border-n-6/50 rounded-2xl px-6 py-3 shadow-2xl">
@@ -227,7 +240,7 @@ const PresentationViewer = ({ setCurrentPage }) => {
 
         <div className="flex items-center gap-3">
           <span className="text-n-3 text-sm font-medium whitespace-nowrap">
-            {currentSlide + 1} / {slides.length}
+            {currentSlide + 1} / {totalSlides}
           </span>
           <div className="w-32 sm:w-48 md:w-64 h-2 bg-n-6 rounded-full overflow-hidden">
             <div
@@ -239,7 +252,7 @@ const PresentationViewer = ({ setCurrentPage }) => {
 
         <button
           onClick={nextSlide}
-          disabled={currentSlide === slides.length - 1}
+          disabled={currentSlide === totalSlides - 1}
           className="p-2 bg-n-6 hover:bg-n-5 disabled:opacity-30 disabled:cursor-not-allowed rounded-lg transition-all"
         >
           <svg className="w-5 h-5 text-n-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
