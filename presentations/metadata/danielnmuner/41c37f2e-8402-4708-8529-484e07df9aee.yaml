@@ -1,0 +1,9 @@
+id: 41c37f2e-8402-4708-8529-484e07df9aee
+title: "Familia Sagrada "
+author: danielnmuner
+theme: modern
+model: gpt-4o
+slides_count: 10
+created_at: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
+status: completed
+url: /presentations/public/danielnmuner/41c37f2e-8402-4708-8529-484e07df9aee.html
