@@ -2,7 +2,6 @@ import { useRef, useMemo, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
-import gsap from 'gsap';
 
 // Vertex shader for particle positioning and mouse interaction
 const vertexShader = `
@@ -98,8 +97,8 @@ function Particles({ imageUrl }) {
   }, []);
   
   // Create particle system
-  const { geometry, material, particleCount } = useMemo(() => {
-    if (!texture.image) return { geometry: null, material: null, particleCount: 0 };
+  const { geometry, material } = useMemo(() => {
+    if (!texture.image) return { geometry: null, material: null };
     
     const img = texture.image;
     const width = 128; // Reduced for performance
@@ -112,8 +111,7 @@ function Particles({ imageUrl }) {
     canvas.height = height;
     ctx.drawImage(img, 0, 0, width, height);
     
-    const imgData = ctx.getImageData(0, 0, width, height);
-    const pixels = imgData.data;
+    ctx.getImageData(0, 0, width, height);
     
     const numParticles = width * height;
     const positions = new Float32Array(numParticles * 3);
@@ -127,7 +125,6 @@ function Particles({ imageUrl }) {
     
     for (let i = 0; i < height; i++) {
       for (let j = 0; j < width; j++) {
-        const pixelIndex = (i * width + j) * 4;
         
         // Position in 3D space (centered)
         positions[index * 3 + 0] = (j / width - 0.5) * viewport.width;
@@ -172,7 +169,7 @@ function Particles({ imageUrl }) {
       blending: THREE.AdditiveBlending
     });
     
-    return { geometry: geom, material: mat, particleCount: numParticles };
+    return { geometry: geom, material: mat };
   }, [texture, viewport]);
   
   // Mouse interaction
@@ -233,7 +230,7 @@ function Particles({ imageUrl }) {
   
   if (!geometry || !material) return null;
   
-  return <points ref={meshRef} geometry={geometry} material={material} />;
+  return <primitive ref={meshRef} object={new THREE.Points(geometry, material)} />;
 }
 
 export default function ParticleLogo() {
