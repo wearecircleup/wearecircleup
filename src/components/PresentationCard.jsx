@@ -8,9 +8,9 @@ const PresentationCard = ({ presentation, onOpen, onDelete }) => {
   };
 
   return (
-    <div className="group relative bg-n-7/90 backdrop-blur-sm border border-n-6/50 rounded-xl overflow-hidden hover:border-color-1/50 transition-all duration-300">
+    <div className="group relative bg-n-7/90 backdrop-blur-sm border border-n-6/50 rounded-xl overflow-hidden hover:border-color-1/50 transition-all duration-300 w-full">
       {/* Thumbnail with quote */}
-      <div className="relative h-48 bg-gradient-to-br from-n-8 via-n-7 to-n-8 overflow-hidden border-b border-n-6/50">
+      <div className="relative h-40 sm:h-48 bg-gradient-to-br from-n-8 via-n-7 to-n-8 overflow-hidden border-b border-n-6/50">
         {/* Background decoration */}
         <div className="absolute inset-0 opacity-20">
           <div className="absolute top-0 right-0 w-32 h-32 bg-color-1 rounded-full blur-3xl"></div>
@@ -18,14 +18,14 @@ const PresentationCard = ({ presentation, onOpen, onDelete }) => {
         </div>
         
         {/* Quote content */}
-        <div className="relative h-full flex flex-col items-center justify-center p-6 text-center">
-          <svg className="w-8 h-8 text-color-1/50 mb-3" fill="currentColor" viewBox="0 0 24 24">
+        <div className="relative h-full flex flex-col items-center justify-center p-4 sm:p-6 text-center">
+          <svg className="w-6 h-6 sm:w-8 sm:h-8 text-color-1/50 mb-2 sm:mb-3" fill="currentColor" viewBox="0 0 24 24">
             <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
           </svg>
-          <p className="text-n-2 text-sm font-medium line-clamp-3 italic">
+          <p className="text-n-2 text-xs sm:text-sm font-medium line-clamp-3 italic">
             {description || title}
           </p>
-          <div className="mt-3 w-12 h-0.5 bg-gradient-to-r from-color-1 to-color-2 rounded-full"></div>
+          <div className="mt-2 sm:mt-3 w-12 h-0.5 bg-gradient-to-r from-color-1 to-color-2 rounded-full"></div>
         </div>
         
         {/* Status badge */}
@@ -37,9 +37,9 @@ const PresentationCard = ({ presentation, onOpen, onDelete }) => {
       </div>
 
       {/* Content */}
-      <div className="p-6">
-        <h3 className="text-xl font-bold text-n-1 mb-2 line-clamp-1">{title}</h3>
-        <p className="text-n-4 text-sm mb-4 line-clamp-2">{description}</p>
+      <div className="p-4 sm:p-6">
+        <h3 className="text-lg sm:text-xl font-bold text-n-1 mb-2 line-clamp-1">{title}</h3>
+        <p className="text-n-4 text-xs sm:text-sm mb-4 line-clamp-2">{description}</p>
         
         <div className="flex items-center justify-between text-xs text-n-4 mb-4">
           <span className="flex items-center gap-2">
@@ -61,12 +61,12 @@ const PresentationCard = ({ presentation, onOpen, onDelete }) => {
             {status === 'completed' ? (
               <>
                 <div className="absolute inset-0 bg-gradient-to-r from-color-1 via-color-2 to-color-1 rounded-lg opacity-100 group-hover:opacity-80 transition-opacity"></div>
-                <div className="relative bg-n-8 m-[2px] rounded-[6px] py-3 px-4 text-n-1 font-semibold">
+                <div className="relative bg-n-8 m-[2px] rounded-[6px] py-2 sm:py-3 px-3 sm:px-4 text-n-1 text-sm sm:text-base font-semibold">
                   Abrir
                 </div>
               </>
             ) : (
-              <div className="bg-n-6 rounded-lg py-3 px-4 text-n-4 font-semibold">
+              <div className="bg-n-6 rounded-lg py-2 sm:py-3 px-3 sm:px-4 text-n-4 text-sm sm:text-base font-semibold">
                 Procesando...
               </div>
             )}
@@ -75,9 +75,9 @@ const PresentationCard = ({ presentation, onOpen, onDelete }) => {
           {onDelete && (
             <button
               onClick={() => onDelete(presentation)}
-              className="p-2 rounded-lg border border-n-6 text-n-4 hover:border-red-500/50 hover:text-red-400 transition-all"
+              className="p-2 rounded-lg border border-n-6 text-n-4 hover:border-red-500/50 hover:text-red-400 transition-all flex-shrink-0"
             >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
             </button>

@@ -17,6 +17,8 @@ const PresentationViewer = ({ setCurrentPage }) => {
   const [fontFamily, setFontFamily] = useState('sans'); // sans, serif, mono
   const [showAccessibilityMenu, setShowAccessibilityMenu] = useState(false);
   const [menuLanguage, setMenuLanguage] = useState('es'); // en, es, pt
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
   const loadPresentation = async () => {
     try {
@@ -41,7 +43,7 @@ const PresentationViewer = ({ setCurrentPage }) => {
   }, [userId, presentationId]);
 
   const nextSlide = () => {
-    if (slides && currentSlide < slides.length - 1) {
+    if (currentSlide < slides.length - 1) {
       setCurrentSlide(currentSlide + 1);
     }
   };
@@ -50,6 +52,33 @@ const PresentationViewer = ({ setCurrentPage }) => {
     if (currentSlide > 0) {
       setCurrentSlide(currentSlide - 1);
     }
+  };
+
+  // Touch handlers for mobile swipe
+  const handleTouchStart = (e) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      nextSlide();
+    } else if (isRightSwipe) {
+      prevSlide();
+    }
+
+    // Reset
+    setTouchStart(0);
+    setTouchEnd(0);
   };
 
   useEffect(() => {
@@ -116,7 +145,12 @@ const PresentationViewer = ({ setCurrentPage }) => {
       </div>
 
       {/* Main content - Full screen */}
-      <div className="relative z-10 h-screen flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 lg:px-24 py-20">
+      <div 
+        className="relative z-10 h-screen flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 lg:px-24 py-20"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         <div className="w-full h-full max-w-7xl flex items-center justify-center">
           {/* Slide content - Responsive sizing with accessibility */}
           <div 
@@ -356,9 +390,9 @@ const PresentationViewer = ({ setCurrentPage }) => {
       </div>
       )}
 
-      {/* CircleUp branding */}
+      {/* Circle Up branding */}
       <div className="absolute bottom-6 right-6 text-n-4 text-sm opacity-50">
-        CircleUp AI
+        Circle Up AI
       </div>
     </div>
   );

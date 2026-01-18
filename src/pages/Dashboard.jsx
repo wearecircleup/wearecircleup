@@ -5,6 +5,7 @@ import Logo from "../components/Logo";
 import { GitHubAuthService } from "../shared/utils/github";
 import DashboardHome from "../components/dashboard/DashboardHome";
 import CreatePresentation from "../components/dashboard/CreatePresentation";
+import curve from "../assets/hero/curve.png";
 
 const Dashboard = ({ setCurrentPage }) => {
   const user = GitHubAuthService.getUser();
@@ -58,31 +59,19 @@ const Dashboard = ({ setCurrentPage }) => {
             <div>
               <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-n-1 mb-2">
                 Dashboard{" "}
-                <span className="inline-block relative">
-                  CircleUp
-                  <svg
-                    className="absolute top-full left-0 w-full xl:-mt-2"
-                    width="200"
-                    height="12"
-                    viewBox="0 0 624 28"
-                    fill="none"
-                  >
-                    <path
-                      d="M1 26.5C43 13.5 123.5 0.5 312 0.5C500.5 0.5 581 13.5 623 26.5"
-                      stroke="url(#gradient)"
-                      strokeWidth="2"
-                    />
-                    <defs>
-                      <linearGradient id="gradient" x1="1" y1="26.5" x2="623" y2="26.5">
-                        <stop stopColor="#AC6AFF" />
-                        <stop offset="1" stopColor="#FFC876" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
+                <span className="inline-block relative font-semibold">
+                  Circle Up
+                  <img
+                    src={curve}
+                    className="absolute top-full left-0 w-full xl:-mt-2 pointer-events-none select-none"
+                    width={624}
+                    height={28}
+                    alt="Curve"
+                  />
                 </span>
               </h1>
               <p className="text-n-4 text-base lg:text-lg">
-                Bienvenido, <span className="text-color-1 font-medium">{user?.username || 'Usuario'}</span>
+                Bienvenido, <span className="text-color-1 font-medium">{user?.username || 'Usuario'}</span> de <span className="font-semibold text-n-1">Circle Up Volunteer</span>
               </p>
             </div>
             <div className="flex gap-3">
