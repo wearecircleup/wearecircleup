@@ -146,7 +146,7 @@ jobs:
           node backend/scripts/build-presentation.js
         env:
           SLIDES_JSON: /tmp/slides-${{ github.event.client_payload.request_id }}.json
-          USERNAME: ${{ needs.validate.outputs.user_id }}
+          USERNAME: ${{ github.event.client_payload.user.login }}
           PRESENTATION_ID: ${{ github.event.client_payload.request_id }}
           TITLE: ${{ github.event.client_payload.presentation.title }}
           THEME: ${{ github.event.client_payload.presentation.theme }}
@@ -178,7 +178,7 @@ jobs:
             echo "Committing changes..."
             git commit -m "feat(presentation): ${{ github.event.client_payload.presentation.title }}
             
-            - User: ${{ needs.validate.outputs.user_id }}
+            - User: ${{ github.event.client_payload.user.login }}
             - Slides: ${{ github.event.client_payload.presentation.numSlides }}
             - Theme: ${{ github.event.client_payload.presentation.theme }}
             - Model: ${{ github.event.client_payload.presentation.model }}
@@ -196,7 +196,7 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const url = `https://circleup.com.co/presentations/public/${{ needs.validate.outputs.user_id }}/${{ github.event.client_payload.request_id }}.html`;
+            const url = `https://circleup.com.co/p/${{ github.event.client_payload.user.login }}/${{ github.event.client_payload.request_id }}`;
             
             await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,

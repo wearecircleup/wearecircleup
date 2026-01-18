@@ -173,12 +173,15 @@ const PresentationViewer = () => {
       {/* Back to Dashboard button */}
       <button
         onClick={() => window.location.href = '/dashboard'}
-        className="fixed top-6 left-6 z-50 px-5 py-3 bg-gradient-to-r from-color-1 to-color-2 hover:from-color-1/90 hover:to-color-2/90 rounded-lg transition-all flex items-center gap-2 text-n-1 font-semibold shadow-lg"
+        className="fixed top-6 left-6 z-50 group relative"
       >
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-        </svg>
-        Volver al Dashboard
+        <div className="absolute inset-0 bg-gradient-to-r from-color-1 via-color-2 to-color-1 rounded-xl opacity-100 group-hover:opacity-80 transition-opacity"></div>
+        <div className="relative bg-n-8 m-[2px] rounded-[10px] px-6 py-3 flex items-center gap-2 text-n-1 font-semibold">
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Volver al Dashboard
+        </div>
       </button>
 
       {/* CircleUp branding */}

@@ -49,7 +49,7 @@ const CreatePresentation = ({ user, onBack, onSuccess }) => {
         });
         
         // Save to localStorage
-        const presentations = JSON.parse(localStorage.getItem(`presentations_${user.id}`) || '[]');
+        const presentations = JSON.parse(localStorage.getItem(`presentations_${user.login}`) || '[]');
         presentations.unshift({
           id: crypto.randomUUID(),
           ...validated,
@@ -57,7 +57,7 @@ const CreatePresentation = ({ user, onBack, onSuccess }) => {
           createdAt: new Date().toISOString(),
           url: null
         });
-        localStorage.setItem(`presentations_${user.id}`, JSON.stringify(presentations));
+        localStorage.setItem(`presentations_${user.login}`, JSON.stringify(presentations));
         
         // Reset form
         setFormData({

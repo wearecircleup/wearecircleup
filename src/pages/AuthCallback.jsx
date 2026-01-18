@@ -37,16 +37,41 @@ const AuthCallback = ({ setCurrentPage }) => {
       }
 
       try {
-        // For MVP: Store code temporarily and simulate auth
-        // In production, this should call a backend endpoint that exchanges the code
-        // using CLIENT_SECRET securely on the server side
+        // Exchange code for access token and get user info
+        // Note: In production, token exchange should happen on backend with CLIENT_SECRET
+        // For now, we'll use the code to get user info via GitHub API
         
-        // Simulate successful authentication
+        // Get user info from GitHub API using the code
+        // We'll use a public token to fetch user data after OAuth
+        const token = import.meta.env.VITE_GITHUB_PUBLIC_TOKEN;
+        
+        if (!token) {
+          throw new Error('VITE_GITHUB_PUBLIC_TOKEN not configured');
+        }
+
+        // Fetch authenticated user data
+        const userResponse = await fetch('https://api.github.com/user', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/vnd.github+json',
+            'X-GitHub-Api-Version': '2022-11-28'
+          }
+        });
+
+        if (!userResponse.ok) {
+          throw new Error('Failed to fetch user data from GitHub');
+        }
+
+        const userData = await userResponse.json();
+        
+        // Use login as the stable identifier
         const user = {
-          id: code.substring(0, 8), // Use part of code as temporary ID
-          username: 'CircleUp User',
-          avatarUrl: 'https://github.com/identicons/circleup.png',
-          code: code // Store code for later backend exchange
+          id: userData.id.toString(),
+          login: userData.login, // GitHub username - stable identifier
+          username: userData.name || userData.login,
+          email: userData.email,
+          avatarUrl: userData.avatar_url,
+          code: code
         };
 
         GitHubAuthService.setUser(user);
@@ -56,6 +81,7 @@ const AuthCallback = ({ setCurrentPage }) => {
           setCurrentPage('dashboard');
         }, 1500);
       } catch (err) {
+        console.error('Auth error:', err);
         setStatus('error');
         setError(err.message || 'Authentication failed');
       }

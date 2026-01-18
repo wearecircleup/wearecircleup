@@ -15,15 +15,16 @@ export class PresentationService {
       client_payload: {
         user: {
           id: user.id,
+          login: user.login, // Use login as stable identifier
           username: user.username
         },
         presentation: {
           title: formData.title,
           description: formData.description,
           numSlides: formData.numSlides,
+          language: formData.language,
           theme: formData.theme,
-          model: formData.model,
-          options: formData.options
+          model: formData.model
         },
         request_id: crypto.randomUUID()
       }

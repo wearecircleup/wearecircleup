@@ -56,13 +56,20 @@ const PresentationCard = ({ presentation, onOpen, onDelete }) => {
           <button
             onClick={() => onOpen(presentation)}
             disabled={status !== 'completed'}
-            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
-              status === 'completed'
-                ? 'bg-gradient-to-r from-color-1 to-color-2 text-n-1 hover:from-color-1/90 hover:to-color-2/90 shadow-md'
-                : 'bg-n-6 text-n-4 cursor-not-allowed'
-            }`}
+            className={`flex-1 relative group ${status !== 'completed' ? 'cursor-not-allowed' : ''}`}
           >
-            {status === 'completed' ? 'Abrir' : 'Procesando...'}
+            {status === 'completed' ? (
+              <>
+                <div className="absolute inset-0 bg-gradient-to-r from-color-1 via-color-2 to-color-1 rounded-lg opacity-100 group-hover:opacity-80 transition-opacity"></div>
+                <div className="relative bg-n-8 m-[2px] rounded-[6px] py-3 px-4 text-n-1 font-semibold">
+                  Abrir
+                </div>
+              </>
+            ) : (
+              <div className="bg-n-6 rounded-lg py-3 px-4 text-n-4 font-semibold">
+                Procesando...
+              </div>
+            )}
           </button>
           
           {onDelete && (

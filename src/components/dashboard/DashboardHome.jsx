@@ -11,24 +11,35 @@ const DashboardHome = ({ user, onNavigate }) => {
   useEffect(() => {
     loadPresentations();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user.id]);
+  }, [user.login]);
 
   const loadPresentations = async () => {
     setLoading(true);
     try {
-      // Fetch from GitHub repository (use user.id as it's what the workflow uses)
-      const remotePresentations = await PresentationsAPI.getUserPresentations(user.id);
+      // Fetch from GitHub repository using login as stable identifier
+      const remotePresentations = await PresentationsAPI.getUserPresentations(user.login);
       
       // Merge with localStorage (for processing status)
-      const localKey = `presentations_${user.id}`;
+      const localKey = `presentations_${user.login}`;
       const localData = localStorage.getItem(localKey);
       const localPresentations = localData ? JSON.parse(localData) : [];
       
       // Create a map of remote presentations by ID
       const remoteMap = new Map(remotePresentations.map(p => [p.id, p]));
       
+      // Filter out processing presentations that are now completed in remote
+      const validLocalPresentations = localPresentations.filter(local => {
+        // If it's processing, check if there's a completed version in remote
+        if (local.status === 'processing') {
+          const remoteVersion = remotePresentations.find(r => r.id === local.id);
+          // Keep only if NOT found in remote or if remote is also processing
+          return !remoteVersion || remoteVersion.status === 'processing';
+        }
+        return true;
+      });
+      
       // Update local presentations with remote data if available
-      const merged = localPresentations
+      const merged = validLocalPresentations
         .map(local => {
           const remote = remoteMap.get(local.id);
           if (remote) {
@@ -38,14 +49,6 @@ const DashboardHome = ({ user, onNavigate }) => {
           }
           // Still processing or failed - keep local version
           return local;
-        })
-        .filter(p => {
-          // Remove "processing" if a completed version exists in remote
-          if (p.status === 'processing') {
-            // Check if this presentation is now completed in remote
-            return !remotePresentations.some(r => r.id === p.id && r.status === 'completed');
-          }
-          return true;
         });
       
       // Add any remote presentations not in local storage
@@ -58,7 +61,7 @@ const DashboardHome = ({ user, onNavigate }) => {
     } catch (error) {
       console.error('Error loading presentations:', error);
       // Fallback to localStorage
-      const stored = localStorage.getItem(`presentations_${user.id}`);
+      const stored = localStorage.getItem(`presentations_${user.login}`);
       if (stored) {
         setPresentations(JSON.parse(stored));
       }
@@ -76,11 +79,11 @@ const DashboardHome = ({ user, onNavigate }) => {
     window.open(presentation.url, '_blank');
   };
 
-  const handleDeletePresentation = (presentation) => {
+  const handleDelete = (presentation) => {
     if (confirm(`¿Eliminar "${presentation.title}"?`)) {
       const updated = presentations.filter(p => p.id !== presentation.id);
       setPresentations(updated);
-      localStorage.setItem(`presentations_${user.id}`, JSON.stringify(updated));
+      localStorage.setItem(`presentations_${user.login}`, JSON.stringify(updated));
     }
   };
 
