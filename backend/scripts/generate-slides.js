@@ -68,7 +68,7 @@ Respond ONLY with valid JSON in this format:
 Do NOT include speaker notes. Only title and content array for each slide.`
         }
       ],
-      temperature: 0.7,
+      temperature: 0.4,
       max_tokens: 4000
     })
   });
