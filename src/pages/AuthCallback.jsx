@@ -37,9 +37,15 @@ const AuthCallback = ({ setCurrentPage }) => {
       }
 
       try {
+<<<<<<< HEAD
         // Exchange code for access token via backend function
         // This is secure because CLIENT_SECRET stays on the server
         const authResponse = await fetch('/.netlify/functions/github-auth', {
+=======
+        // Exchange code for access token via Vercel serverless function
+        // This is secure because CLIENT_SECRET stays on the server
+        const authResponse = await fetch('/api/github-auth', {
+>>>>>>> 3d6146e (refactor: migrate from Netlify to Vercel for OAuth backend)
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
