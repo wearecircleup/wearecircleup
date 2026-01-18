@@ -62,7 +62,11 @@ function ParticleCanvas({ imageUrl }) {
               r: r,
               g: g,
               b: b,
-              size: 2
+              size: Math.random() * 2 + 1.5, // Variable size
+              vx: 0,
+              vy: 0,
+              mass: Math.random() * 2 + 1, // Different mass for momentum
+              friction: Math.random() * 0.1 + 0.85 // Variable friction
             });
           }
         }
@@ -70,34 +74,46 @@ function ParticleCanvas({ imageUrl }) {
       
       particlesRef.current = particles;
       
-      // Animation loop - simple and fast
+      // Animation loop - dynamic and fluid
       const animate = () => {
-        ctx.fillStyle = 'rgba(20, 20, 30, 0.1)';
+        ctx.fillStyle = 'rgba(20, 20, 30, 0.15)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
         particles.forEach(particle => {
-          // Mouse interaction - simple repulsion
+          // Mouse interaction with momentum
           const dx = mouseRef.current.x - particle.x;
           const dy = mouseRef.current.y - particle.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
-          const maxDistance = 100;
+          const maxDistance = 120;
           
           if (distance < maxDistance) {
             const force = (maxDistance - distance) / maxDistance;
             const angle = Math.atan2(dy, dx);
-            particle.x -= Math.cos(angle) * force * 3;
-            particle.y -= Math.sin(angle) * force * 3;
-          } else {
-            // Return to base position
-            const dxBase = particle.x - particle.baseX;
-            const dyBase = particle.y - particle.baseY;
-            particle.x -= dxBase * 0.1;
-            particle.y -= dyBase * 0.1;
+            // Apply force based on mass (heavier = slower)
+            particle.vx -= Math.cos(angle) * force * (4 / particle.mass);
+            particle.vy -= Math.sin(angle) * force * (4 / particle.mass);
           }
           
-          // Draw particle - simple and fast
-          ctx.fillStyle = `rgba(${particle.r}, ${particle.g}, ${particle.b}, 0.8)`;
-          ctx.fillRect(particle.x, particle.y, particle.size, particle.size);
+          // Spring back to base with momentum
+          const dxBase = particle.baseX - particle.x;
+          const dyBase = particle.baseY - particle.y;
+          particle.vx += dxBase * 0.03;
+          particle.vy += dyBase * 0.03;
+          
+          // Apply individual friction
+          particle.vx *= particle.friction;
+          particle.vy *= particle.friction;
+          
+          // Update position
+          particle.x += particle.vx;
+          particle.y += particle.vy;
+          
+          // Draw particle with variable opacity
+          const opacity = Math.max(0.5, 1 - distance / (maxDistance * 2));
+          ctx.fillStyle = `rgba(${particle.r}, ${particle.g}, ${particle.b}, ${opacity})`;
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+          ctx.fill();
         });
         
         animationRef.current = requestAnimationFrame(animate);
