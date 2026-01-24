@@ -34,8 +34,10 @@ function ParticleCanvas({ imageUrl }) {
       const tempCanvas = document.createElement('canvas');
       const tempCtx = tempCanvas.getContext('2d');
       
-      // Scale image to fit screen while maintaining aspect ratio - larger
-      const scale = Math.min(canvas.width / img.width, canvas.height / img.height) * 0.85;
+      // Scale image to fit screen while maintaining aspect ratio - larger, especially on mobile
+      const isMobile = window.innerWidth < 768;
+      const scaleFactor = isMobile ? 0.95 : 0.9;
+      const scale = Math.min(canvas.width / img.width, canvas.height / img.height) * scaleFactor;
       const width = Math.floor(img.width * scale);
       const height = Math.floor(img.height * scale);
       
@@ -48,8 +50,7 @@ function ParticleCanvas({ imageUrl }) {
       
       // Create particles - optimized for mobile and desktop
       const particles = [];
-      const isMobile = window.innerWidth < 768;
-      const gap = isMobile ? 9 : 7; // Larger gap on mobile for better performance
+      const gap = isMobile ? 6 : 7; // Smaller gap on mobile for better quality
       
       for (let y = 0; y < height; y += gap) {
         for (let x = 0; x < width; x += gap) {
@@ -270,14 +271,14 @@ export default function ParticleLogo() {
       
       {/* Text overlay - top positioned */}
       <div className="absolute top-0 left-0 right-0 z-20 pointer-events-none pt-16">
-        <div className="flex flex-col items-center space-y-3">
+        <div className="flex flex-col items-center space-y-1">
           <span className="font-thin text-white text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight">
             CIRCLE UP
           </span>
           <span className="font-extrabold text-white text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight">
             VOLUNTEER
           </span>
-          <span className="text-xl md:text-2xl text-n-2 font-mono leading-tight mt-4">
+          <span className="text-xl md:text-2xl text-n-2 font-mono leading-tight mt-2 tracking-wider">
             Community Based Learning
           </span>
         </div>
