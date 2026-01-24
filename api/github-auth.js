@@ -73,13 +73,38 @@ export default async function handler(req, res) {
 
     const userData = await userResponse.json();
 
+    // If email is null, fetch from /user/emails endpoint
+    let email = userData.email;
+    if (!email) {
+      try {
+        const emailsResponse = await fetch('https://api.github.com/user/emails', {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Accept': 'application/vnd.github+json',
+            'X-GitHub-Api-Version': '2022-11-28'
+          }
+        });
+
+        if (emailsResponse.ok) {
+          const emails = await emailsResponse.json();
+          // Find primary verified email, or fallback to first verified, or first email
+          const primaryEmail = emails.find(e => e.primary && e.verified);
+          const verifiedEmail = emails.find(e => e.verified);
+          email = primaryEmail?.email || verifiedEmail?.email || emails[0]?.email || null;
+        }
+      } catch (emailError) {
+        console.error('Error fetching user emails:', emailError);
+        // Continue without email - user can provide it manually
+      }
+    }
+
     // Return user data and token (token should be stored securely on client)
     return res.status(200).json({
       user: {
         id: userData.id.toString(),
         login: userData.login,
         username: userData.name || userData.login,
-        email: userData.email,
+        email: email,
         avatarUrl: userData.avatar_url
       },
       accessToken: accessToken // Client will use this for API calls

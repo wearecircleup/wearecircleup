@@ -3,7 +3,7 @@
     "app": {
       "clientId": "${GITHUB_APP_CLIENT_ID}",
       "redirectUri": "${GITHUB_APP_REDIRECT_URI}",
-      "scopes": ["repo", "workflow"]
+      "scopes": ["repo", "workflow", "user:email"]
     },
     "api": {
       "baseUrl": "https://api.github.com",
