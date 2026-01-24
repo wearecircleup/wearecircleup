@@ -184,21 +184,19 @@ function ParticleCanvas({ imageUrl }) {
     
     img.src = imageUrl;
     
-    // Mouse move handler - only update if formation is complete
+    // Mouse move handler - always active for interaction
     const handleMouseMove = (e) => {
-      if (!isFormingRef.current) {
-        mouseRef.current = {
-          x: e.clientX,
-          y: e.clientY
-        };
-      }
+      mouseRef.current = {
+        x: e.clientX,
+        y: e.clientY
+      };
     };
     
     canvas.addEventListener('mousemove', handleMouseMove);
     
-    // Touch support for mobile - only update if formation is complete
+    // Touch support for mobile - always active for interaction
     const handleTouchMove = (e) => {
-      if (!isFormingRef.current && e.touches.length > 0) {
+      if (e.touches.length > 0) {
         mouseRef.current = {
           x: e.touches[0].clientX,
           y: e.touches[0].clientY
@@ -207,7 +205,7 @@ function ParticleCanvas({ imageUrl }) {
     };
     
     const handleTouchStart = (e) => {
-      if (!isFormingRef.current && e.touches.length > 0) {
+      if (e.touches.length > 0) {
         mouseRef.current = {
           x: e.touches[0].clientX,
           y: e.touches[0].clientY
@@ -288,7 +286,7 @@ export default function ParticleLogo() {
       <ParticleCanvas imageUrl={PRESENTATION_IMAGES[currentImageIndex]} />
       
       {/* Text overlay - positioned well above carousel pagination - responsive */}
-      <div className="absolute bottom-24 md:bottom-20 left-0 right-0 z-20 pointer-events-none mb-6 md:mb-4">
+      <div className="absolute bottom-32 md:bottom-20 left-0 right-0 z-20 pointer-events-none mb-8 md:mb-4">
         <div className="flex flex-col items-center space-y-0">
           <span className="font-thin text-white text-3xl md:text-4xl lg:text-5xl leading-none tracking-tight">
             CIRCLE UP
