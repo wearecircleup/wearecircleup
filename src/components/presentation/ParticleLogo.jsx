@@ -2,9 +2,10 @@ import { useRef, useEffect, useState } from 'react';
 
 // Array of images in presentation folder
 const PRESENTATION_IMAGES = [
-  '/assets/circleimages/presentation/thumpup.png',
-  '/assets/circleimages/presentation/kid.png',
-  '/assets/circleimages/presentation/power.png'
+  '/assets/circleimages/presentation/particles-1.png',
+  '/assets/circleimages/presentation/particles-2.png',
+  '/assets/circleimages/presentation/particles-3.png',
+  '/assets/circleimages/presentation/particles-4.png'
 ];
 
 function ParticleCanvas({ imageUrl, resetMousePosition }) {
