@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { profileSchema } from '../../shared/schemas/profile.schema';
 import { ProfileService } from '../../shared/utils/profile';
+import Button from '../Button';
 
 /**
  * ProfileRegistration - Typeform-style multi-step form
@@ -16,11 +17,13 @@ import { ProfileService } from '../../shared/utils/profile';
  * + Role display (bloqueado, siempre "Volunteer")
  */
 const ProfileRegistration = ({ user, onComplete, onCancel }) => {
+  console.log('ProfileRegistration - user object:', user);
+  
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
-    userId: user.id,
-    login: user.login,
-    email: user.email,
+    userId: user?.id || user?.node_id || '',
+    login: user?.login || user?.username || '',
+    email: user?.email || '',
     firstName: '',
     lastName: '',
     ageRange: '',
@@ -30,9 +33,9 @@ const ProfileRegistration = ({ user, onComplete, onCancel }) => {
     legalDisclaimerAccepted: false,
     parentalConsentConfirmed: false,
     githubData: {
-      avatarUrl: user.avatar_url,
-      username: user.login,
-      email: user.email
+      avatarUrl: user?.avatar_url || '',
+      username: user?.login || user?.username || '',
+      email: user?.email || ''
     }
   });
   const [errors, setErrors] = useState({});
@@ -215,23 +218,44 @@ const ProfileRegistration = ({ user, onComplete, onCancel }) => {
         return (
           <StepContent
             title="Email de contacto"
-            subtitle="Obtenido de tu cuenta de GitHub"
+            subtitle={formData.email ? "Obtenido de tu cuenta de GitHub" : "Tu email de GitHub es privado"}
           >
-            <div className="relative">
-              <input
-                type="email"
-                value={formData.email || ''}
-                placeholder={formData.email || 'Cargando...'}
-                disabled
-                className="w-full px-6 py-4 text-lg bg-n-7/50 border border-n-6 rounded-xl text-n-1 cursor-not-allowed"
-              />
-              <div className="absolute right-4 top-1/2 -translate-y-1/2">
-                <svg className="w-5 h-5 text-n-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-              </div>
-            </div>
-            <p className="mt-2 text-sm text-n-4">Este campo no se puede modificar</p>
+            {formData.email ? (
+              <>
+                <div className="relative">
+                  <input
+                    type="email"
+                    value={formData.email}
+                    disabled
+                    className="w-full px-6 py-4 text-lg bg-n-7/50 border border-n-6 rounded-xl text-n-1 cursor-not-allowed"
+                  />
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                    <svg className="w-5 h-5 text-n-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                  </div>
+                </div>
+                <p className="mt-2 text-sm text-n-4">Este campo no se puede modificar</p>
+              </>
+            ) : (
+              <>
+                <input
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => updateField('email', e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleNext()}
+                  placeholder="tu@email.com"
+                  className="w-full px-6 py-4 text-lg bg-n-7 border border-n-6 rounded-xl text-n-1 placeholder:text-n-4 focus:border-color-1 focus:outline-none transition-colors"
+                  autoFocus
+                />
+                <p className="mt-2 text-sm text-n-4">
+                  Tu email de GitHub es privado. Por favor ingresa un email de contacto.
+                </p>
+                {errors.email && (
+                  <p className="mt-2 text-sm text-red-500">{errors.email}</p>
+                )}
+              </>
+            )}
           </StepContent>
         );
 
@@ -471,25 +495,33 @@ const ProfileRegistration = ({ user, onComplete, onCancel }) => {
             {currentStep === 1 ? 'Cancelar' : 'Atrás'}
           </button>
 
-          <button
-            onClick={handleNext}
-            disabled={isSubmitting}
-            className="px-8 py-3 bg-gradient-to-r from-color-1 to-color-2 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-color-1/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isSubmitting ? (
-              <span className="flex items-center gap-2">
-                <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                </svg>
-                Creando...
-              </span>
-            ) : currentStep === totalSteps ? (
-              'Crear Perfil'
-            ) : (
-              'Continuar'
-            )}
-          </button>
+          {currentStep === totalSteps ? (
+            <Button 
+              onClick={handleNext} 
+              white 
+              className="text-sm lg:text-base"
+            >
+              {isSubmitting ? (
+                <span className="flex items-center gap-2">
+                  <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  Creando...
+                </span>
+              ) : (
+                'Crear Perfil'
+              )}
+            </Button>
+          ) : (
+            <button
+              onClick={handleNext}
+              disabled={isSubmitting}
+              className="px-8 py-3 bg-gradient-to-r from-color-1 to-color-2 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-color-1/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Continuar
+            </button>
+          )}
         </div>
       </div>
     </div>

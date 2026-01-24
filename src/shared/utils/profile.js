@@ -39,7 +39,7 @@ export class ProfileService {
       if (!response.ok) {
         if (response.status === 404) {
           // Profile doesn't exist
-          return null;
+          return { success: true, profile: null };
         }
         throw new Error(`API error: ${response.status}`);
       }
@@ -49,10 +49,10 @@ export class ProfileService {
       if (data.success && data.profile) {
         // Cache the profile
         this._cacheProfile(userId, data.profile);
-        return data.profile;
+        return { success: true, profile: data.profile };
       }
       
-      return null;
+      return { success: true, profile: null };
     } catch (error) {
       console.error('Error fetching profile from API:', error);
       
@@ -60,10 +60,10 @@ export class ProfileService {
       const cached = this._getCachedProfile(userId);
       if (cached) {
         console.log('Using cached profile (offline mode)');
-        return cached;
+        return { success: true, profile: cached };
       }
       
-      return null;
+      return { success: true, profile: null };
     }
   }
 

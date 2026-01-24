@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import Button from '../Button';
 
 /**
  * ProfileCreationCTA - Spotify-style Call-to-Action
@@ -104,41 +105,14 @@ const ProfileCreationCTA = ({ onStart, onSkip }) => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
         >
-          <button
-            onClick={onStart}
-            className="button relative inline-flex items-center justify-center h-11 transition-colors hover:text-color-1 px-7 text-n-8 text-sm lg:text-base"
-          >
-            <span className="relative z-10 flex items-center gap-2">
+          <Button onClick={onStart} white className="text-sm lg:text-base">
+            <span className="flex items-center gap-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
               Crear Perfil
             </span>
-            <svg className="absolute inset-0 pointer-events-none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="btn-left" x1="50%" x2="50%" y1="0%" y2="100%">
-                  <stop offset="0%" stopColor="#89F9E8" />
-                  <stop offset="100%" stopColor="#FACB7B" />
-                </linearGradient>
-                <linearGradient id="btn-top" x1="100%" x2="0%" y1="50%" y2="50%">
-                  <stop offset="0%" stopColor="#D87CEE" />
-                  <stop offset="100%" stopColor="rgba(88, 88, 88, 0)" />
-                </linearGradient>
-                <linearGradient id="btn-bottom" x1="100%" x2="0%" y1="50%" y2="50%">
-                  <stop offset="0%" stopColor="#9099FC" />
-                  <stop offset="100%" stopColor="rgba(88, 88, 88, 0)" />
-                </linearGradient>
-                <linearGradient id="btn-right" x1="14.635%" x2="14.635%" y1="0%" y2="100%">
-                  <stop offset="0%" stopColor="#9099FC" />
-                  <stop offset="100%" stopColor="#D87CEE" />
-                </linearGradient>
-              </defs>
-              <rect width="100%" height="100%" fill="url(#btn-left)" rx="1.5rem" />
-              <rect width="100%" height="100%" fill="url(#btn-top)" rx="1.5rem" />
-              <rect width="100%" height="100%" fill="url(#btn-bottom)" rx="1.5rem" />
-              <rect width="100%" height="100%" fill="url(#btn-right)" rx="1.5rem" />
-            </svg>
-          </button>
+          </Button>
         </motion.div>
 
         {/* Info text */}
