@@ -238,6 +238,7 @@ const DashboardHome = ({ user, onNavigate }) => {
       <ProfileView
         profile={profile}
         onEdit={() => setProfileView('edit')}
+        onDelete={() => setProfileView('delete')}
         onClose={() => setProfileView('dashboard')}
       />
     );
@@ -248,24 +249,29 @@ const DashboardHome = ({ user, onNavigate }) => {
     <div className="space-y-8">
       {/* Header with profile info */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4 w-full lg:w-auto">
           {profile && (
             <button
               onClick={() => setProfileView('view')}
-              className="flex items-center gap-3 p-3 bg-n-7 hover:bg-n-6 rounded-xl transition-all"
-              title="Ver perfil"
+              className="w-full lg:w-auto flex items-center gap-4 p-4 bg-gradient-to-r from-n-7 to-n-6 hover:from-n-6 hover:to-n-5 border border-n-6 hover:border-color-1/30 rounded-2xl transition-all group shadow-lg"
+              title="Ver perfil completo"
             >
               <img
-                src={profile.githubData?.avatarUrl || user.avatar_url}
+                src={profile.githubData?.avatarUrl || user.avatarUrl}
                 alt={profile.firstName}
-                className="w-10 h-10 rounded-lg"
+                className="w-14 h-14 rounded-xl border-2 border-color-1/50 group-hover:border-color-1 transition-colors"
               />
-              <div className="text-left">
-                <p className="text-sm font-medium text-n-1">
+              <div className="text-left flex-1">
+                <p className="text-base font-bold text-n-1 group-hover:text-color-1 transition-colors">
                   {profile.firstName} {profile.lastName}
                 </p>
-                <p className="text-xs text-n-4">{profile.role}</p>
+                <p className="text-sm text-n-3 mt-0.5">
+                  {profile.role} • @{profile.login}
+                </p>
               </div>
+              <svg className="w-5 h-5 text-n-4 group-hover:text-color-1 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
             </button>
           )}
           <div>
