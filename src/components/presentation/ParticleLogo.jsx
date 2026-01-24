@@ -4,8 +4,7 @@ import { useRef, useEffect, useState } from 'react';
 const PRESENTATION_IMAGES = [
   '/assets/circleimages/presentation/hug.png',
   '/assets/circleimages/presentation/kid.png',
-  '/assets/circleimages/presentation/power.png',
-  '/assets/circleimages/presentation/waving.png'
+  '/assets/circleimages/presentation/power.png'
 ];
 
 function ParticleCanvas({ imageUrl }) {
@@ -47,9 +46,10 @@ function ParticleCanvas({ imageUrl }) {
       const imageData = tempCtx.getImageData(0, 0, width, height);
       const pixels = imageData.data;
       
-      // Create particles - highly optimized
+      // Create particles - optimized for mobile and desktop
       const particles = [];
-      const gap = 7; // Larger gap for more separation and better performance
+      const isMobile = window.innerWidth < 768;
+      const gap = isMobile ? 9 : 7; // Larger gap on mobile for better performance
       
       for (let y = 0; y < height; y += gap) {
         for (let x = 0; x < width; x += gap) {
@@ -106,7 +106,7 @@ function ParticleCanvas({ imageUrl }) {
         particles.forEach(particle => {
           // Initial formation animation
           if (particle.forming) {
-            particle.formProgress += 0.008; // Moderate speed for formation
+            particle.formProgress += 0.012; // Faster formation speed
             
             if (particle.formProgress >= 1) {
               particle.forming = false;
@@ -117,8 +117,8 @@ function ParticleCanvas({ imageUrl }) {
             const easeProgress = 1 - Math.pow(1 - particle.formProgress, 3);
             const dxForm = particle.baseX - particle.x;
             const dyForm = particle.baseY - particle.y;
-            particle.x += dxForm * 0.05 * easeProgress;
-            particle.y += dyForm * 0.05 * easeProgress;
+            particle.x += dxForm * 0.07 * easeProgress;
+            particle.y += dyForm * 0.07 * easeProgress;
           } else {
             // Normal mouse interaction after formation
             const dx = mouseRef.current.x - particle.x;
@@ -189,16 +189,29 @@ function ParticleCanvas({ imageUrl }) {
     
     canvas.addEventListener('mousemove', handleMouseMove);
     
+    // Touch support for mobile
+    const handleTouchMove = (e) => {
+      if (e.touches.length > 0) {
+        mouseRef.current = {
+          x: e.touches[0].clientX,
+          y: e.touches[0].clientY
+        };
+      }
+    };
+    
+    canvas.addEventListener('touchmove', handleTouchMove, { passive: true });
+    
     return () => {
       window.removeEventListener('resize', updateSize);
       canvas.removeEventListener('mousemove', handleMouseMove);
+      canvas.removeEventListener('touchmove', handleTouchMove);
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
     };
   }, [imageUrl]);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 z-5" />;
+  return <canvas ref={canvasRef} className="absolute inset-0 z-5" style={{ touchAction: 'none' }} />;
 }
 
 export default function ParticleLogo() {
@@ -217,9 +230,9 @@ export default function ParticleLogo() {
       {/* Much darker overlay for contrast */}
       <div className="absolute inset-0 bg-black/60 z-0"></div>
       
-      {/* Background gradient - behind particles */}
+      {/* Background gradient - behind particles - very subtle */}
       <div 
-        className="absolute inset-0 opacity-20 z-0"
+        className="absolute inset-0 opacity-5 z-0"
         style={{
           backgroundImage: 'url(/assets/gradient.png)',
           backgroundSize: 'cover',
