@@ -63,6 +63,7 @@ describe('Profile Schemas - Unit Tests', () => {
       ageRange: '25-34',
       educationLevel: 'universitario',
       educationStatus: 'completed',
+      role: 'Volunteer',
       legalDisclaimerAccepted: true,
       githubData: {
         avatarUrl: 'https://avatars.githubusercontent.com/u/12345',
