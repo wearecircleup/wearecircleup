@@ -2,16 +2,53 @@ import { useState, useEffect } from "react";
 import PresentationCard from "../PresentationCard";
 import Button from "../Button";
 import { PresentationsAPI } from "../../shared/utils/presentations-api";
+import { ProfileService } from "../../shared/utils/profile";
+import ProfileCreationCTA from "../profile/ProfileCreationCTA";
+import ProfileRegistration from "../profile/ProfileRegistration";
+import ProfileView from "../profile/ProfileView";
+import ProfileEdit from "../profile/ProfileEdit";
+import AccountDeletion from "../profile/AccountDeletion";
 
 const DashboardHome = ({ user, onNavigate }) => {
   const [presentations, setPresentations] = useState([]);
   const [filter, setFilter] = useState('all'); // all, completed, processing
   const [loading, setLoading] = useState(true);
+  
+  // Profile state management
+  const [profile, setProfile] = useState(null);
+  const [profileLoading, setProfileLoading] = useState(true);
+  const [profileView, setProfileView] = useState('check'); // check, cta, register, view, edit, delete
 
   useEffect(() => {
-    loadPresentations();
+    checkProfile();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user.login]);
+  }, [user.id]);
+
+  useEffect(() => {
+    if (profile) {
+      loadPresentations();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user.login, profile]);
+
+  const checkProfile = async () => {
+    setProfileLoading(true);
+    try {
+      const result = await ProfileService.getProfile(user.id);
+      if (result.success && result.profile) {
+        setProfile(result.profile);
+        setProfileView('view');
+      } else {
+        // No profile found, show CTA
+        setProfileView('cta');
+      }
+    } catch (error) {
+      console.error('Error checking profile:', error);
+      setProfileView('cta');
+    } finally {
+      setProfileLoading(false);
+    }
+  };
 
   const loadPresentations = async () => {
     setLoading(true);
@@ -127,17 +164,118 @@ const DashboardHome = ({ user, onNavigate }) => {
     }
   };
 
+  // Profile gate: Show profile flow if no profile exists
+  if (profileLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-center">
+          <div className="w-16 h-16 mx-auto mb-4 border-4 border-color-1 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-n-4">Cargando perfil...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show ProfileCreationCTA if no profile
+  if (profileView === 'cta') {
+    return (
+      <ProfileCreationCTA
+        onStart={() => setProfileView('register')}
+        onSkip={() => {
+          // Allow skip for now, but remind later
+          setProfileView('view');
+          setProfile({ firstName: user.name || user.login });
+        }}
+      />
+    );
+  }
+
+  // Show ProfileRegistration
+  if (profileView === 'register') {
+    return (
+      <ProfileRegistration
+        user={user}
+        onComplete={(newProfile) => {
+          setProfile(newProfile);
+          setProfileView('view');
+        }}
+        onCancel={() => setProfileView('cta')}
+      />
+    );
+  }
+
+  // Show ProfileEdit
+  if (profileView === 'edit') {
+    return (
+      <ProfileEdit
+        profile={profile}
+        onSave={(updatedProfile) => {
+          setProfile(updatedProfile);
+          setProfileView('view');
+        }}
+        onCancel={() => setProfileView('view')}
+      />
+    );
+  }
+
+  // Show AccountDeletion
+  if (profileView === 'delete') {
+    return (
+      <AccountDeletion
+        profile={profile}
+        onDelete={() => {
+          setProfile(null);
+          setProfileView('cta');
+        }}
+        onCancel={() => setProfileView('view')}
+      />
+    );
+  }
+
+  // Show ProfileView (full screen)
+  if (profileView === 'view' && profile) {
+    return (
+      <ProfileView
+        profile={profile}
+        onEdit={() => setProfileView('edit')}
+        onClose={() => setProfileView('dashboard')}
+      />
+    );
+  }
+
+  // Main dashboard view
   return (
     <div className="space-y-8">
-      {/* Header */}
+      {/* Header with profile info */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-        <div>
-          <h2 className="text-2xl lg:text-3xl font-bold text-n-1 mb-2">
-            Mis Presentaciones
-          </h2>
-          <p className="text-n-4">
-            {presentations.length} {presentations.length === 1 ? 'presentación' : 'presentaciones'} creadas
-          </p>
+        <div className="flex items-center gap-4">
+          {profile && (
+            <button
+              onClick={() => setProfileView('view')}
+              className="flex items-center gap-3 p-3 bg-n-7 hover:bg-n-6 rounded-xl transition-all"
+              title="Ver perfil"
+            >
+              <img
+                src={profile.githubData?.avatarUrl || user.avatar_url}
+                alt={profile.firstName}
+                className="w-10 h-10 rounded-lg"
+              />
+              <div className="text-left">
+                <p className="text-sm font-medium text-n-1">
+                  {profile.firstName} {profile.lastName}
+                </p>
+                <p className="text-xs text-n-4">{profile.role}</p>
+              </div>
+            </button>
+          )}
+          <div>
+            <h2 className="text-2xl lg:text-3xl font-bold text-n-1 mb-2">
+              Mis Presentaciones
+            </h2>
+            <p className="text-n-4">
+              {presentations.length} {presentations.length === 1 ? 'presentación' : 'presentaciones'} creadas
+            </p>
+          </div>
         </div>
         
         <div className="flex gap-3">
