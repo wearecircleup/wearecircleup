@@ -35,9 +35,9 @@ function ParticleCanvas({ imageUrl }) {
       const tempCanvas = document.createElement('canvas');
       const tempCtx = tempCanvas.getContext('2d');
       
-      // Scale image to fit screen while maintaining aspect ratio - larger, especially on mobile
+      // Scale image to fit screen while maintaining aspect ratio - maximum size
       const isMobile = window.innerWidth < 768;
-      const scaleFactor = isMobile ? 1.0 : 0.95;
+      const scaleFactor = isMobile ? 1.05 : 1.0;
       const scale = Math.min(canvas.width / img.width, canvas.height / img.height) * scaleFactor;
       const width = Math.floor(img.width * scale);
       const height = Math.floor(img.height * scale);
@@ -111,7 +111,7 @@ function ParticleCanvas({ imageUrl }) {
           // Initial formation animation
           if (particle.forming) {
             allFormed = false;
-            particle.formProgress += 0.012; // Faster formation speed
+            particle.formProgress += 0.018; // Much faster formation speed - ~2 seconds max
             
             if (particle.formProgress >= 1) {
               particle.forming = false;
@@ -122,8 +122,8 @@ function ParticleCanvas({ imageUrl }) {
             const easeProgress = 1 - Math.pow(1 - particle.formProgress, 3);
             const dxForm = particle.baseX - particle.x;
             const dyForm = particle.baseY - particle.y;
-            particle.x += dxForm * 0.07 * easeProgress;
-            particle.y += dyForm * 0.07 * easeProgress;
+            particle.x += dxForm * 0.1 * easeProgress;
+            particle.y += dyForm * 0.1 * easeProgress;
           } else {
             // Normal mouse interaction after formation - only if user has interacted
             const dx = mouseRef.current.x - particle.x;
@@ -287,16 +287,16 @@ export default function ParticleLogo() {
       {/* Particle Canvas - Dynamic image as particles - above backgrounds */}
       <ParticleCanvas imageUrl={PRESENTATION_IMAGES[currentImageIndex]} />
       
-      {/* Text overlay - positioned above carousel pagination */}
-      <div className="absolute bottom-16 left-0 right-0 z-20 pointer-events-none mb-2">
-        <div className="flex flex-col items-center space-y-1">
-          <span className="font-thin text-white text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight">
+      {/* Text overlay - positioned well above carousel pagination */}
+      <div className="absolute bottom-20 left-0 right-0 z-20 pointer-events-none mb-4">
+        <div className="flex flex-col items-center space-y-0">
+          <span className="font-thin text-white text-3xl md:text-4xl lg:text-5xl leading-none tracking-tight">
             CIRCLE UP
           </span>
-          <span className="font-extrabold text-white text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight">
+          <span className="font-extrabold text-white text-3xl md:text-4xl lg:text-5xl leading-none tracking-tight">
             VOLUNTEER
           </span>
-          <span className="text-xl md:text-2xl text-white font-mono leading-tight mt-2 tracking-wider">
+          <span className="text-xl md:text-2xl text-white font-mono leading-none mt-1 tracking-wider">
             Community Based Learning
           </span>
         </div>
