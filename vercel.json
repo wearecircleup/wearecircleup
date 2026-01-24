@@ -17,6 +17,9 @@
     },
     "api/delete-presentation.js": {
       "maxDuration": 10
+    },
+    "api/profile.js": {
+      "maxDuration": 10
     }
   },
   "headers": [
