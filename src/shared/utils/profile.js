@@ -1,0 +1,351 @@
+/**
+ * Profile Service - Frontend CRUD operations for user profiles
+ * 
+ * This service handles all profile-related operations from the frontend,
+ * including API calls to Vercel Functions and localStorage caching.
+ * 
+ * Features:
+ * - Create, Read, Update, Delete operations
+ * - localStorage caching with TTL
+ * - Offline fallback support
+ * - Error handling and retry logic
+ */
+
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+const CACHE_PREFIX = 'profile_';
+
+/**
+ * Profile Service for frontend operations
+ */
+export class ProfileService {
+  /**
+   * Get user profile by userId
+   * Uses cache-first strategy with API fallback
+   */
+  static async getProfile(userId) {
+    if (!userId) {
+      throw new Error('userId is required');
+    }
+
+    try {
+      // Try API first
+      const response = await fetch(`/api/profile?userId=${userId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        if (response.status === 404) {
+          // Profile doesn't exist
+          return null;
+        }
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      if (data.success && data.profile) {
+        // Cache the profile
+        this._cacheProfile(userId, data.profile);
+        return data.profile;
+      }
+      
+      return null;
+    } catch (error) {
+      console.error('Error fetching profile from API:', error);
+      
+      // Fallback to localStorage cache
+      const cached = this._getCachedProfile(userId);
+      if (cached) {
+        console.log('Using cached profile (offline mode)');
+        return cached;
+      }
+      
+      return null;
+    }
+  }
+
+  /**
+   * Create new user profile
+   */
+  static async createProfile(profileData) {
+    if (!profileData || !profileData.userId) {
+      throw new Error('Profile data with userId is required');
+    }
+
+    try {
+      const response = await fetch('/api/profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(profileData)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return {
+          success: false,
+          error: data.error || `Error ${response.status}: ${response.statusText}`
+        };
+      }
+
+      if (data.success && data.profile) {
+        // Cache the new profile
+        this._cacheProfile(profileData.userId, data.profile);
+        return {
+          success: true,
+          profile: data.profile
+        };
+      }
+
+      return {
+        success: false,
+        error: data.error || 'Failed to create profile'
+      };
+    } catch (error) {
+      console.error('Error creating profile:', error);
+      return {
+        success: false,
+        error: 'Error de conexión. Verifica tu conexión a internet e intenta nuevamente.'
+      };
+    }
+  }
+
+  /**
+   * Update existing user profile
+   */
+  static async updateProfile(userId, updates) {
+    if (!userId) {
+      throw new Error('userId is required');
+    }
+
+    if (!updates || Object.keys(updates).length === 0) {
+      throw new Error('Updates object is required');
+    }
+
+    try {
+      const response = await fetch('/api/profile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          userId,
+          ...updates
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return {
+          success: false,
+          error: data.error || `Error ${response.status}: ${response.statusText}`
+        };
+      }
+
+      if (data.success) {
+        // Update cache with new data
+        const cached = this._getCachedProfile(userId);
+        if (cached) {
+          const updated = { ...cached, ...updates, updatedAt: new Date().toISOString() };
+          this._cacheProfile(userId, updated);
+        }
+
+        return {
+          success: true,
+          profile: data.profile
+        };
+      }
+
+      return {
+        success: false,
+        error: data.error || 'Failed to update profile'
+      };
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      return {
+        success: false,
+        error: 'Error de conexión. Verifica tu conexión a internet e intenta nuevamente.'
+      };
+    }
+  }
+
+  /**
+   * Delete user profile and all associated data
+   * Requires typed confirmation for safety
+   */
+  static async deleteProfile(userId, confirmation, accessToken) {
+    if (!userId || !confirmation || !accessToken) {
+      throw new Error('userId, confirmation, and accessToken are required');
+    }
+
+    if (confirmation !== 'Delete') {
+      return {
+        success: false,
+        error: 'Confirmación inválida. Debes escribir exactamente "Delete"'
+      };
+    }
+
+    try {
+      const response = await fetch('/api/profile', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          userId,
+          confirmation,
+          accessToken
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return {
+          success: false,
+          error: data.error || `Error ${response.status}: ${response.statusText}`
+        };
+      }
+
+      if (data.success) {
+        // Clear all caches
+        this._clearCache(userId);
+        this._clearAllCaches(); // Clear everything for security
+        
+        return {
+          success: true,
+          message: data.message || 'Cuenta eliminada exitosamente'
+        };
+      }
+
+      return {
+        success: false,
+        error: data.error || 'Failed to delete profile'
+      };
+    } catch (error) {
+      console.error('Error deleting profile:', error);
+      return {
+        success: false,
+        error: 'Error de conexión. Verifica tu conexión a internet e intenta nuevamente.'
+      };
+    }
+  }
+
+  /**
+   * Check if user has a complete profile
+   */
+  static async hasCompleteProfile(userId) {
+    const profile = await this.getProfile(userId);
+    return profile && profile.profileComplete === true;
+  }
+
+  /**
+   * Cache profile in localStorage with timestamp
+   * @private
+   */
+  static _cacheProfile(userId, profile) {
+    try {
+      const cacheData = {
+        profile,
+        timestamp: Date.now()
+      };
+      localStorage.setItem(
+        `${CACHE_PREFIX}${userId}`,
+        JSON.stringify(cacheData)
+      );
+    } catch (error) {
+      console.warn('Failed to cache profile:', error);
+    }
+  }
+
+  /**
+   * Get cached profile from localStorage
+   * Returns null if cache is expired or doesn't exist
+   * @private
+   */
+  static _getCachedProfile(userId) {
+    try {
+      const cached = localStorage.getItem(`${CACHE_PREFIX}${userId}`);
+      if (!cached) return null;
+
+      const cacheData = JSON.parse(cached);
+      const age = Date.now() - cacheData.timestamp;
+
+      // Check if cache is still valid
+      if (age > CACHE_TTL) {
+        // Cache expired, remove it
+        localStorage.removeItem(`${CACHE_PREFIX}${userId}`);
+        return null;
+      }
+
+      return cacheData.profile;
+    } catch (error) {
+      console.warn('Failed to read cached profile:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Clear cache for specific user
+   * @private
+   */
+  static _clearCache(userId) {
+    try {
+      localStorage.removeItem(`${CACHE_PREFIX}${userId}`);
+    } catch (error) {
+      console.warn('Failed to clear cache:', error);
+    }
+  }
+
+  /**
+   * Clear all profile caches
+   * Used during logout or account deletion
+   * @private
+   */
+  static _clearAllCaches() {
+    try {
+      const keys = Object.keys(localStorage);
+      keys.forEach(key => {
+        if (key.startsWith(CACHE_PREFIX)) {
+          localStorage.removeItem(key);
+        }
+      });
+    } catch (error) {
+      console.warn('Failed to clear all caches:', error);
+    }
+  }
+
+  /**
+   * Invalidate cache for user (force refresh on next get)
+   */
+  static invalidateCache(userId) {
+    this._clearCache(userId);
+  }
+
+  /**
+   * Get cache statistics (for debugging)
+   */
+  static getCacheStats() {
+    try {
+      const keys = Object.keys(localStorage);
+      const profileKeys = keys.filter(k => k.startsWith(CACHE_PREFIX));
+      
+      return {
+        totalCached: profileKeys.length,
+        cacheKeys: profileKeys,
+        cacheSizeEstimate: profileKeys.reduce((total, key) => {
+          const value = localStorage.getItem(key);
+          return total + (value ? value.length : 0);
+        }, 0)
+      };
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
+}
