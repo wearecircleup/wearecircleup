@@ -111,7 +111,7 @@ function ParticleCanvas({ imageUrl }) {
           // Initial formation animation
           if (particle.forming) {
             allFormed = false;
-            particle.formProgress += 0.018; // Much faster formation speed - ~2 seconds max
+            particle.formProgress += 0.025; // Very fast formation speed - under 2 seconds
             
             if (particle.formProgress >= 1) {
               particle.forming = false;
@@ -122,8 +122,8 @@ function ParticleCanvas({ imageUrl }) {
             const easeProgress = 1 - Math.pow(1 - particle.formProgress, 3);
             const dxForm = particle.baseX - particle.x;
             const dyForm = particle.baseY - particle.y;
-            particle.x += dxForm * 0.1 * easeProgress;
-            particle.y += dyForm * 0.1 * easeProgress;
+            particle.x += dxForm * 0.15 * easeProgress;
+            particle.y += dyForm * 0.15 * easeProgress;
           } else {
             // Normal mouse interaction after formation - only if user has interacted
             const dx = mouseRef.current.x - particle.x;
@@ -287,8 +287,8 @@ export default function ParticleLogo() {
       {/* Particle Canvas - Dynamic image as particles - above backgrounds */}
       <ParticleCanvas imageUrl={PRESENTATION_IMAGES[currentImageIndex]} />
       
-      {/* Text overlay - positioned well above carousel pagination */}
-      <div className="absolute bottom-20 left-0 right-0 z-20 pointer-events-none mb-4">
+      {/* Text overlay - positioned well above carousel pagination - responsive */}
+      <div className="absolute bottom-24 md:bottom-20 left-0 right-0 z-20 pointer-events-none mb-6 md:mb-4">
         <div className="flex flex-col items-center space-y-0">
           <span className="font-thin text-white text-3xl md:text-4xl lg:text-5xl leading-none tracking-tight">
             CIRCLE UP
