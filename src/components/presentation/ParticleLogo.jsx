@@ -2,7 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 
 // Array of images in presentation folder
 const PRESENTATION_IMAGES = [
-  '/assets/circleimages/presentation/hug.png',
+  '/assets/circleimages/presentation/thumpup.png',
   '/assets/circleimages/presentation/kid.png',
   '/assets/circleimages/presentation/power.png'
 ];
@@ -259,7 +259,7 @@ export default function ParticleLogo() {
       
       {/* Grid overlay - over particles */}
       <div 
-        className="absolute inset-0 opacity-20 z-10 pointer-events-none"
+        className="absolute inset-0 opacity-30 z-10 pointer-events-none"
         style={{
           backgroundImage: 'url(/assets/grid.png)',
           backgroundSize: 'cover',
@@ -286,7 +286,7 @@ export default function ParticleLogo() {
       <ParticleCanvas imageUrl={PRESENTATION_IMAGES[currentImageIndex]} />
       
       {/* Text overlay - positioned well above carousel pagination - responsive */}
-      <div className="absolute bottom-32 md:bottom-20 left-0 right-0 z-20 pointer-events-none mb-8 md:mb-4">
+      <div className="absolute bottom-36 md:bottom-20 left-0 right-0 z-20 pointer-events-none mb-10 md:mb-4">
         <div className="flex flex-col items-center space-y-0">
           <span className="font-thin text-white text-3xl md:text-4xl lg:text-5xl leading-none tracking-tight">
             CIRCLE UP
