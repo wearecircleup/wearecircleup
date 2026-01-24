@@ -10,8 +10,9 @@ const PRESENTATION_IMAGES = [
 function ParticleCanvas({ imageUrl }) {
   const canvasRef = useRef(null);
   const particlesRef = useRef([]);
-  const mouseRef = useRef({ x: 0, y: 0 });
+  const mouseRef = useRef({ x: -1000, y: -1000 }); // Initialize far off-screen
   const animationRef = useRef(null);
+  const isFormingRef = useRef(true); // Track if particles are still forming
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -36,7 +37,7 @@ function ParticleCanvas({ imageUrl }) {
       
       // Scale image to fit screen while maintaining aspect ratio - larger, especially on mobile
       const isMobile = window.innerWidth < 768;
-      const scaleFactor = isMobile ? 0.95 : 0.9;
+      const scaleFactor = isMobile ? 1.0 : 0.95;
       const scale = Math.min(canvas.width / img.width, canvas.height / img.height) * scaleFactor;
       const width = Math.floor(img.width * scale);
       const height = Math.floor(img.height * scale);
@@ -104,9 +105,12 @@ function ParticleCanvas({ imageUrl }) {
         ctx.fillStyle = '#110f19';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
+        let allFormed = true;
+        
         particles.forEach(particle => {
           // Initial formation animation
           if (particle.forming) {
+            allFormed = false;
             particle.formProgress += 0.012; // Faster formation speed
             
             if (particle.formProgress >= 1) {
@@ -121,7 +125,7 @@ function ParticleCanvas({ imageUrl }) {
             particle.x += dxForm * 0.07 * easeProgress;
             particle.y += dyForm * 0.07 * easeProgress;
           } else {
-            // Normal mouse interaction after formation
+            // Normal mouse interaction after formation - only if user has interacted
             const dx = mouseRef.current.x - particle.x;
             const dy = mouseRef.current.y - particle.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
@@ -180,19 +184,30 @@ function ParticleCanvas({ imageUrl }) {
     
     img.src = imageUrl;
     
-    // Mouse move handler
+    // Mouse move handler - only update if formation is complete
     const handleMouseMove = (e) => {
-      mouseRef.current = {
-        x: e.clientX,
-        y: e.clientY
-      };
+      if (!isFormingRef.current) {
+        mouseRef.current = {
+          x: e.clientX,
+          y: e.clientY
+        };
+      }
     };
     
     canvas.addEventListener('mousemove', handleMouseMove);
     
-    // Touch support for mobile
+    // Touch support for mobile - only update if formation is complete
     const handleTouchMove = (e) => {
-      if (e.touches.length > 0) {
+      if (!isFormingRef.current && e.touches.length > 0) {
+        mouseRef.current = {
+          x: e.touches[0].clientX,
+          y: e.touches[0].clientY
+        };
+      }
+    };
+    
+    const handleTouchStart = (e) => {
+      if (!isFormingRef.current && e.touches.length > 0) {
         mouseRef.current = {
           x: e.touches[0].clientX,
           y: e.touches[0].clientY
@@ -201,11 +216,13 @@ function ParticleCanvas({ imageUrl }) {
     };
     
     canvas.addEventListener('touchmove', handleTouchMove, { passive: true });
+    canvas.addEventListener('touchstart', handleTouchStart, { passive: true });
     
     return () => {
       window.removeEventListener('resize', updateSize);
       canvas.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('touchmove', handleTouchMove);
+      canvas.removeEventListener('touchstart', handleTouchStart);
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
@@ -231,13 +248,14 @@ export default function ParticleLogo() {
       {/* Much darker overlay for contrast */}
       <div className="absolute inset-0 bg-black/60 z-0"></div>
       
-      {/* Background gradient - behind particles - very subtle */}
+      {/* Background gradient - behind particles - very subtle on sides */}
       <div 
-        className="absolute inset-0 opacity-5 z-0"
+        className="absolute inset-0 z-0"
         style={{
-          backgroundImage: 'url(/assets/gradient.png)',
+          backgroundImage: 'linear-gradient(to right, rgba(0,0,0,0.7) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.7) 100%), url(/assets/gradient.png)',
           backgroundSize: 'cover',
-          backgroundPosition: 'center'
+          backgroundPosition: 'center',
+          opacity: 0.08
         }}
       />
       
@@ -269,8 +287,8 @@ export default function ParticleLogo() {
       {/* Particle Canvas - Dynamic image as particles - above backgrounds */}
       <ParticleCanvas imageUrl={PRESENTATION_IMAGES[currentImageIndex]} />
       
-      {/* Text overlay - top positioned */}
-      <div className="absolute top-0 left-0 right-0 z-20 pointer-events-none pt-16">
+      {/* Text overlay - positioned above carousel pagination */}
+      <div className="absolute bottom-16 left-0 right-0 z-20 pointer-events-none mb-2">
         <div className="flex flex-col items-center space-y-1">
           <span className="font-thin text-white text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight">
             CIRCLE UP
@@ -278,7 +296,7 @@ export default function ParticleLogo() {
           <span className="font-extrabold text-white text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight">
             VOLUNTEER
           </span>
-          <span className="text-xl md:text-2xl text-n-2 font-mono leading-tight mt-2 tracking-wider">
+          <span className="text-xl md:text-2xl text-white font-mono leading-tight mt-2 tracking-wider">
             Community Based Learning
           </span>
         </div>
