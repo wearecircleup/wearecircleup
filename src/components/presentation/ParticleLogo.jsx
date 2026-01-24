@@ -49,9 +49,9 @@ function ParticleCanvas({ imageUrl }) {
       const imageData = tempCtx.getImageData(0, 0, width, height);
       const pixels = imageData.data;
       
-      // Create particles - optimized for mobile and desktop
+      // Create particles - optimized for mobile and desktop with extra detail
       const particles = [];
-      const gap = isMobile ? 6 : 7; // Smaller gap on mobile for better quality
+      const gap = isMobile ? 5 : 6; // Smaller gap for more particles and better definition
       
       for (let y = 0; y < height; y += gap) {
         for (let x = 0; x < width; x += gap) {
@@ -83,7 +83,7 @@ function ParticleCanvas({ imageUrl }) {
               r: r,
               g: g,
               b: b,
-              size: Math.random() * 2 + 0.8,
+              size: Math.random() * 1.5 + 0.6, // Smaller particles for more detail
               vx: 0,
               vy: 0,
               mass: Math.random() * 3 + 0.5,
@@ -227,7 +227,7 @@ function ParticleCanvas({ imageUrl }) {
     };
   }, [imageUrl]);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 z-5" style={{ touchAction: 'none' }} />;
+  return <canvas ref={canvasRef} className="absolute inset-0 z-15" style={{ touchAction: 'none' }} />;
 }
 
 export default function ParticleLogo() {
