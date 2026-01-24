@@ -2,22 +2,9 @@ import { useRef, useEffect, useState } from 'react';
 
 // Array of images in presentation folder
 const PRESENTATION_IMAGES = [
-  '/assets/circleimages/presentation/care-elder.png',
-  '/assets/circleimages/presentation/enjoy.png',
-  '/assets/circleimages/presentation/football.png',
-  '/assets/circleimages/presentation/friends.png',
-  '/assets/circleimages/presentation/grandchild.png',
-  '/assets/circleimages/presentation/hands.png',
-  '/assets/circleimages/presentation/happiness.png',
-  '/assets/circleimages/presentation/heart.png',
   '/assets/circleimages/presentation/hug.png',
   '/assets/circleimages/presentation/kid.png',
   '/assets/circleimages/presentation/power.png',
-  '/assets/circleimages/presentation/recycle.png',
-  '/assets/circleimages/presentation/sharing.png',
-  '/assets/circleimages/presentation/smile.png',
-  '/assets/circleimages/presentation/support.png',
-  '/assets/circleimages/presentation/volunteer-team.png',
   '/assets/circleimages/presentation/waving.png'
 ];
 
