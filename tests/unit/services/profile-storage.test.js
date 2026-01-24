@@ -46,7 +46,7 @@ describe('ProfileStorageService - Unit Tests', () => {
         const result = NDJSONUtils.serialize(record);
         expect(result).toContain('"nested":{"value":"test"}');
         expect(result).toContain('"array":[1,2,3]');
-        expect(result).toEndWith('\n');
+        expect(result.endsWith('\n')).toBe(true);
       });
     });
 
