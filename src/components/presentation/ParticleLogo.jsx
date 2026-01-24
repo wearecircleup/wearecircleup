@@ -7,7 +7,7 @@ const PRESENTATION_IMAGES = [
   '/assets/circleimages/presentation/power.png'
 ];
 
-function ParticleCanvas({ imageUrl }) {
+function ParticleCanvas({ imageUrl, resetMousePosition }) {
   const canvasRef = useRef(null);
   const particlesRef = useRef([]);
   const mouseRef = useRef({ x: -1000, y: -1000 }); // Initialize far off-screen
@@ -21,6 +21,9 @@ function ParticleCanvas({ imageUrl }) {
     const ctx = canvas.getContext('2d');
     const img = new Image();
     img.crossOrigin = 'anonymous';
+    
+    // Reset mouse position when image changes
+    mouseRef.current = { x: -1000, y: -1000 };
     
     // Set canvas size
     const updateSize = () => {
@@ -232,9 +235,11 @@ function ParticleCanvas({ imageUrl }) {
 
 export default function ParticleLogo() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [resetMouse, setResetMouse] = useState(0);
 
   const handleClick = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex + 1) % PRESENTATION_IMAGES.length);
+    setResetMouse(prev => prev + 1); // Trigger mouse reset
   };
 
   return (
@@ -283,7 +288,7 @@ export default function ParticleLogo() {
       />
       
       {/* Particle Canvas - Dynamic image as particles - above backgrounds */}
-      <ParticleCanvas imageUrl={PRESENTATION_IMAGES[currentImageIndex]} />
+      <ParticleCanvas imageUrl={PRESENTATION_IMAGES[currentImageIndex]} resetMousePosition={resetMouse} />
       
       {/* Text overlay - positioned well above carousel pagination - responsive */}
       <div className="absolute bottom-36 md:bottom-20 left-0 right-0 z-20 pointer-events-none mb-10 md:mb-4">
