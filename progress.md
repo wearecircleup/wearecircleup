@@ -1228,3 +1228,217 @@ Migrate presentation generation from GitHub Actions to Vercel Functions to solve
 - External redirect to marketing site (circleup.com.co)
 - Vercel serverless functions for secure OAuth
 - User data isolation by GitHub login
+
+## Phase 11: User Profile Registration System
+
+**Status:** IN PROGRESS
+**Date:** 2026-01-24
+
+### Objective
+
+Implement complete user profile registration system with CRUD operations using Vercel Blob storage and NDJSON data lake format.
+
+### Architecture
+
+**Storage Strategy:**
+- Vercel Blob with NDJSON format (append-only)
+- Data lake structure: `profiles/{userId}.ndjson`
+- Versionado automático (cada cambio = nueva línea)
+- Audit trail completo
+- Free tier: 500MB (650K+ perfiles)
+
+**Components:**
+```
+Backend:
+├── Schemas (Zod validation)
+├── ProfileStorageService (NDJSON utilities)
+├── ProfileService (Frontend CRUD + cache)
+└── Vercel Function /api/profile.js (GET/POST/PUT/DELETE)
+
+Frontend:
+├── ProfileCreationCTA (Spotify-style button)
+├── ProfileRegistration (Typeform 6 pasos)
+├── ProfileView (Display profile)
+├── ProfileEdit (Update profile)
+├── AccountDeletion (2-step confirmation)
+└── DashboardHome integration (Profile gate)
+```
+
+### Implementation Progress
+
+**Step 1: Schemas y Validación** ✅ COMPLETED
+- Created: `src/shared/schemas/profile.schema.ts`
+- Zod schemas con validación completa
+- Sistema educativo colombiano (primaria → posgrado)
+- Rangos de edad con validación parental (14-17 requiere consentimiento)
+- Mensajes de error en español
+- Tests: 28/28 passing
+
+**Step 2: NDJSON Storage Service** ✅ COMPLETED
+- Created: `src/shared/utils/profile-storage.js`
+- NDJSONUtils class (parse, serialize, append, getLatest)
+- ProfileStorageService (CRUD utilities)
+- Versionado automático
+- Soft deletes con audit trail
+- Analytics metadata extraction
+- Tests: 31/31 passing
+
+**Step 3: Frontend Service** ✅ COMPLETED
+- Created: `src/shared/utils/profile.js`
+- ProfileService class (CRUD operations)
+- localStorage cache con TTL (5 minutos)
+- Offline fallback support
+- Error handling robusto
+- Cache invalidation
+
+**Step 4: Vercel Function API** ✅ COMPLETED
+- Created: `api/profile.js`
+- GET: Obtener perfil por userId
+- POST: Crear nuevo perfil
+- PUT: Actualizar perfil existente
+- DELETE: Soft delete con confirmación
+- CORS headers configurados
+- Validación de campos requeridos
+- Integración con Vercel Blob
+
+**Step 5: UI Components** 🔄 IN PROGRESS
+- Created: `src/components/profile/ProfileCreationCTA.jsx` ✅
+- Pending: ProfileRegistration (Typeform 6 pasos)
+- Pending: ProfileView
+- Pending: ProfileEdit
+- Pending: AccountDeletion
+
+**Step 6: Configuration** ✅ COMPLETED
+- Updated: `vercel.json` (added /api/profile function)
+- Updated: `.env.example` (added BLOB_READ_WRITE_TOKEN)
+- Configuration: maxDuration 10 seconds
+
+### Data Lake Structure
+
+```
+profiles/
+  └── {userId}.ndjson    # NDJSON append-only
+      ├── Line 1: Initial profile (version 1)
+      ├── Line 2: Updated profile (version 2)
+      ├── Line 3: Updated profile (version 3)
+      └── Line N: Deletion record (soft delete)
+```
+
+### Profile Schema Fields
+
+**Required:**
+- userId, login, email (from GitHub OAuth)
+- firstName, lastName
+- ageRange (14-17, 18-24, 25-34, 35+)
+- educationLevel (primaria, bachillerato, técnico, tecnólogo, universitario, posgrado)
+- educationStatus (in-progress, completed)
+- legalDisclaimerAccepted (must be true)
+- githubData (avatarUrl, username, email)
+
+**Conditional:**
+- parentalConsentConfirmed (required if ageRange = 14-17)
+
+**Auto-generated:**
+- version, createdAt, updatedAt, profileComplete, legalDisclaimerAcceptedAt
+
+### Testing Results
+
+**Unit Tests:**
+- Schemas: 28/28 ✅
+- Storage Service: 31/31 ✅
+- Config: 5/5 ✅
+- Total: 64/64 passing
+
+**Fixes Applied:**
+- Removed TypeScript syntax (`as const`) from JavaScript tests
+- Changed `.toEndWith()` to `.endsWith().toBe(true)` (Chai compatibility)
+- Separated profileBaseSchema from profileSchema for `.extend()` compatibility
+
+### Vercel Blob Setup
+
+**Installation:**
+```bash
+npm install @vercel/blob
+```
+
+**Environment Variables:**
+```bash
+BLOB_READ_WRITE_TOKEN=vercel_blob_rw_XXXXXXXXXX
+```
+
+**Configuration:**
+1. Vercel Dashboard → Storage → Create Blob
+2. Name: `circleup-profiles`
+3. Copy token to environment variables
+4. Token auto-configures in production
+
+### API Endpoints
+
+**GET /api/profile?userId={userId}**
+- Returns latest profile version
+- Returns null if deleted or not found
+
+**POST /api/profile**
+- Creates new profile with version 1
+- Validates all required fields
+- Returns 409 if profile exists
+
+**PUT /api/profile**
+- Updates profile (increments version)
+- Preserves createdAt, userId (immutable)
+- Appends new line to NDJSON
+
+**DELETE /api/profile**
+- Soft delete (appends deletion record)
+- Requires confirmation: "Delete"
+- Preserves audit trail
+
+### Security
+
+- ✅ BLOB_READ_WRITE_TOKEN never exposed to frontend
+- ✅ All operations server-side (Vercel Functions)
+- ✅ Zod validation on all inputs
+- ✅ Immutable fields (userId, email) protected
+- ✅ Soft deletes preserve audit trail
+- ✅ CORS configured for frontend access
+
+### Performance
+
+**Cache Strategy:**
+- Frontend: localStorage (5 min TTL)
+- Vercel Function: Direct Blob access
+- NDJSON parsing: O(n) where n = versions
+
+**Capacity:**
+- Free tier: 500MB storage
+- Estimated: 650K+ profiles
+- 3-5 versions per profile average
+
+### Next Steps
+
+1. ⏳ Implement ProfileRegistration component (Typeform-style, 6 steps)
+2. ⏳ Implement ProfileView component
+3. ⏳ Implement ProfileEdit component
+4. ⏳ Implement AccountDeletion component (2-step confirmation)
+5. ⏳ Integrate profile gate into DashboardHome.jsx
+6. ⏳ Write integration tests for API endpoints
+7. ⏳ Write E2E tests for registration flow
+
+### Files Created
+
+```
+src/shared/schemas/profile.schema.ts
+src/shared/utils/profile-storage.js
+src/shared/utils/profile.js
+src/components/profile/ProfileCreationCTA.jsx
+api/profile.js
+tests/unit/schemas/profile.schema.test.js
+tests/unit/services/profile-storage.test.js
+```
+
+### Files Modified
+
+```
+vercel.json (added /api/profile function)
+.env.example (added BLOB_READ_WRITE_TOKEN)
+```

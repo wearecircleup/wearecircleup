@@ -33,6 +33,15 @@ export const educationStatusSchema = z.enum(['in-progress', 'completed'], {
 });
 
 /**
+ * User role schema
+ * Default: Volunteer (immutable by users)
+ * Future roles: Business, Participant, Admin
+ */
+export const roleSchema = z.enum(['Volunteer', 'Business', 'Participant', 'Admin'], {
+  errorMap: () => ({ message: 'Rol de usuario inválido' })
+}).default('Volunteer');
+
+/**
  * Base profile object schema (without refinements)
  */
 const profileBaseSchema = z.object({
@@ -56,6 +65,9 @@ const profileBaseSchema = z.object({
   
   educationLevel: educationLevelSchema,
   educationStatus: educationStatusSchema,
+  
+  // User role (immutable by users, default: Volunteer)
+  role: roleSchema,
   
   // Legal compliance
   legalDisclaimerAccepted: z.literal(true, {

@@ -153,6 +153,7 @@ async function handlePost(req, res) {
     const now = new Date().toISOString();
     const profileRecord = {
       ...profileData,
+      role: profileData.role || 'Volunteer', // Default role
       version: 1,
       createdAt: now,
       updatedAt: now,
@@ -221,6 +222,8 @@ async function handlePut(req, res) {
       ...currentProfile,
       ...updates,
       userId: currentProfile.userId, // Prevent userId change
+      role: currentProfile.role, // Prevent role change (immutable)
+      email: currentProfile.email, // Prevent email change (immutable)
       version: currentProfile.version + 1,
       updatedAt: new Date().toISOString(),
       createdAt: currentProfile.createdAt // Preserve creation date
