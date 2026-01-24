@@ -113,19 +113,28 @@ const ProfileRegistration = ({ user, onComplete, onCancel }) => {
   };
 
   const handleSubmit = async () => {
+    console.log('handleSubmit called');
+    console.log('Form data:', formData);
+    
     setIsSubmitting(true);
     setErrors({});
 
     try {
       // Validate with Zod schema
+      console.log('Validating with Zod...');
       const validatedData = profileSchema.parse(formData);
+      console.log('Validation successful:', validatedData);
 
       // Create profile via API
+      console.log('Calling ProfileService.createProfile...');
       const result = await ProfileService.createProfile(validatedData);
+      console.log('API result:', result);
 
       if (result.success) {
+        console.log('Profile created successfully');
         onComplete(result.profile);
       } else {
+        console.error('API error:', result.error);
         setErrors({ submit: result.error || 'Error al crear el perfil' });
         setIsSubmitting(false);
       }
@@ -136,6 +145,7 @@ const ProfileRegistration = ({ user, onComplete, onCancel }) => {
         error.errors.forEach(err => {
           zodErrors[err.path[0]] = err.message;
         });
+        console.log('Zod errors:', zodErrors);
         setErrors(zodErrors);
       } else {
         setErrors({ submit: 'Error de validación. Por favor verifica todos los campos.' });
@@ -163,7 +173,7 @@ const ProfileRegistration = ({ user, onComplete, onCancel }) => {
         return (
           <StepContent
             title="¿Cuál es tu nombre?"
-            subtitle="Así te conocerán en Circle Up"
+            subtitle="Así te conocerán en Circle Up Volunteer"
           >
             <input
               type="text"
@@ -210,9 +220,10 @@ const ProfileRegistration = ({ user, onComplete, onCancel }) => {
             <div className="relative">
               <input
                 type="email"
-                value={formData.email}
+                value={formData.email || ''}
+                placeholder={formData.email || 'Cargando...'}
                 disabled
-                className="w-full px-6 py-4 text-lg bg-n-7/50 border border-n-6 rounded-xl text-n-3 cursor-not-allowed"
+                className="w-full px-6 py-4 text-lg bg-n-7/50 border border-n-6 rounded-xl text-n-1 cursor-not-allowed"
               />
               <div className="absolute right-4 top-1/2 -translate-y-1/2">
                 <svg className="w-5 h-5 text-n-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -348,30 +359,23 @@ const ProfileRegistration = ({ user, onComplete, onCancel }) => {
         return (
           <StepContent
             title="Declaración legal"
-            subtitle="Por favor lee y acepta los términos"
+            subtitle="Tu privacidad y seguridad son nuestra prioridad"
           >
-            <div className="p-6 bg-n-7 border border-n-6 rounded-xl max-h-64 overflow-y-auto">
-              <p className="text-sm text-n-3 leading-relaxed">
-                Al registrarte en Circle Up, aceptas que:
+            <div className="p-8 bg-gradient-to-br from-n-7 to-n-8 border border-n-6 rounded-2xl">
+              <p className="text-base text-n-2 leading-relaxed italic font-light">
+                Al unirte a Circle Up Volunteer, tus datos personales se almacenan de forma segura y solo se usan para personalizar tu experiencia. Tienes control total sobre tu información y puedes eliminar tu cuenta cuando lo desees. Nos comprometemos a mantener un espacio seguro y respetuoso para todos.
               </p>
-              <ul className="mt-4 space-y-2 text-sm text-n-3">
-                <li>• Tus datos personales serán almacenados de forma segura</li>
-                <li>• La información será usada únicamente para mejorar tu experiencia</li>
-                <li>• Puedes solicitar la eliminación de tu cuenta en cualquier momento</li>
-                <li>• Cumplirás con el código de conducta de la plataforma</li>
-                <li>• Eres responsable del contenido que generes</li>
-              </ul>
             </div>
 
-            <label className="mt-6 flex items-start gap-3 cursor-pointer">
+            <label className="mt-8 flex items-start gap-4 cursor-pointer group">
               <input
                 type="checkbox"
                 checked={formData.legalDisclaimerAccepted}
                 onChange={(e) => updateField('legalDisclaimerAccepted', e.target.checked)}
-                className="mt-1 w-5 h-5 rounded border-n-5 text-color-1 focus:ring-color-1"
+                className="mt-1 w-5 h-5 rounded border-n-5 text-color-1 focus:ring-color-1 focus:ring-offset-2 focus:ring-offset-n-8"
               />
-              <span className="text-sm text-n-2">
-                He leído y acepto la declaración legal de Circle Up
+              <span className="text-base text-n-2 group-hover:text-n-1 transition-colors">
+                Acepto los términos y condiciones de Circle Up Volunteer
               </span>
             </label>
             {errors.legalDisclaimerAccepted && (

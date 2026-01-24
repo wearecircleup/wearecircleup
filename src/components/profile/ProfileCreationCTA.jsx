@@ -98,34 +98,48 @@ const ProfileCreationCTA = ({ onStart, onSkip }) => {
           Para comenzar a crear presentaciones increíbles con IA, necesitamos conocerte un poco mejor.
         </motion.p>
 
-        {/* CTA Button - Spotify style with Button component geometry */}
-        <motion.button
-          onClick={onStart}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          className="group relative inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-white bg-gradient-to-r from-color-1 to-color-2 rounded-xl overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-color-1/50 transition-all duration-300"
+        {/* CTA Button - Using Button component */}
+        <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.98 }}
         >
-          {/* Animated background */}
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-color-2 to-color-1"
-            initial={{ x: "-100%" }}
-            animate={{ x: isHovered ? "0%" : "-100%" }}
-            transition={{ duration: 0.3 }}
-          />
-          
-          {/* Button content */}
-          <span className="relative flex items-center gap-2">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          <button
+            onClick={onStart}
+            className="button relative inline-flex items-center justify-center h-11 transition-colors hover:text-color-1 px-7 text-n-8 text-sm lg:text-base"
+          >
+            <span className="relative z-10 flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              Crear Perfil
+            </span>
+            <svg className="absolute inset-0 pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="btn-left" x1="50%" x2="50%" y1="0%" y2="100%">
+                  <stop offset="0%" stopColor="#89F9E8" />
+                  <stop offset="100%" stopColor="#FACB7B" />
+                </linearGradient>
+                <linearGradient id="btn-top" x1="100%" x2="0%" y1="50%" y2="50%">
+                  <stop offset="0%" stopColor="#D87CEE" />
+                  <stop offset="100%" stopColor="rgba(88, 88, 88, 0)" />
+                </linearGradient>
+                <linearGradient id="btn-bottom" x1="100%" x2="0%" y1="50%" y2="50%">
+                  <stop offset="0%" stopColor="#9099FC" />
+                  <stop offset="100%" stopColor="rgba(88, 88, 88, 0)" />
+                </linearGradient>
+                <linearGradient id="btn-right" x1="14.635%" x2="14.635%" y1="0%" y2="100%">
+                  <stop offset="0%" stopColor="#9099FC" />
+                  <stop offset="100%" stopColor="#D87CEE" />
+                </linearGradient>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#btn-left)" rx="1.5rem" />
+              <rect width="100%" height="100%" fill="url(#btn-top)" rx="1.5rem" />
+              <rect width="100%" height="100%" fill="url(#btn-bottom)" rx="1.5rem" />
+              <rect width="100%" height="100%" fill="url(#btn-right)" rx="1.5rem" />
             </svg>
-            Crear Perfil
-          </span>
-        </motion.button>
+          </button>
+        </motion.div>
 
         {/* Info text */}
         <motion.p
