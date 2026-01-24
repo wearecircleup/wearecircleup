@@ -33,7 +33,7 @@ const ProfileRegistration = ({ user, onComplete, onCancel }) => {
     legalDisclaimerAccepted: false,
     parentalConsentConfirmed: false,
     githubData: {
-      avatarUrl: user?.avatar_url || '',
+      avatarUrl: user?.avatarUrl || user?.avatar_url || '',
       username: user?.login || user?.username || '',
       email: user?.email || ''
     }
