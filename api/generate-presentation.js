@@ -136,10 +136,17 @@ RULES FOR ARTISTIC TYPOGRAPHY:
   * Use |xl:black| or |lg:black| for 1-2 hero words
   * Default unmarked words are |md:normal|
 
-- "explanation": Must be 30-50 words. A concise paragraph in italic that complements or explains the message. Occupies 20% of the slide.
+- "explanation": STRICT LIMIT 15-20 words. Brief, impactful statement in italic. NOT a paragraph - keep it SHORT and PUNCHY.
 - NO bullet points, NO lists
 - Focus on DRAMATIC visual hierarchy through size AND weight variations
-- Each message should be memorable and visually striking
+- Think TEDx style: slides are visual support, NOT reading material
+- Each message should be memorable, conversational, and visually striking
+- The audience should FEEL the message, not read it
+
+CRITICAL: 
+- "explanation" must be EXACTLY 15-20 words (count them!)
+- Shorter is better - make every word count
+- This is a visual aid for a speaker, not a document
 
 Do NOT include any other fields. Only "message" and "explanation" for each slide.`
           }

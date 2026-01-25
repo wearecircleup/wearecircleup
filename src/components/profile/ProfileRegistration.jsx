@@ -175,15 +175,15 @@ const ProfileRegistration = ({ user, onComplete, onCancel }) => {
       case 1:
         return (
           <StepContent
-            title="¿Cuál es tu nombre?"
-            subtitle="Así te conocerán en Circle Up Volunteer"
+            title="Comencemos con tu nombre"
+            subtitle="Así te conocerá nuestra comunidad"
           >
             <input
               type="text"
               value={formData.firstName}
               onChange={(e) => updateField('firstName', e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleNext()}
-              placeholder="Escribe tu nombre"
+              placeholder="Tu nombre"
               className="w-full px-6 py-4 text-lg bg-n-7 border border-n-6 rounded-xl text-n-1 placeholder:text-n-4 focus:border-color-1 focus:outline-none transition-colors"
               autoFocus
             />
@@ -196,15 +196,15 @@ const ProfileRegistration = ({ user, onComplete, onCancel }) => {
       case 2:
         return (
           <StepContent
-            title="¿Y tu apellido?"
-            subtitle="Para completar tu identificación"
+            title="Y tu apellido"
+            subtitle="Completemos tu identidad"
           >
             <input
               type="text"
               value={formData.lastName}
               onChange={(e) => updateField('lastName', e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleNext()}
-              placeholder="Escribe tu apellido"
+              placeholder="Tu apellido"
               className="w-full px-6 py-4 text-lg bg-n-7 border border-n-6 rounded-xl text-n-1 placeholder:text-n-4 focus:border-color-1 focus:outline-none transition-colors"
               autoFocus
             />
@@ -244,12 +244,12 @@ const ProfileRegistration = ({ user, onComplete, onCancel }) => {
                   value={formData.email}
                   onChange={(e) => updateField('email', e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleNext()}
-                  placeholder="tu@email.com"
+                  placeholder="donde@te.encontramos"
                   className="w-full px-6 py-4 text-lg bg-n-7 border border-n-6 rounded-xl text-n-1 placeholder:text-n-4 focus:border-color-1 focus:outline-none transition-colors"
                   autoFocus
                 />
                 <p className="mt-2 text-sm text-n-4">
-                  Tu email de GitHub es privado. Por favor ingresa un email de contacto.
+                  Tu email de GitHub es privado. Comparte uno donde podamos conectar contigo.
                 </p>
                 {errors.email && (
                   <p className="mt-2 text-sm text-red-500">{errors.email}</p>
@@ -299,7 +299,7 @@ const ProfileRegistration = ({ user, onComplete, onCancel }) => {
                     className="mt-1 w-5 h-5 rounded border-yellow-500/50 text-yellow-500 focus:ring-yellow-500"
                   />
                   <span className="text-sm text-n-2">
-                    Confirmo que tengo el consentimiento de mis padres o tutor legal para registrarme en Circle Up
+                    Tengo el consentimiento de mis padres o tutor legal para unirme a Circle Up
                   </span>
                 </label>
                 {errors.parentalConsentConfirmed && (
@@ -399,7 +399,7 @@ const ProfileRegistration = ({ user, onComplete, onCancel }) => {
                 className="mt-1 w-5 h-5 rounded border-n-5 text-color-1 focus:ring-color-1 focus:ring-offset-2 focus:ring-offset-n-8"
               />
               <span className="text-base text-n-2 group-hover:text-n-1 transition-colors">
-                Acepto los términos y condiciones de Circle Up Volunteer
+                Acepto los términos y condiciones para ser parte de esta comunidad
               </span>
             </label>
             {errors.legalDisclaimerAccepted && (

@@ -32,6 +32,17 @@ const CreatePresentation = ({ user, onBack, onSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    // Validate word count for description
+    const wordCount = formData.description.split(/\s+/).filter(w => w.length > 0).length;
+    if (wordCount < 50) {
+      setErrors({ description: 'Tu historia merece más. Comparte al menos 50 palabras para que podamos crear algo increíble juntos.' });
+      return;
+    }
+    if (wordCount > 200) {
+      setErrors({ description: 'Menos es más. Mantengamos el enfoque en lo esencial: máximo 200 palabras.' });
+      return;
+    }
+    
     try {
       const validated = presentationFormSchema.parse(formData);
       setErrors({});
@@ -99,9 +110,9 @@ const CreatePresentation = ({ user, onBack, onSuccess }) => {
         </button>
         <div>
           <h2 className="text-2xl lg:text-3xl font-bold text-n-1">
-            Nueva Presentación
+            Crea algo memorable
           </h2>
-          <p className="text-n-4">Genera contenido profesional con AI</p>
+          <p className="text-n-4">Tu historia, amplificada por IA</p>
         </div>
       </div>
 
@@ -144,14 +155,14 @@ const CreatePresentation = ({ user, onBack, onSuccess }) => {
           {/* Title */}
           <div>
             <label className="block text-n-1 font-medium mb-2">
-              Título de la Presentación *
+              Dale un nombre a tu historia
             </label>
             <input
               type="text"
               name="title"
               value={formData.title}
               onChange={handleInputChange}
-              placeholder="ej., Acción Climática 2026"
+              placeholder="El futuro que queremos construir"
               className={`w-full bg-n-8/50 border ${errors.title ? 'border-red-500' : 'border-n-1/10'} rounded-xl py-3 lg:py-4 px-4 text-n-1 placeholder-n-4 focus:border-color-1 focus:outline-none transition-colors`}
             />
             {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
@@ -160,16 +171,27 @@ const CreatePresentation = ({ user, onBack, onSuccess }) => {
           {/* Description */}
           <div>
             <label className="block text-n-1 font-medium mb-2">
-              Descripción *
+              ¿Qué quieres que recuerden?
             </label>
             <textarea
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              placeholder="Describe de qué debería tratar tu presentación..."
-              rows="4"
+              placeholder="Imagina que estás en un escenario. ¿Qué mensajes clave quieres que tu audiencia se lleve a casa? Escribe como si estuvieras conversando, no leyendo. Tus slides serán el arte visual que acompaña tu voz."
+              rows="5"
               className={`w-full bg-n-8/50 border ${errors.description ? 'border-red-500' : 'border-n-1/10'} rounded-xl py-3 lg:py-4 px-4 text-n-1 placeholder-n-4 focus:border-color-1 focus:outline-none transition-colors resize-none`}
             />
+            <div className="flex items-center justify-between mt-2">
+              <p className="text-xs text-n-4">
+                {formData.description.split(/\s+/).filter(w => w.length > 0).length} palabras
+                {formData.description.split(/\s+/).filter(w => w.length > 0).length < 50 && (
+                  <span className="text-color-1 ml-2">Comparte al menos 50 para crear magia</span>
+                )}
+                {formData.description.split(/\s+/).filter(w => w.length > 0).length > 200 && (
+                  <span className="text-color-2 ml-2">Mantengamos el enfoque: máximo 200</span>
+                )}
+              </p>
+            </div>
             {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
           </div>
 
@@ -179,7 +201,7 @@ const CreatePresentation = ({ user, onBack, onSuccess }) => {
             {/* Number of Slides */}
             <div>
               <label className="block text-n-1 font-medium mb-2">
-                Número de Diapositivas *
+                ¿Cuántos momentos?
               </label>
               <input
                 type="number"
@@ -196,7 +218,7 @@ const CreatePresentation = ({ user, onBack, onSuccess }) => {
             {/* Language */}
             <div>
               <label className="block text-n-1 font-medium mb-2">
-                Idioma de Salida *
+                Tu idioma
               </label>
               <select
                 name="language"
@@ -213,7 +235,7 @@ const CreatePresentation = ({ user, onBack, onSuccess }) => {
             {/* Theme */}
             <div>
               <label className="block text-n-1 font-medium mb-2">
-                Tema *
+                Estilo visual
               </label>
               <select
                 name="theme"
@@ -230,7 +252,7 @@ const CreatePresentation = ({ user, onBack, onSuccess }) => {
             {/* Model */}
             <div>
               <label className="block text-n-1 font-medium mb-2">
-                Modelo de AI *
+                Cerebro creativo
               </label>
               <select
                 name="model"
@@ -255,15 +277,12 @@ const CreatePresentation = ({ user, onBack, onSuccess }) => {
               disabled={isGenerating}
             >
               {isGenerating ? (
-                <span className="flex items-center justify-center">
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Generando...
-                </span>
+                <div className="flex items-center justify-center gap-3">
+                  <div className="w-5 h-5 border-2 border-n-1 border-t-transparent rounded-full animate-spin"></div>
+                  <span>Creando tu obra maestra...</span>
+                </div>
               ) : (
-                'Generar Presentación'
+                'Crear Presentación'
               )}
             </Button>
           </div>

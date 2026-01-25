@@ -183,37 +183,37 @@ const PresentationViewerComponent = ({ presentation, onBack }) => {
                   fontFamily === 'serif' ? 'font-serif' : fontFamily === 'mono' ? 'font-mono' : 'font-sans'
                 }`}
               >
-                {/* Main impactful message - 70% of space */}
-                <div className="flex-[7] flex items-center justify-center mb-6 sm:mb-8">
+                {/* Main impactful message - 80% of space */}
+                <div className="flex-[8] flex items-center justify-center mb-4 sm:mb-6">
                   <h1 className="leading-tight text-center">
                     {parseMessageWithEmphasis(slide.message || slide.title).map((part, idx) => {
                       // Size multipliers based on fontSize setting
                       const sizeClasses = {
                         xs: fontSize === 'small' 
-                          ? 'text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl'
+                          ? 'text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl'
                           : fontSize === 'large'
-                          ? 'text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl'
-                          : 'text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl',
+                          ? 'text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl'
+                          : 'text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl',
                         sm: fontSize === 'small'
-                          ? 'text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl'
+                          ? 'text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl'
                           : fontSize === 'large'
-                          ? 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl'
-                          : 'text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl',
+                          ? 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl'
+                          : 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl',
                         md: fontSize === 'small'
-                          ? 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl'
-                          : fontSize === 'large'
-                          ? 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl'
-                          : 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl',
-                        lg: fontSize === 'small'
                           ? 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl'
                           : fontSize === 'large'
                           ? 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl'
                           : 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl',
-                        xl: fontSize === 'small'
+                        lg: fontSize === 'small'
                           ? 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl'
                           : fontSize === 'large'
-                          ? 'text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem]'
-                          : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl'
+                          ? 'text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[11rem]'
+                          : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl',
+                        xl: fontSize === 'small'
+                          ? 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl'
+                          : fontSize === 'large'
+                          ? 'text-7xl sm:text-8xl md:text-9xl lg:text-[10rem] xl:text-[12rem]'
+                          : 'text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem]'
                       };
                       
                       const weightClasses = {
@@ -238,7 +238,7 @@ const PresentationViewerComponent = ({ presentation, onBack }) => {
                 </div>
                 
                 {/* Complementary explanation - 20% of space */}
-                <div className="flex-[2] flex items-start justify-center">
+                <div className="flex-[2] flex items-center justify-center">
                   <p className={`text-n-3 italic leading-relaxed text-center max-w-4xl ${
                     fontSize === 'small'
                       ? 'text-sm sm:text-base md:text-lg lg:text-xl'
