@@ -3,6 +3,78 @@ import Button from '../Button';
 import Logo from '../Logo';
 import ParticleLogo from '../presentation/ParticleLogo';
 
+// Parse message with asterisk emphasis markers
+const parseMessageWithEmphasis = (message) => {
+  if (!message) return [];
+  
+  // Split by asterisk patterns while preserving them
+  const parts = [];
+  let currentText = '';
+  let i = 0;
+  
+  while (i < message.length) {
+    // Check for 4 asterisks (****word****)
+    if (message.substr(i, 4) === '****') {
+      if (currentText) parts.push({ text: currentText, weight: 'normal' });
+      currentText = '';
+      i += 4;
+      let emphasisText = '';
+      while (i < message.length && message.substr(i, 4) !== '****') {
+        emphasisText += message[i];
+        i++;
+      }
+      if (emphasisText) parts.push({ text: emphasisText, weight: 'black' });
+      i += 4;
+    }
+    // Check for 3 asterisks (***word***)
+    else if (message.substr(i, 3) === '***') {
+      if (currentText) parts.push({ text: currentText, weight: 'normal' });
+      currentText = '';
+      i += 3;
+      let emphasisText = '';
+      while (i < message.length && message.substr(i, 3) !== '***') {
+        emphasisText += message[i];
+        i++;
+      }
+      if (emphasisText) parts.push({ text: emphasisText, weight: 'bold' });
+      i += 3;
+    }
+    // Check for 2 asterisks (**word**)
+    else if (message.substr(i, 2) === '**') {
+      if (currentText) parts.push({ text: currentText, weight: 'normal' });
+      currentText = '';
+      i += 2;
+      let emphasisText = '';
+      while (i < message.length && message.substr(i, 2) !== '**') {
+        emphasisText += message[i];
+        i++;
+      }
+      if (emphasisText) parts.push({ text: emphasisText, weight: 'medium' });
+      i += 2;
+    }
+    // Check for 1 asterisk (*word*)
+    else if (message[i] === '*') {
+      if (currentText) parts.push({ text: currentText, weight: 'normal' });
+      currentText = '';
+      i++;
+      let emphasisText = '';
+      while (i < message.length && message[i] !== '*') {
+        emphasisText += message[i];
+        i++;
+      }
+      if (emphasisText) parts.push({ text: emphasisText, weight: 'light' });
+      i++;
+    }
+    else {
+      currentText += message[i];
+      i++;
+    }
+  }
+  
+  if (currentText) parts.push({ text: currentText, weight: 'normal' });
+  return parts;
+};
+
 const PresentationViewerComponent = ({ presentation, onBack }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [fontSize, setFontSize] = useState('normal'); // small, normal, large
@@ -88,6 +160,12 @@ const PresentationViewerComponent = ({ presentation, onBack }) => {
   }, [slides, currentSlide]);
 
   const slide = currentSlide === 0 ? null : slides[currentSlide - 1];
+  
+  // Support both old format (title + content) and new format (message + explanation)
+  if (slide && !slide.message && slide.title) {
+    slide.message = slide.title;
+    slide.explanation = slide.content ? slide.content.join('. ') : '';
+  }
   const totalSlides = slides.length + 1; // +1 for ParticleLogo
   const progress = ((currentSlide + 1) / totalSlides) * 100;
 
@@ -119,33 +197,46 @@ const PresentationViewerComponent = ({ presentation, onBack }) => {
                   fontFamily === 'serif' ? 'font-serif' : fontFamily === 'mono' ? 'font-mono' : 'font-sans'
                 }`}
               >
-                <h1 className={`font-bold mb-6 sm:mb-8 md:mb-10 lg:mb-12 bg-gradient-to-r from-color-1 to-color-2 bg-clip-text text-transparent leading-tight ${
-                  fontSize === 'small'
-                    ? 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl'
-                    : fontSize === 'large'
-                    ? 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl'
-                    : 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl'
-                }`}>
-                  {slide.title}
-                </h1>
+                {/* Main impactful message - 70% of space */}
+                <div className="flex-[7] flex items-center justify-center mb-6 sm:mb-8">
+                  <h1 className={`leading-tight text-center ${
+                    fontSize === 'small'
+                      ? 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl'
+                      : fontSize === 'large'
+                      ? 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl'
+                      : 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl'
+                  }`}>
+                    {parseMessageWithEmphasis(slide.message || slide.title).map((part, idx) => {
+                      const weightClasses = {
+                        light: 'font-light',
+                        normal: 'font-normal',
+                        medium: 'font-medium',
+                        bold: 'font-bold',
+                        black: 'font-black'
+                      };
+                      return (
+                        <span 
+                          key={idx} 
+                          className={`bg-gradient-to-r from-color-1 to-color-2 bg-clip-text text-transparent ${weightClasses[part.weight]}`}
+                        >
+                          {part.text}
+                        </span>
+                      );
+                    })}
+                  </h1>
+                </div>
                 
-                <div className="space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6 flex-1 flex flex-col justify-center">
-                  {slide.content.map((point, index) => (
-                    <div
-                      key={index}
-                      className={`flex items-start gap-3 sm:gap-4 text-n-2 animate-fadeIn ${
-                        fontSize === 'small'
-                          ? 'text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl'
-                          : fontSize === 'large'
-                          ? 'text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl'
-                          : 'text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl'
-                      }`}
-                      style={{ animationDelay: `${index * 0.1}s` }}
-                    >
-                      <span className="text-color-1 font-bold flex-shrink-0">•</span>
-                      <p className="leading-relaxed">{point}</p>
-                    </div>
-                  ))}
+                {/* Complementary explanation - 20% of space */}
+                <div className="flex-[2] flex items-start justify-center">
+                  <p className={`text-n-3 italic leading-relaxed text-center max-w-4xl ${
+                    fontSize === 'small'
+                      ? 'text-sm sm:text-base md:text-lg lg:text-xl'
+                      : fontSize === 'large'
+                      ? 'text-lg sm:text-xl md:text-2xl lg:text-3xl'
+                      : 'text-base sm:text-lg md:text-xl lg:text-2xl'
+                  }`}>
+                    {slide.explanation || (slide.content && slide.content.join(' '))}
+                  </p>
                 </div>
 
                 {/* Logo */}

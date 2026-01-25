@@ -86,25 +86,44 @@ export default async function handler(req, res) {
         messages: [
           {
             role: 'system',
-            content: `You are an expert in creating professional presentations. Generate structured content in JSON format. Always respond in ${outputLanguage}.`
+            content: `You are an expert in creating impactful professional presentations focused on key messages rather than information overload. Generate structured content in JSON format. Always respond in ${outputLanguage}.`
           },
           {
             role: 'user',
             content: `Create ${slideCount} slides about: ${description}
 
 IMPORTANT: All content must be in ${outputLanguage}.
-          
+
+PRESENTATION PHILOSOPHY:
+- Focus on key messages that the audience will remember after the presentation
+- Reduce cognitive load by avoiding bullet points
+- Each slide should have ONE clear, impactful message
+
 Respond ONLY with valid JSON in this format:
 {
   "slides": [
     {
-      "title": "Slide title",
-      "content": ["Point 1", "Point 2", "Point 3"]
+      "message": "Main impactful message (5-10 words maximum)",
+      "explanation": "Complementary paragraph that explains or supports the message (30-50 words, will be displayed in italic)"
     }
   ]
 }
 
-Do NOT include speaker notes. Only title and content array for each slide.`
+RULES:
+- "message": Must be 5-10 words maximum. This is the key takeaway that occupies 70% of the slide.
+  * Use asterisks to mark emphasis levels for visual hierarchy:
+    * *word* = light emphasis (font-weight: 300)
+    * **word** = medium emphasis (font-weight: 500) 
+    * ***word*** = strong emphasis (font-weight: 700)
+    * ****word**** = extra strong emphasis (font-weight: 900)
+  * Example: "visualize your ****big**** thoughts" or "the only **limit** is your ****imagination****"
+  * Mark 1-3 key words for dramatic visual impact
+- "explanation": Must be 30-50 words. A concise paragraph in italic that complements or explains the message. Occupies 20% of the slide.
+- NO bullet points, NO lists
+- Focus on impact and clarity through typography
+- Each message should be memorable and actionable
+
+Do NOT include any other fields. Only "message" and "explanation" for each slide.`
           }
         ],
         temperature: 0.4,
