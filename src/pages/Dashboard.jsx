@@ -5,6 +5,7 @@ import Logo from "../components/Logo";
 import { GitHubAuthService } from "../shared/utils/github";
 import DashboardHome from "../components/dashboard/DashboardHome";
 import CreatePresentation from "../components/dashboard/CreatePresentation";
+import PresentationViewerComponent from "../components/dashboard/PresentationViewerComponent";
 import curve from "../assets/hero/curve.png";
 
 const Dashboard = ({ setCurrentPage }) => {
@@ -119,35 +120,10 @@ const Dashboard = ({ setCurrentPage }) => {
           )}
           
           {currentView === 'view' && selectedPresentation && (
-            <div className="space-y-6">
-              <Button onClick={() => handleNavigate('home')} className="mb-4">
-                ← Volver
-              </Button>
-              <div className="bg-n-7/90 backdrop-blur-sm border border-n-6/50 rounded-2xl p-6 lg:p-8">
-                <h2 className="text-2xl lg:text-3xl font-bold text-n-1 mb-4">{selectedPresentation.title}</h2>
-                <p className="text-n-4 mb-6">{selectedPresentation.description}</p>
-                <div className="space-y-4">
-                  {selectedPresentation.slides?.map((slide, index) => (
-                    <div key={index} className="bg-n-8/50 border border-n-6/30 rounded-xl p-6">
-                      <h3 className="text-xl font-bold text-color-1 mb-3">{slide.title}</h3>
-                      <ul className="space-y-2">
-                        {slide.content?.map((point, i) => (
-                          <li key={i} className="text-n-2 flex items-start gap-3">
-                            <span className="text-color-2 mt-1">•</span>
-                            <span>{point}</span>
-                          </li>
-                        ))}
-                      </ul>
-                      {slide.notes && (
-                        <div className="mt-4 pt-4 border-t border-n-6/30">
-                          <p className="text-sm text-n-4 italic">{slide.notes}</p>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+            <PresentationViewerComponent 
+              presentation={selectedPresentation}
+              onBack={() => handleNavigate('home')}
+            />
           )}
 
         </div>
