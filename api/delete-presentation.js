@@ -4,7 +4,12 @@
  * Deletes presentation from DynamoDB
  */
 
-import { PresentationService } from '../backend/services/presentation.service.js';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient, GetCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
+
+const client = new DynamoDBClient({ region: process.env.AWS_REGION });
+const docClient = DynamoDBDocumentClient.from(client);
+const PRESENTATIONS_TABLE = process.env.DYNAMODB_PRESENTATIONS_TABLE_NAME;
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Credentials', true);
@@ -33,7 +38,26 @@ export default async function handler(req, res) {
 
     console.log(`Deleting presentation: ${presentationId} for user: ${userId}`);
 
-    await PresentationService.deletePresentation(presentationId, userId);
+    // Get current presentations
+    const current = await docClient.send(new GetCommand({
+      TableName: PRESENTATIONS_TABLE,
+      Key: { PK: userId }
+    }));
+    
+    // Remove presentation from array
+    const presentations = (current.Item?.presentations || [])
+      .filter(p => p.id !== presentationId);
+    
+    // Update user's presentations
+    await docClient.send(new PutCommand({
+      TableName: PRESENTATIONS_TABLE,
+      Item: {
+        PK: userId,
+        userId: userId,
+        presentations: presentations,
+        updatedAt: new Date().toISOString()
+      }
+    }));
 
     console.log(`Presentation deleted successfully: ${presentationId}`);
 

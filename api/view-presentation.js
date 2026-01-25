@@ -4,17 +4,28 @@
  * Returns HTML for a presentation to be displayed
  */
 
-import { PresentationService } from '../backend/services/presentation.service.js';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
+
+const client = new DynamoDBClient({ region: process.env.AWS_REGION });
+const docClient = DynamoDBDocumentClient.from(client);
+const PRESENTATIONS_TABLE = process.env.DYNAMODB_PRESENTATIONS_TABLE_NAME;
 
 export default async function handler(req, res) {
-  const { presentationId } = req.query;
+  const { presentationId, userId } = req.query;
 
-  if (!presentationId) {
-    return res.status(400).send('<h1>Error: Presentation ID required</h1>');
+  if (!presentationId || !userId) {
+    return res.status(400).send('<h1>Error: Presentation ID and User ID required</h1>');
   }
 
   try {
-    const presentation = await PresentationService.getPresentation(presentationId);
+    const result = await docClient.send(new GetCommand({
+      TableName: PRESENTATIONS_TABLE,
+      Key: { PK: userId }
+    }));
+    
+    const presentations = result.Item?.presentations || [];
+    const presentation = presentations.find(p => p.id === presentationId);
 
     if (!presentation) {
       return res.status(404).send('<h1>Presentation not found</h1>');

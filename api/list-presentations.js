@@ -4,7 +4,12 @@
  * Returns all presentations for a user from DynamoDB
  */
 
-import { PresentationService } from '../backend/services/presentation.service.js';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
+
+const client = new DynamoDBClient({ region: process.env.AWS_REGION });
+const docClient = DynamoDBDocumentClient.from(client);
+const PRESENTATIONS_TABLE = process.env.DYNAMODB_PRESENTATIONS_TABLE_NAME;
 
 export default async function handler(req, res) {
   // Set CORS headers
@@ -36,7 +41,12 @@ export default async function handler(req, res) {
 
     console.log(`Fetching presentations for user: ${userId}`);
 
-    const presentations = await PresentationService.getUserPresentations(userId);
+    const result = await docClient.send(new GetCommand({
+      TableName: PRESENTATIONS_TABLE,
+      Key: { PK: userId }
+    }));
+    
+    const presentations = result.Item?.presentations || [];
 
     return res.status(200).json({
       success: true,

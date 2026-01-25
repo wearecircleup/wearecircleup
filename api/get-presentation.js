@@ -4,7 +4,12 @@
  * Returns a single presentation by ID from DynamoDB
  */
 
-import { PresentationService } from '../backend/services/presentation.service.js';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
+
+const client = new DynamoDBClient({ region: process.env.AWS_REGION });
+const docClient = DynamoDBDocumentClient.from(client);
+const PRESENTATIONS_TABLE = process.env.DYNAMODB_PRESENTATIONS_TABLE_NAME;
 
 export default async function handler(req, res) {
   // Set CORS headers
@@ -28,15 +33,21 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { presentationId } = req.query;
+    const { presentationId, userId } = req.query;
 
-    if (!presentationId) {
-      return res.status(400).json({ error: 'presentationId is required' });
+    if (!presentationId || !userId) {
+      return res.status(400).json({ error: 'presentationId and userId are required' });
     }
 
-    console.log(`Fetching presentation: ${presentationId}`);
+    console.log(`Fetching presentation: ${presentationId} for user: ${userId}`);
 
-    const presentation = await PresentationService.getPresentation(presentationId);
+    const result = await docClient.send(new GetCommand({
+      TableName: PRESENTATIONS_TABLE,
+      Key: { PK: userId }
+    }));
+    
+    const presentations = result.Item?.presentations || [];
+    const presentation = presentations.find(p => p.id === presentationId);
 
     if (!presentation) {
       return res.status(404).json({ error: 'Presentation not found' });

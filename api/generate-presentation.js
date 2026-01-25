@@ -4,8 +4,13 @@
  * Calls GitHub Models API to generate slides and saves to DynamoDB
  */
 
-import { PresentationService } from '../backend/services/presentation.service.js';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient, PutCommand, GetCommand } from '@aws-sdk/lib-dynamodb';
 import crypto from 'crypto';
+
+const client = new DynamoDBClient({ region: process.env.AWS_REGION });
+const docClient = DynamoDBDocumentClient.from(client);
+const PRESENTATIONS_TABLE = process.env.DYNAMODB_PRESENTATIONS_TABLE_NAME;
 
 export default async function handler(req, res) {
   // Set CORS headers
@@ -139,11 +144,21 @@ Do NOT include speaker notes. Only title and content array for each slide.`
     const presentationId = crypto.randomUUID();
     const userId = user.id || user.node_id;
 
-    // Save to DynamoDB
+    // Save to DynamoDB presentations table
+    const timestamp = new Date().toISOString();
+    
     try {
-      await PresentationService.savePresentation({
-        presentationId: presentationId,
-        userId: userId,
+      // Get current presentations for user
+      const current = await docClient.send(new GetCommand({
+        TableName: PRESENTATIONS_TABLE,
+        Key: { PK: userId }
+      }));
+      
+      const presentations = current.Item?.presentations || [];
+      
+      // Add new presentation
+      presentations.unshift({
+        id: presentationId,
         title: presentationTitle,
         description: description,
         slides: slidesData.slides,
@@ -154,10 +169,23 @@ Do NOT include speaker notes. Only title and content array for each slide.`
           language: selectedLanguage,
           slideCount: slidesData.slides.length,
           username: user.login
-        }
+        },
+        createdAt: timestamp,
+        updatedAt: timestamp
       });
+      
+      // Save all presentations for user
+      await docClient.send(new PutCommand({
+        TableName: PRESENTATIONS_TABLE,
+        Item: {
+          PK: userId,
+          userId: userId,
+          presentations: presentations,
+          updatedAt: timestamp
+        }
+      }));
 
-      console.log(`[${user.login}] Presentation saved to DynamoDB: ${presentationId}`);
+      console.log(`[${user.login}] Presentation saved to presentations table: ${presentationId}`);
     } catch (saveError) {
       console.error(`[${user.login}] Error saving to DynamoDB:`, saveError);
       return res.status(500).json({ 
