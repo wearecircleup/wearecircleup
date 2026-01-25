@@ -1,20 +1,23 @@
 /**
  * Vercel Serverless Function - User Profile CRUD Operations
  * 
- * This function handles all profile operations using Vercel Blob storage with NDJSON format.
- * Each user has their own NDJSON file with versioned records for complete audit trail.
+ * This function handles all profile operations using AWS DynamoDB.
+ * No backward compatibility with Vercel Blob - clean migration.
  * 
  * Endpoints:
  * - GET    /api/profile?userId={userId}  - Get user profile
  * - POST   /api/profile                  - Create new profile
  * - PUT    /api/profile                  - Update existing profile
- * - DELETE /api/profile                  - Delete profile (soft delete)
+ * - DELETE /api/profile                  - Delete profile (hard delete)
  * 
  * Environment Variables Required:
- * - BLOB_READ_WRITE_TOKEN: Vercel Blob access token
+ * - AWS_REGION: AWS region
+ * - AWS_ROLE_ARN: IAM role ARN with DynamoDB permissions
+ * - DYNAMODB_TABLE_NAME: DynamoDB table name
  */
 
-import { put, head } from '@vercel/blob';
+import { GetCommand, PutCommand, UpdateCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb";
+import { docClient, TABLE_NAME } from "../lib/dynamodb.js";
 
 // CORS headers for frontend access
 const corsHeaders = {
@@ -59,7 +62,7 @@ export default async function handler(req, res) {
 
 /**
  * GET /api/profile?userId={userId}
- * Retrieve user profile
+ * Retrieve user profile from DynamoDB
  */
 async function handleGet(req, res) {
   const { userId } = req.query;
@@ -72,28 +75,21 @@ async function handleGet(req, res) {
   }
 
   try {
-    const pathname = `profiles/${userId}.ndjson`;
-    const content = await readNDJSON(pathname);
+    const result = await docClient.send(new GetCommand({
+      TableName: TABLE_NAME,
+      Key: { userId }
+    }));
 
-    if (!content) {
+    if (!result.Item) {
       return res.status(404).json({ 
         success: false, 
         error: 'Perfil no encontrado' 
       });
     }
 
-    const profile = parseProfileContent(content);
-
-    if (!profile) {
-      return res.status(404).json({ 
-        success: false, 
-        error: 'Perfil no encontrado o eliminado' 
-      });
-    }
-
     return res.status(200).json({ 
       success: true, 
-      profile 
+      profile: result.Item
     });
   } catch (error) {
     console.error('Error reading profile:', error);
@@ -106,7 +102,7 @@ async function handleGet(req, res) {
 
 /**
  * POST /api/profile
- * Create new user profile
+ * Create new user profile in DynamoDB
  */
 async function handlePost(req, res) {
   const profileData = req.body;
@@ -135,25 +131,11 @@ async function handlePost(req, res) {
       }
     }
 
-    // Check if profile already exists
-    const pathname = `profiles/${profileData.userId}.ndjson`;
-    const existingContent = await readNDJSON(pathname);
-    
-    if (existingContent) {
-      const existingProfile = parseProfileContent(existingContent);
-      if (existingProfile) {
-        return res.status(409).json({ 
-          success: false, 
-          error: 'El perfil ya existe. Usa PUT para actualizar.' 
-        });
-      }
-    }
-
     // Create profile record with metadata
     const now = new Date().toISOString();
     const profileRecord = {
       ...profileData,
-      role: profileData.role || 'Volunteer', // Default role
+      role: profileData.role || 'Volunteer',
       version: 1,
       createdAt: now,
       updatedAt: now,
@@ -161,13 +143,12 @@ async function handlePost(req, res) {
       legalDisclaimerAcceptedAt: now
     };
 
-    // Write to Vercel Blob
-    const newLine = JSON.stringify(profileRecord) + '\n';
-    await put(pathname, newLine, {
-      access: 'public',
-      contentType: 'application/x-ndjson',
-      addRandomSuffix: false
-    });
+    // Write to DynamoDB with condition to prevent overwrite
+    await docClient.send(new PutCommand({
+      TableName: TABLE_NAME,
+      Item: profileRecord,
+      ConditionExpression: "attribute_not_exists(userId)"
+    }));
 
     return res.status(201).json({ 
       success: true, 
@@ -175,6 +156,12 @@ async function handlePost(req, res) {
       message: 'Perfil creado exitosamente' 
     });
   } catch (error) {
+    if (error.name === 'ConditionalCheckFailedException') {
+      return res.status(409).json({ 
+        success: false, 
+        error: 'El perfil ya existe. Usa PUT para actualizar.' 
+      });
+    }
     console.error('Error creating profile:', error);
     return res.status(500).json({ 
       success: false, 
@@ -185,7 +172,7 @@ async function handlePost(req, res) {
 
 /**
  * PUT /api/profile
- * Update existing user profile
+ * Update existing user profile in DynamoDB
  */
 async function handlePut(req, res) {
   const updates = req.body;
@@ -198,51 +185,54 @@ async function handlePut(req, res) {
   }
 
   try {
-    const pathname = `profiles/${updates.userId}.ndjson`;
-    const existingContent = await readNDJSON(pathname);
+    const { userId, ...updateFields } = updates;
+    
+    // Build update expression dynamically
+    const updateExpressionParts = [];
+    const expressionAttributeNames = {};
+    const expressionAttributeValues = {};
+    
+    // Immutable fields that cannot be updated
+    const immutableFields = ['userId', 'role', 'email', 'createdAt', 'legalDisclaimerAcceptedAt'];
+    
+    Object.keys(updateFields).forEach((key) => {
+      if (!immutableFields.includes(key)) {
+        updateExpressionParts.push(`#${key} = :${key}`);
+        expressionAttributeNames[`#${key}`] = key;
+        expressionAttributeValues[`:${key}`] = updateFields[key];
+      }
+    });
+    
+    // Always update version and updatedAt
+    updateExpressionParts.push('#version = #version + :inc');
+    updateExpressionParts.push('#updatedAt = :updatedAt');
+    expressionAttributeNames['#version'] = 'version';
+    expressionAttributeNames['#updatedAt'] = 'updatedAt';
+    expressionAttributeValues[':inc'] = 1;
+    expressionAttributeValues[':updatedAt'] = new Date().toISOString();
+    
+    const result = await docClient.send(new UpdateCommand({
+      TableName: TABLE_NAME,
+      Key: { userId },
+      UpdateExpression: `SET ${updateExpressionParts.join(', ')}`,
+      ExpressionAttributeNames: expressionAttributeNames,
+      ExpressionAttributeValues: expressionAttributeValues,
+      ConditionExpression: "attribute_exists(userId)",
+      ReturnValues: "ALL_NEW"
+    }));
 
-    if (!existingContent) {
+    return res.status(200).json({ 
+      success: true, 
+      profile: result.Attributes,
+      message: 'Perfil actualizado exitosamente' 
+    });
+  } catch (error) {
+    if (error.name === 'ConditionalCheckFailedException') {
       return res.status(404).json({ 
         success: false, 
         error: 'Perfil no encontrado' 
       });
     }
-
-    const currentProfile = parseProfileContent(existingContent);
-
-    if (!currentProfile) {
-      return res.status(404).json({ 
-        success: false, 
-        error: 'Perfil no encontrado o eliminado' 
-      });
-    }
-
-    // Create updated record
-    const updatedProfile = {
-      ...currentProfile,
-      ...updates,
-      userId: currentProfile.userId, // Prevent userId change
-      role: currentProfile.role, // Prevent role change (immutable)
-      email: currentProfile.email, // Prevent email change (immutable)
-      version: currentProfile.version + 1,
-      updatedAt: new Date().toISOString(),
-      createdAt: currentProfile.createdAt // Preserve creation date
-    };
-
-    // Append to NDJSON file
-    const newLine = JSON.stringify(updatedProfile) + '\n';
-    await put(pathname, existingContent + newLine, {
-      access: 'public',
-      contentType: 'application/x-ndjson',
-      addRandomSuffix: false
-    });
-
-    return res.status(200).json({ 
-      success: true, 
-      profile: updatedProfile,
-      message: 'Perfil actualizado exitosamente' 
-    });
-  } catch (error) {
     console.error('Error updating profile:', error);
     return res.status(500).json({ 
       success: false, 
@@ -253,7 +243,7 @@ async function handlePut(req, res) {
 
 /**
  * DELETE /api/profile
- * Soft delete user profile
+ * Hard delete user profile from DynamoDB
  */
 async function handleDelete(req, res) {
   const { userId, confirmation } = req.body;
@@ -273,36 +263,23 @@ async function handleDelete(req, res) {
   }
 
   try {
-    const pathname = `profiles/${userId}.ndjson`;
-    const existingContent = await readNDJSON(pathname);
-
-    if (!existingContent) {
-      return res.status(404).json({ 
-        success: false, 
-        error: 'Perfil no encontrado' 
-      });
-    }
-
-    // Create soft delete record
-    const deletionRecord = {
-      deleted: true,
-      deletedAt: new Date().toISOString(),
-      deletedBy: userId
-    };
-
-    // Append deletion record
-    const newLine = JSON.stringify(deletionRecord) + '\n';
-    await put(pathname, existingContent + newLine, {
-      access: 'public',
-      contentType: 'application/x-ndjson',
-      addRandomSuffix: false
-    });
+    await docClient.send(new DeleteCommand({
+      TableName: TABLE_NAME,
+      Key: { userId },
+      ConditionExpression: "attribute_exists(userId)"
+    }));
 
     return res.status(200).json({ 
       success: true, 
       message: 'Perfil eliminado exitosamente' 
     });
   } catch (error) {
+    if (error.name === 'ConditionalCheckFailedException') {
+      return res.status(404).json({ 
+        success: false, 
+        error: 'Perfil no encontrado' 
+      });
+    }
     console.error('Error deleting profile:', error);
     return res.status(500).json({ 
       success: false, 
@@ -311,63 +288,3 @@ async function handleDelete(req, res) {
   }
 }
 
-/**
- * Read NDJSON file from Vercel Blob
- * Returns empty string if file doesn't exist
- */
-async function readNDJSON(pathname) {
-  try {
-    // Check if file exists
-    await head(`https://${process.env.BLOB_READ_WRITE_TOKEN?.split('_')[0]}.public.blob.vercel-storage.com/${pathname}`);
-    
-    const response = await fetch(
-      `https://${process.env.BLOB_READ_WRITE_TOKEN?.split('_')[0]}.public.blob.vercel-storage.com/${pathname}`
-    );
-    
-    if (!response.ok) {
-      return '';
-    }
-    
-    return await response.text();
-  } catch {
-    return '';
-  }
-}
-
-/**
- * Parse NDJSON content and return latest non-deleted profile
- */
-function parseProfileContent(content) {
-  if (!content || content.trim() === '') {
-    return null;
-  }
-
-  const records = content
-    .split('\n')
-    .filter(line => line.trim() !== '')
-    .map(line => {
-      try {
-        return JSON.parse(line);
-      } catch {
-        return null;
-      }
-    })
-    .filter(record => record !== null);
-
-  if (records.length === 0) {
-    return null;
-  }
-
-  // Check if last record is a deletion
-  const lastRecord = records[records.length - 1];
-  if (lastRecord.deleted === true) {
-    return null;
-  }
-
-  // Get latest profile record (filter out deletion records)
-  const profileRecords = records.filter(r => r.userId && !r.deleted);
-  
-  return profileRecords.length > 0 
-    ? profileRecords[profileRecords.length - 1] 
-    : null;
-}

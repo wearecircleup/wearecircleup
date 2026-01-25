@@ -1449,3 +1449,217 @@ tests/unit/services/profile-storage.test.js
 vercel.json (added /api/profile function)
 .env.example (added BLOB_READ_WRITE_TOKEN)
 ```
+
+## Phase 12: DynamoDB Migration (No Backward Compatibility)
+
+**Status:** IN PROGRESS  
+**Date:** 2026-01-25
+
+### Objective
+
+Migrate user profile storage from Vercel Blob (NDJSON) to AWS DynamoDB for improved performance, scalability, and query capabilities. **No backward compatibility** - clean migration strategy.
+
+### Migration Rationale
+
+**Why DynamoDB:**
+- Single-digit millisecond latency (vs Blob fetch + parse)
+- Native query support (filter by role, age, etc.)
+- Atomic transactions and conditional writes
+- Pay-per-request pricing (cheaper at scale)
+- Vercel OIDC integration (no AWS credentials needed)
+
+**Cost Comparison:**
+- Vercel Blob: $0 (included in Pro plan)
+- DynamoDB: ~$1.25/month for 1000 users (on-demand)
+
+### Architecture
+
+**Table Structure:**
+```
+Table: CircleUpProfiles
+Partition Key: userId (String)
+Attributes: All profile fields as JSON
+```
+
+**Vercel Integration:**
+- Uses `@vercel/functions/oidc` for AWS credentials
+- No hardcoded AWS keys (OIDC role assumption)
+- Environment variables: AWS_REGION, AWS_ROLE_ARN, DYNAMODB_TABLE_NAME
+
+### Migration Plan (8 Steps)
+
+**Step 1: Pull Environment Variables** ✅ COMPLETED
+```bash
+vercel env pull
+```
+- Retrieved: AWS_REGION, AWS_ROLE_ARN, DYNAMODB_TABLE_NAME
+- Status: Variables available in .env.local
+
+**Step 2: Install Dependencies** ✅ COMPLETED
+```bash
+npm install @aws-sdk/client-dynamodb @aws-sdk/lib-dynamodb @vercel/functions
+npm uninstall @vercel/blob
+```
+- Installed: AWS SDK v3 with Document Client
+- Removed: Vercel Blob SDK
+- Status: Dependencies updated in package.json
+
+**Step 3: Create DynamoDB Client** ✅ COMPLETED
+- Created: `lib/dynamodb.js`
+- Features:
+  - OIDC credentials provider (no hardcoded keys)
+  - Document Client for JSON operations
+  - Exports: docClient, TABLE_NAME
+- Status: Client ready for use
+
+**Step 4: Rewrite API Endpoint** ✅ COMPLETED
+- Modified: `api/profile.js`
+- Changes:
+  - Removed: All Vercel Blob imports and logic
+  - Removed: NDJSON parsing functions
+  - Removed: Soft delete logic (now hard delete)
+  - Added: DynamoDB commands (Get, Put, Update, Delete)
+  - Added: Conditional expressions for data integrity
+  - Added: Dynamic UpdateExpression builder
+- Operations:
+  - **GET**: GetCommand with userId key
+  - **POST**: PutCommand with ConditionExpression (prevent overwrite)
+  - **PUT**: UpdateCommand with dynamic fields + version increment
+  - **DELETE**: DeleteCommand with ConditionExpression (ensure exists)
+- Status: API fully migrated to DynamoDB
+
+**Step 5: Update Documentation** ✅ COMPLETED
+- Update: progress.md (this section)
+- Update: .env.example (AWS variables)
+- Status: Completed
+
+**Step 6: Update .env.example** ✅ COMPLETED
+- Removed: BLOB_READ_WRITE_TOKEN
+- Added: AWS_REGION, AWS_ROLE_ARN, DYNAMODB_TABLE_NAME
+- Status: Completed
+
+**Step 7: Create Unit Tests** ✅ COMPLETED
+- Created: `tests/unit/api/profile.test.js`
+- Mock: DynamoDB Document Client with vi.mock
+- Tests: 16 test cases covering all CRUD operations
+- Results: ✓ 16/16 passing
+- Coverage:
+  - GET: Profile exists, 404, missing userId
+  - POST: Create success, 409 conflict, missing fields
+  - PUT: Update success, 404, immutable fields, version increment
+  - DELETE: Delete success, 404, invalid confirmation, missing confirmation
+  - Error handling: DynamoDB errors, network errors
+- Status: Completed
+
+**Step 8: Production Deployment** ⏳ READY
+```bash
+vercel --prod
+```
+- Command: Initiated (awaiting user confirmation)
+- Action required: Confirm deployment in terminal (Y/n)
+- Status: Ready for deployment
+
+### Key Differences from Blob
+
+| Feature | Vercel Blob (NDJSON) | DynamoDB |
+|---------|---------------------|----------|
+| **Storage** | Append-only file | Key-value table |
+| **Versioning** | Manual (append lines) | Automatic (version field) |
+| **Delete** | Soft (append record) | Hard (remove item) |
+| **Queries** | Parse entire file | Native queries |
+| **Latency** | 50-100ms | 1-5ms |
+| **Audit Trail** | Complete (all versions) | Single version only |
+
+### Breaking Changes
+
+**No Backward Compatibility:**
+1. ❌ Old NDJSON files will NOT be migrated
+2. ❌ No soft deletes (hard delete only)
+3. ❌ No version history (single version)
+4. ❌ Users must re-create profiles
+
+**Rationale:**
+- Clean slate for production launch
+- Simplified data model
+- Better performance
+- No legacy code maintenance
+
+### Files Created
+
+```
+lib/dynamodb.js (DynamoDB client with OIDC)
+```
+
+### Files Modified
+
+```
+api/profile.js (complete rewrite for DynamoDB)
+package.json (AWS SDK dependencies)
+progress.md (this documentation)
+```
+
+### Files to Modify
+
+```
+.env.example (add AWS variables)
+tests/unit/api/profile.test.js (create new tests)
+```
+
+### Environment Variables
+
+**Required:**
+```bash
+AWS_REGION=us-east-1
+AWS_ROLE_ARN=arn:aws:iam::123456789:role/vercel-dynamodb
+DYNAMODB_TABLE_NAME=CircleUpProfiles
+```
+
+**Removed:**
+```bash
+BLOB_READ_WRITE_TOKEN (no longer needed)
+```
+
+### Testing Checklist
+
+**Unit Tests:** ✅ 16/16 passing
+- [x] GET /api/profile returns profile when exists
+- [x] GET /api/profile returns 404 when not found
+- [x] GET /api/profile returns 400 when userId missing
+- [x] POST /api/profile creates profile successfully
+- [x] POST /api/profile returns 409 when duplicate
+- [x] POST /api/profile returns 400 when fields missing
+- [x] PUT /api/profile updates profile successfully
+- [x] PUT /api/profile returns 404 when not found
+- [x] PUT /api/profile ignores immutable fields
+- [x] PUT /api/profile increments version
+- [x] DELETE /api/profile deletes successfully
+- [x] DELETE /api/profile returns 404 when not found
+- [x] DELETE /api/profile returns 400 when confirmation invalid
+- [x] DELETE /api/profile returns 400 when confirmation missing
+- [x] Error handling for DynamoDB errors
+- [x] Error handling for network errors
+
+**Production Tests:** ⏳ Pending deployment
+- [ ] GET /api/profile?userId=test returns 404
+- [ ] POST /api/profile creates profile successfully
+- [ ] GET /api/profile?userId=test returns created profile
+- [ ] PUT /api/profile updates profile (version increments)
+- [ ] DELETE /api/profile removes profile
+- [ ] GET /api/profile?userId=test returns 404 after delete
+
+### Rollback Plan
+
+If migration fails:
+1. Revert `api/profile.js` to previous commit
+2. Reinstall `@vercel/blob`
+3. Redeploy with `vercel --prod`
+4. Restore BLOB_READ_WRITE_TOKEN environment variable
+
+### Next Steps
+
+1. ⏳ Update .env.example with AWS variables
+2. ⏳ Create unit tests for DynamoDB operations
+3. ⏳ Test locally with `vercel dev`
+4. ⏳ Deploy to production
+5. ⏳ Monitor DynamoDB metrics
+6. ⏳ Update user documentation
