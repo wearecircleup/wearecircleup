@@ -13,6 +13,7 @@
 
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 const CACHE_PREFIX = 'profile_';
+const HAS_PROFILE_PREFIX = 'has_profile_';
 
 /**
  * Profile Service for frontend operations
@@ -38,6 +39,14 @@ export class ProfileService {
 
       if (!response.ok) {
         if (response.status === 404) {
+          // If we believe a profile exists (local flag), try cached profile instead of showing CTA
+          const hasFlag = this.hasProfile(userId);
+          if (hasFlag) {
+            const cachedWhen404 = this._getCachedProfile(userId);
+            if (cachedWhen404) {
+              return { success: true, profile: cachedWhen404 };
+            }
+          }
           // Profile doesn't exist
           return { success: true, profile: null };
         }
@@ -49,9 +58,19 @@ export class ProfileService {
       if (data.success && data.profile) {
         // Cache the profile
         this._cacheProfile(userId, data.profile);
+        // Persist flag that profile exists
+        this._setHasProfile(userId, true);
         return { success: true, profile: data.profile };
       }
       
+      // If API did not return profile but we have local flag and cache, prefer cache
+      const hasFlagNoData = this.hasProfile(userId);
+      if (hasFlagNoData) {
+        const cachedNoData = this._getCachedProfile(userId);
+        if (cachedNoData) {
+          return { success: true, profile: cachedNoData };
+        }
+      }
       return { success: true, profile: null };
     } catch (error) {
       console.error('Error fetching profile from API:', error);
@@ -96,6 +115,7 @@ export class ProfileService {
       if (data.success && data.profile) {
         // Cache the new profile
         this._cacheProfile(profileData.userId, data.profile);
+        this._setHasProfile(profileData.userId, true);
         return {
           success: true,
           profile: data.profile
@@ -155,6 +175,8 @@ export class ProfileService {
           const updated = { ...cached, ...updates, updatedAt: new Date().toISOString() };
           this._cacheProfile(userId, updated);
         }
+        // Ensure flag remains true after successful update
+        this._setHasProfile(userId, true);
 
         return {
           success: true,
@@ -217,6 +239,7 @@ export class ProfileService {
         // Clear all caches
         this._clearCache(userId);
         this._clearAllCaches(); // Clear everything for security
+        this._setHasProfile(userId, false);
         
         return {
           success: true,
@@ -243,6 +266,35 @@ export class ProfileService {
   static async hasCompleteProfile(userId) {
     const profile = await this.getProfile(userId);
     return profile && profile.profileComplete === true;
+  }
+
+  /**
+   * Public: Get cached profile without touching network
+   */
+  static getCachedProfile(userId) {
+    return this._getCachedProfile(userId);
+  }
+
+  /**
+   * Public: Read local flag that indicates this user created a profile before
+   */
+  static hasProfile(userId) {
+    try {
+      return localStorage.getItem(`${HAS_PROFILE_PREFIX}${userId}`) === 'true';
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /**
+   * Private: Persist the has_profile flag
+   */
+  static _setHasProfile(userId, value) {
+    try {
+      localStorage.setItem(`${HAS_PROFILE_PREFIX}${userId}`, value ? 'true' : 'false');
+    } catch (e) {
+      // ignore
+    }
   }
 
   /**

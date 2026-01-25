@@ -45,18 +45,35 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
 
   const checkProfile = async () => {
     setProfileLoading(true);
+    // 1) Optimistic: use cache/flag to avoid flashing CTA if profile exists
     try {
+      const cached = ProfileService.getCachedProfile(user.id);
+      const hadProfileFlag = ProfileService.hasProfile(user.id);
+      if (cached) {
+        setProfile(cached);
+        setProfileView('view');
+      } else if (hadProfileFlag) {
+        // We believe a profile exists (e.g., temporary 404), keep user in view
+        setProfileView('view');
+      }
+
+      // 2) Network: refresh from API and reconcile
       const result = await ProfileService.getProfile(user.id);
       if (result.success && result.profile) {
         setProfile(result.profile);
         setProfileView('view');
       } else {
-        // No profile found, show CTA
-        setProfileView('cta');
+        // Only show CTA if we neither have cache nor flag
+        if (!cached && !hadProfileFlag) {
+          setProfileView('cta');
+        }
       }
     } catch (error) {
       console.error('Error checking profile:', error);
-      setProfileView('cta');
+      // If we have cache/flag, remain in view; otherwise CTA
+      const cached = ProfileService.getCachedProfile(user.id);
+      const hadProfileFlag = ProfileService.hasProfile(user.id);
+      setProfileView(cached || hadProfileFlag ? 'view' : 'cta');
     } finally {
       setProfileLoading(false);
     }
