@@ -148,23 +148,35 @@ Do NOT include speaker notes. Only title and content array for each slide.`
     const timestamp = new Date().toISOString();
     
     try {
-      // Debug: Log table name
-      console.log(`[${user.login}] Using table: ${PRESENTATIONS_TABLE}`);
+      // Debug: Log all relevant info
+      console.log(`[${user.login}] === SAVE TO DYNAMODB DEBUG ===`);
+      console.log(`[${user.login}] Table name: ${PRESENTATIONS_TABLE}`);
+      console.log(`[${user.login}] AWS Region: ${process.env.AWS_REGION}`);
+      console.log(`[${user.login}] User ID: ${userId}`);
+      console.log(`[${user.login}] Presentation ID: ${presentationId}`);
       
       if (!PRESENTATIONS_TABLE) {
         throw new Error('DYNAMODB_PRESENTATIONS_TABLE_NAME environment variable not set');
       }
       
+      if (!process.env.AWS_REGION) {
+        throw new Error('AWS_REGION environment variable not set');
+      }
+      
       // Get current presentations for user
+      console.log(`[${user.login}] Attempting to get current presentations...`);
       const current = await docClient.send(new GetCommand({
         TableName: PRESENTATIONS_TABLE,
         Key: { PK: userId }
       }));
       
+      console.log(`[${user.login}] Current item retrieved:`, current.Item ? 'Found' : 'Not found');
+      
       const presentations = current.Item?.presentations || [];
+      console.log(`[${user.login}] Current presentations count: ${presentations.length}`);
       
       // Add new presentation
-      presentations.unshift({
+      const newPresentation = {
         id: presentationId,
         title: presentationTitle,
         description: description,
@@ -179,10 +191,14 @@ Do NOT include speaker notes. Only title and content array for each slide.`
         },
         createdAt: timestamp,
         updatedAt: timestamp
-      });
+      };
+      
+      presentations.unshift(newPresentation);
+      console.log(`[${user.login}] New presentation added. Total count: ${presentations.length}`);
       
       // Save all presentations for user
-      await docClient.send(new PutCommand({
+      console.log(`[${user.login}] Attempting to save to DynamoDB...`);
+      const putResult = await docClient.send(new PutCommand({
         TableName: PRESENTATIONS_TABLE,
         Item: {
           PK: userId,
@@ -192,12 +208,17 @@ Do NOT include speaker notes. Only title and content array for each slide.`
         }
       }));
 
-      console.log(`[${user.login}] Presentation saved to presentations table: ${presentationId}`);
+      console.log(`[${user.login}] ✅ Presentation saved successfully to ${PRESENTATIONS_TABLE}: ${presentationId}`);
+      console.log(`[${user.login}] DynamoDB response:`, putResult);
     } catch (saveError) {
-      console.error(`[${user.login}] Error saving to DynamoDB:`, saveError);
+      console.error(`[${user.login}] ❌ Error saving to DynamoDB:`, saveError);
+      console.error(`[${user.login}] Error name:`, saveError.name);
+      console.error(`[${user.login}] Error message:`, saveError.message);
+      console.error(`[${user.login}] Error stack:`, saveError.stack);
       return res.status(500).json({ 
         error: 'Failed to save presentation',
-        details: saveError.message 
+        details: saveError.message,
+        errorName: saveError.name
       });
     }
 
