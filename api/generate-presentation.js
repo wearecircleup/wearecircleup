@@ -8,11 +8,11 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, PutCommand, GetCommand } from '@aws-sdk/lib-dynamodb';
 import crypto from 'crypto';
 
-const client = new DynamoDBClient({ region: process.env.AWS_REGION });
-const docClient = DynamoDBDocumentClient.from(client);
-const PRESENTATIONS_TABLE = process.env.DYNAMODB_PRESENTATIONS_TABLE_NAME;
-
 export default async function handler(req, res) {
+  // Initialize DynamoDB client inside handler to access env vars
+  const client = new DynamoDBClient({ region: process.env.AWS_REGION });
+  const docClient = DynamoDBDocumentClient.from(client);
+  const PRESENTATIONS_TABLE = process.env.DYNAMODB_PRESENTATIONS_TABLE_NAME;
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -148,6 +148,13 @@ Do NOT include speaker notes. Only title and content array for each slide.`
     const timestamp = new Date().toISOString();
     
     try {
+      // Debug: Log table name
+      console.log(`[${user.login}] Using table: ${PRESENTATIONS_TABLE}`);
+      
+      if (!PRESENTATIONS_TABLE) {
+        throw new Error('DYNAMODB_PRESENTATIONS_TABLE_NAME environment variable not set');
+      }
+      
       // Get current presentations for user
       const current = await docClient.send(new GetCommand({
         TableName: PRESENTATIONS_TABLE,
