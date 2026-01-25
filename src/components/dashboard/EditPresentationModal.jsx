@@ -1,23 +1,6 @@
 import { useState } from 'react';
 import Button from '../Button';
-
-const EXAMPLE_PROMPT = `Aplica la sintaxis de tipografía artística a este slide:
-
-Slide actual:
-{
-  "message": "Tu mensaje aquí",
-  "explanation": "Tu explicación aquí"
-}
-
-Sintaxis de tipografía:
-- Usa | para marcar palabras con estilo especial: |tamaño:peso|palabra|
-- Tamaños: xs, sm, md, lg, xl
-- Pesos: thin, light, normal, medium, bold, black
-
-Ejemplo:
-"El |xl:black|futuro| es |lg:bold|ahora|"
-
-Devuelve solo el JSON con la sintaxis aplicada.`;
+import HelpModal from './HelpModal';
 
 const EditPresentationModal = ({ presentation, onClose, onSave }) => {
   const [jsonContent, setJsonContent] = useState(
@@ -25,6 +8,7 @@ const EditPresentationModal = ({ presentation, onClose, onSave }) => {
   );
   const [error, setError] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
 
   const handleSave = async () => {
     setError(null);
@@ -107,45 +91,20 @@ const EditPresentationModal = ({ presentation, onClose, onSave }) => {
         )}
 
         {/* Footer */}
-        <div className="flex flex-col gap-4 p-6 border-t border-n-6">
-          {/* Help section */}
-          <div className="flex items-start gap-3 p-4 bg-n-8/50 border border-n-6/30 rounded-xl">
-            <div className="flex-1">
-              <h3 className="text-sm font-medium text-n-1 mb-2">Tipografía artística</h3>
-              <p className="text-xs text-n-4 mb-3">
-                Usa IA para aplicar estilos visuales. Copia el prompt y pégalo en ChatGPT con tu slide.
-              </p>
-              <div className="flex flex-wrap gap-2 text-xs">
-                <code className="px-2 py-1 bg-n-7 border border-n-6 rounded text-color-1">|xl:black|palabra|</code>
-                <span className="text-n-5">→</span>
-                <span className="text-n-3">Extra grande y negrita</span>
-              </div>
-              <div className="flex flex-wrap gap-2 text-xs mt-1">
-                <code className="px-2 py-1 bg-n-7 border border-n-6 rounded text-color-2">|sm:light|texto|</code>
-                <span className="text-n-5">→</span>
-                <span className="text-n-3">Pequeño y delgado</span>
-              </div>
-            </div>
-            <button
-              onClick={(e) => {
-                navigator.clipboard.writeText(EXAMPLE_PROMPT);
-                // Visual feedback
-                const btn = e.currentTarget;
-                const originalText = btn.textContent;
-                btn.textContent = 'Copiado';
-                setTimeout(() => {
-                  btn.textContent = originalText;
-                }, 2000);
-              }}
-              className="px-4 py-2 bg-color-1 hover:bg-color-1/80 text-n-8 rounded-lg text-sm font-medium transition-all whitespace-nowrap"
-              title="Copiar prompt de ejemplo"
-            >
-              Copiar prompt
-            </button>
-          </div>
+        <div className="flex items-center justify-between p-6 border-t border-n-6">
+          {/* Help button */}
+          <button
+            onClick={() => setShowHelp(true)}
+            className="flex items-center gap-2 px-4 py-2 text-n-3 hover:text-n-1 transition-all"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="text-sm">Ayuda</span>
+          </button>
 
           {/* Action buttons */}
-          <div className="flex items-center justify-end gap-3">
+          <div className="flex items-center gap-3">
             <Button
               onClick={onClose}
               className="px-6"
@@ -171,6 +130,9 @@ const EditPresentationModal = ({ presentation, onClose, onSave }) => {
           </div>
         </div>
       </div>
+
+      {/* Help Modal */}
+      {showHelp && <HelpModal onClose={() => setShowHelp(false)} />}
     </div>
   );
 };

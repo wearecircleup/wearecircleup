@@ -73,11 +73,24 @@ export default async function handler(req, res) {
       Key: { PK: userId }
     }));
 
+    console.log('DynamoDB result:', JSON.stringify(result.Item, null, 2));
+
     const presentations = result.Item?.presentations || [];
+    console.log(`Found ${presentations.length} presentations for user ${userId}`);
+    console.log('Presentation IDs:', presentations.map(p => p.id));
+    
     const presentationIndex = presentations.findIndex(p => p.id === presentationId);
+    console.log(`Looking for presentationId: ${presentationId}, found at index: ${presentationIndex}`);
 
     if (presentationIndex === -1) {
-      return res.status(404).json({ error: 'Presentation not found' });
+      return res.status(404).json({ 
+        error: 'Presentation not found',
+        debug: {
+          userId,
+          presentationId,
+          availableIds: presentations.map(p => p.id)
+        }
+      });
     }
 
     // Update the presentation while preserving metadata

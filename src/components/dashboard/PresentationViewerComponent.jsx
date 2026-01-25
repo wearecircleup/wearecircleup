@@ -216,32 +216,33 @@ const PresentationViewerComponent = ({ presentation, onBack, onUpdate, userId })
                   <h1 className="leading-tight text-center break-words hyphens-auto max-w-full px-2" style={{ wordSpacing: '0.3em' }}>
                     {parseMessageWithEmphasis(slide.message || slide.title).map((part, idx) => {
                       // Size multipliers based on fontSize setting
-                      const sizeClasses = {
+                      // Dynamic font sizes using clamp for responsive scaling
+                      const sizeStyles = {
                         xs: fontSize === 'small' 
-                          ? 'text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl'
+                          ? { fontSize: 'clamp(1rem, 2vw, 1.5rem)' }
                           : fontSize === 'large'
-                          ? 'text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl'
-                          : 'text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl',
+                          ? { fontSize: 'clamp(1.5rem, 3vw, 2.5rem)' }
+                          : { fontSize: 'clamp(1.25rem, 2.5vw, 2rem)' },
                         sm: fontSize === 'small'
-                          ? 'text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl'
+                          ? { fontSize: 'clamp(1.5rem, 3vw, 2.5rem)' }
                           : fontSize === 'large'
-                          ? 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl'
-                          : 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl',
+                          ? { fontSize: 'clamp(2.5rem, 5vw, 4rem)' }
+                          : { fontSize: 'clamp(2rem, 4vw, 3.5rem)' },
                         md: fontSize === 'small'
-                          ? 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl'
+                          ? { fontSize: 'clamp(2rem, 4vw, 3.5rem)' }
                           : fontSize === 'large'
-                          ? 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl'
-                          : 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl',
+                          ? { fontSize: 'clamp(3.5rem, 7vw, 6rem)' }
+                          : { fontSize: 'clamp(3rem, 6vw, 5rem)' },
                         lg: fontSize === 'small'
-                          ? 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl'
+                          ? { fontSize: 'clamp(2.5rem, 5vw, 4.5rem)' }
                           : fontSize === 'large'
-                          ? 'text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[11rem]'
-                          : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl',
+                          ? { fontSize: 'clamp(4.5rem, 9vw, 8rem)' }
+                          : { fontSize: 'clamp(3.5rem, 7vw, 6.5rem)' },
                         xl: fontSize === 'small'
-                          ? 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl'
+                          ? { fontSize: 'clamp(3rem, 6vw, 5.5rem)' }
                           : fontSize === 'large'
-                          ? 'text-7xl sm:text-8xl md:text-9xl lg:text-[10rem] xl:text-[12rem]'
-                          : 'text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem]'
+                          ? { fontSize: 'clamp(5rem, 10vw, 9rem)' }
+                          : { fontSize: 'clamp(4rem, 8vw, 7.5rem)' }
                       };
                       
                       const weightClasses = {
@@ -256,8 +257,13 @@ const PresentationViewerComponent = ({ presentation, onBack, onUpdate, userId })
                       return (
                         <span 
                           key={idx} 
-                          className={`inline-block bg-gradient-to-r from-color-1 to-color-2 bg-clip-text text-transparent ${sizeClasses[part.size] || sizeClasses.md} ${weightClasses[part.weight] || weightClasses.normal}`}
-                          style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
+                          className={`inline-block bg-gradient-to-r from-color-1 to-color-2 bg-clip-text text-transparent ${weightClasses[part.weight] || weightClasses.normal}`}
+                          style={{ 
+                            ...(sizeStyles[part.size] || sizeStyles.md),
+                            wordBreak: 'break-word', 
+                            overflowWrap: 'break-word',
+                            maxWidth: '100%'
+                          }}
                         >
                           {part.text}
                         </span>
