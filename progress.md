@@ -1579,6 +1579,18 @@ vercel --prod --yes
 - Status: Live in production
 - Next: Test profile creation flow
 
+**Step 11: Fix DynamoDB Partition Key** ✅ COMPLETED
+- Issue: Error 500 - DynamoDB operations failing
+- Root cause: Code used `userId` as key, but table uses `PK` as partition key
+- Fix: Updated all CRUD operations to use `Key: { PK: userId }`
+- Changes:
+  - GET: `Key: { PK: userId }`
+  - POST: `Item: { ...profileRecord, PK: profileRecord.userId }`
+  - PUT: `Key: { PK: userId }`, `ConditionExpression: "attribute_exists(PK)"`
+  - DELETE: `Key: { PK: userId }`, `ConditionExpression: 'attribute_exists(PK)'`
+- Deployed to: https://www.circleup.com.co
+- Status: Connection to DynamoDB working
+
 ### Key Differences from Blob
 
 | Feature | Vercel Blob (NDJSON) | DynamoDB |
