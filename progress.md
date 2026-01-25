@@ -1696,6 +1696,36 @@ vercel --prod --yes
     - Content closer to header, no scroll required on most screens
 - Status: Improved UX with easier dismissal and optimized vertical space usage
 
+**Step 20: Migrate Presentations to DynamoDB (Single Table Design)** ✅ COMPLETED
+- Issue: Presentations stored in GitHub repository, need DynamoDB for better scalability
+- Requirement: Single table design, no backward compatibility with GitHub storage
+- Changes:
+  - **Backend Service**: Created `backend/services/presentation.service.js`
+    - `savePresentation()`: Save to DynamoDB with PK `PRESENTATION#{id}`
+    - `getPresentation()`: Retrieve by ID
+    - `getUserPresentations()`: Get all presentations for user (PK `USER_PRESENTATIONS#{userId}`)
+    - `deletePresentation()`: Remove presentation and update user list
+  - **API Endpoints**:
+    - `api/generate-presentation.js`: Modified to save to DynamoDB instead of GitHub
+    - `api/list-presentations.js`: Get all presentations for user
+    - `api/get-presentation.js`: Get single presentation by ID
+    - `api/delete-presentation.js`: Delete from DynamoDB (not GitHub)
+    - `api/view-presentation.js`: Render HTML presentation
+  - **Frontend**: Updated `src/shared/utils/presentation.ts`
+    - Added `getUserPresentations()`, `getPresentation()`, `deletePresentation()`
+    - Removed localStorage dependency
+    - Fixed TypeScript lint errors with `(user as any).node_id`
+  - **Cleanup**:
+    - Deleted GitHub Actions workflows: `save-presentation.yml`, `delete-presentation.yml`, `generate-presentation.yml`
+    - Deleted backend scripts: `build-presentation.js`, `generate-slides.js`
+    - Removed `presentations/` folder
+  - **Dependencies**: Installed `@aws-sdk/client-dynamodb` and `@aws-sdk/lib-dynamodb`
+- Data Structure:
+  - `PRESENTATION#{uuid}`: Full presentation (slides, html, metadata)
+  - `USER_PRESENTATIONS#{userId}`: List of user's presentations (summaries)
+  - `USER#{userId}`: User profile (existing)
+- Status: All presentations now stored in DynamoDB, GitHub storage completely removed
+
 ### Authentication Architecture
 
 **Two Independent Systems:**
