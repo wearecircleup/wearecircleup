@@ -133,7 +133,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-n-8 p-6">
+    <div className="min-h-screen flex items-center justify-center bg-n-8 p-4 sm:p-6">
       <motion.div
         className="w-full max-w-4xl"
         initial={{ opacity: 0, y: 20 }}
@@ -176,7 +176,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
         {/* Form */}
         <form onSubmit={handleSubmit} className="bg-n-7 border border-n-6 rounded-2xl overflow-hidden">
           {/* Immutable fields display */}
-          <div className="p-8 bg-n-8 border-b border-n-6">
+          <div className="p-4 sm:p-6 md:p-8 bg-gradient-to-br from-n-7/50 to-n-8/50 border-b border-n-6">
             <h3 className="text-lg font-semibold text-n-1 mb-4">Información de cuenta (no editable)</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <ImmutableField
@@ -198,7 +198,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
           </div>
 
           {/* Editable fields */}
-          <div className="p-8 space-y-6">
+          <div className="p-4 sm:p-6 md:p-8 space-y-6">
             {/* Name fields */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
@@ -317,7 +317,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
           </div>
 
           {/* Actions */}
-          <div className="p-6 bg-n-8 border-t border-n-6 flex gap-3">
+          <div className="p-4 sm:p-6 bg-n-8 border-t border-n-6 flex flex-col sm:flex-row gap-3">
             <Button
               onClick={onCancel}
               disabled={isSubmitting}

@@ -38,7 +38,7 @@ const ProfileView = ({ profile, onEdit, onClose, onDelete }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-n-8 p-6">
+    <div className="min-h-screen flex items-center justify-center bg-n-8 p-4 sm:p-6">
       <motion.div
         className="w-full max-w-4xl"
         initial={{ opacity: 0, y: 20 }}
@@ -64,7 +64,7 @@ const ProfileView = ({ profile, onEdit, onClose, onDelete }) => {
         {/* Profile Card */}
         <div className="bg-n-7 border border-n-6 rounded-2xl overflow-hidden">
           {/* Avatar and basic info */}
-          <div className="p-8 bg-gradient-to-br from-color-1/10 to-color-2/10 border-b border-n-6">
+          <div className="p-4 sm:p-6 md:p-8 bg-gradient-to-br from-color-1/10 to-color-2/10 border-b border-n-6">
             <div className="flex items-start gap-6">
               <img
                 src={profile.githubData.avatarUrl}
@@ -89,7 +89,7 @@ const ProfileView = ({ profile, onEdit, onClose, onDelete }) => {
           </div>
 
           {/* Profile details grid */}
-          <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="p-4 sm:p-6 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             {/* Role - Locked */}
             <div className="md:col-span-2 p-6 bg-gradient-to-br from-color-1/10 to-color-2/10 border-2 border-color-1/30 rounded-xl">
               <div className="flex items-center justify-between">
@@ -170,7 +170,7 @@ const ProfileView = ({ profile, onEdit, onClose, onDelete }) => {
           </div>
 
           {/* Action buttons */}
-          <div className="flex gap-3 mt-8">
+          <div className="flex flex-col sm:flex-row gap-3 mt-6 sm:mt-8">
             <Button onClick={onClose} className="flex-1">
               Cerrar
             </Button>

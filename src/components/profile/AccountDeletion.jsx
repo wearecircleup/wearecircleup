@@ -54,7 +54,7 @@ const AccountDeletion = ({ profile, user, onDelete, onCancel }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-n-8 p-6">
+    <div className="min-h-screen flex items-center justify-center bg-n-8 p-4 sm:p-6">
       <motion.div
         className="w-full max-w-2xl"
         initial={{ opacity: 0, y: 20 }}
@@ -88,7 +88,7 @@ const AccountDeletion = ({ profile, user, onDelete, onCancel }) => {
               className="bg-n-7 border border-n-6 rounded-2xl overflow-hidden"
             >
               {/* Profile info */}
-              <div className="p-8">
+              <div className="p-4 sm:p-6 md:p-8">
                 <div className="flex items-center gap-4 mb-6">
                   <img
                     src={profile.githubData.avatarUrl}
@@ -126,7 +126,7 @@ const AccountDeletion = ({ profile, user, onDelete, onCancel }) => {
               className="bg-n-7 border border-n-6 rounded-2xl overflow-hidden"
             >
               {/* Confirmation input */}
-              <div className="p-8">
+              <div className="p-4 sm:p-6 md:p-8">
                 <label className="block text-sm font-medium text-n-2 mb-3">
                   Para confirmar, escribe: <span className="font-mono font-semibold text-n-1">eliminar</span>
                 </label>

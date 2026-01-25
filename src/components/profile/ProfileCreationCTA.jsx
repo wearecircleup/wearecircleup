@@ -13,7 +13,7 @@ const ProfileCreationCTA = ({ onStart, onSkip }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-n-8 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-n-8 relative overflow-hidden px-4">
       {/* Decorative background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Gradient orbs */}

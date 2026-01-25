@@ -61,7 +61,7 @@ const Dashboard = ({ setCurrentPage }) => {
           </div>
 
           {/* Header */}
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 gap-4">
             <div>
               <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-n-1 mb-2">
                 Dashboard{" "}
@@ -80,21 +80,18 @@ const Dashboard = ({ setCurrentPage }) => {
                 Bienvenido, <span className="text-color-1 font-medium">{user?.username || 'Usuario'}</span>
               </p>
             </div>
-            <div className="flex flex-col gap-3 min-w-[280px]">
-              {/* Action Buttons */}
-              <div className="flex gap-3">
-                <Button onClick={() => setCurrentPage('home')} className="text-sm lg:text-base flex-1">
-                  ← Inicio
+            <div className="flex gap-2 w-full lg:w-auto">
+              <Button onClick={() => setCurrentPage('home')} className="text-xs sm:text-sm whitespace-nowrap flex-1 lg:flex-initial">
+                ← Inicio
+              </Button>
+              {hasProfile && (
+                <Button onClick={() => handleProfileAction('view')} className="text-xs sm:text-sm whitespace-nowrap flex-1 lg:flex-initial">
+                  Mi Perfil
                 </Button>
-                {hasProfile && (
-                  <Button onClick={() => handleProfileAction('view')} className="text-sm lg:text-base flex-1">
-                    Mi Perfil
-                  </Button>
-                )}
-                <Button onClick={handleLogout} white className="text-sm lg:text-base flex-1">
-                  Cerrar Sesión
-                </Button>
-              </div>
+              )}
+              <Button onClick={handleLogout} white className="text-xs sm:text-sm whitespace-nowrap flex-1 lg:flex-initial">
+                Cerrar Sesión
+              </Button>
             </div>
           </div>
 

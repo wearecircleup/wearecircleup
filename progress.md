@@ -1647,6 +1647,25 @@ vercel --prod --yes
 - UI: `← Inicio | Mi Perfil | Cerrar Sesión` (Mi Perfil conditional)
 - Status: Clean header, profile button only shows when profile exists
 
+**Step 17: Standardize All Profile Buttons** ✅ COMPLETED
+- Issue: Multiple button styles across profile components (custom buttons, gradients, red colors)
+- Requirement: Only 3 button types allowed (Primary, White, Standard from Button component)
+- Changes:
+  - **AccountDeletion**: Simplified flow, removed red drama, changed "Delete" to "eliminar"
+    - Step 1: Profile info + 2 buttons (Cancelar | Continuar)
+    - Step 2: Input "eliminar" + 2 buttons (Atrás | Eliminar)
+    - Removed: Warning icons, consequence lists, dramatic red colors
+    - Style: Clean, minimal, Spotify-like
+  - **ProfileRegistration**: Replaced custom gradient button with Button component
+    - Navigation: 2 buttons (Cancelar/Atrás | Continuar/Crear Perfil)
+  - **ProfileEdit**: Replaced custom buttons with Button component
+    - Actions: 2 buttons (Cancelar | Guardar Cambios)
+  - **ProfileView**: Replaced 3 custom buttons with Button component
+    - Actions: 3 buttons (Cerrar | Editar Perfil | Eliminar Cuenta)
+- API changes: Updated validation from "Delete" to "eliminar" in backend
+- Deleted: ~260 lines of custom button code
+- Status: All profile components use standardized Button component
+
 ### Authentication Architecture
 
 **Two Independent Systems:**

@@ -454,7 +454,7 @@ const ProfileRegistration = ({ user, onComplete, onCancel }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-n-8 p-6">
+    <div className="min-h-screen flex items-center justify-center bg-n-8 p-4 sm:p-6">
       <div className="w-full max-w-2xl">
         {/* Progress bar */}
         <div className="mb-8">
@@ -486,7 +486,7 @@ const ProfileRegistration = ({ user, onComplete, onCancel }) => {
         </AnimatePresence>
 
         {/* Navigation buttons */}
-        <div className="mt-8 flex gap-3">
+        <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3">
           <Button
             onClick={currentStep === 1 ? onCancel : handleBack}
             disabled={isSubmitting}
