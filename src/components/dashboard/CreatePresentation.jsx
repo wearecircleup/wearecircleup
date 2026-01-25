@@ -3,7 +3,7 @@ import Button from "../Button";
 import { presentationFormSchema } from "../../shared/schemas/presentation.schema";
 import { PresentationService } from "../../shared/utils/presentation";
 
-const CreatePresentation = ({ user, onBack, onSuccess }) => {
+const CreatePresentation = ({ onBack, onSuccess }) => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",

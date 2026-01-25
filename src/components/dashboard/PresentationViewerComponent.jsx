@@ -158,31 +158,27 @@ const PresentationViewerComponent = ({ presentation, onBack, onUpdate }) => {
   const progress = ((currentSlide + 1) / totalSlides) * 100;
 
   const handleSaveEdit = async (updatedPresentation) => {
-    try {
-      const response = await fetch('/api/update-presentation', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: presentation.userId,
-          presentationId: presentation.id,
-          updatedPresentation: updatedPresentation
-        })
-      });
+    const response = await fetch('/api/update-presentation', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: presentation.userId,
+        presentationId: presentation.id,
+        updatedPresentation: updatedPresentation
+      })
+    });
 
-      const result = await response.json();
+    const result = await response.json();
 
-      if (result.success) {
-        setShowEditModal(false);
-        if (onUpdate) {
-          onUpdate(result.presentation);
-        }
-      } else {
-        throw new Error(result.error || 'Error al guardar');
+    if (result.success) {
+      setShowEditModal(false);
+      if (onUpdate) {
+        onUpdate(result.presentation);
       }
-    } catch (error) {
-      throw error;
+    } else {
+      throw new Error(result.error || 'Error al guardar');
     }
   };
 

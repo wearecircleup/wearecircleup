@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Section from "../components/Section";
 import Button from "../components/Button";
 import Logo from "../components/Logo";
@@ -29,10 +29,10 @@ const Dashboard = ({ setCurrentPage }) => {
     }
   };
 
-  const handleProfileAction = (action) => {
-    setDashboardTab('profile');
-    setProfileAction(action);
-  };
+  // const handleProfileAction = (action) => {
+  //   setDashboardTab('profile');
+  //   setProfileAction(action);
+  // };
 
   const handleCreateSuccess = () => {
     // Return to home after successful creation
@@ -158,7 +158,6 @@ const Dashboard = ({ setCurrentPage }) => {
           
           {currentView === 'create' && (
             <CreatePresentation 
-              user={user}
               onBack={() => handleNavigate('home')}
               onSuccess={handleCreateSuccess}
             />
