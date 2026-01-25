@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import Button from '../Button';
 import Logo from '../Logo';
 import ParticleLogo from '../presentation/ParticleLogo';
+import EditPresentationModal from './EditPresentationModal';
 
 // Parse message with size and weight markers: |size:weight|word|
 const parseMessageWithEmphasis = (message) => {
@@ -61,7 +62,7 @@ const parseMessageWithEmphasis = (message) => {
   return parts;
 };
 
-const PresentationViewerComponent = ({ presentation, onBack }) => {
+const PresentationViewerComponent = ({ presentation, onBack, onUpdate }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [fontSize, setFontSize] = useState('normal'); // small, normal, large
   const [fontFamily, setFontFamily] = useState('sans'); // sans, serif, mono
@@ -69,6 +70,7 @@ const PresentationViewerComponent = ({ presentation, onBack }) => {
   const [menuLanguage, setMenuLanguage] = useState('es'); // en, es, pt
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+  const [showEditModal, setShowEditModal] = useState(false);
   const menuRef = useRef(null);
 
   const slides = presentation.slides || [];
@@ -155,8 +157,38 @@ const PresentationViewerComponent = ({ presentation, onBack }) => {
   const totalSlides = slides.length + 1; // +1 for ParticleLogo
   const progress = ((currentSlide + 1) / totalSlides) * 100;
 
+  const handleSaveEdit = async (updatedPresentation) => {
+    try {
+      const response = await fetch('/api/update-presentation', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: presentation.userId,
+          presentationId: presentation.id,
+          updatedPresentation: updatedPresentation
+        })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setShowEditModal(false);
+        if (onUpdate) {
+          onUpdate(result.presentation);
+        }
+      } else {
+        throw new Error(result.error || 'Error al guardar');
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-n-8 via-n-7 to-n-8 overflow-hidden z-50">
+    <>
+      <div className="fixed inset-0 bg-gradient-to-br from-n-8 via-n-7 to-n-8 overflow-hidden z-50">
       {/* Show ParticleLogo as first slide */}
       {currentSlide === 0 ? (
         <div className="relative z-10 h-screen">
@@ -300,10 +332,21 @@ const PresentationViewerComponent = ({ presentation, onBack }) => {
       </div>
 
       {/* Back button */}
-      <div className="fixed top-6 left-6 z-[100]">
+      <div className="fixed top-6 left-6 z-[100] flex items-center gap-3">
         <Button onClick={onBack} white>
           ← Volver
         </Button>
+        
+        {/* Edit button */}
+        <button
+          onClick={() => setShowEditModal(true)}
+          className="p-3 bg-n-7/90 backdrop-blur-xl border border-n-6/50 rounded-xl text-n-1 hover:border-color-1 hover:text-color-1 transition-all shadow-lg"
+          title="Editar presentación"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+        </button>
       </div>
 
       {/* Accessibility Button */}
@@ -446,6 +489,16 @@ const PresentationViewerComponent = ({ presentation, onBack }) => {
         Circle Up AI
       </div>
     </div>
+
+    {/* Edit Modal */}
+    {showEditModal && (
+      <EditPresentationModal
+        presentation={presentation}
+        onClose={() => setShowEditModal(false)}
+        onSave={handleSaveEdit}
+      />
+    )}
+    </>
   );
 };
 

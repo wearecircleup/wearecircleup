@@ -168,6 +168,9 @@ const Dashboard = ({ setCurrentPage }) => {
             <PresentationViewerComponent 
               presentation={selectedPresentation}
               onBack={() => handleNavigate('home')}
+              onUpdate={(updatedPresentation) => {
+                setSelectedPresentation(updatedPresentation);
+              }}
             />
           )}
 
