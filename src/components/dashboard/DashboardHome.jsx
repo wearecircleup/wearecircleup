@@ -304,65 +304,28 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
 
   // Main dashboard view
   return (
-    <div className="space-y-8">
-      {/* Header with profile info */}
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full">
-          {profile && (
-            <button
-              onClick={() => setProfileView('view')}
-              className="w-full sm:w-auto flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gradient-to-r from-n-7 to-n-6 hover:from-n-6 hover:to-n-5 border border-n-6 hover:border-color-1/30 rounded-xl sm:rounded-2xl transition-all group shadow-lg"
-              title="Ver perfil completo"
-            >
-              <img
-                src={profile.githubData?.avatarUrl || user.avatarUrl}
-                alt={profile.firstName}
-                className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl border-2 border-color-1/50 group-hover:border-color-1 transition-colors flex-shrink-0"
-              />
-              <div className="text-left flex-1 min-w-0">
-                <p className="text-sm sm:text-base font-bold text-n-1 group-hover:text-color-1 transition-colors truncate">
-                  {profile.firstName} {profile.lastName}
-                </p>
-                <p className="text-xs sm:text-sm text-n-3 mt-0.5 truncate">
-                  {profile.role} • @{profile.login}
-                </p>
-              </div>
-              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-n-4 group-hover:text-color-1 transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          )}
-          <div className="flex-1 min-w-0">
-            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-n-1 mb-1 sm:mb-2">
-              Mis Presentaciones
-            </h2>
-            <p className="text-sm sm:text-base text-n-4">
-              {presentations.length} {presentations.length === 1 ? 'presentación' : 'presentaciones'} creadas
-            </p>
-          </div>
-        </div>
+    <div className="space-y-6">
+      {/* Action buttons */}
+      <div className="flex gap-2 sm:gap-3 w-full justify-end">
+        <button
+          onClick={loadPresentations}
+          className="px-3 sm:px-4 py-2 bg-n-6 hover:bg-n-5 text-n-1 rounded-lg transition-all flex items-center gap-2 text-xs sm:text-sm justify-center"
+          title="Refrescar presentaciones"
+        >
+          <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          <span className="hidden sm:inline">Refrescar</span>
+        </button>
         
-        <div className="flex gap-2 sm:gap-3 w-full lg:w-auto">
-          <button
-            onClick={loadPresentations}
-            className="px-3 sm:px-4 py-2 bg-n-6 hover:bg-n-5 text-n-1 rounded-lg transition-all flex items-center gap-2 text-xs sm:text-sm flex-1 lg:flex-initial justify-center"
-            title="Refrescar presentaciones"
-          >
+        <Button onClick={() => onNavigate('create')} white>
+          <span className="flex items-center gap-2 justify-center">
             <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
-            <span className="hidden sm:inline">Refrescar</span>
-          </button>
-          
-          <Button onClick={() => onNavigate('create')} white className="flex-1 lg:flex-initial">
-            <span className="flex items-center gap-2 justify-center">
-              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-              <span className="text-xs sm:text-sm">Nueva Presentación</span>
-            </span>
-          </Button>
-        </div>
+            <span className="text-xs sm:text-sm">Nueva Presentación</span>
+          </span>
+        </Button>
       </div>
 
       {/* Filters */}

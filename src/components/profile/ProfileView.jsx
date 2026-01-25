@@ -38,17 +38,12 @@ const ProfileView = ({ profile, onEdit, onClose, onDelete }) => {
   };
 
   return (
-    <div 
-      className="min-h-screen flex items-center justify-center bg-n-8/95 p-4 sm:p-6 backdrop-blur-sm"
-      onClick={onClose}
+    <motion.div
+      className="w-full max-w-4xl mx-auto"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
     >
-      <motion.div
-        className="w-full max-w-4xl"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        onClick={(e) => e.stopPropagation()}
-      >
 
         {/* Profile Card */}
         <div className="bg-n-7 border border-n-6 rounded-2xl overflow-hidden">
@@ -199,8 +194,7 @@ const ProfileView = ({ profile, onEdit, onClose, onDelete }) => {
             </div>
           </motion.div>
         )}
-      </motion.div>
-    </div>
+    </motion.div>
   );
 };
 
