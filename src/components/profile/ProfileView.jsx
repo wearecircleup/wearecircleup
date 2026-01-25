@@ -38,28 +38,17 @@ const ProfileView = ({ profile, onEdit, onClose, onDelete }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-n-8 p-4 sm:p-6">
+    <div 
+      className="min-h-screen flex items-center justify-center bg-n-8/95 p-4 sm:p-6 backdrop-blur-sm"
+      onClick={onClose}
+    >
       <motion.div
         className="w-full max-w-4xl"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
+        onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-4xl font-bold text-n-1 mb-2">Mi Perfil</h1>
-            <p className="text-n-3">Información personal y configuración</p>
-          </div>
-          <button
-            onClick={onClose}
-            className="p-3 text-n-3 hover:text-n-1 hover:bg-n-7 rounded-xl transition-all"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
 
         {/* Profile Card */}
         <div className="bg-n-7 border border-n-6 rounded-2xl overflow-hidden">

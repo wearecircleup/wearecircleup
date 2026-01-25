@@ -46,13 +46,13 @@ const ProfileCreationCTA = ({ onStart, onSkip }) => {
 
       {/* Main content */}
       <motion.div
-        className="relative z-10 text-center px-6 max-w-2xl"
+        className="relative z-10 text-center px-6 max-w-2xl -mt-[10vh]"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
         {/* Audio Wave Animation */}
-        <AudioWave className="mb-8" />
+        <AudioWave className="mb-6" />
 
         {/* Title */}
         <motion.h1
@@ -66,7 +66,7 @@ const ProfileCreationCTA = ({ onStart, onSkip }) => {
 
         {/* Subtitle */}
         <motion.p
-          className="text-lg text-n-3 mb-8 max-w-lg mx-auto"
+          className="text-lg text-n-3 mb-6 max-w-lg mx-auto"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
@@ -102,7 +102,7 @@ const ProfileCreationCTA = ({ onStart, onSkip }) => {
 
         {/* Feature highlights */}
         <motion.div
-          className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 text-left"
+          className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 text-left"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7 }}
