@@ -10,7 +10,7 @@ import curve from "../assets/hero/curve.png";
 const Dashboard = ({ setCurrentPage }) => {
   const user = GitHubAuthService.getUser();
   const [currentView, setCurrentView] = useState('home'); // 'home' | 'create'
-  const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [hasProfile, setHasProfile] = useState(false);
   const [profileAction, setProfileAction] = useState(null); // 'view' | 'delete'
 
   const handleLogout = () => {
@@ -25,22 +25,7 @@ const Dashboard = ({ setCurrentPage }) => {
 
   const handleProfileAction = (action) => {
     setProfileAction(action);
-    setShowProfileMenu(false);
   };
-
-  // Close dropdown when clicking outside
-  const handleClickOutside = (e) => {
-    if (showProfileMenu && !e.target.closest('.profile-dropdown-container')) {
-      setShowProfileMenu(false);
-    }
-  };
-
-  useEffect(() => {
-    if (showProfileMenu) {
-      document.addEventListener('click', handleClickOutside);
-      return () => document.removeEventListener('click', handleClickOutside);
-    }
-  }, [showProfileMenu]);
 
   const handleCreateSuccess = () => {
     // Return to home after successful creation
@@ -96,58 +81,16 @@ const Dashboard = ({ setCurrentPage }) => {
               </p>
             </div>
             <div className="flex flex-col gap-3 min-w-[280px]">
-              {/* Profile Button */}
-              <div className="relative profile-dropdown-container">
-                <button
-                  onClick={() => setShowProfileMenu(!showProfileMenu)}
-                  className="w-full flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-color-1/20 to-color-2/20 hover:from-color-1/30 hover:to-color-2/30 border border-color-1/30 rounded-xl transition-all group"
-                >
-                  <img
-                    src={user?.avatarUrl}
-                    alt={user?.username}
-                    className="w-10 h-10 rounded-lg border-2 border-color-1/50"
-                  />
-                  <div className="flex-1 text-left">
-                    <p className="text-sm font-semibold text-n-1 group-hover:text-color-1 transition-colors">
-                      {user?.username || 'Usuario'}
-                    </p>
-                    <p className="text-xs text-n-4">Ver perfil</p>
-                  </div>
-                  <svg className="w-5 h-5 text-n-3 group-hover:text-color-1 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-
-                {/* Profile Dropdown Menu */}
-                {showProfileMenu && (
-                  <div className="absolute right-0 mt-2 w-full bg-n-7 border border-n-6 rounded-xl shadow-xl overflow-hidden z-50">
-                    <button
-                      onClick={() => handleProfileAction('view')}
-                      className="w-full px-4 py-3 text-left text-n-2 hover:bg-n-6 hover:text-color-1 transition-colors flex items-center gap-2"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                      </svg>
-                      Mi Perfil
-                    </button>
-                    <button
-                      onClick={() => handleProfileAction('delete')}
-                      className="w-full px-4 py-3 text-left text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors flex items-center gap-2 border-t border-n-6"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                      Eliminar Cuenta
-                    </button>
-                  </div>
-                )}
-              </div>
-
               {/* Action Buttons */}
               <div className="flex gap-3">
                 <Button onClick={() => setCurrentPage('home')} className="text-sm lg:text-base flex-1">
                   ← Inicio
                 </Button>
+                {hasProfile && (
+                  <Button onClick={() => handleProfileAction('view')} className="text-sm lg:text-base flex-1">
+                    Mi Perfil
+                  </Button>
+                )}
                 <Button onClick={handleLogout} white className="text-sm lg:text-base flex-1">
                   Cerrar Sesión
                 </Button>
@@ -162,6 +105,7 @@ const Dashboard = ({ setCurrentPage }) => {
               onNavigate={handleNavigate}
               profileAction={profileAction}
               onProfileActionComplete={() => setProfileAction(null)}
+              onProfileStatusChange={setHasProfile}
             />
           )}
           

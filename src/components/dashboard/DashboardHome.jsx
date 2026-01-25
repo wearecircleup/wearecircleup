@@ -9,7 +9,7 @@ import ProfileView from "../profile/ProfileView";
 import ProfileEdit from "../profile/ProfileEdit";
 import AccountDeletion from "../profile/AccountDeletion";
 
-const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplete }) => {
+const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplete, onProfileStatusChange }) => {
   const [presentations, setPresentations] = useState([]);
   const [filter, setFilter] = useState('all'); // all, completed, processing
   const [loading, setLoading] = useState(true);
@@ -53,10 +53,12 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
         // Profile exists in DynamoDB
         setProfile(result.profile);
         setProfileView('view');
+        onProfileStatusChange?.(true); // Notify Dashboard
       } else {
         // Profile doesn't exist - show CTA
         setProfile(null);
         setProfileView('cta');
+        onProfileStatusChange?.(false); // Notify Dashboard
         // Clear any stale localStorage data
         ProfileService.clearUserData(user.id);
       }
@@ -65,6 +67,7 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
       // On error, default to CTA (don't trust localStorage)
       setProfile(null);
       setProfileView('cta');
+      onProfileStatusChange?.(false); // Notify Dashboard
       // Clear stale data
       ProfileService.clearUserData(user.id);
     } finally {
