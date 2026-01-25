@@ -1,9 +1,11 @@
 /**
  * Vercel Serverless Function: Generate Presentation
  * 
- * Calls GitHub Models API to generate slides and returns JSON
- * This replaces the GitHub Actions workflow for LLM generation
+ * Calls GitHub Models API to generate slides and saves to DynamoDB
  */
+
+import { PresentationService } from '../backend/services/presentation.service.js';
+import crypto from 'crypto';
 
 export default async function handler(req, res) {
   // Set CORS headers
@@ -135,57 +137,42 @@ Do NOT include speaker notes. Only title and content array for each slide.`
 
     // Generate presentation ID
     const presentationId = crypto.randomUUID();
+    const userId = user.id || user.node_id;
 
-    // Trigger GitHub Action to save to repository
-    const repoOwner = process.env.GITHUB_REPO_OWNER || 'wearecircleup';
-    const repoName = process.env.GITHUB_REPO_NAME || 'wearecircleup';
-    
+    // Save to DynamoDB
     try {
-      const dispatchResponse = await fetch(
-        `https://api.github.com/repos/${repoOwner}/${repoName}/dispatches`,
-        {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/vnd.github+json',
-            'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
-            'X-GitHub-Api-Version': '2022-11-28',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            event_type: 'save_presentation',
-            client_payload: {
-              user: user.login,
-              presentationId: presentationId,
-              html: html,
-              slides: slidesData.slides,
-              metadata: {
-                title: presentationTitle,
-                theme: selectedTheme,
-                model: selectedModel,
-                language: selectedLanguage,
-                slideCount: slidesData.slides.length
-              }
-            }
-          })
+      await PresentationService.savePresentation({
+        presentationId: presentationId,
+        userId: userId,
+        title: presentationTitle,
+        description: description,
+        slides: slidesData.slides,
+        html: html,
+        metadata: {
+          theme: selectedTheme,
+          model: selectedModel,
+          language: selectedLanguage,
+          slideCount: slidesData.slides.length,
+          username: user.login
         }
-      );
+      });
 
-      if (!dispatchResponse.ok) {
-        console.error(`[${user.login}] Failed to trigger save workflow: ${dispatchResponse.status}`);
-      } else {
-        console.log(`[${user.login}] Save workflow triggered successfully`);
-      }
-    } catch (dispatchError) {
-      console.error(`[${user.login}] Error triggering save workflow:`, dispatchError);
+      console.log(`[${user.login}] Presentation saved to DynamoDB: ${presentationId}`);
+    } catch (saveError) {
+      console.error(`[${user.login}] Error saving to DynamoDB:`, saveError);
+      return res.status(500).json({ 
+        error: 'Failed to save presentation',
+        details: saveError.message 
+      });
     }
 
-    // Return slides data and HTML immediately
+    // Return slides data and HTML
     return res.status(200).json({
       success: true,
       presentationId: presentationId,
       slides: slidesData.slides,
       html: html,
-      url: `/p/${user.login}/${presentationId}`,
+      url: `/presentation/${presentationId}`,
       metadata: {
         title: presentationTitle,
         theme: selectedTheme,

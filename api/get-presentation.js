@@ -1,49 +1,54 @@
 /**
- * Vercel Serverless Function: Delete Presentation
+ * Vercel Serverless Function: Get Presentation
  * 
- * Deletes presentation from DynamoDB
+ * Returns a single presentation by ID from DynamoDB
  */
 
 import { PresentationService } from '../backend/services/presentation.service.js';
 
 export default async function handler(req, res) {
+  // Set CORS headers
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
   res.setHeader(
     'Access-Control-Allow-Headers',
     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
   );
 
+  // Handle OPTIONS request for CORS preflight
   if (req.method === 'OPTIONS') {
     res.status(200).end();
     return;
   }
 
-  if (req.method !== 'DELETE') {
+  // Only allow GET requests
+  if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    const { presentationId, userId } = req.body;
+    const { presentationId } = req.query;
 
-    if (!presentationId || !userId) {
-      return res.status(400).json({ error: 'Missing required fields: presentationId, userId' });
+    if (!presentationId) {
+      return res.status(400).json({ error: 'presentationId is required' });
     }
 
-    console.log(`Deleting presentation: ${presentationId} for user: ${userId}`);
+    console.log(`Fetching presentation: ${presentationId}`);
 
-    await PresentationService.deletePresentation(presentationId, userId);
+    const presentation = await PresentationService.getPresentation(presentationId);
 
-    console.log(`Presentation deleted successfully: ${presentationId}`);
+    if (!presentation) {
+      return res.status(404).json({ error: 'Presentation not found' });
+    }
 
     return res.status(200).json({
       success: true,
-      message: 'Presentación eliminada correctamente'
+      presentation: presentation
     });
 
   } catch (error) {
-    console.error('Error deleting presentation:', error);
+    console.error('Error fetching presentation:', error);
     return res.status(500).json({ 
       error: 'Internal server error',
       details: error.message 

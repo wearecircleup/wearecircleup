@@ -1,9 +1,0 @@
-id: c0fd2e1b-6028-4e8f-a4bd-c1c1a1fada77
-title: "Habas Boyaceses"
-author: wearecircleup
-theme: modern
-model: gpt-4o
-slides_count: 10
-created_at: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
-status: completed
-url: /presentations/public/wearecircleup/c0fd2e1b-6028-4e8f-a4bd-c1c1a1fada77.html

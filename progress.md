@@ -1682,6 +1682,20 @@ vercel --prod --yes
     - Added horizontal padding to CTA: `px-4`
 - Status: All profile flows fully responsive, optimized for smartphone screens
 
+**Step 19: UX Improvements - Click-to-Close & Vertical Spacing** ✅ COMPLETED
+- Issue: ProfileView requires close button click, too much vertical space in ProfileView and ProfileCreationCTA
+- Changes:
+  - **ProfileView**:
+    - Added click-outside-to-close: Click anywhere on backdrop to close profile
+    - Removed title/subtitle header ("Mi Perfil" + "Información personal y configuración")
+    - Added backdrop blur: `bg-n-8/95 backdrop-blur-sm`
+    - Content starts immediately with profile card (no scroll needed)
+  - **ProfileCreationCTA**:
+    - Moved content up 10vh: `-mt-[10vh]` (responsive, not hardcoded)
+    - Reduced spacing: `mb-8` → `mb-6` (AudioWave, subtitle, features)
+    - Content closer to header, no scroll required on most screens
+- Status: Improved UX with easier dismissal and optimized vertical space usage
+
 ### Authentication Architecture
 
 **Two Independent Systems:**

@@ -1,9 +1,0 @@
-id: 48b9829f-f475-484e-863c-eea0d5ae6fc8
-title: "Animales Salvajes "
-author: danielnmuner
-theme: modern
-model: gpt-4o
-slides_count: 10
-created_at: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
-status: completed
-url: /presentations/public/danielnmuner/48b9829f-f475-484e-863c-eea0d5ae6fc8.html

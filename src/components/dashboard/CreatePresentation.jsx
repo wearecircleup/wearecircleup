@@ -48,17 +48,6 @@ const CreatePresentation = ({ user, onBack, onSuccess }) => {
           message: result.message
         });
         
-        // Save to localStorage with completed status
-        const presentations = JSON.parse(localStorage.getItem(`presentations_${user.login}`) || '[]');
-        presentations.unshift({
-          id: result.requestId,
-          ...validated,
-          status: 'completed',
-          createdAt: new Date().toISOString(),
-          url: result.url
-        });
-        localStorage.setItem(`presentations_${user.login}`, JSON.stringify(presentations));
-        
         // Reset form
         setFormData({
           title: "",
@@ -69,7 +58,7 @@ const CreatePresentation = ({ user, onBack, onSuccess }) => {
           model: "gpt-4o"
         });
         
-        // Notify parent
+        // Notify parent to refresh presentations list
         if (onSuccess) onSuccess();
       } else {
         setNotification({
