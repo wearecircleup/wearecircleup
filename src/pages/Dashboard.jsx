@@ -132,7 +132,7 @@ const Dashboard = ({ setCurrentPage }) => {
                       : 'text-n-4 hover:text-n-2'
                   }`}
                 >
-                  Mi Perfil
+                  Perfil
                   {dashboardTab === 'profile' && (
                     <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-color-1 to-color-2"></div>
                   )}
@@ -143,29 +143,17 @@ const Dashboard = ({ setCurrentPage }) => {
 
           {/* Content */}
           {currentView === 'home' && (
-            <>
-              {dashboardTab === 'presentations' && (
-                <DashboardHome 
-                  user={user} 
-                  onNavigate={handleNavigate}
-                  profileAction={null}
-                  onProfileActionComplete={() => setProfileAction(null)}
-                  onProfileStatusChange={setHasProfile}
-                />
-              )}
-              {dashboardTab === 'profile' && hasProfile && (
-                <DashboardHome 
-                  user={user} 
-                  onNavigate={handleNavigate}
-                  profileAction={profileAction || 'view'}
-                  onProfileActionComplete={() => {
-                    setProfileAction(null);
-                    setDashboardTab('presentations');
-                  }}
-                  onProfileStatusChange={setHasProfile}
-                />
-              )}
-            </>
+            <DashboardHome 
+              user={user} 
+              onNavigate={handleNavigate}
+              profileAction={dashboardTab === 'profile' ? (profileAction || 'view') : null}
+              onProfileActionComplete={() => {
+                setProfileAction(null);
+                setDashboardTab('presentations');
+              }}
+              onProfileStatusChange={setHasProfile}
+              showPresentations={dashboardTab === 'presentations'}
+            />
           )}
           
           {currentView === 'create' && (

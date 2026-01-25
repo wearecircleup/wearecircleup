@@ -10,7 +10,7 @@ import ProfileEdit from "../profile/ProfileEdit";
 import AccountDeletion from "../profile/AccountDeletion";
 import DeletePresentationModal from "./DeletePresentationModal";
 
-const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplete, onProfileStatusChange }) => {
+const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplete, onProfileStatusChange, showPresentations = true }) => {
   const [presentations, setPresentations] = useState([]);
   const [filter, setFilter] = useState('all'); // all, completed, processing
   const [loading, setLoading] = useState(true);
@@ -42,9 +42,8 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
       } else if (profileAction === 'delete') {
         setProfileView('delete');
       }
-      onProfileActionComplete();
     }
-  }, [profileAction, profile, onProfileActionComplete]);
+  }, [profileAction, profile]);
 
   const checkProfile = async () => {
     setProfileLoading(true);
@@ -283,16 +282,24 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
     );
   }
 
-  // Show ProfileView (full screen)
-  if (profileView === 'view' && profile) {
+  // Show ProfileView (full screen) - only when profile action is active
+  if (profileAction && profileView === 'view' && profile) {
     return (
       <ProfileView
         profile={profile}
         onEdit={() => setProfileView('edit')}
         onDelete={() => setProfileView('delete')}
-        onClose={() => setProfileView('dashboard')}
+        onClose={() => {
+          setProfileView('dashboard');
+          onProfileActionComplete();
+        }}
       />
     );
+  }
+
+  // Don't render presentations if we're in profile tab and not showing presentations
+  if (!showPresentations && !profileAction) {
+    return null;
   }
 
   // Main dashboard view
