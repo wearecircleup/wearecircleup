@@ -108,29 +108,11 @@ const AccountDeletion = ({ profile, user, onDelete, onCancel }) => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
                     <div className="flex-1">
-                      <h3 className="text-red-400 font-semibold mb-2">Eliminación permanente de datos</h3>
-                      <p className="text-n-3 text-sm mb-3">
-                        Esta acción eliminará <strong className="text-n-1">completamente y de forma irreversible</strong> toda tu información de nuestras bases de datos:
+                      <h3 className="text-red-400 font-semibold mb-3">Eliminación permanente de datos</h3>
+                      <p className="text-n-3 text-sm leading-relaxed">
+                        Esta acción eliminará <strong className="text-n-1">completamente y de forma irreversible</strong> toda tu información de nuestras bases de datos. Esto incluye tu perfil personal con nombre, email, edad y educación, así como todas tus presentaciones creadas con IA junto con todo su contenido y slides. También se borrará tu historial de actividad y preferencias.
                       </p>
-                      <ul className="space-y-2 text-sm text-n-3">
-                        <li className="flex items-start gap-2">
-                          <span className="text-red-400 mt-0.5">•</span>
-                          <span>Tu perfil personal (nombre, email, edad, educación)</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-red-400 mt-0.5">•</span>
-                          <span>Todas tus presentaciones creadas con IA</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-red-400 mt-0.5">•</span>
-                          <span>Todo el contenido y slides de cada presentación</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-red-400 mt-0.5">•</span>
-                          <span>Historial de actividad y preferencias</span>
-                        </li>
-                      </ul>
-                      <p className="text-n-4 text-xs mt-3 italic">
+                      <p className="text-n-4 text-sm mt-3 italic leading-relaxed">
                         No podremos recuperar esta información una vez eliminada. Si deseas usar Circle Up nuevamente, deberás crear un perfil desde cero.
                       </p>
                     </div>

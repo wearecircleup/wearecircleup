@@ -60,26 +60,15 @@ const DeletePresentationModal = ({ presentation, onConfirm, onCancel, isDeleting
                 </div>
 
                 <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 mb-6">
-                  <h3 className="text-red-400 font-semibold mb-2 flex items-center gap-2">
+                  <h3 className="text-red-400 font-semibold mb-3 flex items-center gap-2">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    Consecuencias
+                    Ten en cuenta
                   </h3>
-                  <ul className="space-y-2 text-n-3 text-sm">
-                    <li className="flex items-start gap-2">
-                      <span className="text-red-400 mt-0.5">•</span>
-                      <span>Se eliminarán todos los slides de la presentación</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-red-400 mt-0.5">•</span>
-                      <span>No podrás recuperar esta presentación</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-red-400 mt-0.5">•</span>
-                      <span>Esta acción es inmediata y permanente</span>
-                    </li>
-                  </ul>
+                  <p className="text-n-3 text-sm italic leading-relaxed">
+                    Al eliminar esta presentación, se borrarán todos los slides y contenido de forma permanente. Esta acción es inmediata y no podrás recuperar la presentación una vez confirmada.
+                  </p>
                 </div>
 
                 <div className="flex gap-3">
