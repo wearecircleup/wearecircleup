@@ -45,35 +45,28 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
 
   const checkProfile = async () => {
     setProfileLoading(true);
-    // 1) Optimistic: use cache/flag to avoid flashing CTA if profile exists
     try {
-      const cached = ProfileService.getCachedProfile(user.id);
-      const hadProfileFlag = ProfileService.hasProfile(user.id);
-      if (cached) {
-        setProfile(cached);
-        setProfileView('view');
-      } else if (hadProfileFlag) {
-        // We believe a profile exists (e.g., temporary 404), keep user in view
-        setProfileView('view');
-      }
-
-      // 2) Network: refresh from API and reconcile
+      // Always check API first (source of truth)
       const result = await ProfileService.getProfile(user.id);
+      
       if (result.success && result.profile) {
+        // Profile exists in DynamoDB
         setProfile(result.profile);
         setProfileView('view');
       } else {
-        // Only show CTA if we neither have cache nor flag
-        if (!cached && !hadProfileFlag) {
-          setProfileView('cta');
-        }
+        // Profile doesn't exist - show CTA
+        setProfile(null);
+        setProfileView('cta');
+        // Clear any stale localStorage data
+        ProfileService.clearUserData(user.id);
       }
     } catch (error) {
       console.error('Error checking profile:', error);
-      // If we have cache/flag, remain in view; otherwise CTA
-      const cached = ProfileService.getCachedProfile(user.id);
-      const hadProfileFlag = ProfileService.hasProfile(user.id);
-      setProfileView(cached || hadProfileFlag ? 'view' : 'cta');
+      // On error, default to CTA (don't trust localStorage)
+      setProfile(null);
+      setProfileView('cta');
+      // Clear stale data
+      ProfileService.clearUserData(user.id);
     } finally {
       setProfileLoading(false);
     }
