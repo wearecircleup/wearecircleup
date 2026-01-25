@@ -77,7 +77,7 @@ async function handleGet(req, res) {
   try {
     const result = await docClient.send(new GetCommand({
       TableName: TABLE_NAME,
-      Key: { userId }
+      Key: { PK: userId }
     }));
 
     if (!result.Item) {
@@ -144,10 +144,10 @@ async function handlePost(req, res) {
     };
 
     // Write to DynamoDB with condition to prevent overwrite
-    await docClient.send(new PutCommand({
+    const result = await docClient.send(new PutCommand({
       TableName: TABLE_NAME,
-      Item: profileRecord,
-      ConditionExpression: "attribute_not_exists(userId)"
+      Item: { ...profileRecord, PK: profileRecord.userId },
+      ConditionExpression: 'attribute_not_exists(PK)'
     }));
 
     return res.status(201).json({ 
@@ -213,11 +213,11 @@ async function handlePut(req, res) {
     
     const result = await docClient.send(new UpdateCommand({
       TableName: TABLE_NAME,
-      Key: { userId },
+      Key: { PK: userId },
       UpdateExpression: `SET ${updateExpressionParts.join(', ')}`,
       ExpressionAttributeNames: expressionAttributeNames,
       ExpressionAttributeValues: expressionAttributeValues,
-      ConditionExpression: "attribute_exists(userId)",
+      ConditionExpression: "attribute_exists(PK)",
       ReturnValues: "ALL_NEW"
     }));
 
@@ -265,8 +265,8 @@ async function handleDelete(req, res) {
   try {
     await docClient.send(new DeleteCommand({
       TableName: TABLE_NAME,
-      Key: { userId },
-      ConditionExpression: "attribute_exists(userId)"
+      Key: { PK: userId },
+      ConditionExpression: 'attribute_exists(PK)'
     }));
 
     return res.status(200).json({ 
