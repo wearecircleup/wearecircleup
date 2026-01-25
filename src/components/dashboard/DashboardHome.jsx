@@ -9,7 +9,7 @@ import ProfileView from "../profile/ProfileView";
 import ProfileEdit from "../profile/ProfileEdit";
 import AccountDeletion from "../profile/AccountDeletion";
 
-const DashboardHome = ({ user, onNavigate }) => {
+const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplete }) => {
   const [presentations, setPresentations] = useState([]);
   const [filter, setFilter] = useState('all'); // all, completed, processing
   const [loading, setLoading] = useState(true);
@@ -30,6 +30,18 @@ const DashboardHome = ({ user, onNavigate }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.login, profile]);
+
+  // Handle profile actions from Dashboard header
+  useEffect(() => {
+    if (profileAction && profile) {
+      if (profileAction === 'view') {
+        setProfileView('view');
+      } else if (profileAction === 'delete') {
+        setProfileView('delete');
+      }
+      onProfileActionComplete();
+    }
+  }, [profileAction, profile, onProfileActionComplete]);
 
   const checkProfile = async () => {
     setProfileLoading(true);

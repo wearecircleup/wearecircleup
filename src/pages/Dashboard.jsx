@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Section from "../components/Section";
 import Button from "../components/Button";
 import Logo from "../components/Logo";
@@ -11,6 +11,7 @@ const Dashboard = ({ setCurrentPage }) => {
   const user = GitHubAuthService.getUser();
   const [currentView, setCurrentView] = useState('home'); // 'home' | 'create'
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [profileAction, setProfileAction] = useState(null); // 'view' | 'delete'
 
   const handleLogout = () => {
     GitHubAuthService.logout();
@@ -21,6 +22,25 @@ const Dashboard = ({ setCurrentPage }) => {
   const handleNavigate = (view) => {
     setCurrentView(view);
   };
+
+  const handleProfileAction = (action) => {
+    setProfileAction(action);
+    setShowProfileMenu(false);
+  };
+
+  // Close dropdown when clicking outside
+  const handleClickOutside = (e) => {
+    if (showProfileMenu && !e.target.closest('.profile-dropdown-container')) {
+      setShowProfileMenu(false);
+    }
+  };
+
+  useEffect(() => {
+    if (showProfileMenu) {
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [showProfileMenu]);
 
   const handleCreateSuccess = () => {
     // Return to home after successful creation
@@ -75,9 +95,9 @@ const Dashboard = ({ setCurrentPage }) => {
                 Bienvenido, <span className="text-color-1 font-medium">{user?.username || 'Usuario'}</span>
               </p>
             </div>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3 min-w-[280px]">
               {/* Profile Button */}
-              <div className="relative">
+              <div className="relative profile-dropdown-container">
                 <button
                   onClick={() => setShowProfileMenu(!showProfileMenu)}
                   className="w-full flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-color-1/20 to-color-2/20 hover:from-color-1/30 hover:to-color-2/30 border border-color-1/30 rounded-xl transition-all group"
@@ -102,10 +122,7 @@ const Dashboard = ({ setCurrentPage }) => {
                 {showProfileMenu && (
                   <div className="absolute right-0 mt-2 w-full bg-n-7 border border-n-6 rounded-xl shadow-xl overflow-hidden z-50">
                     <button
-                      onClick={() => {
-                        setShowProfileMenu(false);
-                        // Trigger profile view in DashboardHome
-                      }}
+                      onClick={() => handleProfileAction('view')}
                       className="w-full px-4 py-3 text-left text-n-2 hover:bg-n-6 hover:text-color-1 transition-colors flex items-center gap-2"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -114,10 +131,7 @@ const Dashboard = ({ setCurrentPage }) => {
                       Mi Perfil
                     </button>
                     <button
-                      onClick={() => {
-                        setShowProfileMenu(false);
-                        // Trigger delete account
-                      }}
+                      onClick={() => handleProfileAction('delete')}
                       className="w-full px-4 py-3 text-left text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors flex items-center gap-2 border-t border-n-6"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -146,6 +160,8 @@ const Dashboard = ({ setCurrentPage }) => {
             <DashboardHome 
               user={user} 
               onNavigate={handleNavigate}
+              profileAction={profileAction}
+              onProfileActionComplete={() => setProfileAction(null)}
             />
           )}
           

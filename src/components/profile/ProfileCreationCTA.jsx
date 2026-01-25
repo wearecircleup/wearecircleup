@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import Button from '../Button';
+import AudioWave from './AudioWave';
 
 /**
  * ProfileCreationCTA - Spotify-style Call-to-Action
@@ -50,34 +51,8 @@ const ProfileCreationCTA = ({ onStart, onSkip }) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        {/* Icon */}
-        <motion.div
-          className="mb-8 inline-block"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ 
-            type: "spring",
-            stiffness: 200,
-            damping: 15,
-            delay: 0.2
-          }}
-        >
-          <div className="w-24 h-24 mx-auto bg-gradient-to-br from-color-1 to-color-2 rounded-full flex items-center justify-center shadow-lg shadow-color-1/50">
-            <svg 
-              className="w-12 h-12 text-white" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth={2} 
-                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" 
-              />
-            </svg>
-          </div>
-        </motion.div>
+        {/* Audio Wave Animation */}
+        <AudioWave className="mb-8" />
 
         {/* Title */}
         <motion.h1
