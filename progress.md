@@ -1591,6 +1591,16 @@ vercel --prod --yes
 - Deployed to: https://www.circleup.com.co
 - Status: Connection to DynamoDB working
 
+**Step 12: Fix OIDC Credentials** ✅ COMPLETED
+- Issue: FUNCTION_INVOCATION_FAILED - Server crashing on all API calls
+- Root cause: `@vercel/functions` package not installed
+- Fix: Installed `@vercel/functions` for OIDC AWS credentials
+- Test endpoint: `/api/test-dynamodb` returns success
+- Verification:
+  - ✅ DynamoDB connection: `{"success":true,"itemCount":0}`
+  - ✅ GET profile: `{"success":false,"error":"Perfil no encontrado"}` (404 expected)
+- Status: Server working, ready for profile creation
+
 ### Key Differences from Blob
 
 | Feature | Vercel Blob (NDJSON) | DynamoDB |

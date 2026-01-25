@@ -101,8 +101,11 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
       // Validate with Zod schema
       const validatedData = profileUpdateSchema.parse(formData);
 
+      // Extract userId and updates
+      const { userId, ...updates } = validatedData;
+
       // Update profile via API
-      const result = await ProfileService.updateProfile(validatedData);
+      const result = await ProfileService.updateProfile(userId, updates);
 
       if (result.success) {
         setShowSuccess(true);
