@@ -11,6 +11,7 @@ import curve from "../assets/hero/curve.png";
 const Dashboard = ({ setCurrentPage }) => {
   const user = GitHubAuthService.getUser();
   const [currentView, setCurrentView] = useState('home'); // 'home' | 'create' | 'view'
+  const [dashboardTab, setDashboardTab] = useState('presentations'); // 'presentations' | 'profile'
   const [selectedPresentation, setSelectedPresentation] = useState(null);
   const [hasProfile, setHasProfile] = useState(false);
   const [profileAction, setProfileAction] = useState(null); // 'view' | 'delete'
@@ -29,6 +30,7 @@ const Dashboard = ({ setCurrentPage }) => {
   };
 
   const handleProfileAction = (action) => {
+    setDashboardTab('profile');
     setProfileAction(action);
   };
 
@@ -66,49 +68,104 @@ const Dashboard = ({ setCurrentPage }) => {
           </div>
 
           {/* Header */}
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 gap-4">
-            <div>
-              <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-n-1 mb-2">
-                Dashboard{" "}
-                <span className="inline-block relative font-semibold">
-                  Circle Up
-                  <img
-                    src={curve}
-                    className="absolute top-full left-0 w-full xl:-mt-2 pointer-events-none select-none"
-                    width={624}
-                    height={28}
-                    alt="Curve"
-                  />
-                </span>
-              </h1>
-              <p className="text-n-4 text-base lg:text-lg">
-                Bienvenido, <span className="text-color-1 font-medium">{user?.username || 'Usuario'}</span>
-              </p>
-            </div>
-            <div className="flex gap-2 w-full lg:w-auto">
-              <Button onClick={() => setCurrentPage('home')} className="text-xs sm:text-sm whitespace-nowrap flex-1 lg:flex-initial">
-                ← Inicio
-              </Button>
-              {hasProfile && (
-                <Button onClick={() => handleProfileAction('view')} className="text-xs sm:text-sm whitespace-nowrap flex-1 lg:flex-initial">
-                  Mi Perfil
+          <div className="mb-8">
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 gap-4">
+              <div>
+                <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-n-1 mb-2">
+                  Dashboard{" "}
+                  <span className="inline-block relative font-semibold">
+                    Circle Up
+                    <img
+                      src={curve}
+                      className="absolute top-full left-0 w-full xl:-mt-2 pointer-events-none select-none"
+                      width={624}
+                      height={28}
+                      alt="Curve"
+                    />
+                  </span>
+                </h1>
+                <p className="text-n-4 text-base lg:text-lg">
+                  Bienvenido, <span className="text-color-1 font-medium">{user?.username || 'Usuario'}</span>
+                </p>
+              </div>
+              <div className="flex gap-2 w-full lg:w-auto">
+                <Button 
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    setCurrentPage('home');
+                  }} 
+                  className="text-xs sm:text-sm whitespace-nowrap flex-1 lg:flex-initial"
+                >
+                  ← Inicio
                 </Button>
+                <Button 
+                  onClick={handleLogout} 
+                  white 
+                  className="text-xs sm:text-sm whitespace-nowrap flex-1 lg:flex-initial"
+                >
+                  Cerrar Sesión
+                </Button>
+              </div>
+            </div>
+
+            {/* Tab Navigation */}
+            <div className="flex gap-1 sm:gap-2 border-b border-n-6 overflow-x-auto">
+              <button
+                onClick={() => setDashboardTab('presentations')}
+                className={`relative px-4 sm:px-6 py-3 font-semibold text-xs sm:text-sm whitespace-nowrap transition-all ${
+                  dashboardTab === 'presentations'
+                    ? 'text-n-1'
+                    : 'text-n-4 hover:text-n-2'
+                }`}
+              >
+                Presentaciones
+                {dashboardTab === 'presentations' && (
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-color-1 to-color-2"></div>
+                )}
+              </button>
+              {hasProfile && (
+                <button
+                  onClick={() => setDashboardTab('profile')}
+                  className={`relative px-4 sm:px-6 py-3 font-semibold text-xs sm:text-sm whitespace-nowrap transition-all ${
+                    dashboardTab === 'profile'
+                      ? 'text-n-1'
+                      : 'text-n-4 hover:text-n-2'
+                  }`}
+                >
+                  Mi Perfil
+                  {dashboardTab === 'profile' && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-color-1 to-color-2"></div>
+                  )}
+                </button>
               )}
-              <Button onClick={handleLogout} white className="text-xs sm:text-sm whitespace-nowrap flex-1 lg:flex-initial">
-                Cerrar Sesión
-              </Button>
             </div>
           </div>
 
           {/* Content */}
           {currentView === 'home' && (
-            <DashboardHome 
-              user={user} 
-              onNavigate={handleNavigate}
-              profileAction={profileAction}
-              onProfileActionComplete={() => setProfileAction(null)}
-              onProfileStatusChange={setHasProfile}
-            />
+            <>
+              {dashboardTab === 'presentations' && (
+                <DashboardHome 
+                  user={user} 
+                  onNavigate={handleNavigate}
+                  profileAction={null}
+                  onProfileActionComplete={() => setProfileAction(null)}
+                  onProfileStatusChange={setHasProfile}
+                />
+              )}
+              {dashboardTab === 'profile' && hasProfile && (
+                <DashboardHome 
+                  user={user} 
+                  onNavigate={handleNavigate}
+                  profileAction={profileAction || 'view'}
+                  onProfileActionComplete={() => {
+                    setProfileAction(null);
+                    setDashboardTab('presentations');
+                  }}
+                  onProfileStatusChange={setHasProfile}
+                />
+              )}
+            </>
           )}
           
           {currentView === 'create' && (
