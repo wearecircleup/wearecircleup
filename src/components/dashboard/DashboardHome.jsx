@@ -141,7 +141,8 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
   });
 
   const handleOpenPresentation = (presentation) => {
-    window.open(presentation.url, '_blank');
+    // Navigate to presentation viewer with data in state
+    onNavigate('view', presentation);
   };
 
   const handleDelete = async (presentation) => {

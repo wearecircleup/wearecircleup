@@ -65,7 +65,7 @@ export default async function handler(req, res) {
  * Retrieve user profile from DynamoDB
  */
 async function handleGet(req, res) {
-  const { userId } = req.query;
+  const userId = req.query?.userId || new URL(req.url, `http://${req.headers.host}`).searchParams.get('userId');
 
   if (!userId) {
     return res.status(400).json({ 
