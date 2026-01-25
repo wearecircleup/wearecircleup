@@ -109,19 +109,37 @@ Respond ONLY with valid JSON in this format:
   ]
 }
 
-RULES:
+RULES FOR ARTISTIC TYPOGRAPHY:
 - "message": Must be 5-10 words maximum. This is the key takeaway that occupies 70% of the slide.
-  * Use asterisks to mark emphasis levels for visual hierarchy:
-    * *word* = light emphasis (font-weight: 300)
-    * **word** = medium emphasis (font-weight: 500) 
-    * ***word*** = strong emphasis (font-weight: 700)
-    * ****word**** = extra strong emphasis (font-weight: 900)
-  * Example: "visualize your ****big**** thoughts" or "the only **limit** is your ****imagination****"
-  * Mark 1-3 key words for dramatic visual impact
+  
+  TYPOGRAPHY SYSTEM (combine size + weight for dramatic impact):
+  * Use pipe | to separate size and weight: |size:weight|word|
+  * Sizes: xs (extra small), sm (small), md (medium/default), lg (large), xl (extra large)
+  * Weights: thin (100), light (300), normal (400), medium (500), bold (700), black (900)
+  
+  EXAMPLES:
+  * "visualize your |xl:black|big| thoughts" → "big" is HUGE and BLACK
+  * "the only |sm:light|limit| is your |xl:black|imagination|" → "limit" small/light, "imagination" huge/black
+  * "|sm:thin|A| |md:normal|symbol| |sm:thin|of| |lg:bold|sustainability| |md:medium|and| |lg:bold|tradition|"
+  
+  DESIGN PHILOSOPHY:
+  * Supporting words (articles, prepositions): |xs:thin| or |sm:light| - make them SMALL and THIN
+  * Regular words: |md:normal| or no marker (default)
+  * Important words: |lg:bold| or |lg:black| - make them LARGER and BOLDER
+  * Hero words (1-2 per message): |xl:black| - DRAMATICALLY larger and boldest
+  * Create CONTRAST: small thin words make big bold words POP
+  * Think like a designer: play with hierarchy, not uniform text
+  
+  MANDATORY:
+  * Mark at least 3-5 words with size/weight combinations
+  * Use |xs:thin| or |sm:light| for at least 2 supporting words
+  * Use |xl:black| or |lg:black| for 1-2 hero words
+  * Default unmarked words are |md:normal|
+
 - "explanation": Must be 30-50 words. A concise paragraph in italic that complements or explains the message. Occupies 20% of the slide.
 - NO bullet points, NO lists
-- Focus on impact and clarity through typography
-- Each message should be memorable and actionable
+- Focus on DRAMATIC visual hierarchy through size AND weight variations
+- Each message should be memorable and visually striking
 
 Do NOT include any other fields. Only "message" and "explanation" for each slide.`
           }

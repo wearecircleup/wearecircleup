@@ -3,75 +3,61 @@ import Button from '../Button';
 import Logo from '../Logo';
 import ParticleLogo from '../presentation/ParticleLogo';
 
-// Parse message with asterisk emphasis markers
+// Parse message with size and weight markers: |size:weight|word|
 const parseMessageWithEmphasis = (message) => {
   if (!message) return [];
   
-  // Split by asterisk patterns while preserving them
   const parts = [];
-  let currentText = '';
   let i = 0;
+  let currentText = '';
   
   while (i < message.length) {
-    // Check for 4 asterisks (****word****)
-    if (message.substr(i, 4) === '****') {
-      if (currentText) parts.push({ text: currentText, weight: 'normal' });
-      currentText = '';
-      i += 4;
-      let emphasisText = '';
-      while (i < message.length && message.substr(i, 4) !== '****') {
-        emphasisText += message[i];
+    // Check for marker pattern |size:weight|word|
+    if (message[i] === '|') {
+      // Save any accumulated text
+      if (currentText.trim()) {
+        parts.push({ text: currentText, size: 'md', weight: 'normal' });
+        currentText = '';
+      }
+      
+      i++; // skip opening |
+      
+      // Extract size:weight
+      let styleStr = '';
+      while (i < message.length && message[i] !== '|') {
+        styleStr += message[i];
         i++;
       }
-      if (emphasisText) parts.push({ text: emphasisText, weight: 'black' });
-      i += 4;
-    }
-    // Check for 3 asterisks (***word***)
-    else if (message.substr(i, 3) === '***') {
-      if (currentText) parts.push({ text: currentText, weight: 'normal' });
-      currentText = '';
-      i += 3;
-      let emphasisText = '';
-      while (i < message.length && message.substr(i, 3) !== '***') {
-        emphasisText += message[i];
+      i++; // skip closing | after style
+      
+      // Extract word
+      let word = '';
+      while (i < message.length && message[i] !== '|') {
+        word += message[i];
         i++;
       }
-      if (emphasisText) parts.push({ text: emphasisText, weight: 'bold' });
-      i += 3;
-    }
-    // Check for 2 asterisks (**word**)
-    else if (message.substr(i, 2) === '**') {
-      if (currentText) parts.push({ text: currentText, weight: 'normal' });
-      currentText = '';
-      i += 2;
-      let emphasisText = '';
-      while (i < message.length && message.substr(i, 2) !== '**') {
-        emphasisText += message[i];
-        i++;
+      i++; // skip closing | after word
+      
+      // Parse size:weight
+      const [size, weight] = styleStr.split(':');
+      if (word.trim()) {
+        parts.push({ 
+          text: word, 
+          size: size || 'md', 
+          weight: weight || 'normal' 
+        });
       }
-      if (emphasisText) parts.push({ text: emphasisText, weight: 'medium' });
-      i += 2;
-    }
-    // Check for 1 asterisk (*word*)
-    else if (message[i] === '*') {
-      if (currentText) parts.push({ text: currentText, weight: 'normal' });
-      currentText = '';
-      i++;
-      let emphasisText = '';
-      while (i < message.length && message[i] !== '*') {
-        emphasisText += message[i];
-        i++;
-      }
-      if (emphasisText) parts.push({ text: emphasisText, weight: 'light' });
-      i++;
-    }
-    else {
+    } else {
       currentText += message[i];
       i++;
     }
   }
   
-  if (currentText) parts.push({ text: currentText, weight: 'normal' });
+  // Add remaining text
+  if (currentText.trim()) {
+    parts.push({ text: currentText, size: 'md', weight: 'normal' });
+  }
+  
   return parts;
 };
 
@@ -199,25 +185,50 @@ const PresentationViewerComponent = ({ presentation, onBack }) => {
               >
                 {/* Main impactful message - 70% of space */}
                 <div className="flex-[7] flex items-center justify-center mb-6 sm:mb-8">
-                  <h1 className={`leading-tight text-center ${
-                    fontSize === 'small'
-                      ? 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl'
-                      : fontSize === 'large'
-                      ? 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl'
-                      : 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl'
-                  }`}>
+                  <h1 className="leading-tight text-center">
                     {parseMessageWithEmphasis(slide.message || slide.title).map((part, idx) => {
+                      // Size multipliers based on fontSize setting
+                      const sizeClasses = {
+                        xs: fontSize === 'small' 
+                          ? 'text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl'
+                          : fontSize === 'large'
+                          ? 'text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl'
+                          : 'text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl',
+                        sm: fontSize === 'small'
+                          ? 'text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl'
+                          : fontSize === 'large'
+                          ? 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl'
+                          : 'text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl',
+                        md: fontSize === 'small'
+                          ? 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl'
+                          : fontSize === 'large'
+                          ? 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl'
+                          : 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl',
+                        lg: fontSize === 'small'
+                          ? 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl'
+                          : fontSize === 'large'
+                          ? 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl'
+                          : 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl',
+                        xl: fontSize === 'small'
+                          ? 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl'
+                          : fontSize === 'large'
+                          ? 'text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem]'
+                          : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl'
+                      };
+                      
                       const weightClasses = {
+                        thin: 'font-thin',
                         light: 'font-light',
                         normal: 'font-normal',
                         medium: 'font-medium',
                         bold: 'font-bold',
                         black: 'font-black'
                       };
+                      
                       return (
                         <span 
                           key={idx} 
-                          className={`bg-gradient-to-r from-color-1 to-color-2 bg-clip-text text-transparent ${weightClasses[part.weight]}`}
+                          className={`bg-gradient-to-r from-color-1 to-color-2 bg-clip-text text-transparent ${sizeClasses[part.size] || sizeClasses.md} ${weightClasses[part.weight] || weightClasses.normal}`}
                         >
                           {part.text}
                         </span>
