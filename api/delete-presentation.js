@@ -6,8 +6,15 @@
 
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, GetCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
+import { awsCredentialsProvider } from '@vercel/functions/oidc';
 
-const client = new DynamoDBClient({ region: process.env.AWS_REGION });
+const client = new DynamoDBClient({
+  region: process.env.AWS_REGION,
+  credentials: awsCredentialsProvider({
+    roleArn: process.env.AWS_ROLE_ARN,
+    clientConfig: { region: process.env.AWS_REGION },
+  }),
+});
 const docClient = DynamoDBDocumentClient.from(client);
 const PRESENTATIONS_TABLE = process.env.DYNAMODB_PRESENTATIONS_TABLE_NAME;
 
