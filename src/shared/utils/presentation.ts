@@ -30,7 +30,7 @@ export class PresentationService {
             login: user.login,
             username: user.username,
             id: user.id,
-            node_id: user.node_id
+            node_id: (user as any).node_id
           }
         })
       });
@@ -82,7 +82,7 @@ export class PresentationService {
     }
 
     try {
-      const userId = user.id || user.node_id;
+      const userId = user.id || (user as any).node_id;
       const response = await fetch(`/api/list-presentations?userId=${userId}`);
       
       if (!response.ok) {
@@ -128,7 +128,7 @@ export class PresentationService {
     }
 
     try {
-      const userId = user.id || user.node_id;
+      const userId = user.id || (user as any).node_id;
       const response = await fetch('/api/delete-presentation', {
         method: 'DELETE',
         headers: {
