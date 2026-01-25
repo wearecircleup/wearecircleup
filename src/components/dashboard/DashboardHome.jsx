@@ -78,10 +78,18 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
   const loadPresentations = async () => {
     setLoading(true);
     try {
-      // Fetch from GitHub repository using login as stable identifier
-      const remotePresentations = await PresentationsAPI.getUserPresentations(user.login);
+      // Fetch from DynamoDB using userId
+      const userId = user.id || user.node_id;
+      const response = await fetch(`/api/list-presentations?userId=${userId}`);
       
-      // Merge with localStorage (for processing status)
+      if (!response.ok) {
+        throw new Error('Failed to fetch presentations');
+      }
+      
+      const data = await response.json();
+      const remotePresentations = data.presentations || [];
+      
+      // Merge with localStorage (for any local-only data)
       const localKey = `presentations_${user.login}`;
       const localData = localStorage.getItem(localKey);
       const localPresentations = localData ? JSON.parse(localData) : [];
@@ -91,11 +99,9 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
       
       // Filter local presentations: only keep if exists in remote OR is processing
       const validLocalPresentations = localPresentations.filter(local => {
-        // Keep if it's processing (not yet in GitHub)
         if (local.status === 'processing') {
           return true;
         }
-        // Keep only if exists in remote (completed presentations)
         return remoteMap.has(local.id);
       });
       
@@ -104,11 +110,9 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
         .map(local => {
           const remote = remoteMap.get(local.id);
           if (remote) {
-            // Presentation completed, use remote data and remove from map
             remoteMap.delete(local.id);
             return remote;
           }
-          // Still processing - keep local version
           return local;
         });
       
@@ -117,7 +121,7 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
       
       setPresentations(merged);
       
-      // Update localStorage with merged data (this removes deleted presentations)
+      // Update localStorage with merged data
       localStorage.setItem(localKey, JSON.stringify(merged));
     } catch (error) {
       console.error('Error loading presentations:', error);
@@ -141,7 +145,7 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
   };
 
   const handleDelete = async (presentation) => {
-    const confirmMessage = `¿Eliminar "${presentation.title}"?\n\nEsta acción no se puede deshacer.\n\nNota: La presentación puede tardar hasta 30 segundos en desaparecer completamente del repositorio.`;
+    const confirmMessage = `¿Eliminar "${presentation.title}"?\n\nEsta acción no se puede deshacer.`;
     
     if (confirm(confirmMessage)) {
       try {
@@ -154,16 +158,28 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
         setPresentations(updated);
         localStorage.setItem(`presentations_${user.login}`, JSON.stringify(updated));
 
-        // Trigger deletion in GitHub
-        const result = await PresentationsAPI.deletePresentation(
-          user.login,
-          presentation.id,
-          presentation.title
-        );
+        // Delete from DynamoDB
+        const userId = user.id || user.node_id;
+        const response = await fetch('/api/delete-presentation', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userId: userId,
+            presentationId: presentation.id
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to delete presentation');
+        }
+
+        const result = await response.json();
 
         if (!result.success) {
-          console.error('Failed to delete from GitHub:', result.message);
-          alert('Hubo un error al eliminar la presentación del servidor. Por favor intenta nuevamente.');
+          console.error('Failed to delete from DynamoDB:', result.message);
+          alert('Hubo un error al eliminar la presentación. Por favor intenta nuevamente.');
           
           // Restore original status on error
           const restored = presentations.map(p => 
@@ -174,10 +190,8 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
           setPresentations(restored);
           localStorage.setItem(`presentations_${user.login}`, JSON.stringify(restored));
         } else {
-          // Wait for GitHub Action to complete, then reload
-          setTimeout(() => {
-            loadPresentations();
-          }, 5000);
+          // Reload presentations immediately
+          loadPresentations();
         }
       } catch (error) {
         console.error('Error deleting presentation:', error);

@@ -141,13 +141,8 @@ Do NOT include speaker notes. Only title and content array for each slide.`
 
     console.log(`[${user.login}] Generated ${slidesData.slides.length} slides successfully`);
 
-    // Generate HTML presentation
-    const presentationTitle = title || description.substring(0, 50);
-    const html = generateHTML(slidesData, presentationTitle, selectedTheme);
-
-    console.log(`[${user.login}] HTML generated successfully`);
-
     // Generate presentation ID
+    const presentationTitle = title || description.substring(0, 50);
     const presentationId = crypto.randomUUID();
     const userId = user.id || user.node_id;
 
@@ -155,40 +150,22 @@ Do NOT include speaker notes. Only title and content array for each slide.`
     const timestamp = new Date().toISOString();
     
     try {
-      // Debug: Log all relevant info
-      console.log(`[${user.login}] === SAVE TO DYNAMODB DEBUG ===`);
-      console.log(`[${user.login}] Table name: ${PRESENTATIONS_TABLE}`);
-      console.log(`[${user.login}] AWS Region: ${process.env.AWS_REGION}`);
-      console.log(`[${user.login}] User ID: ${userId}`);
-      console.log(`[${user.login}] Presentation ID: ${presentationId}`);
-      
-      if (!PRESENTATIONS_TABLE) {
-        throw new Error('DYNAMODB_PRESENTATIONS_TABLE_NAME environment variable not set');
-      }
-      
-      if (!process.env.AWS_REGION) {
-        throw new Error('AWS_REGION environment variable not set');
-      }
-      
       // Get current presentations for user
-      console.log(`[${user.login}] Attempting to get current presentations...`);
+      console.log(`[${user.login}] Fetching presentations for user ${userId}...`);
       const current = await docClient.send(new GetCommand({
         TableName: PRESENTATIONS_TABLE,
         Key: { PK: userId }
       }));
       
-      console.log(`[${user.login}] Current item retrieved:`, current.Item ? 'Found' : 'Not found');
-      
       const presentations = current.Item?.presentations || [];
       console.log(`[${user.login}] Current presentations count: ${presentations.length}`);
       
-      // Add new presentation
+      // Add new presentation (JSON only, no HTML)
       const newPresentation = {
         id: presentationId,
         title: presentationTitle,
         description: description,
         slides: slidesData.slides,
-        html: html,
         metadata: {
           theme: selectedTheme,
           model: selectedModel,
@@ -196,6 +173,7 @@ Do NOT include speaker notes. Only title and content array for each slide.`
           slideCount: slidesData.slides.length,
           username: user.login
         },
+        status: 'completed',
         createdAt: timestamp,
         updatedAt: timestamp
       };
@@ -204,8 +182,7 @@ Do NOT include speaker notes. Only title and content array for each slide.`
       console.log(`[${user.login}] New presentation added. Total count: ${presentations.length}`);
       
       // Save all presentations for user
-      console.log(`[${user.login}] Attempting to save to DynamoDB...`);
-      const putResult = await docClient.send(new PutCommand({
+      await docClient.send(new PutCommand({
         TableName: PRESENTATIONS_TABLE,
         Item: {
           PK: userId,
@@ -215,13 +192,9 @@ Do NOT include speaker notes. Only title and content array for each slide.`
         }
       }));
 
-      console.log(`[${user.login}] ✅ Presentation saved successfully to ${PRESENTATIONS_TABLE}: ${presentationId}`);
-      console.log(`[${user.login}] DynamoDB response:`, putResult);
+      console.log(`[${user.login}] ✅ Presentation saved successfully: ${presentationId}`);
     } catch (saveError) {
       console.error(`[${user.login}] ❌ Error saving to DynamoDB:`, saveError);
-      console.error(`[${user.login}] Error name:`, saveError.name);
-      console.error(`[${user.login}] Error message:`, saveError.message);
-      console.error(`[${user.login}] Error stack:`, saveError.stack);
       return res.status(500).json({ 
         error: 'Failed to save presentation',
         details: saveError.message,
@@ -229,13 +202,11 @@ Do NOT include speaker notes. Only title and content array for each slide.`
       });
     }
 
-    // Return slides data and HTML
+    // Return slides data only (no HTML)
     return res.status(200).json({
       success: true,
       presentationId: presentationId,
       slides: slidesData.slides,
-      html: html,
-      url: `/presentation/${presentationId}`,
       metadata: {
         title: presentationTitle,
         theme: selectedTheme,
@@ -252,130 +223,4 @@ Do NOT include speaker notes. Only title and content array for each slide.`
       details: error.message 
     });
   }
-}
-
-function generateHTML(slidesData, title, theme) {
-  const slides = slidesData.slides.map((slide, index) => {
-    const x = (index % 3) * 1200;
-    const y = Math.floor(index / 3) * 800;
-    const rotate = index % 2 === 0 ? 0 : 15;
-    
-    return `
-    <div class="step slide" data-x="${x}" data-y="${y}" data-rotate="${rotate}">
-      <h2>${slide.title}</h2>
-      <div class="content">
-        ${slide.content.map(point => `<p>• ${point}</p>`).join('\n        ')}
-      </div>
-      ${slide.notes ? `<div class="notes">${slide.notes}</div>` : ''}
-    </div>`;
-  }).join('\n');
-
-  const themeColors = {
-    modern: { bg: '#0E0C15', primary: '#AC6AFF', secondary: '#FFC876' },
-    academic: { bg: '#1a1a1a', primary: '#4a90e2', secondary: '#e8e8e8' },
-    minimal: { bg: '#ffffff', primary: '#333333', secondary: '#666666' }
-  };
-  
-  const colors = themeColors[theme] || themeColors.modern;
-
-  return `<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${title} - CircleUp</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/impress.js@2.0.0/css/impress-common.css">
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: ${colors.bg};
-      color: ${theme === 'minimal' ? colors.primary : '#ffffff'};
-      overflow: hidden;
-    }
-    
-    .step {
-      width: 1000px;
-      padding: 60px;
-      background: ${theme === 'minimal' ? '#f5f5f5' : 'rgba(255, 255, 255, 0.05)'};
-      border: 2px solid ${colors.primary};
-      border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(10px);
-    }
-    
-    .step h2 {
-      color: ${colors.primary};
-      font-size: 3em;
-      margin-bottom: 0.5em;
-      font-weight: bold;
-      background: linear-gradient(135deg, ${colors.primary}, ${colors.secondary});
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .step .content p {
-      font-size: 1.5em;
-      line-height: 1.6;
-      margin: 0.5em 0;
-      color: ${theme === 'minimal' ? colors.secondary : '#e0e0e0'};
-    }
-    
-    .step .notes {
-      margin-top: 2em;
-      padding: 1em;
-      background: rgba(0, 0, 0, 0.2);
-      border-left: 4px solid ${colors.secondary};
-      font-size: 1em;
-      font-style: italic;
-      color: ${colors.secondary};
-    }
-    
-    .impress-enabled .step {
-      opacity: 0.3;
-      transition: opacity 1s;
-    }
-    
-    .impress-enabled .step.active {
-      opacity: 1;
-    }
-    
-    .branding {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      font-size: 0.8em;
-      color: ${colors.secondary};
-      opacity: 0.5;
-      z-index: 1000;
-    }
-  </style>
-</head>
-<body>
-  <div id="impress">
-    ${slides}
-    
-    <div class="step" data-x="${Math.ceil(slidesData.slides.length / 3) * 1200}" data-y="0" data-scale="2">
-      <h2>Gracias</h2>
-      <div class="content">
-        <p>Presentacion generada con CircleUp AI</p>
-        <p style="font-size: 0.8em; color: ${colors.secondary};">Powered by GitHub Models</p>
-      </div>
-    </div>
-  </div>
-  
-  <div class="branding">CircleUp</div>
-  
-  <script src="https://cdn.jsdelivr.net/npm/impress.js@2.0.0/js/impress.js"></script>
-  <script>
-    impress().init();
-    
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        impress().goto(0);
-      }
-    });
-  </script>
-</body>
-</html>`;
 }
