@@ -166,6 +166,7 @@ const Dashboard = ({ setCurrentPage }) => {
           {currentView === 'view' && selectedPresentation && (
             <PresentationViewerComponent 
               presentation={selectedPresentation}
+              userId={user?.login}
               onBack={() => handleNavigate('home')}
               onUpdate={(updatedPresentation) => {
                 setSelectedPresentation(updatedPresentation);

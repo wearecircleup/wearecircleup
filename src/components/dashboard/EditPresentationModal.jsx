@@ -1,6 +1,24 @@
 import { useState } from 'react';
 import Button from '../Button';
 
+const EXAMPLE_PROMPT = `Aplica la sintaxis de tipografía artística a este slide:
+
+Slide actual:
+{
+  "message": "Tu mensaje aquí",
+  "explanation": "Tu explicación aquí"
+}
+
+Sintaxis de tipografía:
+- Usa | para marcar palabras con estilo especial: |tamaño:peso|palabra|
+- Tamaños: xs, sm, md, lg, xl
+- Pesos: thin, light, normal, medium, bold, black
+
+Ejemplo:
+"El |xl:black|futuro| es |lg:bold|ahora|"
+
+Devuelve solo el JSON con la sintaxis aplicada.`;
+
 const EditPresentationModal = ({ presentation, onClose, onSave }) => {
   const [jsonContent, setJsonContent] = useState(
     JSON.stringify(presentation, null, 2)
@@ -55,10 +73,10 @@ const EditPresentationModal = ({ presentation, onClose, onSave }) => {
         <div className="flex items-center justify-between p-6 border-b border-n-6">
           <div>
             <h2 className="text-2xl font-bold text-n-1">
-              Editar Presentación
+              Dale tu toque personal
             </h2>
             <p className="text-sm text-n-4 mt-1">
-              Modifica el JSON directamente. Ten cuidado con la sintaxis.
+              Edita el contenido y usa IA para aplicar estilos visuales increíbles
             </p>
           </div>
           <button
@@ -89,11 +107,45 @@ const EditPresentationModal = ({ presentation, onClose, onSave }) => {
         )}
 
         {/* Footer */}
-        <div className="flex items-center justify-between gap-4 p-6 border-t border-n-6">
-          <p className="text-xs text-n-4">
-            Asegúrate de mantener la estructura: id, title, slides[], createdAt, etc.
-          </p>
-          <div className="flex gap-3">
+        <div className="flex flex-col gap-4 p-6 border-t border-n-6">
+          {/* Help section */}
+          <div className="flex items-start gap-3 p-4 bg-n-8/50 border border-n-6/30 rounded-xl">
+            <div className="flex-1">
+              <h3 className="text-sm font-medium text-n-1 mb-2">Tipografía artística</h3>
+              <p className="text-xs text-n-4 mb-3">
+                Usa IA para aplicar estilos visuales. Copia el prompt y pégalo en ChatGPT con tu slide.
+              </p>
+              <div className="flex flex-wrap gap-2 text-xs">
+                <code className="px-2 py-1 bg-n-7 border border-n-6 rounded text-color-1">|xl:black|palabra|</code>
+                <span className="text-n-5">→</span>
+                <span className="text-n-3">Extra grande y negrita</span>
+              </div>
+              <div className="flex flex-wrap gap-2 text-xs mt-1">
+                <code className="px-2 py-1 bg-n-7 border border-n-6 rounded text-color-2">|sm:light|texto|</code>
+                <span className="text-n-5">→</span>
+                <span className="text-n-3">Pequeño y delgado</span>
+              </div>
+            </div>
+            <button
+              onClick={(e) => {
+                navigator.clipboard.writeText(EXAMPLE_PROMPT);
+                // Visual feedback
+                const btn = e.currentTarget;
+                const originalText = btn.textContent;
+                btn.textContent = 'Copiado';
+                setTimeout(() => {
+                  btn.textContent = originalText;
+                }, 2000);
+              }}
+              className="px-4 py-2 bg-color-1 hover:bg-color-1/80 text-n-8 rounded-lg text-sm font-medium transition-all whitespace-nowrap"
+              title="Copiar prompt de ejemplo"
+            >
+              Copiar prompt
+            </button>
+          </div>
+
+          {/* Action buttons */}
+          <div className="flex items-center justify-end gap-3">
             <Button
               onClick={onClose}
               className="px-6"

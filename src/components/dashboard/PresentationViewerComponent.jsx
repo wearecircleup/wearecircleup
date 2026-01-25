@@ -62,7 +62,7 @@ const parseMessageWithEmphasis = (message) => {
   return parts;
 };
 
-const PresentationViewerComponent = ({ presentation, onBack, onUpdate }) => {
+const PresentationViewerComponent = ({ presentation, onBack, onUpdate, userId }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [fontSize, setFontSize] = useState('normal'); // small, normal, large
   const [fontFamily, setFontFamily] = useState('sans'); // sans, serif, mono
@@ -164,7 +164,7 @@ const PresentationViewerComponent = ({ presentation, onBack, onUpdate }) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        userId: presentation.userId,
+        userId: userId,
         presentationId: presentation.id,
         updatedPresentation: updatedPresentation
       })
@@ -212,8 +212,8 @@ const PresentationViewerComponent = ({ presentation, onBack, onUpdate }) => {
                 }`}
               >
                 {/* Main impactful message - 80% of space */}
-                <div className="flex-[8] flex items-center justify-center mb-4 sm:mb-6">
-                  <h1 className="leading-tight text-center">
+                <div className="flex-[8] flex items-center justify-center mb-4 sm:mb-6 overflow-hidden">
+                  <h1 className="leading-tight text-center break-words hyphens-auto max-w-full px-2" style={{ wordSpacing: '0.3em' }}>
                     {parseMessageWithEmphasis(slide.message || slide.title).map((part, idx) => {
                       // Size multipliers based on fontSize setting
                       const sizeClasses = {
@@ -256,7 +256,8 @@ const PresentationViewerComponent = ({ presentation, onBack, onUpdate }) => {
                       return (
                         <span 
                           key={idx} 
-                          className={`bg-gradient-to-r from-color-1 to-color-2 bg-clip-text text-transparent ${sizeClasses[part.size] || sizeClasses.md} ${weightClasses[part.weight] || weightClasses.normal}`}
+                          className={`inline-block bg-gradient-to-r from-color-1 to-color-2 bg-clip-text text-transparent ${sizeClasses[part.size] || sizeClasses.md} ${weightClasses[part.weight] || weightClasses.normal}`}
+                          style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
                         >
                           {part.text}
                         </span>
@@ -265,16 +266,16 @@ const PresentationViewerComponent = ({ presentation, onBack, onUpdate }) => {
                   </h1>
                 </div>
                 
-                {/* Complementary explanation - 20% of space */}
-                <div className="flex-[2] flex items-center justify-center">
-                  <p className={`text-n-3 italic leading-relaxed text-center max-w-4xl ${
-                    fontSize === 'small'
-                      ? 'text-sm sm:text-base md:text-lg lg:text-xl'
+                {/* Explanation - 20% of space */}
+                <div className="flex-[2] flex items-center justify-center overflow-hidden px-4">
+                  <p className={`text-center italic text-n-3 max-w-4xl break-words hyphens-auto ${
+                    fontSize === 'small' 
+                      ? 'text-xs sm:text-sm md:text-base lg:text-lg' 
                       : fontSize === 'large'
-                      ? 'text-lg sm:text-xl md:text-2xl lg:text-3xl'
-                      : 'text-base sm:text-lg md:text-xl lg:text-2xl'
-                  }`}>
-                    {slide.explanation || (slide.content && slide.content.join(' '))}
+                      ? 'text-base sm:text-lg md:text-xl lg:text-2xl'
+                      : 'text-sm sm:text-base md:text-lg lg:text-xl'
+                  }`} style={{ wordSpacing: '0.2em' }}>
+                    {slide.explanation || (slide.content ? slide.content.join('. ') : '')}
                   </p>
                 </div>
 
