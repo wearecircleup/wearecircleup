@@ -61,7 +61,7 @@ const ProfileCreationCTA = ({ onStart, onSkip }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          ¡Bienvenido a Circle Up!
+          Bienvenido a Circle Up Volunteer
         </motion.h1>
 
         {/* Subtitle */}
@@ -99,79 +99,6 @@ const ProfileCreationCTA = ({ onStart, onSkip }) => {
         >
           Menos de 1 minuto • Información segura y privada
         </motion.p>
-
-        {/* Feature highlights */}
-        <motion.div
-          className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 text-left"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
-        >
-          {[
-            {
-              icon: (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                />
-              ),
-              title: "Seguro y Privado",
-              description: "Tus datos están protegidos y nunca se comparten"
-            },
-            {
-              icon: (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 10V3L4 14h7v7l9-11h-7z"
-                />
-              ),
-              title: "Rápido y Fácil",
-              description: "Proceso simple para comenzar"
-            },
-            {
-              icon: (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              ),
-              title: "Personalizado",
-              description: "Experiencia adaptada a tu perfil educativo"
-            }
-          ].map((feature, index) => (
-            <motion.div
-              key={index}
-              className="flex flex-col items-center text-center p-6 rounded-2xl bg-n-7/50 backdrop-blur-sm border border-n-6 hover:border-color-1/50 transition-colors"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 + index * 0.1 }}
-              whileHover={{ y: -5 }}
-            >
-              <div className="w-12 h-12 mb-4 bg-gradient-to-br from-color-1/20 to-color-2/20 rounded-xl flex items-center justify-center">
-                <svg
-                  className="w-6 h-6 text-color-1"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  {feature.icon}
-                </svg>
-              </div>
-              <h3 className="text-base font-semibold text-n-1 mb-2">
-                {feature.title}
-              </h3>
-              <p className="text-sm text-n-3">
-                {feature.description}
-              </p>
-            </motion.div>
-          ))}
-        </motion.div>
       </motion.div>
     </div>
   );

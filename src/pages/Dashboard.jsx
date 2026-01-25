@@ -108,22 +108,22 @@ const Dashboard = ({ setCurrentPage }) => {
               </div>
             </div>
 
-            {/* Tab Navigation */}
-            <div className="flex gap-1 sm:gap-2 border-b border-n-6 overflow-x-auto">
-              <button
-                onClick={() => setDashboardTab('presentations')}
-                className={`relative px-4 sm:px-6 py-3 font-semibold text-xs sm:text-sm whitespace-nowrap transition-all ${
-                  dashboardTab === 'presentations'
-                    ? 'text-n-1'
-                    : 'text-n-4 hover:text-n-2'
-                }`}
-              >
-                Presentaciones
-                {dashboardTab === 'presentations' && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-color-1 to-color-2"></div>
-                )}
-              </button>
-              {hasProfile && (
+            {/* Tab Navigation - Only show if user has profile */}
+            {hasProfile && (
+              <div className="flex gap-1 sm:gap-2 border-b border-n-6 overflow-x-auto">
+                <button
+                  onClick={() => setDashboardTab('presentations')}
+                  className={`relative px-4 sm:px-6 py-3 font-semibold text-xs sm:text-sm whitespace-nowrap transition-all ${
+                    dashboardTab === 'presentations'
+                      ? 'text-n-1'
+                      : 'text-n-4 hover:text-n-2'
+                  }`}
+                >
+                  Presentaciones
+                  {dashboardTab === 'presentations' && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-color-1 to-color-2"></div>
+                  )}
+                </button>
                 <button
                   onClick={() => setDashboardTab('profile')}
                   className={`relative px-4 sm:px-6 py-3 font-semibold text-xs sm:text-sm whitespace-nowrap transition-all ${
@@ -137,8 +137,8 @@ const Dashboard = ({ setCurrentPage }) => {
                     <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-color-1 to-color-2"></div>
                   )}
                 </button>
-              )}
-            </div>
+              </div>
+            )}
           </div>
 
           {/* Content */}
