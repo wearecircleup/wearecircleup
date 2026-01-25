@@ -133,13 +133,12 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-n-8 p-4 sm:p-6">
-      <motion.div
-        className="w-full max-w-4xl"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
+    <motion.div
+      className="w-full max-w-4xl mx-auto"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -357,8 +356,7 @@ const ProfileEdit = ({ profile, onSave, onCancel }) => {
             </div>
           </div>
         </motion.div>
-      </motion.div>
-    </div>
+    </motion.div>
   );
 };
 

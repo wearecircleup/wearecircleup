@@ -454,8 +454,7 @@ const ProfileRegistration = ({ user, onComplete, onCancel }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-n-8 p-4 sm:p-6">
-      <div className="w-full max-w-2xl">
+    <div className="w-full max-w-2xl mx-auto py-6">
         {/* Progress bar */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
@@ -504,7 +503,6 @@ const ProfileRegistration = ({ user, onComplete, onCancel }) => {
             {isSubmitting ? 'Creando...' : (currentStep === totalSteps ? 'Crear Perfil' : 'Continuar')}
           </Button>
         </div>
-      </div>
     </div>
   );
 };
