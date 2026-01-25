@@ -108,7 +108,7 @@ const AccountDeletion = ({ profile, user, onDelete, onCancel }) => {
               </div>
 
               {/* Actions */}
-              <div className="p-6 bg-n-8 border-t border-n-6 flex gap-3">
+              <div className="p-4 sm:p-6 bg-n-8 border-t border-n-6 flex flex-col sm:flex-row gap-3">
                 <Button onClick={onCancel} className="flex-1">
                   Cancelar
                 </Button>
@@ -149,7 +149,7 @@ const AccountDeletion = ({ profile, user, onDelete, onCancel }) => {
               </div>
 
               {/* Actions */}
-              <div className="p-6 bg-n-8 border-t border-n-6 flex gap-3">
+              <div className="p-4 sm:p-6 bg-n-8 border-t border-n-6 flex flex-col sm:flex-row gap-3">
                 <Button 
                   onClick={() => {
                     setStep(1);
