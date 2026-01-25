@@ -1601,6 +1601,17 @@ vercel --prod --yes
   - ✅ GET profile: `{"success":false,"error":"Perfil no encontrado"}` (404 expected)
 - Status: Server working, ready for profile creation
 
+**Step 13: Fix Profile Update** ✅ COMPLETED
+- Issue: Error "Updates object is required" when updating profile
+- Root cause: `ProfileEdit.jsx` passed entire object instead of `(userId, updates)` separately
+- Fix: Extract userId and spread remaining fields as updates
+- Code change:
+  ```javascript
+  const { userId, ...updates } = validatedData;
+  const result = await ProfileService.updateProfile(userId, updates);
+  ```
+- Status: Profile creation and update working end-to-end
+
 ### Key Differences from Blob
 
 | Feature | Vercel Blob (NDJSON) | DynamoDB |
