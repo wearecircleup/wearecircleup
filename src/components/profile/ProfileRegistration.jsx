@@ -486,42 +486,23 @@ const ProfileRegistration = ({ user, onComplete, onCancel }) => {
         </AnimatePresence>
 
         {/* Navigation buttons */}
-        <div className="mt-8 flex items-center justify-between gap-4">
-          <button
+        <div className="mt-8 flex gap-3">
+          <Button
             onClick={currentStep === 1 ? onCancel : handleBack}
-            className="px-6 py-3 text-n-3 hover:text-n-1 transition-colors"
             disabled={isSubmitting}
+            className="flex-1"
           >
             {currentStep === 1 ? 'Cancelar' : 'Atrás'}
-          </button>
+          </Button>
 
-          {currentStep === totalSteps ? (
-            <Button 
-              onClick={handleNext} 
-              white 
-              className="text-sm lg:text-base"
-            >
-              {isSubmitting ? (
-                <span className="flex items-center gap-2">
-                  <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                  </svg>
-                  Creando...
-                </span>
-              ) : (
-                'Crear Perfil'
-              )}
-            </Button>
-          ) : (
-            <button
-              onClick={handleNext}
-              disabled={isSubmitting}
-              className="px-8 py-3 bg-gradient-to-r from-color-1 to-color-2 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-color-1/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Continuar
-            </button>
-          )}
+          <Button 
+            onClick={handleNext} 
+            white 
+            className="flex-1"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Creando...' : (currentStep === totalSteps ? 'Crear Perfil' : 'Continuar')}
+          </Button>
         </div>
       </div>
     </div>

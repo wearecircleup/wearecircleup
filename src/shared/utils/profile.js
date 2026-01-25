@@ -213,10 +213,10 @@ export class ProfileService {
       throw new Error('userId, confirmation, and accessToken are required');
     }
 
-    if (confirmation !== 'Delete') {
+    if (confirmation !== 'eliminar') {
       return {
         success: false,
-        error: 'Confirmación inválida. Debes escribir exactamente "Delete"'
+        error: 'Confirmación inválida. Debes escribir exactamente "eliminar"'
       };
     }
 

@@ -255,10 +255,10 @@ async function handleDelete(req, res) {
     });
   }
 
-  if (confirmation !== 'Delete') {
+  if (confirmation !== 'eliminar') {
     return res.status(400).json({ 
       success: false, 
-      error: 'Confirmación inválida. Debes escribir exactamente "Delete"' 
+      error: 'Confirmación inválida. Debes escribir exactamente "eliminar"' 
     });
   }
 

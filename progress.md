@@ -1635,6 +1635,18 @@ vercel --prod --yes
   ```
 - Status: Clean UX - Account deletion now logs out user completely
 
+**Step 16: Replace Profile Dropdown with Button** ✅ COMPLETED
+- Issue: Profile dropdown menu shows even when user has no profile in DynamoDB
+- Requirement: Show "Mi Perfil" button only if profile exists in DynamoDB
+- Changes:
+  - Removed dropdown menu and profile card from Dashboard header
+  - Added "Mi Perfil" button next to "Cerrar Sesión" with same design
+  - Button only appears when `hasProfile === true`
+  - DashboardHome notifies Dashboard via `onProfileStatusChange(true/false)`
+  - State synced with DynamoDB API response (source of truth)
+- UI: `← Inicio | Mi Perfil | Cerrar Sesión` (Mi Perfil conditional)
+- Status: Clean header, profile button only shows when profile exists
+
 ### Authentication Architecture
 
 **Two Independent Systems:**
