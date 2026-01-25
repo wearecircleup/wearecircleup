@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ProfileService } from '../../shared/utils/profile';
+import { GitHubAuthService } from '../../shared/utils/github';
 
 /**
  * AccountDeletion - Two-step confirmation for account deletion
@@ -33,7 +34,12 @@ const AccountDeletion = ({ profile, user, onDelete, onCancel }) => {
       if (result.success) {
         // Wait a moment to show success state
         setTimeout(() => {
+          // Clear profile data
           onDelete();
+          
+          // Logout from GitHub and redirect to home
+          GitHubAuthService.logout();
+          window.location.href = '/';
         }, 1500);
       } else {
         setError(result.error || 'Error al eliminar la cuenta');

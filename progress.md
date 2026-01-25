@@ -1612,6 +1612,56 @@ vercel --prod --yes
   ```
 - Status: Profile creation and update working end-to-end
 
+**Step 14: Fix Account Deletion** ✅ COMPLETED
+- Issue: Error "userId, confirmation, and accessToken are required"
+- Root cause: `AccountDeletion.jsx` not passing `user.accessToken` to `deleteProfile()`
+- Fix: Pass `user` prop from DashboardHome and use `user.accessToken`
+- Code changes:
+  - DashboardHome: `<AccountDeletion profile={profile} user={user} .../>`
+  - AccountDeletion: `deleteProfile(profile.userId, confirmText, user.accessToken)`
+- Status: All CRUD operations working (Create, Read, Update, Delete)
+
+**Step 15: Auto-Logout After Account Deletion** ✅ COMPLETED
+- Issue: After deleting profile, user remains authenticated in GitHub (localStorage)
+- Behavior: User sees "CREAR PERFIL" CTA but is still logged in
+- Fix: Auto-logout after successful account deletion
+- Code changes:
+  ```javascript
+  if (result.success) {
+    onDelete();
+    GitHubAuthService.logout(); // Clear GitHub auth
+    window.location.href = '/'; // Redirect to home
+  }
+  ```
+- Status: Clean UX - Account deletion now logs out user completely
+
+### Authentication Architecture
+
+**Two Independent Systems:**
+
+1. **GitHub OAuth (Authentication)** - Stored in `localStorage`
+   - Purpose: Verify user identity and access GitHub API
+   - Data: `{id, login, username, email, avatarUrl, accessToken}`
+   - Cleared: Only with `GitHubAuthService.logout()`
+   - No database storage
+
+2. **DynamoDB (User Profiles)** - Stored in AWS DynamoDB
+   - Purpose: Store CircleUp profile data
+   - Table: `circleup-dynamodb`
+   - Partition Key: `PK` (GitHub userId)
+   - Cleared: Only with "Eliminar Cuenta" in Dashboard
+
+**What happens when deleting account:**
+- ✅ DynamoDB profile: DELETED
+- ✅ localStorage cache: CLEARED
+- ✅ GitHub authentication: LOGGED OUT (new behavior)
+- ✅ User redirected to home page
+
+**User can:**
+- Re-authenticate with GitHub
+- Create a new profile from scratch
+- Previous data is permanently deleted
+
 ### Key Differences from Blob
 
 | Feature | Vercel Blob (NDJSON) | DynamoDB |
