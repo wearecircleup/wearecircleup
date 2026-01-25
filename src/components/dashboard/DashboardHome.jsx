@@ -245,6 +245,7 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
     return (
       <AccountDeletion
         profile={profile}
+        user={user}
         onDelete={() => {
           setProfile(null);
           setProfileView('cta');

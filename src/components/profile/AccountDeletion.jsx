@@ -8,7 +8,7 @@ import { ProfileService } from '../../shared/utils/profile';
  * Step 1: Warning with consequences
  * Step 2: Type "Delete" to confirm
  */
-const AccountDeletion = ({ profile, onDelete, onCancel }) => {
+const AccountDeletion = ({ profile, user, onDelete, onCancel }) => {
   const [step, setStep] = useState(1);
   const [confirmText, setConfirmText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
@@ -24,7 +24,11 @@ const AccountDeletion = ({ profile, onDelete, onCancel }) => {
     setError('');
 
     try {
-      const result = await ProfileService.deleteProfile(profile.userId, confirmText);
+      const result = await ProfileService.deleteProfile(
+        profile.userId, 
+        confirmText, 
+        user.accessToken
+      );
 
       if (result.success) {
         // Wait a moment to show success state
