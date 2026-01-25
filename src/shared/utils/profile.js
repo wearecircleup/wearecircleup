@@ -75,7 +75,14 @@ export class ProfileService {
     } catch (error) {
       console.error('Error fetching profile from API:', error);
       
-      // Fallback to localStorage cache
+      // On 500 errors, clear cache and return null (don't use stale cache)
+      if (error.message.includes('500')) {
+        console.warn('Server error - clearing stale cache');
+        this._clearCache(userId);
+        return { success: true, profile: null };
+      }
+      
+      // For other errors, fallback to localStorage cache
       const cached = this._getCachedProfile(userId);
       if (cached) {
         console.log('Using cached profile (offline mode)');
@@ -378,6 +385,15 @@ export class ProfileService {
    */
   static invalidateCache(userId) {
     this._clearCache(userId);
+  }
+
+  /**
+   * Clear all profile data for user (cache + flags)
+   * Use this to reset user state completely
+   */
+  static clearUserData(userId) {
+    this._clearCache(userId);
+    this._setHasProfile(userId, false);
   }
 
   /**
