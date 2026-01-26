@@ -24,13 +24,18 @@ const ProfileCreationCTA = ({ onStart }) => {
     
     const updateSize = () => {
       canvas.width = window.innerWidth;
-      if (isMobile) {
-        canvas.height = Math.min(window.innerHeight * 0.35, 350);
-      } else if (isTablet) {
-        canvas.height = Math.min(window.innerHeight * 0.45, 450);
-      } else {
-        canvas.height = Math.min(window.innerHeight * 0.5, 500);
-      }
+      // Calculate height based on wave amplitude
+      // Max amplitude is 0.12 of height, so we need enough space for waves to oscillate
+      // Total height = center space + (max amplitude * 2 for top/bottom) + padding
+      const maxAmplitude = 0.12;
+      const amplitudeSpace = maxAmplitude * 2;
+      const paddingFactor = 1.5; // Extra space for smooth wave movement
+      
+      // Base height calculation: enough for waves to move freely
+      const baseHeight = 200; // Minimum comfortable height for wave visualization
+      const calculatedHeight = baseHeight * (1 + amplitudeSpace) * paddingFactor;
+      
+      canvas.height = calculatedHeight;
     };
     
     updateSize();
@@ -212,7 +217,7 @@ const ProfileCreationCTA = ({ onStart }) => {
 
         {/* Info text */}
         <motion.p
-          className="mb-12 text-sm text-n-4 relative z-10"
+          className="text-sm text-n-4 relative z-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
@@ -221,7 +226,7 @@ const ProfileCreationCTA = ({ onStart }) => {
         </motion.p>
 
         {/* Audio Wave Particles - Footer style */}
-        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] mt-16">
+        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
           <canvas 
             ref={canvasRef}
             className="w-full cursor-pointer block"
