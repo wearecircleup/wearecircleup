@@ -35,60 +35,91 @@ const AudioWaveParticles = () => {
     updateSize();
     window.addEventListener('resize', updateSize);
 
-    // Create 5 layered sine waves with different frequencies (some bimodal)
+    // Create 8+ layered sine waves with varied frequencies (bi/tri-modal)
     const waves = [
       {
-        amplitude: canvas.height * 0.2,
-        frequency: 0.015,
-        speed: 0.04,
+        amplitude: canvas.height * 0.25,
+        frequency: 0.012,
+        speed: 0.05,
         phase: 0,
-        color: { r: 0, g: 245, b: 255 }, // Cyan
-        particles: [],
+        color: { r: 0, g: 200, b: 255 }, // Cyan
+        lineWidth: 2.5,
         bimodal: false
-      },
-      {
-        amplitude: canvas.height * 0.15,
-        frequency: 0.025,
-        speed: 0.03,
-        phase: Math.PI / 4,
-        color: { r: 168, g: 85, b: 247 }, // Purple
-        particles: [],
-        bimodal: true, // Bimodal wave
-        secondFrequency: 0.04
       },
       {
         amplitude: canvas.height * 0.22,
-        frequency: 0.012,
+        frequency: 0.018,
         speed: 0.045,
-        phase: Math.PI / 2,
-        color: { r: 236, g: 72, b: 153 }, // Pink
-        particles: [],
-        bimodal: false
-      },
-      {
-        amplitude: canvas.height * 0.18,
-        frequency: 0.02,
-        speed: 0.035,
-        phase: Math.PI * 0.75,
-        color: { r: 139, g: 92, b: 246 }, // Violet
-        particles: [],
-        bimodal: true, // Bimodal wave
+        phase: Math.PI / 6,
+        color: { r: 100, g: 150, b: 255 }, // Light Blue
+        lineWidth: 2,
+        bimodal: true,
         secondFrequency: 0.035
       },
       {
-        amplitude: canvas.height * 0.16,
-        frequency: 0.018,
-        speed: 0.038,
-        phase: Math.PI,
-        color: { r: 100, g: 200, b: 255 }, // Light blue
-        particles: [],
+        amplitude: canvas.height * 0.28,
+        frequency: 0.01,
+        speed: 0.055,
+        phase: Math.PI / 4,
+        color: { r: 150, g: 100, b: 255 }, // Blue-Purple
+        lineWidth: 3,
         bimodal: false
+      },
+      {
+        amplitude: canvas.height * 0.2,
+        frequency: 0.022,
+        speed: 0.04,
+        phase: Math.PI / 3,
+        color: { r: 180, g: 80, b: 250 }, // Purple
+        lineWidth: 2.5,
+        bimodal: true,
+        secondFrequency: 0.04,
+        thirdFrequency: 0.055 // Trimodal
+      },
+      {
+        amplitude: canvas.height * 0.24,
+        frequency: 0.015,
+        speed: 0.048,
+        phase: Math.PI / 2,
+        color: { r: 200, g: 70, b: 220 }, // Magenta
+        lineWidth: 2,
+        bimodal: false
+      },
+      {
+        amplitude: canvas.height * 0.26,
+        frequency: 0.013,
+        speed: 0.052,
+        phase: Math.PI * 0.6,
+        color: { r: 220, g: 80, b: 180 }, // Pink-Purple
+        lineWidth: 3,
+        bimodal: true,
+        secondFrequency: 0.03
+      },
+      {
+        amplitude: canvas.height * 0.21,
+        frequency: 0.02,
+        speed: 0.042,
+        phase: Math.PI * 0.75,
+        color: { r: 236, g: 72, b: 153 }, // Pink
+        lineWidth: 2.5,
+        bimodal: false
+      },
+      {
+        amplitude: canvas.height * 0.23,
+        frequency: 0.016,
+        speed: 0.046,
+        phase: Math.PI,
+        color: { r: 100, g: 220, b: 255 }, // Cyan-Blue
+        lineWidth: 2,
+        bimodal: true,
+        secondFrequency: 0.038
       }
     ];
 
-    // Create particles for each wave
-    const particleCount = Math.floor(canvas.width / 8);
+    // Create continuous line particles for each wave
+    const particleCount = Math.floor(canvas.width / 3); // More particles for smoother lines
     waves.forEach((wave) => {
+      wave.particles = [];
       for (let i = 0; i < particleCount; i++) {
         const x = (canvas.width / particleCount) * i;
         wave.particles.push({
@@ -98,9 +129,8 @@ const AudioWaveParticles = () => {
           baseY: canvas.height / 2,
           vx: 0,
           vy: 0,
-          size: Math.random() * 2 + 1,
           mass: Math.random() * 2 + 1,
-          friction: 0.85
+          friction: 0.88
         });
       }
     });
@@ -119,20 +149,27 @@ const AudioWaveParticles = () => {
       waves.forEach((wave, waveIndex) => {
         wave.phase += wave.speed;
 
-        wave.particles.forEach((particle, pIndex) => {
-          // Calculate sine wave position (bimodal if specified)
+        // Calculate all positions first
+        wave.particles.forEach((particle) => {
+          // Calculate sine wave position (bi/tri-modal)
           let sineY;
-          if (wave.bimodal) {
-            // Bimodal: combination of two frequencies
-            const wave1 = Math.sin(particle.baseX * wave.frequency + wave.phase) * wave.amplitude;
-            const wave2 = Math.sin(particle.baseX * wave.secondFrequency + wave.phase * 1.5) * wave.amplitude * 0.5;
-            sineY = wave1 + wave2;
+          if (wave.thirdFrequency) {
+            // Trimodal: three frequencies combined
+            const w1 = Math.sin(particle.baseX * wave.frequency + wave.phase) * wave.amplitude;
+            const w2 = Math.sin(particle.baseX * wave.secondFrequency + wave.phase * 1.3) * wave.amplitude * 0.4;
+            const w3 = Math.sin(particle.baseX * wave.thirdFrequency + wave.phase * 0.7) * wave.amplitude * 0.25;
+            sineY = w1 + w2 + w3;
+          } else if (wave.bimodal) {
+            // Bimodal: two frequencies
+            const w1 = Math.sin(particle.baseX * wave.frequency + wave.phase) * wave.amplitude;
+            const w2 = Math.sin(particle.baseX * wave.secondFrequency + wave.phase * 1.5) * wave.amplitude * 0.5;
+            sineY = w1 + w2;
           } else {
             sineY = Math.sin(particle.baseX * wave.frequency + wave.phase) * wave.amplitude;
           }
           particle.baseY = centerY + sineY;
 
-          // Mouse/touch interaction - disperse particles
+          // Mouse/touch interaction - disperse
           const dx = mouseRef.current.x - particle.x;
           const dy = mouseRef.current.y - particle.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
@@ -141,49 +178,46 @@ const AudioWaveParticles = () => {
           if (distance < maxDistance) {
             const force = (maxDistance - distance) / maxDistance;
             const angle = Math.atan2(dy, dx);
-            particle.vx -= Math.cos(angle) * force * 4;
-            particle.vy -= Math.sin(angle) * force * 4;
+            particle.vx -= Math.cos(angle) * force * 5;
+            particle.vy -= Math.sin(angle) * force * 5;
           }
 
-          // Spring back to wave position
+          // Spring back
           const dxBase = particle.baseX - particle.x;
           const dyBase = particle.baseY - particle.y;
-          particle.vx += dxBase * 0.03;
-          particle.vy += dyBase * 0.03;
+          particle.vx += dxBase * 0.04;
+          particle.vy += dyBase * 0.04;
 
-          // Apply friction
+          // Friction
           particle.vx *= particle.friction;
           particle.vy *= particle.friction;
 
-          // Update position
+          // Update
           particle.x += particle.vx;
           particle.y += particle.vy;
+        });
 
-          // Calculate opacity based on distance from mouse
-          const opacity = distance < maxDistance * 2 
-            ? Math.max(0.3, 1 - distance / (maxDistance * 2))
-            : 0.8;
-
-          // Draw particle with glow
-          ctx.shadowBlur = 12;
-          ctx.shadowColor = `rgba(${wave.color.r}, ${wave.color.g}, ${wave.color.b}, ${opacity})`;
-          ctx.fillStyle = `rgba(${wave.color.r}, ${wave.color.g}, ${wave.color.b}, ${opacity})`;
-          ctx.beginPath();
-          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.shadowBlur = 0;
-
-          // Connect particles with smooth lines for continuous wave
-          if (pIndex > 0) {
+        // Draw continuous smooth line
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(${wave.color.r}, ${wave.color.g}, ${wave.color.b}, 0.7)`;
+        ctx.lineWidth = wave.lineWidth;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = `rgba(${wave.color.r}, ${wave.color.g}, ${wave.color.b}, 0.5)`;
+        
+        wave.particles.forEach((particle, pIndex) => {
+          if (pIndex === 0) {
+            ctx.moveTo(particle.x, particle.y);
+          } else {
+            // Smooth curve through points
             const prevParticle = wave.particles[pIndex - 1];
-            ctx.strokeStyle = `rgba(${wave.color.r}, ${wave.color.g}, ${wave.color.b}, ${opacity * 0.4})`;
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(prevParticle.x, prevParticle.y);
-            ctx.lineTo(particle.x, particle.y);
-            ctx.stroke();
+            const midX = (prevParticle.x + particle.x) / 2;
+            const midY = (prevParticle.y + particle.y) / 2;
+            ctx.quadraticCurveTo(prevParticle.x, prevParticle.y, midX, midY);
           }
         });
+        
+        ctx.stroke();
+        ctx.shadowBlur = 0;
       });
 
       animationRef.current = requestAnimationFrame(animate);
@@ -234,10 +268,12 @@ const AudioWaveParticles = () => {
       ref={canvasRef}
       className="w-full cursor-pointer block"
       style={{ 
-        maxHeight: '500px',
-        minHeight: '300px',
+        maxHeight: '450px',
+        minHeight: '280px',
         touchAction: 'none',
-        background: 'transparent'
+        background: 'transparent',
+        margin: 0,
+        padding: 0
       }}
     />
   );
