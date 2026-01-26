@@ -86,7 +86,7 @@ export default async function handler(req, res) {
         messages: [
           {
             role: 'system',
-            content: `You are an expert in creating impactful professional presentations focused on key messages rather than information overload. Generate structured content in JSON format. Always respond in ${outputLanguage}.`
+            content: `You are an expert in creating impactful professional presentations. Your tone must always be humble, professional, respectful, coherent, pleasant, and above all, incredible and interesting. Focus on key messages rather than information overload. Generate structured content in JSON format. Always respond in ${outputLanguage}.`
           },
           {
             role: 'user',
@@ -95,9 +95,12 @@ export default async function handler(req, res) {
 IMPORTANT: All content must be in ${outputLanguage}.
 
 PRESENTATION PHILOSOPHY:
+- Use humble, professional, respectful, and coherent language
+- Make content pleasant, incredible, and genuinely interesting
 - Focus on key messages that the audience will remember after the presentation
 - Reduce cognitive load by avoiding bullet points
 - Each slide should have ONE clear, impactful message
+- Avoid exaggerations or sensationalism - be authentic and credible
 
 Respond ONLY with valid JSON in this format:
 {
@@ -151,7 +154,7 @@ CRITICAL VALIDATION:
 Do NOT include any other fields. Only "message" and "explanation" for each slide.`
           }
         ],
-        temperature: 0.4,
+        temperature: 0.3,
         max_tokens: 4000
       })
     });

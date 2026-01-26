@@ -3,18 +3,19 @@ import PresentationCard from "../PresentationCard";
 import Button from "../Button";
 import { PresentationsAPI } from "../../shared/utils/presentations-api";
 import { ProfileService } from "../../shared/utils/profile";
-import ProfileCreationCTA from "../profile/ProfileCreationCTA";
+import DeletePresentationModal from "./DeletePresentationModal";
+import ImportPresentationModal from "./ImportPresentationModal";
 import ProfileRegistration from "../profile/ProfileRegistration";
 import ProfileView from "../profile/ProfileView";
 import ProfileEdit from "../profile/ProfileEdit";
 import AccountDeletion from "../profile/AccountDeletion";
-import DeletePresentationModal from "./DeletePresentationModal";
 
 const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplete, onProfileStatusChange, showPresentations = true }) => {
   const [presentations, setPresentations] = useState([]);
-  const [filter, setFilter] = useState('all'); // all, completed, processing
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [filter, setFilter] = useState('all'); // all, completed, shared, failed
   const [presentationToDelete, setPresentationToDelete] = useState(null);
+  const [showImportModal, setShowImportModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   
   // Profile state management
@@ -139,6 +140,7 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
 
   const filteredPresentations = presentations.filter(p => {
     if (filter === 'all') return true;
+    if (filter === 'shared') return p.metadata?.model === 'imported';
     return p.status === filter;
   });
 
@@ -149,6 +151,44 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
 
   const handleDelete = (presentation) => {
     setPresentationToDelete(presentation);
+  };
+
+  const handleImportPresentation = async (newPresentation) => {
+    try {
+      // Save to DynamoDB
+      const userId = user.id || user.node_id;
+      const response = await fetch('/api/save-presentation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: userId,
+          presentation: newPresentation
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save imported presentation');
+      }
+
+      const result = await response.json();
+
+      if (result.success) {
+        // Add to local state
+        const updated = [newPresentation, ...presentations];
+        setPresentations(updated);
+        localStorage.setItem(`presentations_${user.login}`, JSON.stringify(updated));
+        
+        // Reload to ensure sync
+        await loadPresentations();
+      } else {
+        throw new Error(result.error || 'Failed to import');
+      }
+    } catch (error) {
+      console.error('Error importing presentation:', error);
+      alert('Error al importar la presentación. Por favor intenta nuevamente.');
+    }
   };
 
   const handleConfirmDelete = async () => {
@@ -228,7 +268,7 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
   // Show ProfileCreationCTA if no profile
   if (profileView === 'cta') {
     return (
-      <ProfileCreationCTA
+      <ProfileRegistration
         onStart={() => setProfileView('register')}
         onSkip={() => {
           // Allow skip for now, but remind later
@@ -328,12 +368,14 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
         </Button>
       </div>
 
-      {/* Filters */}
-      <div className="flex gap-2 overflow-x-auto pb-2">
+      {/* Filters and Import button */}
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex gap-2 overflow-x-auto pb-2">
         {[
           { key: 'all', label: 'Todas' },
           { key: 'completed', label: 'Completadas' },
-          { key: 'processing', label: 'En proceso' }
+          { key: 'shared', label: 'Compartidas' },
+          { key: 'failed', label: 'Fallidas' }
         ].map(({ key, label }) => (
           <button
             key={key}
@@ -347,6 +389,19 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
             {label}
           </button>
         ))}
+        </div>
+        
+        {/* Import button */}
+        <button
+          onClick={() => setShowImportModal(true)}
+          className="px-4 py-2 bg-n-6 hover:bg-n-5 text-n-1 rounded-lg transition-all flex items-center gap-2 text-sm whitespace-nowrap"
+          title="Importar presentación compartida"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+          </svg>
+          <span>Importar</span>
+        </button>
       </div>
 
       {/* Presentations Grid */}
@@ -394,6 +449,15 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
           onConfirm={handleConfirmDelete}
           onCancel={() => setPresentationToDelete(null)}
           isDeleting={isDeleting}
+        />
+      )}
+
+      {/* Import Presentation Modal */}
+      {showImportModal && (
+        <ImportPresentationModal
+          user={user}
+          onClose={() => setShowImportModal(false)}
+          onImport={handleImportPresentation}
         />
       )}
     </div>
