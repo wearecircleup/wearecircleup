@@ -6,6 +6,7 @@ import { ProfileService } from "../../shared/utils/profile";
 import DeletePresentationModal from "./DeletePresentationModal";
 import ImportPresentationModal from "./ImportPresentationModal";
 import ProfileRegistration from "../profile/ProfileRegistration";
+import ProfileCreationCTA from "../profile/ProfileCreationCTA";
 import ProfileView from "../profile/ProfileView";
 import ProfileEdit from "../profile/ProfileEdit";
 import AccountDeletion from "../profile/AccountDeletion";
@@ -275,7 +276,7 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
   // Show ProfileCreationCTA if no profile
   if (profileView === 'cta') {
     return (
-      <ProfileRegistration
+      <ProfileCreationCTA
         onStart={() => setProfileView('register')}
         onSkip={() => {
           // Allow skip for now, but remind later

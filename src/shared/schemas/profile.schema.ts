@@ -78,9 +78,9 @@ const profileBaseSchema = z.object({
   
   // GitHub data (immutable)
   githubData: z.object({
-    avatarUrl: z.string().min(1, 'Avatar URL requerida').optional(),
+    avatarUrl: z.string().optional(),
     username: z.string().min(1, 'Username de GitHub requerido'),
-    email: z.string().email('Email de GitHub inválido').optional()
+    email: z.string().optional()
   })
 });
 

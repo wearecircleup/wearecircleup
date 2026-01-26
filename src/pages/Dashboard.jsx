@@ -10,6 +10,17 @@ import curve from "../assets/hero/curve.png";
 
 const Dashboard = ({ setCurrentPage }) => {
   const user = GitHubAuthService.getUser();
+  
+  // Debug: Log user object
+  console.log('Dashboard - user from localStorage:', user);
+  
+  // If no user, redirect to login
+  if (!user) {
+    console.error('No user found in localStorage - redirecting to login');
+    setCurrentPage('login');
+    return null;
+  }
+  
   const [currentView, setCurrentView] = useState('home'); // 'home' | 'create' | 'view'
   const [dashboardTab, setDashboardTab] = useState('presentations'); // 'presentations' | 'profile'
   const [selectedPresentation, setSelectedPresentation] = useState(null);
