@@ -130,8 +130,6 @@ const HowToUseVolunteer = ({ setCurrentPage }) => {
         <HowItWorks 
           steps={steps}
           title="CÓMO FUNCIONA"
-          buttonText="APLICAR COMO VOLUNTARIO"
-          buttonAction={() => { window.location.href = 'mailto:hola@circleup.com.co?subject=Quiero%20ser%20voluntario&body=Nombre%3A%0AExperiencia%3A%0ADisponibilidad%3A%0A'; }}
         />
 
         <RoadmapSection 

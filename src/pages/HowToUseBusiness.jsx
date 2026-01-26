@@ -137,8 +137,6 @@ const HowToUseBusiness = ({ setCurrentPage }) => {
         <HowItWorks 
           steps={steps}
           title="CÓMO FUNCIONA"
-          buttonText="INICIAR ALIANZA"
-          buttonAction={() => console.log("Iniciar alianza")}
         />
 
         <RoadmapSection 
