@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import Button from '../Button';
-import AudioWave from './AudioWave';
+import AudioWaveParticles from './AudioWaveParticles';
 
 /**
  * ProfileCreationCTA - Spotify-style Call-to-Action
@@ -44,13 +44,13 @@ const ProfileCreationCTA = ({ onStart }) => {
 
       {/* Main content */}
       <motion.div
-        className="relative z-10 text-center px-6 max-w-2xl -mt-[10vh]"
+        className="relative z-10 text-center px-6 max-w-4xl -mt-[10vh] w-full"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        {/* Audio Wave Animation */}
-        <AudioWave className="mb-6" />
+        {/* Audio Wave Particles Animation */}
+        <AudioWaveParticles />
 
         {/* Title */}
         <motion.h1
