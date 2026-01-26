@@ -154,7 +154,7 @@ const DeletePresentationModal = ({ presentation, onConfirm, onCancel, isDeleting
                         Eliminando...
                       </>
                     ) : (
-                      'Eliminar definitivamente'
+                      'Eliminar'
                     )}
                   </button>
                 </div>

@@ -3,28 +3,16 @@ import { useState } from 'react';
 const HelpModal = ({ onClose }) => {
   const [copied, setCopied] = useState(false);
 
-  const PROMPT = `Aplica la sintaxis de tipografía artística a este slide:
+  const PROMPT = `Mejora este slide aplicando tipografía artística:
 
-Slide actual:
 {
   "message": "Tu mensaje aquí",
   "explanation": "Tu explicación aquí"
 }
 
-Sintaxis de tipografía:
-- Usa | para marcar palabras con estilo especial: |tamaño:peso|palabra|
-- Tamaños disponibles: sm, md, lg, xl
-- Pesos disponibles: thin, light, normal, medium, bold, black
+Es simple: todas las palabras son medianas y claras por defecto. Solo marca las 2 palabras más importantes con |lg:black|palabra| para que resalten. Nunca marques artículos ni preposiciones. La explicación debe tener entre 20 y 30 palabras exactas.
 
-REGLAS IMPORTANTES:
-1. Máximo 2 palabras pueden usar tamaños grandes (lg o xl)
-2. El resto de palabras debe usar tamaños pequeños o medianos (sm o md)
-3. NUNCA uses lg o xl en artículos (el, la, los, las, un, una, de, del, en, es, por, para, con, sin)
-4. Los artículos y preposiciones deben ser sm o md
-5. Reserva lg y xl solo para las palabras más importantes del mensaje
-
-Ejemplo correcto:
-"La |xl:black|deforestación| del |lg:bold|Amazonas| es una crisis global"
+Ejemplo: "La |lg:black|deforestación| del |lg:black|Amazonas| es una crisis global"
 
 Devuelve solo el JSON con la sintaxis aplicada.`;
 
@@ -54,10 +42,10 @@ Devuelve solo el JSON con la sintaxis aplicada.`;
         <div className="space-y-6">
           <div>
             <h2 className="text-2xl font-bold text-n-1 mb-2">
-              Estiliza tus slides con IA
+              No te preocupes por la sintaxis
             </h2>
             <p className="text-n-3 leading-relaxed">
-              Copia el prompt y pégalo en tu IA favorita junto con el slide que quieres mejorar. La IA aplicará automáticamente la sintaxis de tipografía artística para crear efectos visuales impactantes.
+              Ajusta el mensaje y la explicación de tu slide como quieras. Luego pásalo a tu IA favorita con el prompt de abajo y listo. Ella se encarga de aplicar los estilos visuales.
             </p>
           </div>
 

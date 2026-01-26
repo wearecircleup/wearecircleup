@@ -218,48 +218,29 @@ const PresentationViewerComponent = ({ presentation, onBack, onUpdate, user }) =
                   <h1 className="leading-tight text-center break-words hyphens-auto max-w-full px-2" style={{ wordSpacing: '0.3em' }}>
                     {parseMessageWithEmphasis(slide.message || slide.title).map((part, idx) => {
                       // Size multipliers based on fontSize setting
-                      // Dynamic font sizes using clamp for responsive scaling
+                      // Simplified responsive font sizes - always fit in viewport
                       const sizeStyles = {
-                        xs: fontSize === 'small' 
-                          ? { fontSize: 'clamp(1rem, 2vw, 1.5rem)' }
+                        md: fontSize === 'small' 
+                          ? { fontSize: 'clamp(1.5rem, 3.5vw, 3rem)' }
                           : fontSize === 'large'
-                          ? { fontSize: 'clamp(1.5rem, 3vw, 2.5rem)' }
-                          : { fontSize: 'clamp(1.25rem, 2.5vw, 2rem)' },
-                        sm: fontSize === 'small'
-                          ? { fontSize: 'clamp(1.5rem, 3vw, 2.5rem)' }
-                          : fontSize === 'large'
-                          ? { fontSize: 'clamp(2.5rem, 5vw, 4rem)' }
-                          : { fontSize: 'clamp(2rem, 4vw, 3.5rem)' },
-                        md: fontSize === 'small'
-                          ? { fontSize: 'clamp(2rem, 4vw, 3.5rem)' }
-                          : fontSize === 'large'
-                          ? { fontSize: 'clamp(3.5rem, 7vw, 6rem)' }
-                          : { fontSize: 'clamp(3rem, 6vw, 5rem)' },
-                        lg: fontSize === 'small'
                           ? { fontSize: 'clamp(2.5rem, 5vw, 4.5rem)' }
+                          : { fontSize: 'clamp(2rem, 4vw, 3.5rem)' },
+                        lg: fontSize === 'small'
+                          ? { fontSize: 'clamp(2rem, 4.5vw, 4rem)' }
                           : fontSize === 'large'
-                          ? { fontSize: 'clamp(4.5rem, 9vw, 8rem)' }
-                          : { fontSize: 'clamp(3.5rem, 7vw, 6.5rem)' },
-                        xl: fontSize === 'small'
                           ? { fontSize: 'clamp(3rem, 6vw, 5.5rem)' }
-                          : fontSize === 'large'
-                          ? { fontSize: 'clamp(5rem, 10vw, 9rem)' }
-                          : { fontSize: 'clamp(4rem, 8vw, 7.5rem)' }
+                          : { fontSize: 'clamp(2.5rem, 5vw, 4.5rem)' }
                       };
                       
                       const weightClasses = {
-                        thin: 'font-thin',
                         light: 'font-light',
-                        normal: 'font-normal',
-                        medium: 'font-medium',
-                        bold: 'font-bold',
                         black: 'font-black'
                       };
                       
                       return (
                         <span 
                           key={idx} 
-                          className={`inline-block bg-gradient-to-r from-color-1 to-color-2 bg-clip-text text-transparent ${weightClasses[part.weight] || weightClasses.normal}`}
+                          className={`inline-block bg-gradient-to-r from-color-1 to-color-2 bg-clip-text text-transparent ${weightClasses[part.weight] || weightClasses.light}`}
                           style={{ 
                             ...(sizeStyles[part.size] || sizeStyles.md),
                             wordBreak: 'break-word', 

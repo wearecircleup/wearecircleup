@@ -112,36 +112,30 @@ Respond ONLY with valid JSON in this format:
 RULES FOR ARTISTIC TYPOGRAPHY:
 - "message": Must be 5-10 words maximum. This is the key takeaway that occupies 70% of the slide.
   
-  TYPOGRAPHY SYSTEM (combine size + weight for dramatic impact):
-  * Use pipe | to separate size and weight: |size:weight|word|
-  * Sizes: sm (small), md (medium/default), lg (large), xl (extra large)
-  * Weights: thin (100), light (300), normal (400), medium (500), bold (700), black (900)
+  SIMPLIFIED TYPOGRAPHY SYSTEM:
+  * Use pipe | to mark ONLY the 2 most important words: |lg:black|word|
+  * ALL other words are automatically |md:light| (no need to mark them)
+  * ONLY 2 words maximum can be marked with |lg:black|
   
   CRITICAL RULES:
-  * MAXIMUM 2 words can use large sizes (lg or xl) - these are your hero words
-  * ALL other words MUST use sm or md only
-  * NEVER use lg or xl on articles (el, la, los, las, un, una, de, del, en, es, por, para, con, sin, y, o)
-  * Articles and prepositions MUST be sm or md
-  * Reserve lg and xl ONLY for the most important words
+  * Default: ALL words are medium size (md) and light weight - clean and readable
+  * Hero words: Mark EXACTLY 2 keywords with |lg:black| - these are your focal points
+  * NEVER mark articles (el, la, los, las, un, una, de, del, en, es, por, para, con, sin, y, o)
+  * NEVER mark prepositions or conjunctions
+  * Only mark the 2 MOST IMPORTANT nouns or verbs
   
   EXAMPLES:
-  * "La |xl:black|deforestación| del |lg:bold|Amazonas| es una crisis global" ✓ CORRECT
-  * "visualize your |xl:black|big| thoughts" ✓ CORRECT (only 1 lg/xl word)
-  * "|sm:light|A| symbol |sm:light|of| |lg:bold|sustainability| and |lg:bold|tradition|" ✓ CORRECT (2 lg words max)
+  * "La |lg:black|deforestación| del |lg:black|Amazonas| es una crisis global" ✓ CORRECT
+  * "Ganaderia y |lg:black|agricultura| impulsan la |lg:black|destrucción| del bosque" ✓ CORRECT
+  * "El |lg:black|futuro| depende de nuestras acciones" ✓ CORRECT (only 1 keyword is fine too)
   
   DESIGN PHILOSOPHY:
-  * Supporting words (articles, prepositions): |sm:light| or |sm:thin| - keep them small
-  * Regular words: |md:normal| or no marker (default)
-  * Hero words (MAX 2): |lg:bold|, |lg:black|, |xl:bold|, or |xl:black|
-  * Create CONTRAST: small words make big words stand out
-  
-  MANDATORY:
-  * Mark at least 3-5 words with size/weight combinations
-  * Use |sm:light| or |sm:thin| for articles and prepositions
-  * Use lg or xl for MAXIMUM 2 words (the most important ones)
-  * Default unmarked words are |md:normal|
+  * Keep it simple: most text is uniform (md:light)
+  * Create focus: 2 keywords stand out (lg:black)
+  * Readability first: text must ALWAYS fit within slide boundaries
+  * Less is more: subtle contrast is more elegant than chaos
 
-- "explanation": STRICT LIMIT 15-20 words. Brief, impactful statement in italic. NOT a paragraph - keep it SHORT and PUNCHY.
+- "explanation": MANDATORY 20-30 words. This is NOT optional - count the words carefully. Brief, impactful statement in italic that complements the message.
 - NO bullet points, NO lists
 - Focus on DRAMATIC visual hierarchy through size AND weight variations
 - Think TEDx style: slides are visual support, NOT reading material
