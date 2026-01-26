@@ -15,29 +15,29 @@ const ProfileCreationCTA = ({ onStart }) => {
 
       {/* Main content */}
       <motion.div
-        className="relative z-10 text-center w-full -mt-[15vh]"
+        className="relative text-center w-full -mt-[15vh]"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
         {/* Audio Wave Particles Animation - Full width, minimal margin */}
-        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] mb-0">
+        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] mb-0 z-20">
           <AudioWaveParticles />
         </div>
 
-        {/* Title - Minimal margin */}
+        {/* Title - Very close to waves */}
         <motion.h1
-          className="text-4xl md:text-5xl font-bold text-n-1 mb-4 px-6 mt-0"
+          className="text-4xl md:text-5xl font-bold text-n-1 mb-4 px-6 -mt-8 relative z-10"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          Bienvenido a Circle Up Volunteer
+          Bienvenid@ a Circle Up Volunteer
         </motion.h1>
 
         {/* Subtitle */}
         <motion.p
-          className="text-lg text-n-3 mb-6 max-w-lg mx-auto px-6"
+          className="text-lg text-n-3 mb-6 max-w-lg mx-auto px-6 relative z-10"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
@@ -47,6 +47,7 @@ const ProfileCreationCTA = ({ onStart }) => {
 
         {/* CTA Button - Using Button component */}
         <motion.div
+          className="relative z-10"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
@@ -63,7 +64,7 @@ const ProfileCreationCTA = ({ onStart }) => {
 
         {/* Info text */}
         <motion.p
-          className="mt-6 text-sm text-n-4"
+          className="mt-6 text-sm text-n-4 relative z-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
