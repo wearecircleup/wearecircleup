@@ -21,10 +21,9 @@ const AudioWaveParticles = () => {
 
     const ctx = canvas.getContext('2d');
     
-    // Responsive sizing
+    // Responsive sizing - full viewport width
     const updateSize = () => {
-      const container = canvas.parentElement;
-      canvas.width = container.offsetWidth;
+      canvas.width = window.innerWidth;
       // Responsive height: 40vh on mobile, 500px max on desktop
       const isMobile = window.innerWidth < 768;
       canvas.height = isMobile 
@@ -35,10 +34,10 @@ const AudioWaveParticles = () => {
     updateSize();
     window.addEventListener('resize', updateSize);
 
-    // Create 8+ layered sine waves with varied frequencies (bi/tri-modal)
+    // Create 8+ layered sine waves with reduced amplitude and varied frequencies
     const waves = [
       {
-        amplitude: canvas.height * 0.25,
+        amplitude: canvas.height * 0.15,
         frequency: 0.012,
         speed: 0.05,
         phase: 0,
@@ -47,7 +46,7 @@ const AudioWaveParticles = () => {
         bimodal: false
       },
       {
-        amplitude: canvas.height * 0.22,
+        amplitude: canvas.height * 0.13,
         frequency: 0.018,
         speed: 0.045,
         phase: Math.PI / 6,
@@ -57,7 +56,7 @@ const AudioWaveParticles = () => {
         secondFrequency: 0.035
       },
       {
-        amplitude: canvas.height * 0.28,
+        amplitude: canvas.height * 0.17,
         frequency: 0.01,
         speed: 0.055,
         phase: Math.PI / 4,
@@ -66,7 +65,7 @@ const AudioWaveParticles = () => {
         bimodal: false
       },
       {
-        amplitude: canvas.height * 0.2,
+        amplitude: canvas.height * 0.12,
         frequency: 0.022,
         speed: 0.04,
         phase: Math.PI / 3,
@@ -77,7 +76,7 @@ const AudioWaveParticles = () => {
         thirdFrequency: 0.055 // Trimodal
       },
       {
-        amplitude: canvas.height * 0.24,
+        amplitude: canvas.height * 0.14,
         frequency: 0.015,
         speed: 0.048,
         phase: Math.PI / 2,
@@ -86,7 +85,7 @@ const AudioWaveParticles = () => {
         bimodal: false
       },
       {
-        amplitude: canvas.height * 0.26,
+        amplitude: canvas.height * 0.16,
         frequency: 0.013,
         speed: 0.052,
         phase: Math.PI * 0.6,
@@ -96,7 +95,7 @@ const AudioWaveParticles = () => {
         secondFrequency: 0.03
       },
       {
-        amplitude: canvas.height * 0.21,
+        amplitude: canvas.height * 0.13,
         frequency: 0.02,
         speed: 0.042,
         phase: Math.PI * 0.75,
@@ -105,7 +104,7 @@ const AudioWaveParticles = () => {
         bimodal: false
       },
       {
-        amplitude: canvas.height * 0.23,
+        amplitude: canvas.height * 0.14,
         frequency: 0.016,
         speed: 0.046,
         phase: Math.PI,
@@ -150,7 +149,12 @@ const AudioWaveParticles = () => {
         wave.phase += wave.speed;
 
         // Calculate all positions first
-        wave.particles.forEach((particle) => {
+        wave.particles.forEach((particle, pIndex) => {
+          // Convergence factor: waves converge at start and end
+          const normalizedX = particle.baseX / canvas.width; // 0 to 1
+          const edgeDistance = Math.min(normalizedX, 1 - normalizedX); // Distance from nearest edge
+          const convergenceFactor = Math.min(edgeDistance * 4, 1); // Smooth convergence in first/last 25%
+          
           // Calculate sine wave position (bi/tri-modal)
           let sineY;
           if (wave.thirdFrequency) {
@@ -158,14 +162,14 @@ const AudioWaveParticles = () => {
             const w1 = Math.sin(particle.baseX * wave.frequency + wave.phase) * wave.amplitude;
             const w2 = Math.sin(particle.baseX * wave.secondFrequency + wave.phase * 1.3) * wave.amplitude * 0.4;
             const w3 = Math.sin(particle.baseX * wave.thirdFrequency + wave.phase * 0.7) * wave.amplitude * 0.25;
-            sineY = w1 + w2 + w3;
+            sineY = (w1 + w2 + w3) * convergenceFactor;
           } else if (wave.bimodal) {
             // Bimodal: two frequencies
             const w1 = Math.sin(particle.baseX * wave.frequency + wave.phase) * wave.amplitude;
             const w2 = Math.sin(particle.baseX * wave.secondFrequency + wave.phase * 1.5) * wave.amplitude * 0.5;
-            sineY = w1 + w2;
+            sineY = (w1 + w2) * convergenceFactor;
           } else {
-            sineY = Math.sin(particle.baseX * wave.frequency + wave.phase) * wave.amplitude;
+            sineY = Math.sin(particle.baseX * wave.frequency + wave.phase) * wave.amplitude * convergenceFactor;
           }
           particle.baseY = centerY + sineY;
 

@@ -44,13 +44,13 @@ const ProfileCreationCTA = ({ onStart }) => {
 
       {/* Main content */}
       <motion.div
-        className="relative z-10 text-center px-0 w-full -mt-[15vh]"
+        className="relative z-10 text-center w-full -mt-[15vh]"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
         {/* Audio Wave Particles Animation - Full width, minimal margin */}
-        <div className="w-full mb-0">
+        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] mb-0">
           <AudioWaveParticles />
         </div>
 
