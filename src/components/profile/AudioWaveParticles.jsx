@@ -291,7 +291,7 @@ const AudioWaveParticles = () => {
     <div className="relative w-full">
       {/* Title above waves */}
       <motion.div
-        className="text-center mb-2 relative z-10"
+        className="text-center mb-4 relative z-30"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
@@ -319,7 +319,7 @@ const AudioWaveParticles = () => {
 
       {/* Subtitle below waves */}
       <motion.div
-        className="text-center mt-2 relative z-10"
+        className="text-center -mt-1 relative z-30"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
