@@ -150,10 +150,20 @@ const AudioWaveParticles = () => {
 
         // Calculate all positions first
         wave.particles.forEach((particle, pIndex) => {
-          // Convergence factor: waves converge at start and end
+          // Convergence: all waves meet at single point at edges (like cable wires)
           const normalizedX = particle.baseX / canvas.width; // 0 to 1
-          const edgeDistance = Math.min(normalizedX, 1 - normalizedX); // Distance from nearest edge
-          const convergenceFactor = Math.min(edgeDistance * 4, 1); // Smooth convergence in first/last 25%
+          
+          // Exponential convergence for sharp cable-like effect
+          let convergenceFactor;
+          if (normalizedX < 0.15) {
+            // Left edge: exponential convergence
+            convergenceFactor = Math.pow(normalizedX / 0.15, 2);
+          } else if (normalizedX > 0.85) {
+            // Right edge: exponential convergence
+            convergenceFactor = Math.pow((1 - normalizedX) / 0.15, 2);
+          } else {
+            convergenceFactor = 1;
+          }
           
           // Calculate sine wave position (bi/tri-modal)
           let sineY;
