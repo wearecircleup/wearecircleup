@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Header from "../components/Header";
 import HowItWorks from "../components/HowItWorks";
 import NeedHelp from "../components/NeedHelp";
@@ -7,10 +6,8 @@ import Footer from "../components/Footer";
 import ButtonGradient from "../assets/svg/ButtonGradient";
 import RoadmapSection from "../components/RoadmapSection";
 import CallToActionSection from "../components/CallToActionSection";
-import { curve } from "../assets";
 
 const HowToUseBusiness = ({ setCurrentPage }) => {
-  const [activeStep, setActiveStep] = useState(0);
 
   const steps = [
     {

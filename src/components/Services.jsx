@@ -1,15 +1,9 @@
 import { useState } from "react";
 import { service1, service2, service3, check } from "../assets";
 import { circleUpServices, circleUpServicesIcons } from "../constants";
-import Heading from "./Heading";
 import Section from "./Section";
-import { curve } from "../assets";
-import {
-  Gradient,
-  PhotoChatMessage,
-  VideoBar,
-  VideoChatMessage,
-} from "./design/Services";
+import Heading from "./Heading";
+import { Gradient } from "./design/Services";
 
 const Services = () => {
   const [isPlaying, setIsPlaying] = useState(true);

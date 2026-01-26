@@ -9,8 +9,7 @@ import AudioWave from './AudioWave';
  * Displayed when user doesn't have a profile yet.
  * Full-screen centered layout with gradient button and decorative elements.
  */
-const ProfileCreationCTA = ({ onStart, onSkip }) => {
-  const [isHovered, setIsHovered] = useState(false);
+const ProfileCreationCTA = ({ onStart }) => {
 
   return (
     <div className="w-full flex items-center justify-center relative overflow-hidden px-4 py-12">

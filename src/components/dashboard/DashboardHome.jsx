@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import PresentationCard from "../PresentationCard";
 import Button from "../Button";
-import { PresentationsAPI } from "../../shared/utils/presentations-api";
 import { ProfileService } from "../../shared/utils/profile";
 import DeletePresentationModal from "./DeletePresentationModal";
 import ImportPresentationModal from "./ImportPresentationModal";

@@ -19,13 +19,6 @@
 import { GetCommand, PutCommand, UpdateCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb";
 import { docClient, TABLE_NAME } from "../lib/dynamodb.js";
 
-// CORS headers for frontend access
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-};
-
 /**
  * Main handler for profile API
  */
@@ -144,7 +137,7 @@ async function handlePost(req, res) {
     };
 
     // Write to DynamoDB with condition to prevent overwrite
-    const result = await docClient.send(new PutCommand({
+    await docClient.send(new PutCommand({
       TableName: TABLE_NAME,
       Item: { ...profileRecord, PK: profileRecord.userId },
       ConditionExpression: 'attribute_not_exists(PK)'

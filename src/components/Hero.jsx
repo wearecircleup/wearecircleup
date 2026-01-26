@@ -1,12 +1,9 @@
 import { useRef, useState, useEffect } from "react";
-import { ScrollParallax } from "react-just-parallax";
 import Typewriter from "typewriter-effect";
 
 import { curve } from "../assets";
-import { heroIcons } from "../constants";
-import Button from "./Button";
 import CompanyLogos from "./CompanyLogos";
-import { BackgroundCircles, BottomLine, Gradient } from "./design/Hero";
+import { BackgroundCircles, BottomLine } from "./design/Hero";
 import Section from "./Section";
 
 // Hero Images Infinite Carousel Component
