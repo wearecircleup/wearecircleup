@@ -59,7 +59,7 @@ const ImportPresentationModal = ({ onClose, onImport, user }) => {
         slides: parsed.slides,
         metadata: {
           theme: parsed.metadata?.theme || 'modern',
-          model: parsed.metadata?.model || 'imported',
+          model: 'imported', // Always set to 'imported' for shared presentations
           language: parsed.metadata?.language || 'es-LA',
           slideCount: parsed.slides.length,
           username: user.login
@@ -117,7 +117,7 @@ const ImportPresentationModal = ({ onClose, onImport, user }) => {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Ej: Deforestación del Amazonas"
+            placeholder="Dale un nombre memorable... 💡"
             className="w-full bg-n-8 border border-n-6 rounded-xl px-4 py-3 text-n-1 focus:outline-none focus:border-color-1"
             maxLength={100}
           />

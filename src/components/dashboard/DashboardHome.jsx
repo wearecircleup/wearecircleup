@@ -435,10 +435,20 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
             </svg>
           </div>
           <h3 className="text-xl font-bold text-n-1 mb-2">
-            {filter === 'all' ? 'No hay presentaciones' : `No hay presentaciones ${filter === 'completed' ? 'completadas' : 'en proceso'}`}
+            {filter === 'all' 
+              ? 'No hay presentaciones' 
+              : filter === 'shared'
+              ? 'No hay presentaciones compartidas'
+              : `No hay presentaciones ${filter === 'completed' ? 'completadas' : 'en proceso'}`
+            }
           </h3>
           <p className="text-n-4 mb-6">
-            {filter === 'all' ? 'Crea tu primera presentación con AI' : 'Cambia el filtro para ver otras presentaciones'}
+            {filter === 'all' 
+              ? 'Crea tu primera presentación con AI' 
+              : filter === 'shared'
+              ? 'Importa presentaciones compartidas usando el botón "Importar"'
+              : 'Cambia el filtro para ver otras presentaciones'
+            }
           </p>
           {filter === 'all' && (
             <Button onClick={() => onNavigate('create')} white>
