@@ -151,19 +151,19 @@ const ProfileView = ({ profile, onEdit, onClose, onDelete }) => {
                 </div>
               </div>
             )}
-          </div>
 
-          {/* Action buttons */}
-          <div className="flex flex-col sm:flex-row gap-3 mt-6 sm:mt-8">
-            <Button onClick={onClose} className="flex-1">
-              Cerrar
-            </Button>
-            <Button onClick={onEdit} white className="flex-1">
-              Editar Perfil
-            </Button>
-            <Button onClick={onDelete} className="flex-1">
-              Eliminar Cuenta
-            </Button>
+            {/* Action buttons */}
+            <div className="md:col-span-2 flex flex-col sm:flex-row gap-3 mt-2">
+              <Button onClick={onClose} className="flex-1">
+                Cerrar
+              </Button>
+              <Button onClick={onEdit} white className="flex-1">
+                Editar Perfil
+              </Button>
+              <Button onClick={onDelete} className="flex-1">
+                Eliminar Cuenta
+              </Button>
+            </div>
           </div>
         </div>
 

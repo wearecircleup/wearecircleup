@@ -399,7 +399,7 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
           <button
             key={key}
             onClick={() => setFilter(key)}
-            className={`px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap ${
+            className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${
               filter === key
                 ? 'bg-color-1 text-n-1'
                 : 'bg-n-7/50 text-n-4 hover:bg-n-7 hover:text-n-2'
