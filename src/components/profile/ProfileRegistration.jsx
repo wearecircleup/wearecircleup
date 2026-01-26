@@ -19,25 +19,38 @@ import Button from '../Button';
 const ProfileRegistration = ({ user, onComplete, onCancel }) => {
   console.log('ProfileRegistration - user object:', user);
   
+  // Initialize form data with user data from GitHub OAuth
+  const initializeFormData = () => {
+    const userId = user?.id || user?.node_id || '';
+    const login = user?.login || user?.username || '';
+    const email = user?.email || '';
+    const avatarUrl = user?.avatarUrl || user?.avatar_url || '';
+    const username = user?.login || user?.username || '';
+    
+    console.log('Initializing form with:', { userId, login, email, avatarUrl, username });
+    
+    return {
+      userId,
+      login,
+      email,
+      firstName: '',
+      lastName: '',
+      ageRange: '',
+      educationLevel: '',
+      educationStatus: 'in-progress',
+      role: 'Volunteer', // Default, immutable
+      legalDisclaimerAccepted: false,
+      parentalConsentConfirmed: false,
+      githubData: {
+        avatarUrl,
+        username,
+        email
+      }
+    };
+  };
+  
   const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState({
-    userId: user?.id || user?.node_id || '',
-    login: user?.login || user?.username || '',
-    email: user?.email || '',
-    firstName: '',
-    lastName: '',
-    ageRange: '',
-    educationLevel: '',
-    educationStatus: 'in-progress',
-    role: 'Volunteer', // Default, immutable
-    legalDisclaimerAccepted: false,
-    parentalConsentConfirmed: false,
-    githubData: {
-      avatarUrl: user?.avatarUrl || user?.avatar_url || '',
-      username: user?.login || user?.username || '',
-      email: user?.email || ''
-    }
-  });
+  const [formData, setFormData] = useState(initializeFormData());
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
