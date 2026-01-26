@@ -207,7 +207,7 @@ const PresentationViewerComponent = ({ presentation, onBack, onUpdate, user }) =
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
-            <div className="w-full h-full max-w-7xl flex items-center justify-center">
+            <div className="w-full h-full max-w-[90vw] flex items-center justify-center">
               <div 
                 className={`relative w-full h-full flex flex-col justify-center bg-n-7/50 backdrop-blur-xl border border-n-6/50 rounded-3xl p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 shadow-2xl ${
                   fontFamily === 'serif' ? 'font-serif' : fontFamily === 'mono' ? 'font-mono' : 'font-sans'
@@ -218,18 +218,18 @@ const PresentationViewerComponent = ({ presentation, onBack, onUpdate, user }) =
                   <h1 className="leading-tight text-center break-words hyphens-auto max-w-full px-2" style={{ wordSpacing: '0.3em' }}>
                     {parseMessageWithEmphasis(slide.message || slide.title).map((part, idx) => {
                       // Size multipliers based on fontSize setting
-                      // Simplified responsive font sizes - always fit in viewport
+                      // Simplified responsive font sizes - 30% larger
                       const sizeStyles = {
                         md: fontSize === 'small' 
-                          ? { fontSize: 'clamp(1.5rem, 3.5vw, 3rem)' }
-                          : fontSize === 'large'
-                          ? { fontSize: 'clamp(2.5rem, 5vw, 4.5rem)' }
-                          : { fontSize: 'clamp(2rem, 4vw, 3.5rem)' },
-                        lg: fontSize === 'small'
                           ? { fontSize: 'clamp(2rem, 4.5vw, 4rem)' }
                           : fontSize === 'large'
-                          ? { fontSize: 'clamp(3rem, 6vw, 5.5rem)' }
-                          : { fontSize: 'clamp(2.5rem, 5vw, 4.5rem)' }
+                          ? { fontSize: 'clamp(3.25rem, 6.5vw, 6rem)' }
+                          : { fontSize: 'clamp(2.6rem, 5.2vw, 4.5rem)' },
+                        lg: fontSize === 'small'
+                          ? { fontSize: 'clamp(2.6rem, 5.8vw, 5.2rem)' }
+                          : fontSize === 'large'
+                          ? { fontSize: 'clamp(3.9rem, 7.8vw, 7rem)' }
+                          : { fontSize: 'clamp(3.25rem, 6.5vw, 5.8rem)' }
                       };
                       
                       const weightClasses = {
