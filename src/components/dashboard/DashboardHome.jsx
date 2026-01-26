@@ -9,8 +9,9 @@ import ProfileCreationCTA from "../profile/ProfileCreationCTA";
 import ProfileView from "../profile/ProfileView";
 import ProfileEdit from "../profile/ProfileEdit";
 import AccountDeletion from "../profile/AccountDeletion";
+import EventsTab from "./EventsTab";
 
-const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplete, onProfileStatusChange, showPresentations = true }) => {
+const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplete, onProfileStatusChange, showPresentations = true, currentTab = 'presentations' }) => {
   const [presentations, setPresentations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState('all'); // all, completed, shared, failed
@@ -344,9 +345,17 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
     );
   }
 
-  // Don't render presentations if we're in profile tab and not showing presentations
-  if (!showPresentations && !profileAction) {
-    return null;
+  // Show content based on current tab
+  if (profileView === 'view') {
+    // Show Events tab
+    if (currentTab === 'events') {
+      return <EventsTab />;
+    }
+    
+    // Show Presentations tab
+    if (!showPresentations) {
+      return null;
+    }
   }
 
   // Main dashboard view
