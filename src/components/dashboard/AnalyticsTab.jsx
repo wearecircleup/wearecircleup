@@ -1,38 +1,10 @@
 import { useState, useEffect } from 'react';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  LineElement,
-  PointElement,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-} from 'chart.js';
-import { Bar, Line, Doughnut } from 'react-chartjs-2';
 import Button from '../Button';
 
-// Register Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  LineElement,
-  PointElement,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-);
-
 /**
- * AnalyticsTab Component
+ * AnalyticsTab Component (Simple Version - No Chart.js)
  * 
- * Simple analytics dashboard with 4 charts
+ * Simple analytics dashboard with visual bars and metrics
  * Spotify-inspired minimalist design
  */
 const AnalyticsTab = () => {
@@ -66,75 +38,6 @@ const AnalyticsTab = () => {
     }
   };
 
-  // Chart.js theme colors (Spotify-inspired)
-  const chartColors = {
-    primary: '#AC6AFF',
-    secondary: '#0E73F6',
-    success: '#1DB954',
-    warning: '#FFA500',
-    gradient1: 'rgba(172, 106, 255, 0.8)',
-    gradient2: 'rgba(14, 115, 246, 0.8)',
-    background: 'rgba(172, 106, 255, 0.1)',
-  };
-
-  const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: true,
-        position: 'bottom',
-        labels: {
-          color: '#CAC6DD',
-          padding: 15,
-          font: {
-            size: 11,
-            family: "'Sora', sans-serif"
-          },
-          usePointStyle: true,
-          pointStyle: 'circle'
-        }
-      },
-      tooltip: {
-        backgroundColor: 'rgba(11, 11, 15, 0.95)',
-        titleColor: '#FFFFFF',
-        bodyColor: '#CAC6DD',
-        borderColor: 'rgba(172, 106, 255, 0.3)',
-        borderWidth: 1,
-        padding: 12,
-        cornerRadius: 8,
-        displayColors: true,
-        boxPadding: 6
-      }
-    },
-    scales: {
-      x: {
-        grid: {
-          display: false
-        },
-        ticks: {
-          color: '#6C7275',
-          font: {
-            size: 11
-          }
-        }
-      },
-      y: {
-        grid: {
-          color: 'rgba(108, 114, 117, 0.1)',
-          drawBorder: false
-        },
-        ticks: {
-          color: '#6C7275',
-          font: {
-            size: 11
-          },
-          precision: 0
-        }
-      }
-    }
-  };
-
   // Loading state
   if (loading) {
     return (
@@ -165,62 +68,13 @@ const AnalyticsTab = () => {
 
   if (!analytics) return null;
 
-  // Chart 1: Presentations by Theme (Doughnut)
-  const themeData = {
-    labels: Object.keys(analytics.presentationsByTheme),
-    datasets: [{
-      data: Object.values(analytics.presentationsByTheme),
-      backgroundColor: [
-        chartColors.primary,
-        chartColors.secondary,
-        chartColors.success
-      ],
-      borderWidth: 0,
-      hoverOffset: 8
-    }]
+  // Helper to calculate percentage for bar charts
+  const getPercentage = (value, total) => {
+    return total > 0 ? (value / total) * 100 : 0;
   };
 
-  // Chart 2: Presentations Over Time (Line)
-  const timeData = {
-    labels: Object.keys(analytics.presentationsByMonth),
-    datasets: [{
-      label: 'Creaciones',
-      data: Object.values(analytics.presentationsByMonth),
-      borderColor: chartColors.primary,
-      backgroundColor: chartColors.background,
-      fill: true,
-      tension: 0.4,
-      pointRadius: 4,
-      pointHoverRadius: 6,
-      pointBackgroundColor: chartColors.primary,
-      pointBorderColor: '#0B0B0F',
-      pointBorderWidth: 2
-    }]
-  };
-
-  // Chart 3: Users by Role (Bar)
-  const roleData = {
-    labels: Object.keys(analytics.usersByRole),
-    datasets: [{
-      label: 'Usuarios',
-      data: Object.values(analytics.usersByRole),
-      backgroundColor: chartColors.gradient1,
-      borderRadius: 8,
-      borderSkipped: false
-    }]
-  };
-
-  // Chart 4: Users by Age Group (Bar)
-  const ageData = {
-    labels: Object.keys(analytics.usersByAge),
-    datasets: [{
-      label: 'Usuarios',
-      data: Object.values(analytics.usersByAge),
-      backgroundColor: chartColors.gradient2,
-      borderRadius: 8,
-      borderSkipped: false
-    }]
-  };
+  // Get max value for scaling
+  const getMaxValue = (obj) => Math.max(...Object.values(obj));
 
   return (
     <div className="space-y-6">
@@ -264,68 +118,129 @@ const AnalyticsTab = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {/* Chart 1: Presentations by Theme */}
         <div className="bg-n-7/50 border border-n-6 rounded-xl p-4 sm:p-6">
-          <div className="mb-4">
+          <div className="mb-6">
             <h3 className="text-lg font-bold text-n-1 mb-1">Temas favoritos</h3>
             <p className="text-xs text-n-4">
               Descubre qué estilos prefiere tu comunidad
             </p>
           </div>
-          <div className="h-64 flex items-center justify-center">
-            <div className="w-full max-w-[280px]">
-              <Doughnut 
-                data={themeData} 
-                options={{
-                  ...chartOptions,
-                  cutout: '65%',
-                  plugins: {
-                    ...chartOptions.plugins,
-                    legend: {
-                      ...chartOptions.plugins.legend,
-                      position: 'right'
-                    }
-                  }
-                }} 
-              />
-            </div>
+          <div className="space-y-4">
+            {Object.entries(analytics.presentationsByTheme).map(([theme, count], index) => {
+              const total = Object.values(analytics.presentationsByTheme).reduce((a, b) => a + b, 0);
+              const percentage = getPercentage(count, total);
+              const colors = ['#AC6AFF', '#0E73F6', '#1DB954'];
+              
+              return (
+                <div key={theme}>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm text-n-2">{theme}</span>
+                    <span className="text-sm font-semibold text-n-1">{count}</span>
+                  </div>
+                  <div className="h-2 bg-n-8 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full rounded-full transition-all duration-500"
+                      style={{ 
+                        width: `${percentage}%`,
+                        backgroundColor: colors[index % colors.length]
+                      }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
         {/* Chart 2: Presentations Over Time */}
         <div className="bg-n-7/50 border border-n-6 rounded-xl p-4 sm:p-6">
-          <div className="mb-4">
+          <div className="mb-6">
             <h3 className="text-lg font-bold text-n-1 mb-1">Creaciones en el tiempo</h3>
             <p className="text-xs text-n-4">
               Tu comunidad está creciendo cada día
             </p>
           </div>
-          <div className="h-64">
-            <Line data={timeData} options={chartOptions} />
+          <div className="space-y-3">
+            {Object.entries(analytics.presentationsByMonth).map(([month, count]) => {
+              const max = getMaxValue(analytics.presentationsByMonth);
+              const percentage = getPercentage(count, max);
+              
+              return (
+                <div key={month} className="flex items-center gap-3">
+                  <span className="text-xs text-n-4 w-16 flex-shrink-0">{month}</span>
+                  <div className="flex-1 h-8 bg-n-8 rounded-lg overflow-hidden relative">
+                    <div 
+                      className="h-full bg-gradient-to-r from-color-1 to-color-2 rounded-lg transition-all duration-500"
+                      style={{ width: `${percentage}%` }}
+                    />
+                    <span className="absolute inset-0 flex items-center justify-end pr-3 text-xs font-semibold text-n-1">
+                      {count}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
         {/* Chart 3: Users by Role */}
         <div className="bg-n-7/50 border border-n-6 rounded-xl p-4 sm:p-6">
-          <div className="mb-4">
+          <div className="mb-6">
             <h3 className="text-lg font-bold text-n-1 mb-1">Usuarios por rol</h3>
             <p className="text-xs text-n-4">
               Conoce quiénes forman parte de Circle Up
             </p>
           </div>
-          <div className="h-64">
-            <Bar data={roleData} options={chartOptions} />
+          <div className="space-y-4">
+            {Object.entries(analytics.usersByRole).map(([role, count]) => {
+              const max = getMaxValue(analytics.usersByRole);
+              const percentage = getPercentage(count, max);
+              
+              return (
+                <div key={role}>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm text-n-2">{role}</span>
+                    <span className="text-sm font-semibold text-n-1">{count}</span>
+                  </div>
+                  <div className="h-3 bg-n-8 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-purple-500 to-purple-400 rounded-full transition-all duration-500"
+                      style={{ width: `${percentage}%` }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
         {/* Chart 4: Users by Age Group */}
         <div className="bg-n-7/50 border border-n-6 rounded-xl p-4 sm:p-6">
-          <div className="mb-4">
+          <div className="mb-6">
             <h3 className="text-lg font-bold text-n-1 mb-1">Rango de edades</h3>
             <p className="text-xs text-n-4">
               Diversidad que enriquece la experiencia
             </p>
           </div>
-          <div className="h-64">
-            <Bar data={ageData} options={chartOptions} />
+          <div className="space-y-4">
+            {Object.entries(analytics.usersByAge).map(([age, count]) => {
+              const max = getMaxValue(analytics.usersByAge);
+              const percentage = getPercentage(count, max);
+              
+              return (
+                <div key={age}>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm text-n-2">{age} años</span>
+                    <span className="text-sm font-semibold text-n-1">{count}</span>
+                  </div>
+                  <div className="h-3 bg-n-8 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full transition-all duration-500"
+                      style={{ width: `${percentage}%` }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
