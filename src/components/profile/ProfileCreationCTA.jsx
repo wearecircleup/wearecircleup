@@ -44,17 +44,19 @@ const ProfileCreationCTA = ({ onStart }) => {
 
       {/* Main content */}
       <motion.div
-        className="relative z-10 text-center px-6 max-w-4xl -mt-[10vh] w-full"
+        className="relative z-10 text-center px-0 w-full -mt-[10vh]"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        {/* Audio Wave Particles Animation */}
-        <AudioWaveParticles />
+        {/* Audio Wave Particles Animation - Full width, no margin */}
+        <div className="w-full mb-2">
+          <AudioWaveParticles />
+        </div>
 
-        {/* Title */}
+        {/* Title - Reduced margin */}
         <motion.h1
-          className="text-4xl md:text-5xl font-bold text-n-1 mb-4"
+          className="text-4xl md:text-5xl font-bold text-n-1 mb-4 px-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
@@ -64,7 +66,7 @@ const ProfileCreationCTA = ({ onStart }) => {
 
         {/* Subtitle */}
         <motion.p
-          className="text-lg text-n-3 mb-6 max-w-lg mx-auto"
+          className="text-lg text-n-3 mb-6 max-w-lg mx-auto px-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}

@@ -35,39 +35,54 @@ const AudioWaveParticles = () => {
     updateSize();
     window.addEventListener('resize', updateSize);
 
-    // Create 4 layered sine waves with different frequencies
+    // Create 5 layered sine waves with different frequencies (some bimodal)
     const waves = [
       {
-        amplitude: canvas.height * 0.15,
-        frequency: 0.02,
-        speed: 0.03,
+        amplitude: canvas.height * 0.2,
+        frequency: 0.015,
+        speed: 0.04,
         phase: 0,
         color: { r: 0, g: 245, b: 255 }, // Cyan
-        particles: []
+        particles: [],
+        bimodal: false
       },
       {
-        amplitude: canvas.height * 0.12,
-        frequency: 0.03,
-        speed: 0.025,
-        phase: Math.PI / 3,
+        amplitude: canvas.height * 0.15,
+        frequency: 0.025,
+        speed: 0.03,
+        phase: Math.PI / 4,
         color: { r: 168, g: 85, b: 247 }, // Purple
-        particles: []
+        particles: [],
+        bimodal: true, // Bimodal wave
+        secondFrequency: 0.04
+      },
+      {
+        amplitude: canvas.height * 0.22,
+        frequency: 0.012,
+        speed: 0.045,
+        phase: Math.PI / 2,
+        color: { r: 236, g: 72, b: 153 }, // Pink
+        particles: [],
+        bimodal: false
       },
       {
         amplitude: canvas.height * 0.18,
-        frequency: 0.015,
+        frequency: 0.02,
         speed: 0.035,
-        phase: Math.PI / 2,
-        color: { r: 236, g: 72, b: 153 }, // Pink
-        particles: []
+        phase: Math.PI * 0.75,
+        color: { r: 139, g: 92, b: 246 }, // Violet
+        particles: [],
+        bimodal: true, // Bimodal wave
+        secondFrequency: 0.035
       },
       {
-        amplitude: canvas.height * 0.1,
-        frequency: 0.025,
-        speed: 0.028,
+        amplitude: canvas.height * 0.16,
+        frequency: 0.018,
+        speed: 0.038,
         phase: Math.PI,
-        color: { r: 139, g: 92, b: 246 }, // Violet
-        particles: []
+        color: { r: 100, g: 200, b: 255 }, // Light blue
+        particles: [],
+        bimodal: false
       }
     ];
 
@@ -94,9 +109,8 @@ const AudioWaveParticles = () => {
 
     // Animation loop
     const animate = () => {
-      // Clear with fade effect for electronic trail
-      ctx.fillStyle = 'rgba(17, 15, 25, 0.15)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Clear completely - no trails
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const time = Date.now() * 0.001;
       const centerY = canvas.height / 2;
@@ -106,8 +120,16 @@ const AudioWaveParticles = () => {
         wave.phase += wave.speed;
 
         wave.particles.forEach((particle, pIndex) => {
-          // Calculate sine wave position
-          const sineY = Math.sin(particle.baseX * wave.frequency + wave.phase) * wave.amplitude;
+          // Calculate sine wave position (bimodal if specified)
+          let sineY;
+          if (wave.bimodal) {
+            // Bimodal: combination of two frequencies
+            const wave1 = Math.sin(particle.baseX * wave.frequency + wave.phase) * wave.amplitude;
+            const wave2 = Math.sin(particle.baseX * wave.secondFrequency + wave.phase * 1.5) * wave.amplitude * 0.5;
+            sineY = wave1 + wave2;
+          } else {
+            sineY = Math.sin(particle.baseX * wave.frequency + wave.phase) * wave.amplitude;
+          }
           particle.baseY = centerY + sineY;
 
           // Mouse/touch interaction - disperse particles
@@ -143,7 +165,7 @@ const AudioWaveParticles = () => {
             : 0.8;
 
           // Draw particle with glow
-          ctx.shadowBlur = 15;
+          ctx.shadowBlur = 12;
           ctx.shadowColor = `rgba(${wave.color.r}, ${wave.color.g}, ${wave.color.b}, ${opacity})`;
           ctx.fillStyle = `rgba(${wave.color.r}, ${wave.color.g}, ${wave.color.b}, ${opacity})`;
           ctx.beginPath();
@@ -151,30 +173,17 @@ const AudioWaveParticles = () => {
           ctx.fill();
           ctx.shadowBlur = 0;
 
-          // Connect particles with lines for wave effect
+          // Connect particles with smooth lines for continuous wave
           if (pIndex > 0) {
             const prevParticle = wave.particles[pIndex - 1];
-            ctx.strokeStyle = `rgba(${wave.color.r}, ${wave.color.g}, ${wave.color.b}, ${opacity * 0.3})`;
-            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = `rgba(${wave.color.r}, ${wave.color.g}, ${wave.color.b}, ${opacity * 0.4})`;
+            ctx.lineWidth = 2;
             ctx.beginPath();
             ctx.moveTo(prevParticle.x, prevParticle.y);
             ctx.lineTo(particle.x, particle.y);
             ctx.stroke();
           }
         });
-
-        // Add random burst particles for electronic concert effect
-        if (Math.random() > 0.95) {
-          const burstX = Math.random() * canvas.width;
-          const burstY = centerY + Math.sin(burstX * wave.frequency + wave.phase) * wave.amplitude;
-          ctx.shadowBlur = 25;
-          ctx.shadowColor = `rgba(${wave.color.r}, ${wave.color.g}, ${wave.color.b}, 0.8)`;
-          ctx.fillStyle = `rgba(${wave.color.r}, ${wave.color.g}, ${wave.color.b}, 0.8)`;
-          ctx.beginPath();
-          ctx.arc(burstX, burstY, 4, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.shadowBlur = 0;
-        }
       });
 
       animationRef.current = requestAnimationFrame(animate);
@@ -221,17 +230,16 @@ const AudioWaveParticles = () => {
   }, []);
 
   return (
-    <div className="w-full flex items-center justify-center">
-      <canvas 
-        ref={canvasRef}
-        className="w-full cursor-pointer"
-        style={{ 
-          maxHeight: '500px',
-          minHeight: '300px',
-          touchAction: 'none'
-        }}
-      />
-    </div>
+    <canvas 
+      ref={canvasRef}
+      className="w-full cursor-pointer block"
+      style={{ 
+        maxHeight: '500px',
+        minHeight: '300px',
+        touchAction: 'none',
+        background: 'transparent'
+      }}
+    />
   );
 };
 
