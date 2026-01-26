@@ -33,10 +33,10 @@ const ProfileCreationCTA = ({ onStart }) => {
           transition={{ delay: 0.3 }}
         >
           <h1 className="flex flex-col items-center justify-center">
-            <span className="text-3xl md:text-4xl font-black text-n-1">
+            <span className="text-4xl md:text-5xl lg:text-6xl font-black text-n-1" style={{ fontWeight: 900 }}>
               Bienvenid@
             </span>
-            <span className="text-5xl md:text-6xl lg:text-7xl font-thin text-n-1 tracking-wider">
+            <span className="text-5xl md:text-6xl lg:text-7xl font-mono text-n-1 tracking-wide" style={{ fontWeight: 200 }}>
               Volunteer
             </span>
           </h1>
