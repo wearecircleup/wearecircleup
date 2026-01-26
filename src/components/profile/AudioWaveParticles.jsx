@@ -40,8 +40,8 @@ const AudioWaveParticles = () => {
     updateSize();
     window.addEventListener('resize', updateSize);
 
-    // Simple mobile optimization
-    const waveCount = isMobile ? 4 : 8;
+    // Mobile optimization - more waves for better visual
+    const waveCount = isMobile ? 6 : 8;
     
     // Create layered sine waves with controlled amplitude
     const allWaves = [
@@ -127,9 +127,9 @@ const AudioWaveParticles = () => {
     // Use only first N waves based on device
     const waves = allWaves.slice(0, waveCount);
 
-    // Particle count - simple scaling
+    // Particle count - more particles on mobile for smoother curves
     const particleCount = isMobile 
-      ? Math.floor(canvas.width / 8) 
+      ? Math.floor(canvas.width / 4) 
       : Math.floor(canvas.width / 3);
     waves.forEach((wave) => {
       wave.particles = [];
@@ -234,17 +234,27 @@ const AudioWaveParticles = () => {
         ctx.shadowBlur = 12;
         ctx.shadowColor = `rgba(${wave.color.r}, ${wave.color.g}, ${wave.color.b}, 0.6)`;
         
-        wave.particles.forEach((particle, pIndex) => {
-          if (pIndex === 0) {
-            ctx.moveTo(particle.x, particle.y);
-          } else {
-            // Smooth curve through points
-            const prevParticle = wave.particles[pIndex - 1];
-            const midX = (prevParticle.x + particle.x) / 2;
-            const midY = (prevParticle.y + particle.y) / 2;
-            ctx.quadraticCurveTo(prevParticle.x, prevParticle.y, midX, midY);
+        // Draw smooth bezier curves for fluid lines
+        if (wave.particles.length > 0) {
+          ctx.moveTo(wave.particles[0].x, wave.particles[0].y);
+          
+          for (let i = 1; i < wave.particles.length - 2; i++) {
+            const xc = (wave.particles[i].x + wave.particles[i + 1].x) / 2;
+            const yc = (wave.particles[i].y + wave.particles[i + 1].y) / 2;
+            ctx.quadraticCurveTo(wave.particles[i].x, wave.particles[i].y, xc, yc);
           }
-        });
+          
+          // Last segment
+          if (wave.particles.length > 2) {
+            const lastIdx = wave.particles.length - 1;
+            ctx.quadraticCurveTo(
+              wave.particles[lastIdx - 1].x,
+              wave.particles[lastIdx - 1].y,
+              wave.particles[lastIdx].x,
+              wave.particles[lastIdx].y
+            );
+          }
+        }
         
         ctx.stroke();
         ctx.shadowBlur = 0;
