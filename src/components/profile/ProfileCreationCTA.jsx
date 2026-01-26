@@ -20,23 +20,33 @@ const ProfileCreationCTA = ({ onStart }) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        {/* Audio Wave Particles Animation - Full width, minimal margin */}
-        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] mb-0 z-20">
-          <AudioWaveParticles />
+        {/* Audio Wave Particles Animation with HOLA inside */}
+        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] mb-0">
+          <div className="relative">
+            <AudioWaveParticles />
+            {/* HOLA inside waves - centered */}
+            <motion.div
+              className="absolute inset-0 flex items-center justify-center pointer-events-none"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              <span className="text-4xl md:text-5xl lg:text-6xl font-black text-n-1 z-30" style={{ fontWeight: 950 }}>
+                HOLA
+              </span>
+            </motion.div>
+          </div>
         </div>
 
-        {/* Title - Very close to waves */}
+        {/* Volunteer below waves - almost touching */}
         <motion.div
-          className="mb-4 px-6 -mt-12 relative z-10"
+          className="-mt-16 mb-4 px-6 relative z-10"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.4 }}
         >
-          <h1 className="flex flex-col items-center justify-center">
-            <span className="text-4xl md:text-5xl lg:text-6xl font-black text-n-1" style={{ fontWeight: 900 }}>
-              Bienvenid@
-            </span>
-            <span className="text-5xl md:text-6xl lg:text-7xl font-mono text-n-1 tracking-wide" style={{ fontWeight: 200 }}>
+          <h1 className="text-center">
+            <span className="text-5xl md:text-6xl lg:text-7xl font-mono text-n-1 tracking-normal" style={{ fontWeight: 200 }}>
               Volunteer
             </span>
           </h1>

@@ -14,6 +14,7 @@ const AudioWaveParticles = () => {
   const particlesRef = useRef([]);
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const wavesRef = useRef([]);
+  const holaAreaRef = useRef({ x: 0, y: 0, width: 0, height: 0 });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -153,6 +154,16 @@ const AudioWaveParticles = () => {
     
     wavesRef.current = waves;
 
+    // Define HOLA area in center of canvas
+    const holaWidth = isMobile ? 120 : 200;
+    const holaHeight = isMobile ? 60 : 100;
+    holaAreaRef.current = {
+      x: canvas.width / 2 - holaWidth / 2,
+      y: canvas.height / 2 - holaHeight / 2,
+      width: holaWidth,
+      height: holaHeight
+    };
+
     // Animation loop - simple and fast
     const animate = () => {
       // Clear completely - transparent background
@@ -185,8 +196,28 @@ const AudioWaveParticles = () => {
           }
           particle.baseY = centerY + sineY;
 
+          // HOLA area avoidance - waves dodge the text
+          const holaArea = holaAreaRef.current;
+          const isInHolaArea = particle.x >= holaArea.x && 
+                               particle.x <= holaArea.x + holaArea.width &&
+                               particle.y >= holaArea.y && 
+                               particle.y <= holaArea.y + holaArea.height;
+
+          if (isInHolaArea) {
+            // Push particles away from HOLA center
+            const holaCenterX = holaArea.x + holaArea.width / 2;
+            const holaCenterY = holaArea.y + holaArea.height / 2;
+            const dx = particle.x - holaCenterX;
+            const dy = particle.y - holaCenterY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist > 0) {
+              const force = 3;
+              particle.vx += (dx / dist) * force;
+              particle.vy += (dy / dist) * force;
+            }
+          }
+
           // Mouse/touch interaction - disperse
-          // Simple interaction
           const dx = mouseRef.current.x - particle.x;
           const dy = mouseRef.current.y - particle.y;
           const distSq = dx * dx + dy * dy;
