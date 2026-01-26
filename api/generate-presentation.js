@@ -104,7 +104,7 @@ Respond ONLY with valid JSON in this format:
   "slides": [
     {
       "message": "Main impactful message (5-10 words maximum)",
-      "explanation": "Complementary paragraph that explains or supports the message (30-50 words, will be displayed in italic)"
+      "explanation": "Complementary paragraph that explains or supports the message (MANDATORY 20-30 words exactly, will be displayed in italic)"
     }
   ]
 }
@@ -135,17 +135,18 @@ RULES FOR ARTISTIC TYPOGRAPHY:
   * Readability first: text must ALWAYS fit within slide boundaries
   * Less is more: subtle contrast is more elegant than chaos
 
-- "explanation": MANDATORY 20-30 words. This is NOT optional - count the words carefully. Brief, impactful statement in italic that complements the message.
+- "explanation": MANDATORY 20-30 words. Count each word carefully - this is CRITICAL. Brief, impactful statement in italic that complements the message.
 - NO bullet points, NO lists
-- Focus on DRAMATIC visual hierarchy through size AND weight variations
+- Focus on subtle visual hierarchy through the 2 keyword highlights
 - Think TEDx style: slides are visual support, NOT reading material
 - Each message should be memorable, conversational, and visually striking
 - The audience should FEEL the message, not read it
 
-CRITICAL: 
-- "explanation" must be EXACTLY 15-20 words (count them!)
-- Shorter is better - make every word count
-- This is a visual aid for a speaker, not a document
+CRITICAL VALIDATION: 
+- Count the words in "explanation" - must be MINIMUM 20 words, MAXIMUM 30 words
+- If you generate less than 20 words, ADD more context
+- If you generate more than 30 words, REMOVE unnecessary words
+- This is NOT negotiable - the system will reject slides with wrong word count
 
 Do NOT include any other fields. Only "message" and "explanation" for each slide.`
           }

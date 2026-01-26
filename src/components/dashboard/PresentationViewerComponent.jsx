@@ -237,10 +237,13 @@ const PresentationViewerComponent = ({ presentation, onBack, onUpdate, user }) =
                         black: 'font-black'
                       };
                       
+                      // Add extra spacing for lg+black keywords
+                      const isKeyword = part.size === 'lg' && part.weight === 'black';
+                      
                       return (
                         <span 
                           key={idx} 
-                          className={`inline-block bg-gradient-to-r from-color-1 to-color-2 bg-clip-text text-transparent ${weightClasses[part.weight] || weightClasses.light}`}
+                          className={`inline-block bg-gradient-to-r from-color-1 to-color-2 bg-clip-text text-transparent ${weightClasses[part.weight] || weightClasses.light} ${isKeyword ? 'mx-2 sm:mx-3 md:mx-4' : ''}`}
                           style={{ 
                             ...(sizeStyles[part.size] || sizeStyles.md),
                             wordBreak: 'break-word', 
