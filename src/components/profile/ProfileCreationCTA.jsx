@@ -26,14 +26,21 @@ const ProfileCreationCTA = ({ onStart }) => {
         </div>
 
         {/* Title - Very close to waves */}
-        <motion.h1
-          className="text-4xl md:text-5xl font-bold text-n-1 mb-4 px-6 -mt-8 relative z-10"
+        <motion.div
+          className="mb-4 px-6 -mt-12 relative z-10"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          Bienvenid@ a Circle Up Volunteer
-        </motion.h1>
+          <h1 className="flex flex-col items-center justify-center">
+            <span className="text-3xl md:text-4xl font-black text-n-1">
+              Bienvenid@
+            </span>
+            <span className="text-5xl md:text-6xl lg:text-7xl font-thin text-n-1 tracking-wider">
+              Volunteer
+            </span>
+          </h1>
+        </motion.div>
 
         {/* Subtitle */}
         <motion.p
