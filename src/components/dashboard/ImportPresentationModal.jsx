@@ -3,6 +3,7 @@ import Button from '../Button';
 
 const ImportPresentationModal = ({ onClose, onImport, user }) => {
   const [jsonContent, setJsonContent] = useState('');
+  const [title, setTitle] = useState('');
   const [error, setError] = useState(null);
   const [isImporting, setIsImporting] = useState(false);
 
@@ -13,6 +14,12 @@ const ImportPresentationModal = ({ onClose, onImport, user }) => {
       // Validate JSON structure
       const parsed = JSON.parse(jsonContent);
       
+      // Check if presentation has failed status
+      if (parsed.status === 'failed') {
+        setError('Esta presentación tiene errores. Por favor verifica con la persona que la compartió para obtener una versión correcta.');
+        return;
+      }
+
       // Validate required fields
       if (!Array.isArray(parsed.slides)) {
         setError('El JSON debe contener un campo "slides" con un array de slides');
@@ -21,6 +28,11 @@ const ImportPresentationModal = ({ onClose, onImport, user }) => {
 
       if (parsed.slides.length === 0) {
         setError('El JSON debe contener al menos 1 slide');
+        return;
+      }
+
+      if (!title.trim()) {
+        setError('Por favor ingresa un nombre para la presentación');
         return;
       }
 
@@ -42,7 +54,7 @@ const ImportPresentationModal = ({ onClose, onImport, user }) => {
       // Create new presentation object with current user as owner
       const newPresentation = {
         id: crypto.randomUUID(),
-        title: parsed.title || 'Presentación Importada',
+        title: title.trim(),
         description: parsed.description || 'Presentación compartida',
         slides: parsed.slides,
         metadata: {
@@ -96,13 +108,31 @@ const ImportPresentationModal = ({ onClose, onImport, user }) => {
           </button>
         </div>
 
+        {/* Title Input */}
+        <div className="px-6 pt-6">
+          <label className="block text-sm font-medium text-n-2 mb-2">
+            Nombre de la presentación *
+          </label>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Ej: Deforestación del Amazonas"
+            className="w-full bg-n-8 border border-n-6 rounded-xl px-4 py-3 text-n-1 focus:outline-none focus:border-color-1"
+            maxLength={100}
+          />
+        </div>
+
         {/* JSON Editor */}
         <div className="flex-1 overflow-auto p-6">
+          <label className="block text-sm font-medium text-n-2 mb-2">
+            JSON de la presentación *
+          </label>
           <textarea
             value={jsonContent}
             onChange={(e) => setJsonContent(e.target.value)}
             placeholder='Pega aquí el JSON compartido...'
-            className="w-full h-full min-h-[400px] bg-n-8 border border-n-6 rounded-xl p-4 text-n-1 font-mono text-sm focus:outline-none focus:border-color-1 resize-none"
+            className="w-full h-full min-h-[300px] bg-n-8 border border-n-6 rounded-xl p-4 text-n-1 font-mono text-sm focus:outline-none focus:border-color-1 resize-none"
             spellCheck={false}
           />
         </div>
@@ -127,7 +157,7 @@ const ImportPresentationModal = ({ onClose, onImport, user }) => {
             onClick={handleImport}
             className="px-6"
             white
-            disabled={isImporting || !jsonContent.trim()}
+            disabled={isImporting || !jsonContent.trim() || !title.trim()}
           >
             {isImporting ? (
               <div className="flex items-center gap-2">

@@ -140,7 +140,14 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
 
   const filteredPresentations = presentations.filter(p => {
     if (filter === 'all') return true;
-    if (filter === 'shared') return p.metadata?.model === 'imported';
+    if (filter === 'shared') {
+      // Only show imported presentations
+      return p.metadata?.model === 'imported';
+    }
+    if (filter === 'completed') {
+      // Only show completed non-imported presentations
+      return p.status === 'completed' && p.metadata?.model !== 'imported';
+    }
     return p.status === filter;
   });
 
@@ -374,8 +381,7 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
         {[
           { key: 'all', label: 'Todas' },
           { key: 'completed', label: 'Completadas' },
-          { key: 'shared', label: 'Compartidas' },
-          { key: 'failed', label: 'Fallidas' }
+          { key: 'shared', label: 'Compartidas' }
         ].map(({ key, label }) => (
           <button
             key={key}
