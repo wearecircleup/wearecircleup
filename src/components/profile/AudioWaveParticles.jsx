@@ -288,47 +288,20 @@ const AudioWaveParticles = () => {
   }, []);
 
   return (
-    <div className="relative w-full">
-      {/* Title above waves */}
-      <motion.div
-        className="text-center mb-4 relative z-30"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
-        <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-n-1">
-          Hola, Volunteer
-        </h1>
-      </motion.div>
-
-      {/* Canvas with waves */}
-      <canvas 
-        ref={canvasRef}
-        className="w-full cursor-pointer block relative z-20"
-        style={{ 
-          maxHeight: '450px',
-          minHeight: '250px',
-          touchAction: 'none',
-          background: 'transparent',
-          margin: 0,
-          padding: 0,
-          transform: 'translateZ(0)',
-          willChange: 'transform'
-        }}
-      />
-
-      {/* Subtitle below waves */}
-      <motion.div
-        className="text-center -mt-1 relative z-30"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-      >
-        <p className="text-lg text-n-3 max-w-lg mx-auto px-6">
-          Para comenzar a crear presentaciones increíbles con IA, necesitamos conocerte un poco mejor.
-        </p>
-      </motion.div>
-    </div>
+    <canvas 
+      ref={canvasRef}
+      className="w-full cursor-pointer block"
+      style={{ 
+        maxHeight: '450px',
+        minHeight: '250px',
+        touchAction: 'none',
+        background: 'transparent',
+        margin: 0,
+        padding: 0,
+        transform: 'translateZ(0)',
+        willChange: 'transform'
+      }}
+    />
   );
 };
 
