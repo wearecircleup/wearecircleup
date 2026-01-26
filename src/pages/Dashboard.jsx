@@ -11,21 +11,22 @@ import curve from "../assets/hero/curve.png";
 const Dashboard = ({ setCurrentPage }) => {
   const user = GitHubAuthService.getUser();
   
-  // Debug: Log user object
-  console.log('Dashboard - user from localStorage:', user);
-  
-  // If no user, redirect to login
-  if (!user) {
-    console.error('No user found in localStorage - redirecting to login');
-    setCurrentPage('login');
-    return null;
-  }
-  
+  // Initialize hooks BEFORE any conditional returns
   const [currentView, setCurrentView] = useState('home'); // 'home' | 'create' | 'view'
   const [dashboardTab, setDashboardTab] = useState('presentations'); // 'presentations' | 'profile'
   const [selectedPresentation, setSelectedPresentation] = useState(null);
   const [hasProfile, setHasProfile] = useState(false);
   const [profileAction, setProfileAction] = useState(null); // 'view' | 'delete'
+  
+  // Debug: Log user object
+  console.log('Dashboard - user from localStorage:', user);
+  
+  // If no user, redirect to login (after hooks are initialized)
+  if (!user) {
+    console.error('No user found in localStorage - redirecting to login');
+    setCurrentPage('login');
+    return null;
+  }
 
   const handleLogout = () => {
     GitHubAuthService.logout();

@@ -5,8 +5,6 @@ import Logo from "./Logo";
 const HowItWorks = ({ 
   steps = [],
   title = "CÓMO FUNCIONA",
-  buttonText = "INICIAR",
-  buttonAction = () => {},
   className = "",
   sectionClassName = "overflow-hidden relative"
 }) => {
