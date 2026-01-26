@@ -43,16 +43,18 @@ const ProfileCreationCTA = ({ onStart }) => {
 
     const waveCount = 8;
     const freqMultiplier = isMobile ? 2.5 : 1;
+    const freqBoost = 3; // Triple frequency
+    const ampBoost = 1.15; // 15% more amplitude
     
     const allWaves = [
-      { amplitude: canvas.height * 0.11, frequency: 0.012 * freqMultiplier, speed: 0.05, phase: 0, color: { r: 0, g: 220, b: 255 }, lineWidth: 2.5, bimodal: false },
-      { amplitude: canvas.height * 0.10, frequency: 0.018 * freqMultiplier, speed: 0.045, phase: Math.PI / 6, color: { r: 120, g: 170, b: 255 }, lineWidth: 2, bimodal: true, secondFrequency: 0.035 * freqMultiplier },
-      { amplitude: canvas.height * 0.12, frequency: 0.01 * freqMultiplier, speed: 0.055, phase: Math.PI / 4, color: { r: 170, g: 120, b: 255 }, lineWidth: 3, bimodal: false },
-      { amplitude: canvas.height * 0.09, frequency: 0.022 * freqMultiplier, speed: 0.04, phase: Math.PI / 3, color: { r: 200, g: 100, b: 255 }, lineWidth: 2.5, bimodal: true, secondFrequency: 0.04 * freqMultiplier, thirdFrequency: 0.055 * freqMultiplier },
-      { amplitude: canvas.height * 0.10, frequency: 0.015 * freqMultiplier, speed: 0.048, phase: Math.PI / 2, color: { r: 220, g: 90, b: 240 }, lineWidth: 2, bimodal: false },
-      { amplitude: canvas.height * 0.11, frequency: 0.013 * freqMultiplier, speed: 0.052, phase: Math.PI * 0.6, color: { r: 240, g: 100, b: 200 }, lineWidth: 3, bimodal: true, secondFrequency: 0.03 * freqMultiplier },
-      { amplitude: canvas.height * 0.10, frequency: 0.02 * freqMultiplier, speed: 0.042, phase: Math.PI * 0.75, color: { r: 255, g: 92, b: 173 }, lineWidth: 2.5, bimodal: false },
-      { amplitude: canvas.height * 0.10, frequency: 0.016 * freqMultiplier, speed: 0.046, phase: Math.PI, color: { r: 120, g: 240, b: 255 }, lineWidth: 2, bimodal: true, secondFrequency: 0.038 * freqMultiplier }
+      { amplitude: canvas.height * 0.11 * ampBoost, frequency: 0.012 * freqMultiplier * freqBoost, speed: 0.05, phase: 0, color: { r: 0, g: 220, b: 255 }, lineWidth: 2.5, bimodal: true, secondFrequency: 0.024 * freqMultiplier * freqBoost },
+      { amplitude: canvas.height * 0.10 * ampBoost, frequency: 0.018 * freqMultiplier * freqBoost, speed: 0.045, phase: Math.PI / 6, color: { r: 120, g: 170, b: 255 }, lineWidth: 2, bimodal: true, secondFrequency: 0.035 * freqMultiplier * freqBoost },
+      { amplitude: canvas.height * 0.12 * ampBoost, frequency: 0.01 * freqMultiplier * freqBoost, speed: 0.055, phase: Math.PI / 4, color: { r: 170, g: 120, b: 255 }, lineWidth: 3, bimodal: true, secondFrequency: 0.02 * freqMultiplier * freqBoost },
+      { amplitude: canvas.height * 0.09 * ampBoost, frequency: 0.022 * freqMultiplier * freqBoost, speed: 0.04, phase: Math.PI / 3, color: { r: 200, g: 100, b: 255 }, lineWidth: 2.5, bimodal: true, secondFrequency: 0.04 * freqMultiplier * freqBoost },
+      { amplitude: canvas.height * 0.10 * ampBoost, frequency: 0.015 * freqMultiplier * freqBoost, speed: 0.048, phase: Math.PI / 2, color: { r: 220, g: 90, b: 240 }, lineWidth: 2, bimodal: true, secondFrequency: 0.03 * freqMultiplier * freqBoost },
+      { amplitude: canvas.height * 0.11 * ampBoost, frequency: 0.013 * freqMultiplier * freqBoost, speed: 0.052, phase: Math.PI * 0.6, color: { r: 240, g: 100, b: 200 }, lineWidth: 3, bimodal: true, secondFrequency: 0.03 * freqMultiplier * freqBoost },
+      { amplitude: canvas.height * 0.10 * ampBoost, frequency: 0.02 * freqMultiplier * freqBoost, speed: 0.042, phase: Math.PI * 0.75, color: { r: 255, g: 92, b: 173 }, lineWidth: 2.5, bimodal: true, secondFrequency: 0.04 * freqMultiplier * freqBoost },
+      { amplitude: canvas.height * 0.10 * ampBoost, frequency: 0.016 * freqMultiplier * freqBoost, speed: 0.046, phase: Math.PI, color: { r: 120, g: 240, b: 255 }, lineWidth: 2, bimodal: true, secondFrequency: 0.038 * freqMultiplier * freqBoost }
     ];
     
     const waves = allWaves.slice(0, waveCount);
