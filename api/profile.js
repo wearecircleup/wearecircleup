@@ -256,51 +256,20 @@ async function handleDelete(req, res) {
   }
 
   try {
-    // Import necessary DynamoDB commands
-    const { QueryCommand, BatchWriteCommand } = await import("@aws-sdk/lib-dynamodb");
-    const { docClient: presentationsDocClient } = await import("../lib/dynamodb.js");
-    
     // Get presentations table name from environment
     const PRESENTATIONS_TABLE = process.env.DYNAMODB_PRESENTATIONS_TABLE_NAME;
 
     // Step 1: Delete all user presentations
+    // The presentations table structure: { PK: userId, presentations: [...] }
+    // We need to delete the entire item for this user
     if (PRESENTATIONS_TABLE) {
       try {
-        // Query all presentations for this user
-        const queryResult = await presentationsDocClient.send(new QueryCommand({
+        await docClient.send(new DeleteCommand({
           TableName: PRESENTATIONS_TABLE,
-          KeyConditionExpression: 'userId = :userId',
-          ExpressionAttributeValues: {
-            ':userId': userId
-          }
+          Key: { PK: userId }
         }));
-
-        // Delete presentations in batches (DynamoDB limit is 25 items per batch)
-        if (queryResult.Items && queryResult.Items.length > 0) {
-          const batches = [];
-          for (let i = 0; i < queryResult.Items.length; i += 25) {
-            batches.push(queryResult.Items.slice(i, i + 25));
-          }
-
-          for (const batch of batches) {
-            const deleteRequests = batch.map(item => ({
-              DeleteRequest: {
-                Key: {
-                  userId: item.userId,
-                  presentationId: item.presentationId
-                }
-              }
-            }));
-
-            await presentationsDocClient.send(new BatchWriteCommand({
-              RequestItems: {
-                [PRESENTATIONS_TABLE]: deleteRequests
-              }
-            }));
-          }
-          
-          console.log(`Deleted ${queryResult.Items.length} presentations for user ${userId}`);
-        }
+        
+        console.log(`Deleted presentations record for user ${userId}`);
       } catch (presentationError) {
         console.error('Error deleting presentations:', presentationError);
         // Continue with profile deletion even if presentation deletion fails

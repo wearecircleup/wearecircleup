@@ -117,7 +117,7 @@ const ImportPresentationModal = ({ onClose, onImport, user }) => {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Dale un nombre memorable... 💡"
+            placeholder="Dale un nombre memorable... "
             className="w-full bg-n-8 border border-n-6 rounded-xl px-4 py-3 text-n-1 focus:outline-none focus:border-color-1"
             maxLength={100}
           />
