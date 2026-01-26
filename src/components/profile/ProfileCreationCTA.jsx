@@ -11,45 +11,7 @@ import AudioWaveParticles from './AudioWaveParticles';
 const ProfileCreationCTA = ({ onStart }) => {
 
   return (
-    <div 
-      className="w-full flex items-center justify-center relative overflow-hidden px-4 py-12"
-      style={{
-        background: 'linear-gradient(to bottom, rgba(17, 15, 25, 0.85), rgba(17, 15, 25, 0.95))',
-        backgroundImage: 'url(/assets/grid.png), linear-gradient(to bottom, rgba(17, 15, 25, 0.85), rgba(17, 15, 25, 0.95))',
-        backgroundSize: 'cover, auto',
-        backgroundPosition: 'center, center',
-        backgroundBlendMode: 'overlay, normal'
-      }}
-    >
-      {/* Decorative background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Gradient orbs */}
-        <motion.div
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-color-1/20 rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-color-2/20 rounded-full blur-3xl"
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.5, 0.3, 0.5],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1
-          }}
-        />
-      </div>
+    <div className="w-full flex items-center justify-center relative overflow-hidden px-4 py-12">
 
       {/* Main content */}
       <motion.div
