@@ -40,84 +40,84 @@ const AudioWaveParticles = () => {
     updateSize();
     window.addEventListener('resize', updateSize);
 
-    // Optimize wave count for mobile performance
-    const waveCount = isMobile ? 5 : 8; // Fewer waves on mobile
+    // Simple mobile optimization
+    const waveCount = isMobile ? 4 : 8;
     
-    // Create layered sine waves with reduced amplitude and varied frequencies
+    // Create layered sine waves with controlled amplitude
     const allWaves = [
       {
-        amplitude: canvas.height * 0.15,
+        amplitude: canvas.height * 0.11,
         frequency: 0.012,
         speed: 0.05,
         phase: 0,
-        color: { r: 0, g: 200, b: 255 }, // Cyan
+        color: { r: 0, g: 220, b: 255 }, // Brighter Cyan
         lineWidth: 2.5,
         bimodal: false
       },
       {
-        amplitude: canvas.height * 0.13,
+        amplitude: canvas.height * 0.10,
         frequency: 0.018,
         speed: 0.045,
         phase: Math.PI / 6,
-        color: { r: 100, g: 150, b: 255 }, // Light Blue
+        color: { r: 120, g: 170, b: 255 }, // Brighter Light Blue
         lineWidth: 2,
         bimodal: true,
         secondFrequency: 0.035
       },
       {
-        amplitude: canvas.height * 0.17,
+        amplitude: canvas.height * 0.12,
         frequency: 0.01,
         speed: 0.055,
         phase: Math.PI / 4,
-        color: { r: 150, g: 100, b: 255 }, // Blue-Purple
+        color: { r: 170, g: 120, b: 255 }, // Brighter Blue-Purple
         lineWidth: 3,
         bimodal: false
       },
       {
-        amplitude: canvas.height * 0.12,
+        amplitude: canvas.height * 0.09,
         frequency: 0.022,
         speed: 0.04,
         phase: Math.PI / 3,
-        color: { r: 180, g: 80, b: 250 }, // Purple
+        color: { r: 200, g: 100, b: 255 }, // Brighter Purple
         lineWidth: 2.5,
         bimodal: true,
         secondFrequency: 0.04,
-        thirdFrequency: 0.055 // Trimodal
+        thirdFrequency: 0.055
       },
       {
-        amplitude: canvas.height * 0.14,
+        amplitude: canvas.height * 0.10,
         frequency: 0.015,
         speed: 0.048,
         phase: Math.PI / 2,
-        color: { r: 200, g: 70, b: 220 }, // Magenta
+        color: { r: 220, g: 90, b: 240 }, // Brighter Magenta
         lineWidth: 2,
         bimodal: false
       },
       {
-        amplitude: canvas.height * 0.16,
+        amplitude: canvas.height * 0.11,
         frequency: 0.013,
         speed: 0.052,
         phase: Math.PI * 0.6,
-        color: { r: 220, g: 80, b: 180 }, // Pink-Purple
+        color: { r: 240, g: 100, b: 200 }, // Brighter Pink-Purple
         lineWidth: 3,
         bimodal: true,
         secondFrequency: 0.03
       },
       {
-        amplitude: canvas.height * 0.13,
+        amplitude: canvas.height * 0.10,
         frequency: 0.02,
         speed: 0.042,
         phase: Math.PI * 0.75,
-        color: { r: 236, g: 72, b: 153 }, // Pink
+        color: { r: 255, g: 92, b: 173 }, // Brighter Pink
         lineWidth: 2.5,
         bimodal: false
       },
       {
-        amplitude: canvas.height * 0.14,
+        amplitude: canvas.height * 0.10,
         frequency: 0.016,
         speed: 0.046,
         phase: Math.PI,
-        color: { r: 100, g: 220, b: 255 }, // Cyan-Blue
+        color: { r: 120, g: 240, b: 255 }, // Brighter Cyan-Blue
         lineWidth: 2,
         bimodal: true,
         secondFrequency: 0.038
@@ -127,15 +127,10 @@ const AudioWaveParticles = () => {
     // Use only first N waves based on device
     const waves = allWaves.slice(0, waveCount);
 
-    // Create continuous line particles - optimized per device
-    let particleCount;
-    if (isMobile) {
-      particleCount = Math.floor(canvas.width / 6); // Fewer particles on mobile for speed
-    } else if (isTablet) {
-      particleCount = Math.floor(canvas.width / 4);
-    } else {
-      particleCount = Math.floor(canvas.width / 3); // More particles on desktop
-    }
+    // Particle count - simple scaling
+    const particleCount = isMobile 
+      ? Math.floor(canvas.width / 8) 
+      : Math.floor(canvas.width / 3);
     waves.forEach((wave) => {
       wave.particles = [];
       for (let i = 0; i < particleCount; i++) {
@@ -148,34 +143,20 @@ const AudioWaveParticles = () => {
           vx: 0,
           vy: 0,
           mass: Math.random() * 2 + 1,
-          friction: isMobile ? 0.9 : 0.88 // Higher friction on mobile for stability
+          friction: 0.88
         });
       }
     });
     
     wavesRef.current = waves;
 
-    // Animation loop with mobile optimization
-    let lastFrameTime = Date.now();
-    const targetFPS = isMobile ? 45 : 60; // Lower FPS on mobile
-    const frameInterval = 1000 / targetFPS;
-    
+    // Animation loop - simple and fast
     const animate = () => {
-      const now = Date.now();
-      const elapsed = now - lastFrameTime;
-      
-      // Throttle animation on mobile for better performance
-      if (elapsed < frameInterval) {
-        animationRef.current = requestAnimationFrame(animate);
-        return;
-      }
-      
-      lastFrameTime = now - (elapsed % frameInterval);
-      
-      // Clear completely - no trails
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Clear with dark background for contrast
+      ctx.fillStyle = 'rgba(17, 15, 25, 0.95)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      const time = now * 0.001;
+      const time = Date.now() * 0.001;
       const centerY = canvas.height / 2;
 
       // Draw each wave layer
@@ -187,10 +168,9 @@ const AudioWaveParticles = () => {
           // Convergence: all waves meet at single point at edges (like cable wires)
           const normalizedX = particle.baseX / canvas.width; // 0 to 1
           
-          // Exponential convergence for sharp cable-like effect
-          // Simplified calculation on mobile
+          // Simple convergence calculation
+          const edgeThreshold = 0.15;
           let convergenceFactor;
-          const edgeThreshold = isMobile ? 0.12 : 0.15; // Faster convergence on mobile
           
           if (normalizedX < edgeThreshold) {
             convergenceFactor = Math.pow(normalizedX / edgeThreshold, 2);
@@ -219,17 +199,18 @@ const AudioWaveParticles = () => {
           particle.baseY = centerY + sineY;
 
           // Mouse/touch interaction - disperse
+          // Simple interaction
           const dx = mouseRef.current.x - particle.x;
           const dy = mouseRef.current.y - particle.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          const maxDistance = isMobile ? 120 : 150; // Smaller interaction radius on mobile
+          const distSq = dx * dx + dy * dy;
+          const maxDistSq = 22500; // 150^2
 
-          if (distance < maxDistance) {
-            const force = (maxDistance - distance) / maxDistance;
+          if (distSq < maxDistSq) {
+            const dist = Math.sqrt(distSq);
+            const force = (150 - dist) / 150;
             const angle = Math.atan2(dy, dx);
-            const forceMultiplier = isMobile ? 4 : 5; // Gentler force on mobile
-            particle.vx -= Math.cos(angle) * force * forceMultiplier;
-            particle.vy -= Math.sin(angle) * force * forceMultiplier;
+            particle.vx -= Math.cos(angle) * force * 5;
+            particle.vy -= Math.sin(angle) * force * 5;
           }
 
           // Spring back
@@ -247,13 +228,12 @@ const AudioWaveParticles = () => {
           particle.y += particle.vy;
         });
 
-        // Draw continuous smooth line with mobile optimization
+        // Draw continuous smooth line
         ctx.beginPath();
-        ctx.strokeStyle = `rgba(${wave.color.r}, ${wave.color.g}, ${wave.color.b}, 0.7)`;
-        ctx.lineWidth = isMobile ? wave.lineWidth * 0.8 : wave.lineWidth; // Thinner lines on mobile
-        const shadowBlur = isMobile ? 10 : 15; // Less blur on mobile for performance
-        ctx.shadowBlur = shadowBlur;
-        ctx.shadowColor = `rgba(${wave.color.r}, ${wave.color.g}, ${wave.color.b}, 0.5)`;
+        ctx.strokeStyle = `rgba(${wave.color.r}, ${wave.color.g}, ${wave.color.b}, 0.8)`;
+        ctx.lineWidth = wave.lineWidth;
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = `rgba(${wave.color.r}, ${wave.color.g}, ${wave.color.b}, 0.6)`;
         
         wave.particles.forEach((particle, pIndex) => {
           if (pIndex === 0) {
