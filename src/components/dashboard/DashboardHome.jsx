@@ -15,7 +15,7 @@ import AnalyticsTab from "./AnalyticsTab";
 const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplete, onProfileStatusChange, showPresentations = true, currentTab = 'presentations' }) => {
   const [presentations, setPresentations] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [filter, setFilter] = useState('all'); // all, completed, shared, failed
+  const [filter, setFilter] = useState('completed'); // completed, shared
   const [presentationToDelete, setPresentationToDelete] = useState(null);
   const [showImportModal, setShowImportModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -141,16 +141,15 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
   };
 
   const filteredPresentations = presentations.filter(p => {
-    if (filter === 'all') return true;
     if (filter === 'shared') {
       // Only show imported presentations
       return p.metadata?.model === 'imported';
     }
     if (filter === 'completed') {
-      // Only show completed non-imported presentations
-      return p.status === 'completed' && p.metadata?.model !== 'imported';
+      // Show all presentations except imported ones
+      return p.metadata?.model !== 'imported';
     }
-    return p.status === filter;
+    return true;
   });
 
   const handleOpenPresentation = (presentation) => {
@@ -394,7 +393,6 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
       <div className="flex items-center justify-between gap-4">
         <div className="flex gap-2 overflow-x-auto pb-2">
         {[
-          { key: 'all', label: 'Todas' },
           { key: 'completed', label: 'Creaciones' },
           { key: 'shared', label: 'Compartidas' }
         ].map(({ key, label }) => (
@@ -450,26 +448,18 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
             </svg>
           </div>
           <h3 className="text-xl font-bold text-n-1 mb-2">
-            {filter === 'all' 
-              ? '¡Comienza tu primera creación!' 
-              : filter === 'shared'
+            {filter === 'shared'
               ? 'No hay presentaciones compartidas'
-              : filter === 'completed'
-              ? '¡Aún no tienes creaciones!'
-              : 'No hay presentaciones en proceso'
+              : '¡Aún no tienes creaciones!'
             }
           </h3>
           <p className="text-n-4 mb-6">
-            {filter === 'all' 
-              ? 'Transforma tus ideas en presentaciones increíbles con IA' 
-              : filter === 'shared'
+            {filter === 'shared'
               ? 'Importa presentaciones compartidas usando el botón "Importar"'
-              : filter === 'completed'
-              ? 'Crea tu primera presentación y deja que la IA haga la magia'
-              : 'Cambia el filtro para ver otras presentaciones'
+              : 'Crea tu primera presentación y deja que la IA haga la magia'
             }
           </p>
-          {filter === 'all' && (
+          {filter === 'completed' && (
             <Button onClick={() => onNavigate('create')} white>
               Crear Presentación
             </Button>
