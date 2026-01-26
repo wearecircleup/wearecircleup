@@ -468,6 +468,11 @@ const RoadmapDocs = ({ setCurrentPage }) => {
       {/* Full Width Hero - Awwwards Style with Particle Logo */}
       <section className="relative pt-32 md:pt-40 lg:pt-48 pb-20 md:pb-28 lg:pb-32 px-4 sm:px-6 md:px-12 lg:px-20 xl:px-32">
         <div className="max-w-[1800px] mx-auto">
+          {/* Hero Particle Logo - Mobile (above title) */}
+          <div className="lg:hidden h-[300px] sm:h-[350px] md:h-[400px] mb-12 md:mb-16">
+            <HeroParticleLogo />
+          </div>
+          
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-20 xl:gap-32 items-center">
             {/* Left: Hero Text */}
             <div className="max-w-5xl">
@@ -514,8 +519,8 @@ const RoadmapDocs = ({ setCurrentPage }) => {
               </div>
             </div>
 
-            {/* Right: Particle Logo */}
-            <div className="hidden lg:block">
+            {/* Right: Particle Logo - Desktop */}
+            <div className="hidden lg:block h-[500px] xl:h-[600px]">
               <HeroParticleLogo />
             </div>
           </div>

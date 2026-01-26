@@ -11,7 +11,7 @@ const HERO_IMAGES = [
 function HeroParticleCanvas({ imageUrl, containerRef }) {
   const canvasRef = useRef(null);
   const particlesRef = useRef([]);
-  const mouseRef = useRef({ x: -1000, y: -1000 });
+  const mouseRef = useRef({ x: -1000, y: -1000, active: false });
   const animationRef = useRef(null);
 
   useEffect(() => {
@@ -23,7 +23,7 @@ function HeroParticleCanvas({ imageUrl, containerRef }) {
     const img = new Image();
     img.crossOrigin = 'anonymous';
     
-    mouseRef.current = { x: -1000, y: -1000 };
+    mouseRef.current = { x: -1000, y: -1000, active: false };
     
     // Set canvas size to match container
     const updateSize = () => {
@@ -107,7 +107,7 @@ function HeroParticleCanvas({ imageUrl, containerRef }) {
         
         particles.forEach(particle => {
           if (particle.forming) {
-            particle.formProgress += 0.03;
+            particle.formProgress += 0.08;
             
             if (particle.formProgress >= 1) {
               particle.forming = false;
@@ -117,31 +117,33 @@ function HeroParticleCanvas({ imageUrl, containerRef }) {
             const easeProgress = 1 - Math.pow(1 - particle.formProgress, 3);
             const dxForm = particle.baseX - particle.x;
             const dyForm = particle.baseY - particle.y;
-            particle.x += dxForm * 0.15 * easeProgress;
-            particle.y += dyForm * 0.15 * easeProgress;
+            particle.x += dxForm * 0.35 * easeProgress;
+            particle.y += dyForm * 0.35 * easeProgress;
           } else {
-            // Mouse interaction
-            const dx = mouseRef.current.x - particle.x;
-            const dy = mouseRef.current.y - particle.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            const maxDistance = 100;
-            
-            if (distance < maxDistance) {
-              const force = (maxDistance - distance) / maxDistance;
-              const angle = Math.atan2(dy, dx);
-              const chaosAngle = angle + (Math.random() - 0.5) * particle.chaos;
-              particle.vx -= Math.cos(chaosAngle) * force * (2.5 / particle.mass);
-              particle.vy -= Math.sin(chaosAngle) * force * (2.5 / particle.mass);
+            // Mouse interaction - only when active
+            if (mouseRef.current.active) {
+              const dx = mouseRef.current.x - particle.x;
+              const dy = mouseRef.current.y - particle.y;
+              const distance = Math.sqrt(dx * dx + dy * dy);
+              const maxDistance = 100;
+              
+              if (distance < maxDistance) {
+                const force = (maxDistance - distance) / maxDistance;
+                const angle = Math.atan2(dy, dx);
+                const chaosAngle = angle + (Math.random() - 0.5) * particle.chaos;
+                particle.vx -= Math.cos(chaosAngle) * force * (2.5 / particle.mass);
+                particle.vy -= Math.sin(chaosAngle) * force * (2.5 / particle.mass);
+              }
             }
             
-            // Spring back
+            // Spring back to base position - faster recovery
             const dxBase = particle.baseX - particle.x;
             const dyBase = particle.baseY - particle.y;
-            particle.vx += dxBase * 0.02;
-            particle.vy += dyBase * 0.02;
+            particle.vx += dxBase * 0.08;
+            particle.vy += dyBase * 0.08;
             
-            particle.vx *= particle.friction * 0.95;
-            particle.vy *= particle.friction * 0.95;
+            particle.vx *= particle.friction * 0.88;
+            particle.vy *= particle.friction * 0.88;
           }
           
           particle.x += particle.vx;
@@ -153,12 +155,7 @@ function HeroParticleCanvas({ imageUrl, containerRef }) {
           const g = Math.min(255, particle.g * colorBoost);
           const b = Math.min(255, particle.b * colorBoost);
           
-          const dx = mouseRef.current.x - particle.x;
-          const dy = mouseRef.current.y - particle.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          const opacity = Math.max(0.6, 1 - distance / 200);
-          
-          ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${opacity})`;
+          ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.85)`;
           ctx.beginPath();
           ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
           ctx.fill();
@@ -172,13 +169,18 @@ function HeroParticleCanvas({ imageUrl, containerRef }) {
     
     img.src = imageUrl;
     
-    // Mouse handlers relative to canvas
+    // Mouse/touch handlers - set active flag
     const handleMouseMove = (e) => {
       const rect = canvas.getBoundingClientRect();
       mouseRef.current = {
         x: e.clientX - rect.left,
-        y: e.clientY - rect.top
+        y: e.clientY - rect.top,
+        active: true
       };
+    };
+    
+    const handleMouseLeave = () => {
+      mouseRef.current = { x: -1000, y: -1000, active: false };
     };
     
     const handleTouchMove = (e) => {
@@ -186,18 +188,27 @@ function HeroParticleCanvas({ imageUrl, containerRef }) {
         const rect = canvas.getBoundingClientRect();
         mouseRef.current = {
           x: e.touches[0].clientX - rect.left,
-          y: e.touches[0].clientY - rect.top
+          y: e.touches[0].clientY - rect.top,
+          active: true
         };
       }
     };
     
+    const handleTouchEnd = () => {
+      mouseRef.current = { x: -1000, y: -1000, active: false };
+    };
+    
     canvas.addEventListener('mousemove', handleMouseMove);
+    canvas.addEventListener('mouseleave', handleMouseLeave);
     canvas.addEventListener('touchmove', handleTouchMove, { passive: true });
+    canvas.addEventListener('touchend', handleTouchEnd);
     
     return () => {
       resizeObserver.disconnect();
       canvas.removeEventListener('mousemove', handleMouseMove);
+      canvas.removeEventListener('mouseleave', handleMouseLeave);
       canvas.removeEventListener('touchmove', handleTouchMove);
+      canvas.removeEventListener('touchend', handleTouchEnd);
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
@@ -219,36 +230,11 @@ export default function HeroParticleLogo() {
     <div 
       ref={containerRef}
       className="relative w-full h-full overflow-hidden cursor-pointer rounded-2xl" 
-      style={{ backgroundColor: '#110f19', minHeight: '600px' }}
+      style={{ backgroundColor: '#110f19', minHeight: '400px' }}
       onClick={handleClick}
     >
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/50 z-0"></div>
-      
-      {/* Subtle gradient background */}
-      <div 
-        className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: 'url(/assets/gradient.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          opacity: 0.06
-        }}
-      />
-      
-      {/* Grid overlay */}
-      <div 
-        className="absolute inset-0 opacity-20 z-5 pointer-events-none"
-        style={{
-          backgroundImage: 'url(/assets/grid.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        }}
-      />
-      
-      {/* Decorative circles */}
-      <div className="absolute top-10 right-10 w-48 h-48 bg-color-1 rounded-full blur-3xl opacity-25 animate-pulse"></div>
-      <div className="absolute bottom-10 left-10 w-48 h-48 bg-color-5 rounded-full blur-3xl opacity-25 animate-pulse" style={{ animationDelay: '1s' }}></div>
+      {/* Simple dark background */}
+      <div className="absolute inset-0 bg-n-8 z-0"></div>
       
       {/* Particle Canvas */}
       <HeroParticleCanvas imageUrl={HERO_IMAGES[currentImageIndex]} containerRef={containerRef} />
