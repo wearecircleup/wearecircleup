@@ -1,13 +1,10 @@
-import { useState } from "react";
-import { service1, service2, service3, check } from "../assets";
-import { circleUpServices, circleUpServicesIcons } from "../constants";
+import { curve } from "../assets";
+import { circleUpServicesIcons } from "../constants";
 import Section from "./Section";
 import Heading from "./Heading";
-import { Gradient } from "./design/Services";
+import { Gradient, VideoBar } from "./design/Services";
 
 const Services = () => {
-  const [isPlaying, setIsPlaying] = useState(true);
-
   return (
     <Section id="how-to-use">
       <div className="container">
@@ -178,7 +175,7 @@ const Services = () => {
                   </div>
                 </div>
 
-                <VideoBar isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
+                <VideoBar />
               </div>
 
               {/* Floating text box - Only on desktop, inline on mobile - moved to right */}
