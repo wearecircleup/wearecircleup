@@ -43,84 +43,87 @@ const AudioWaveParticles = () => {
     // Mobile optimization - 8 waves minimum for organic look
     const waveCount = 8;
     
-    // Create layered sine waves with controlled amplitude
+    // Higher frequencies for tighter waves
+    const freqMultiplier = isMobile ? 2.5 : 1;
+    
+    // Create layered sine waves with higher frequencies
     const allWaves = [
       {
         amplitude: canvas.height * 0.11,
-        frequency: 0.012,
+        frequency: 0.012 * freqMultiplier,
         speed: 0.05,
         phase: 0,
-        color: { r: 0, g: 220, b: 255 }, // Brighter Cyan
+        color: { r: 0, g: 220, b: 255 },
         lineWidth: 2.5,
         bimodal: false
       },
       {
         amplitude: canvas.height * 0.10,
-        frequency: 0.018,
+        frequency: 0.018 * freqMultiplier,
         speed: 0.045,
         phase: Math.PI / 6,
-        color: { r: 120, g: 170, b: 255 }, // Brighter Light Blue
+        color: { r: 120, g: 170, b: 255 },
         lineWidth: 2,
         bimodal: true,
-        secondFrequency: 0.035
+        secondFrequency: 0.035 * freqMultiplier
       },
       {
         amplitude: canvas.height * 0.12,
-        frequency: 0.01,
+        frequency: 0.01 * freqMultiplier,
         speed: 0.055,
         phase: Math.PI / 4,
-        color: { r: 170, g: 120, b: 255 }, // Brighter Blue-Purple
+        color: { r: 170, g: 120, b: 255 },
         lineWidth: 3,
         bimodal: false
       },
       {
         amplitude: canvas.height * 0.09,
-        frequency: 0.022,
+        frequency: 0.022 * freqMultiplier,
         speed: 0.04,
         phase: Math.PI / 3,
-        color: { r: 200, g: 100, b: 255 }, // Brighter Purple
+        color: { r: 200, g: 100, b: 255 },
         lineWidth: 2.5,
         bimodal: true,
-        secondFrequency: 0.04,
-        thirdFrequency: 0.055
+        secondFrequency: 0.04 * freqMultiplier,
+        thirdFrequency: 0.055 * freqMultiplier
       },
       {
         amplitude: canvas.height * 0.10,
-        frequency: 0.015,
+        frequency: 0.015 * freqMultiplier,
         speed: 0.048,
         phase: Math.PI / 2,
-        color: { r: 220, g: 90, b: 240 }, // Brighter Magenta
+        color: { r: 220, g: 90, b: 240 },
         lineWidth: 2,
         bimodal: false
       },
       {
         amplitude: canvas.height * 0.11,
-        frequency: 0.013,
+        frequency: 0.013 * freqMultiplier,
         speed: 0.052,
         phase: Math.PI * 0.6,
-        color: { r: 240, g: 100, b: 200 }, // Brighter Pink-Purple
+        color: { r: 240, g: 100, b: 200 },
         lineWidth: 3,
         bimodal: true,
-        secondFrequency: 0.03
+        secondFrequency: 0.03 * freqMultiplier
       },
       {
         amplitude: canvas.height * 0.10,
-        frequency: 0.02,
+        frequency: 0.02 * freqMultiplier,
         speed: 0.042,
         phase: Math.PI * 0.75,
-        color: { r: 255, g: 92, b: 173 }, // Brighter Pink
+        color: { r: 255, g: 92, b: 173 },
         lineWidth: 2.5,
         bimodal: false
       },
       {
         amplitude: canvas.height * 0.10,
-        frequency: 0.016,
+        frequency: 0.016 * freqMultiplier,
         speed: 0.046,
         phase: Math.PI,
-        color: { r: 120, g: 240, b: 255 }, // Brighter Cyan-Blue
+        color: { r: 120, g: 240, b: 255 },
         lineWidth: 2,
         bimodal: true,
-        secondFrequency: 0.038
+        secondFrequency: 0.038 * freqMultiplier
       }
     ];
     
@@ -162,23 +165,8 @@ const AudioWaveParticles = () => {
       waves.forEach((wave, waveIndex) => {
         wave.phase += wave.speed;
 
-        // Calculate all positions first
+        // Calculate all positions first - NO convergence
         wave.particles.forEach((particle, pIndex) => {
-          // Convergence: all waves meet at single point at edges (like cable wires)
-          const normalizedX = particle.baseX / canvas.width; // 0 to 1
-          
-          // Simple convergence calculation
-          const edgeThreshold = 0.15;
-          let convergenceFactor;
-          
-          if (normalizedX < edgeThreshold) {
-            convergenceFactor = Math.pow(normalizedX / edgeThreshold, 2);
-          } else if (normalizedX > (1 - edgeThreshold)) {
-            convergenceFactor = Math.pow((1 - normalizedX) / edgeThreshold, 2);
-          } else {
-            convergenceFactor = 1;
-          }
-          
           // Calculate sine wave position (bi/tri-modal)
           let sineY;
           if (wave.thirdFrequency) {
@@ -186,14 +174,14 @@ const AudioWaveParticles = () => {
             const w1 = Math.sin(particle.baseX * wave.frequency + wave.phase) * wave.amplitude;
             const w2 = Math.sin(particle.baseX * wave.secondFrequency + wave.phase * 1.3) * wave.amplitude * 0.4;
             const w3 = Math.sin(particle.baseX * wave.thirdFrequency + wave.phase * 0.7) * wave.amplitude * 0.25;
-            sineY = (w1 + w2 + w3) * convergenceFactor;
+            sineY = w1 + w2 + w3;
           } else if (wave.bimodal) {
             // Bimodal: two frequencies
             const w1 = Math.sin(particle.baseX * wave.frequency + wave.phase) * wave.amplitude;
             const w2 = Math.sin(particle.baseX * wave.secondFrequency + wave.phase * 1.5) * wave.amplitude * 0.5;
-            sineY = (w1 + w2) * convergenceFactor;
+            sineY = w1 + w2;
           } else {
-            sineY = Math.sin(particle.baseX * wave.frequency + wave.phase) * wave.amplitude * convergenceFactor;
+            sineY = Math.sin(particle.baseX * wave.frequency + wave.phase) * wave.amplitude;
           }
           particle.baseY = centerY + sineY;
 
