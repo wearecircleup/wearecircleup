@@ -22,20 +22,29 @@ const AudioWaveParticles = () => {
     const ctx = canvas.getContext('2d');
     
     // Responsive sizing - full viewport width
+    const isMobile = window.innerWidth < 768;
+    const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+    
     const updateSize = () => {
       canvas.width = window.innerWidth;
-      // Responsive height: 40vh on mobile, 500px max on desktop
-      const isMobile = window.innerWidth < 768;
-      canvas.height = isMobile 
-        ? Math.min(window.innerHeight * 0.4, 400)
-        : Math.min(window.innerHeight * 0.5, 500);
+      // Responsive height optimized for each device
+      if (isMobile) {
+        canvas.height = Math.min(window.innerHeight * 0.35, 350); // Smaller on mobile
+      } else if (isTablet) {
+        canvas.height = Math.min(window.innerHeight * 0.45, 450);
+      } else {
+        canvas.height = Math.min(window.innerHeight * 0.5, 500);
+      }
     };
     
     updateSize();
     window.addEventListener('resize', updateSize);
 
-    // Create 8+ layered sine waves with reduced amplitude and varied frequencies
-    const waves = [
+    // Optimize wave count for mobile performance
+    const waveCount = isMobile ? 5 : 8; // Fewer waves on mobile
+    
+    // Create layered sine waves with reduced amplitude and varied frequencies
+    const allWaves = [
       {
         amplitude: canvas.height * 0.15,
         frequency: 0.012,
@@ -114,9 +123,19 @@ const AudioWaveParticles = () => {
         secondFrequency: 0.038
       }
     ];
+    
+    // Use only first N waves based on device
+    const waves = allWaves.slice(0, waveCount);
 
-    // Create continuous line particles for each wave
-    const particleCount = Math.floor(canvas.width / 3); // More particles for smoother lines
+    // Create continuous line particles - optimized per device
+    let particleCount;
+    if (isMobile) {
+      particleCount = Math.floor(canvas.width / 6); // Fewer particles on mobile for speed
+    } else if (isTablet) {
+      particleCount = Math.floor(canvas.width / 4);
+    } else {
+      particleCount = Math.floor(canvas.width / 3); // More particles on desktop
+    }
     waves.forEach((wave) => {
       wave.particles = [];
       for (let i = 0; i < particleCount; i++) {
@@ -129,19 +148,34 @@ const AudioWaveParticles = () => {
           vx: 0,
           vy: 0,
           mass: Math.random() * 2 + 1,
-          friction: 0.88
+          friction: isMobile ? 0.9 : 0.88 // Higher friction on mobile for stability
         });
       }
     });
     
     wavesRef.current = waves;
 
-    // Animation loop
+    // Animation loop with mobile optimization
+    let lastFrameTime = Date.now();
+    const targetFPS = isMobile ? 45 : 60; // Lower FPS on mobile
+    const frameInterval = 1000 / targetFPS;
+    
     const animate = () => {
+      const now = Date.now();
+      const elapsed = now - lastFrameTime;
+      
+      // Throttle animation on mobile for better performance
+      if (elapsed < frameInterval) {
+        animationRef.current = requestAnimationFrame(animate);
+        return;
+      }
+      
+      lastFrameTime = now - (elapsed % frameInterval);
+      
       // Clear completely - no trails
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const time = Date.now() * 0.001;
+      const time = now * 0.001;
       const centerY = canvas.height / 2;
 
       // Draw each wave layer
@@ -154,13 +188,14 @@ const AudioWaveParticles = () => {
           const normalizedX = particle.baseX / canvas.width; // 0 to 1
           
           // Exponential convergence for sharp cable-like effect
+          // Simplified calculation on mobile
           let convergenceFactor;
-          if (normalizedX < 0.15) {
-            // Left edge: exponential convergence
-            convergenceFactor = Math.pow(normalizedX / 0.15, 2);
-          } else if (normalizedX > 0.85) {
-            // Right edge: exponential convergence
-            convergenceFactor = Math.pow((1 - normalizedX) / 0.15, 2);
+          const edgeThreshold = isMobile ? 0.12 : 0.15; // Faster convergence on mobile
+          
+          if (normalizedX < edgeThreshold) {
+            convergenceFactor = Math.pow(normalizedX / edgeThreshold, 2);
+          } else if (normalizedX > (1 - edgeThreshold)) {
+            convergenceFactor = Math.pow((1 - normalizedX) / edgeThreshold, 2);
           } else {
             convergenceFactor = 1;
           }
@@ -187,13 +222,14 @@ const AudioWaveParticles = () => {
           const dx = mouseRef.current.x - particle.x;
           const dy = mouseRef.current.y - particle.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
-          const maxDistance = 150;
+          const maxDistance = isMobile ? 120 : 150; // Smaller interaction radius on mobile
 
           if (distance < maxDistance) {
             const force = (maxDistance - distance) / maxDistance;
             const angle = Math.atan2(dy, dx);
-            particle.vx -= Math.cos(angle) * force * 5;
-            particle.vy -= Math.sin(angle) * force * 5;
+            const forceMultiplier = isMobile ? 4 : 5; // Gentler force on mobile
+            particle.vx -= Math.cos(angle) * force * forceMultiplier;
+            particle.vy -= Math.sin(angle) * force * forceMultiplier;
           }
 
           // Spring back
@@ -211,11 +247,12 @@ const AudioWaveParticles = () => {
           particle.y += particle.vy;
         });
 
-        // Draw continuous smooth line
+        // Draw continuous smooth line with mobile optimization
         ctx.beginPath();
         ctx.strokeStyle = `rgba(${wave.color.r}, ${wave.color.g}, ${wave.color.b}, 0.7)`;
-        ctx.lineWidth = wave.lineWidth;
-        ctx.shadowBlur = 15;
+        ctx.lineWidth = isMobile ? wave.lineWidth * 0.8 : wave.lineWidth; // Thinner lines on mobile
+        const shadowBlur = isMobile ? 10 : 15; // Less blur on mobile for performance
+        ctx.shadowBlur = shadowBlur;
         ctx.shadowColor = `rgba(${wave.color.r}, ${wave.color.g}, ${wave.color.b}, 0.5)`;
         
         wave.particles.forEach((particle, pIndex) => {
@@ -283,11 +320,14 @@ const AudioWaveParticles = () => {
       className="w-full cursor-pointer block"
       style={{ 
         maxHeight: '450px',
-        minHeight: '280px',
+        minHeight: '250px',
         touchAction: 'none',
         background: 'transparent',
         margin: 0,
-        padding: 0
+        padding: 0,
+        // Hardware acceleration for better mobile performance
+        transform: 'translateZ(0)',
+        willChange: 'transform'
       }}
     />
   );
