@@ -54,41 +54,55 @@ const ProfileCreationCTA = ({ onStart }) => {
           <AudioWaveParticles />
         </div>
 
-        {/* Title - Minimal margin */}
-        <motion.h1
-          className="text-4xl md:text-5xl font-bold text-n-1 mb-4 px-6 mt-0"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+        {/* Text content with dark background and grid */}
+        <div 
+          className="relative px-6 py-8 mx-auto max-w-3xl"
+          style={{
+            background: 'linear-gradient(to bottom, rgba(17, 15, 25, 0.85), rgba(17, 15, 25, 0.95))',
+            backgroundImage: 'url(/assets/grid.png), linear-gradient(to bottom, rgba(17, 15, 25, 0.85), rgba(17, 15, 25, 0.95))',
+            backgroundSize: 'cover, auto',
+            backgroundPosition: 'center, center',
+            backgroundBlendMode: 'overlay, normal',
+            borderRadius: '1rem',
+            backdropFilter: 'blur(10px)'
+          }}
         >
-          Bienvenido a Circle Up Volunteer
-        </motion.h1>
+          {/* Title - Minimal margin */}
+          <motion.h1
+            className="text-4xl md:text-5xl font-bold text-n-1 mb-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            Bienvenido a Circle Up Volunteer
+          </motion.h1>
 
-        {/* Subtitle */}
-        <motion.p
-          className="text-lg text-n-3 mb-6 max-w-lg mx-auto px-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          Para comenzar a crear presentaciones increíbles con IA, necesitamos conocerte un poco mejor.
-        </motion.p>
+          {/* Subtitle */}
+          <motion.p
+            className="text-lg text-n-3 mb-6 max-w-lg mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            Para comenzar a crear presentaciones increíbles con IA, necesitamos conocerte un poco mejor.
+          </motion.p>
 
-        {/* CTA Button - Using Button component */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
-        >
-          <Button onClick={onStart} white className="text-sm lg:text-base">
-            <span className="flex items-center gap-2">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-              Crear Perfil
-            </span>
-          </Button>
-        </motion.div>
+          {/* CTA Button - Using Button component */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
+          >
+            <Button onClick={onStart} white className="text-sm lg:text-base">
+              <span className="flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                Crear Perfil
+              </span>
+            </Button>
+          </motion.div>
+        </div>
 
         {/* Info text */}
         <motion.p

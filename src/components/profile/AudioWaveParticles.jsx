@@ -152,9 +152,8 @@ const AudioWaveParticles = () => {
 
     // Animation loop - simple and fast
     const animate = () => {
-      // Clear with dark background for contrast
-      ctx.fillStyle = 'rgba(17, 15, 25, 0.95)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Clear completely - transparent background
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const time = Date.now() * 0.001;
       const centerY = canvas.height / 2;
