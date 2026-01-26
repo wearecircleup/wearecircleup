@@ -171,11 +171,11 @@ const ProfileCreationCTA = ({ onStart }) => {
   }, []);
 
   return (
-    <div className="w-full flex items-center justify-center relative overflow-hidden px-4 py-12">
+    <div className="w-full flex items-center justify-center relative px-4 py-12">
 
       {/* Main content */}
       <motion.div
-        className="relative text-center w-full -mt-[15vh]"
+        className="relative text-center w-full"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -217,7 +217,7 @@ const ProfileCreationCTA = ({ onStart }) => {
 
         {/* Info text */}
         <motion.p
-          className="text-sm text-n-4 relative z-10"
+          className="mb-4 text-sm text-n-4 relative z-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
@@ -226,7 +226,7 @@ const ProfileCreationCTA = ({ onStart }) => {
         </motion.p>
 
         {/* Audio Wave Particles - Footer style */}
-        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
+        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] -mt-4">
           <canvas 
             ref={canvasRef}
             className="w-full cursor-pointer block"
