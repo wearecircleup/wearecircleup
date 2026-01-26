@@ -106,24 +106,23 @@ const EventsTab = () => {
         </Button>
       </div>
 
-      {/* Events grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+      {/* Events grid - Responsive with equal height cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
         {events.map((event) => (
           <EventCard key={event.id} event={event} />
         ))}
       </div>
 
       {/* Info footer */}
-      <div className="mt-8 p-4 bg-n-7/50 border border-n-6 rounded-xl">
-        <div className="flex items-start gap-3">
-          <svg className="w-5 h-5 text-color-1 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div className="mt-8 p-3 sm:p-4 bg-n-7/50 border border-n-6 rounded-xl">
+        <div className="flex items-start gap-2 sm:gap-3">
+          <svg className="w-4 h-4 sm:w-5 sm:h-5 text-color-1 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <div>
-            <p className="text-n-2 text-sm font-medium mb-1">Eventos de Circle Up Volunteer</p>
+            <p className="text-n-2 text-xs sm:text-sm font-medium mb-1">Eventos de Circle Up Volunteer</p>
             <p className="text-n-4 text-xs leading-relaxed">
-              Estos eventos son organizados por Circle Up Volunteer en Eventbrite. 
-              Haz clic en "Ver en Eventbrite" para obtener más información y registrarte.
+              Mostrando solo eventos próximos y en curso. Los datos se actualizan cada 10 minutos para optimizar el uso de la API.
             </p>
           </div>
         </div>

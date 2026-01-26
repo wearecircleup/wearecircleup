@@ -389,7 +389,7 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
         <div className="flex gap-2 overflow-x-auto pb-2">
         {[
           { key: 'all', label: 'Todas' },
-          { key: 'completed', label: 'Completadas' },
+          { key: 'completed', label: 'Creaciones' },
           { key: 'shared', label: 'Compartidas' }
         ].map(({ key, label }) => (
           <button
@@ -445,17 +445,21 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
           </div>
           <h3 className="text-xl font-bold text-n-1 mb-2">
             {filter === 'all' 
-              ? 'No hay presentaciones' 
+              ? '¡Comienza tu primera creación!' 
               : filter === 'shared'
               ? 'No hay presentaciones compartidas'
-              : `No hay presentaciones ${filter === 'completed' ? 'completadas' : 'en proceso'}`
+              : filter === 'completed'
+              ? '¡Aún no tienes creaciones!'
+              : 'No hay presentaciones en proceso'
             }
           </h3>
           <p className="text-n-4 mb-6">
             {filter === 'all' 
-              ? 'Crea tu primera presentación con AI' 
+              ? 'Transforma tus ideas en presentaciones increíbles con IA' 
               : filter === 'shared'
               ? 'Importa presentaciones compartidas usando el botón "Importar"'
+              : filter === 'completed'
+              ? 'Crea tu primera presentación y deja que la IA haga la magia'
               : 'Cambia el filtro para ver otras presentaciones'
             }
           </p>

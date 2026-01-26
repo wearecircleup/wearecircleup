@@ -37,9 +37,9 @@ const EventCard = ({ event }) => {
   const status = getEventStatus();
 
   return (
-    <div className="group relative bg-n-7/90 backdrop-blur-sm border border-n-6/50 rounded-xl overflow-hidden hover:border-color-1/50 transition-all duration-300 w-full">
+    <div className="group relative bg-n-7/90 backdrop-blur-sm border border-n-6/50 rounded-xl overflow-hidden hover:border-color-1/50 transition-all duration-300 w-full h-full flex flex-col">
       {/* Event Image/Thumbnail */}
-      <div className="relative h-48 sm:h-56 bg-gradient-to-br from-n-8 via-n-7 to-n-8 overflow-hidden border-b border-n-6/50">
+      <div className="relative h-40 sm:h-48 md:h-56 bg-gradient-to-br from-n-8 via-n-7 to-n-8 overflow-hidden border-b border-n-6/50 flex-shrink-0">
         {event.logo?.url ? (
           <img 
             src={event.logo.url} 
@@ -80,12 +80,12 @@ const EventCard = ({ event }) => {
       </div>
 
       {/* Content */}
-      <div className="p-4 sm:p-6">
-        <h3 className="text-lg sm:text-xl font-bold text-n-1 mb-2 line-clamp-2">{event.name}</h3>
-        <p className="text-n-4 text-xs sm:text-sm mb-4 line-clamp-2">{event.summary}</p>
+      <div className="p-3 sm:p-4 md:p-6 flex flex-col flex-1">
+        <h3 className="text-base sm:text-lg md:text-xl font-bold text-n-1 mb-2 line-clamp-2">{event.name}</h3>
+        <p className="text-n-4 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2">{event.summary}</p>
         
         {/* Event details */}
-        <div className="space-y-2 mb-4">
+        <div className="space-y-2 mb-3 sm:mb-4 flex-1">
           {/* Date and time */}
           <div className="flex items-start gap-2 text-xs sm:text-sm text-n-3">
             <svg className="w-4 h-4 mt-0.5 flex-shrink-0 text-color-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -139,13 +139,14 @@ const EventCard = ({ event }) => {
           href={event.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="block relative group"
+          className="block relative group mt-auto"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-color-1 via-color-2 to-color-1 rounded-lg opacity-100 group-hover:opacity-80 transition-opacity"></div>
-          <div className="relative bg-n-8 m-[2px] rounded-[6px] py-2 sm:py-3 px-3 sm:px-4 text-center">
-            <span className="text-n-1 text-sm sm:text-base font-semibold flex items-center justify-center gap-2">
-              Ver en Eventbrite
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="relative bg-n-8 m-[2px] rounded-[6px] py-2 sm:py-2.5 md:py-3 px-3 sm:px-4 text-center">
+            <span className="text-n-1 text-xs sm:text-sm md:text-base font-semibold flex items-center justify-center gap-1.5 sm:gap-2">
+              <span className="hidden xs:inline">Ver en Eventbrite</span>
+              <span className="xs:hidden">Eventbrite</span>
+              <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
               </svg>
             </span>

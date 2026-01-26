@@ -3,12 +3,18 @@
  * 
  * Fetches events from Circle Up Volunteer's Eventbrite organization
  * Uses Private Token for server-side authentication
+ * Implements caching to optimize API usage and avoid rate limits
  * 
  * Eventbrite API Documentation:
  * - Authentication: https://www.eventbrite.com/platform/docs/authentication
  * - API Basics: https://www.eventbrite.com/platform/docs/api-basics
  * - Events Endpoint: https://www.eventbrite.com/platform/api#/reference/event
  */
+
+// In-memory cache for events
+let eventsCache = null;
+let cacheTimestamp = null;
+const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes in milliseconds
 
 export default async function handler(req, res) {
   // Set CORS headers
@@ -32,6 +38,16 @@ export default async function handler(req, res) {
   }
 
   try {
+    // Check if we have valid cached data
+    const currentTime = Date.now();
+    if (eventsCache && cacheTimestamp && (currentTime - cacheTimestamp) < CACHE_DURATION) {
+      console.log('Returning cached events data');
+      return res.status(200).json({
+        ...eventsCache,
+        cached: true,
+        cacheAge: Math.floor((currentTime - cacheTimestamp) / 1000) // seconds
+      });
+    }
     const EVENTBRITE_PRIVATE_TOKEN = process.env.EVENTBRITE_PRIVATE_TOKEN;
     const EVENTBRITE_ORGANIZATION_ID = process.env.EVENTBRITE_ORGANIZATION_ID;
 
@@ -76,8 +92,15 @@ export default async function handler(req, res) {
 
     const data = await response.json();
     
-    // Transform Eventbrite events to our format
-    const events = data.events?.map(event => ({
+    // Filter and transform Eventbrite events
+    // Only include events that haven't ended yet (upcoming or ongoing)
+    const now = new Date();
+    const upcomingEvents = data.events?.filter(event => {
+      const eventEnd = new Date(event.end.local);
+      return eventEnd > now; // Only events that haven't ended
+    }) || [];
+
+    const events = upcomingEvents.map(event => ({
       id: event.id,
       name: event.name.text,
       description: event.description.text,
@@ -128,14 +151,21 @@ export default async function handler(req, res) {
       } : null
     })) || [];
 
-    console.log(`Successfully fetched ${events.length} events from Eventbrite`);
+    console.log(`Successfully fetched ${events.length} upcoming events from Eventbrite (${data.events?.length || 0} total)`);
 
-    return res.status(200).json({
+    // Cache the response
+    const responseData = {
       success: true,
       events: events,
       count: events.length,
-      pagination: data.pagination
-    });
+      pagination: data.pagination,
+      cached: false
+    };
+    
+    eventsCache = responseData;
+    cacheTimestamp = Date.now();
+
+    return res.status(200).json(responseData);
 
   } catch (error) {
     console.error('Error fetching Eventbrite events:', error);
