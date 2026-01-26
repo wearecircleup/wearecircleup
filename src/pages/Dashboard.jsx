@@ -150,6 +150,19 @@ const Dashboard = ({ setCurrentPage }) => {
                   )}
                 </button>
                 <button
+                  onClick={() => setDashboardTab('analytics')}
+                  className={`relative px-4 sm:px-6 py-3 font-semibold text-xs sm:text-sm whitespace-nowrap transition-all ${
+                    dashboardTab === 'analytics'
+                      ? 'text-n-1'
+                      : 'text-n-4 hover:text-n-2'
+                  }`}
+                >
+                  Analítica
+                  {dashboardTab === 'analytics' && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-color-1 to-color-2"></div>
+                  )}
+                </button>
+                <button
                   onClick={() => setDashboardTab('profile')}
                   className={`relative px-4 sm:px-6 py-3 font-semibold text-xs sm:text-sm whitespace-nowrap transition-all ${
                     dashboardTab === 'profile'

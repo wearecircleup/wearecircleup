@@ -10,6 +10,7 @@ import ProfileView from "../profile/ProfileView";
 import ProfileEdit from "../profile/ProfileEdit";
 import AccountDeletion from "../profile/AccountDeletion";
 import EventsTab from "./EventsTab";
+import AnalyticsTab from "./AnalyticsTab";
 
 const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplete, onProfileStatusChange, showPresentations = true, currentTab = 'presentations' }) => {
   const [presentations, setPresentations] = useState([]);
@@ -350,6 +351,11 @@ const DashboardHome = ({ user, onNavigate, profileAction, onProfileActionComplet
     // Show Events tab
     if (currentTab === 'events') {
       return <EventsTab />;
+    }
+    
+    // Show Analytics tab
+    if (currentTab === 'analytics') {
+      return <AnalyticsTab />;
     }
     
     // Show Presentations tab
