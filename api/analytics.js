@@ -143,13 +143,15 @@ function calculateUsersByAge(profiles) {
   };
   
   profiles.forEach(profile => {
-    const age = profile.age;
-    if (!age) return;
+    // DynamoDB stores ageRange as string (e.g., "25-34")
+    const ageRange = profile.ageRange;
+    if (!ageRange) return;
     
-    if (age >= 18 && age <= 24) ageGroups['18-24']++;
-    else if (age >= 25 && age <= 34) ageGroups['25-34']++;
-    else if (age >= 35 && age <= 44) ageGroups['35-44']++;
-    else if (age >= 45) ageGroups['45+']++;
+    // Map the ageRange string directly to our groups
+    if (ageRange === '18-24') ageGroups['18-24']++;
+    else if (ageRange === '25-34') ageGroups['25-34']++;
+    else if (ageRange === '35-44') ageGroups['35-44']++;
+    else if (ageRange === '45+' || ageRange === '45-54' || ageRange === '55+') ageGroups['45+']++;
   });
   
   return ageGroups;
