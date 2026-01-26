@@ -13,11 +13,18 @@ Slide actual:
 
 Sintaxis de tipografía:
 - Usa | para marcar palabras con estilo especial: |tamaño:peso|palabra|
-- Tamaños: xs, sm, md, lg, xl
-- Pesos: thin, light, normal, medium, bold, black
+- Tamaños disponibles: sm, md, lg, xl
+- Pesos disponibles: thin, light, normal, medium, bold, black
 
-Ejemplo:
-"El |xl:black|futuro| es |lg:bold|ahora|"
+REGLAS IMPORTANTES:
+1. Máximo 2 palabras pueden usar tamaños grandes (lg o xl)
+2. El resto de palabras debe usar tamaños pequeños o medianos (sm o md)
+3. NUNCA uses lg o xl en artículos (el, la, los, las, un, una, de, del, en, es, por, para, con, sin)
+4. Los artículos y preposiciones deben ser sm o md
+5. Reserva lg y xl solo para las palabras más importantes del mensaje
+
+Ejemplo correcto:
+"La |xl:black|deforestación| del |lg:bold|Amazonas| es una crisis global"
 
 Devuelve solo el JSON con la sintaxis aplicada.`;
 
@@ -102,18 +109,6 @@ Devuelve solo el JSON con la sintaxis aplicada.`;
                 </svg>
               )}
             </button>
-          </div>
-
-          {/* Example */}
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-n-2">Ejemplo de sintaxis:</p>
-            <div className="flex items-center gap-3 text-sm">
-              <code className="px-3 py-1.5 bg-n-8 border border-n-6 rounded text-color-1 font-mono">
-                |xl:black|futuro|
-              </code>
-              <span className="text-n-5">→</span>
-              <span className="text-n-3">Palabra grande y en negrita</span>
-            </div>
           </div>
         </div>
       </div>

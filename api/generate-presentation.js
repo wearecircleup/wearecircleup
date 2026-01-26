@@ -114,26 +114,31 @@ RULES FOR ARTISTIC TYPOGRAPHY:
   
   TYPOGRAPHY SYSTEM (combine size + weight for dramatic impact):
   * Use pipe | to separate size and weight: |size:weight|word|
-  * Sizes: xs (extra small), sm (small), md (medium/default), lg (large), xl (extra large)
+  * Sizes: sm (small), md (medium/default), lg (large), xl (extra large)
   * Weights: thin (100), light (300), normal (400), medium (500), bold (700), black (900)
   
+  CRITICAL RULES:
+  * MAXIMUM 2 words can use large sizes (lg or xl) - these are your hero words
+  * ALL other words MUST use sm or md only
+  * NEVER use lg or xl on articles (el, la, los, las, un, una, de, del, en, es, por, para, con, sin, y, o)
+  * Articles and prepositions MUST be sm or md
+  * Reserve lg and xl ONLY for the most important words
+  
   EXAMPLES:
-  * "visualize your |xl:black|big| thoughts" → "big" is HUGE and BLACK
-  * "the only |sm:light|limit| is your |xl:black|imagination|" → "limit" small/light, "imagination" huge/black
-  * "|sm:thin|A| |md:normal|symbol| |sm:thin|of| |lg:bold|sustainability| |md:medium|and| |lg:bold|tradition|"
+  * "La |xl:black|deforestación| del |lg:bold|Amazonas| es una crisis global" ✓ CORRECT
+  * "visualize your |xl:black|big| thoughts" ✓ CORRECT (only 1 lg/xl word)
+  * "|sm:light|A| symbol |sm:light|of| |lg:bold|sustainability| and |lg:bold|tradition|" ✓ CORRECT (2 lg words max)
   
   DESIGN PHILOSOPHY:
-  * Supporting words (articles, prepositions): |xs:thin| or |sm:light| - make them SMALL and THIN
+  * Supporting words (articles, prepositions): |sm:light| or |sm:thin| - keep them small
   * Regular words: |md:normal| or no marker (default)
-  * Important words: |lg:bold| or |lg:black| - make them LARGER and BOLDER
-  * Hero words (1-2 per message): |xl:black| - DRAMATICALLY larger and boldest
-  * Create CONTRAST: small thin words make big bold words POP
-  * Think like a designer: play with hierarchy, not uniform text
+  * Hero words (MAX 2): |lg:bold|, |lg:black|, |xl:bold|, or |xl:black|
+  * Create CONTRAST: small words make big words stand out
   
   MANDATORY:
   * Mark at least 3-5 words with size/weight combinations
-  * Use |xs:thin| or |sm:light| for at least 2 supporting words
-  * Use |xl:black| or |lg:black| for 1-2 hero words
+  * Use |sm:light| or |sm:thin| for articles and prepositions
+  * Use lg or xl for MAXIMUM 2 words (the most important ones)
   * Default unmarked words are |md:normal|
 
 - "explanation": STRICT LIMIT 15-20 words. Brief, impactful statement in italic. NOT a paragraph - keep it SHORT and PUNCHY.

@@ -62,7 +62,7 @@ const parseMessageWithEmphasis = (message) => {
   return parts;
 };
 
-const PresentationViewerComponent = ({ presentation, onBack, onUpdate, userId }) => {
+const PresentationViewerComponent = ({ presentation, onBack, onUpdate, user }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [fontSize, setFontSize] = useState('normal'); // small, normal, large
   const [fontFamily, setFontFamily] = useState('sans'); // sans, serif, mono
@@ -158,6 +158,8 @@ const PresentationViewerComponent = ({ presentation, onBack, onUpdate, userId })
   const progress = ((currentSlide + 1) / totalSlides) * 100;
 
   const handleSaveEdit = async (updatedPresentation) => {
+    const userId = user.id || user.node_id;
+    
     const response = await fetch('/api/update-presentation', {
       method: 'PUT',
       headers: {
