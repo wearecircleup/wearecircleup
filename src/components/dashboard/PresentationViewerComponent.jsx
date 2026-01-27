@@ -202,9 +202,9 @@ const PresentationViewerComponent = ({ presentation, onBack, onUpdate, user }) =
             <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-color-2 rounded-full blur-3xl"></div>
           </div>
 
-          {/* Main content - FULL VIEWPORT - Best Practices */}
+          {/* Main content - FULL VIEWPORT - Professional & Responsive */}
           <div 
-            className={`fixed inset-0 z-10 flex flex-col justify-center bg-gradient-to-br from-n-8 via-n-8/95 to-n-7/90 backdrop-blur-3xl p-8 sm:p-12 md:p-16 lg:p-20 overflow-hidden ${
+            className={`fixed inset-0 z-10 flex flex-col justify-center bg-gradient-to-br from-n-8 via-n-8/95 to-n-7/90 backdrop-blur-3xl p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 overflow-y-auto overflow-x-hidden ${
               fontFamily === 'serif' ? 'font-serif' : fontFamily === 'mono' ? 'font-mono' : 'font-sans'
             }`}
             onTouchStart={handleTouchStart}
@@ -217,22 +217,23 @@ const PresentationViewerComponent = ({ presentation, onBack, onUpdate, user }) =
                 <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '6s', animationDelay: '1s' }}></div>
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[32rem] h-[32rem] bg-pink-500 rounded-full blur-[140px] animate-pulse" style={{ animationDuration: '8s', animationDelay: '2s' }}></div>
               </div>
-              {/* AWWWARDS-LEVEL TYPOGRAPHY - Ultra Bold & Dynamic */}
-              <div className="flex-[8] flex items-center justify-center mb-6 sm:mb-8 md:mb-10 overflow-hidden relative z-10">
-                <h1 className="leading-[0.75] text-center w-full uppercase" style={{ letterSpacing: '-0.06em', wordSpacing: '-0.1em' }}>
+              {/* Professional Typography - Responsive & Readable */}
+              <div className="flex-shrink-0 flex items-center justify-center mb-3 sm:mb-4 md:mb-5 relative z-10">
+                <h1 className="leading-[1.1] text-center w-full uppercase break-words" style={{ letterSpacing: '-0.03em', wordSpacing: '0.05em', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
                     {parseMessageWithEmphasis(slide.message || slide.title).map((part, idx) => {
                       // REAL Awwwards sizing - MASSIVE and responsive
+                      // Professional, responsive sizing - fits viewport perfectly
                       const baseSizes = {
                         md: fontSize === 'small'
-                          ? ['text-[2rem]', 'sm:text-[3rem]', 'md:text-[4rem]', 'lg:text-[5rem]', 'xl:text-[6rem]']
+                          ? ['text-xl', 'sm:text-2xl', 'md:text-3xl', 'lg:text-4xl', 'xl:text-5xl']
                           : fontSize === 'large'
-                          ? ['text-[3.5rem]', 'sm:text-[5rem]', 'md:text-[7rem]', 'lg:text-[9rem]', 'xl:text-[11rem]']
-                          : ['text-[2.5rem]', 'sm:text-[4rem]', 'md:text-[5.5rem]', 'lg:text-[7rem]', 'xl:text-[9rem]'],
+                          ? ['text-3xl', 'sm:text-4xl', 'md:text-5xl', 'lg:text-6xl', 'xl:text-7xl']
+                          : ['text-2xl', 'sm:text-3xl', 'md:text-4xl', 'lg:text-5xl', 'xl:text-6xl'],
                         lg: fontSize === 'small'
-                          ? ['text-[2.5rem]', 'sm:text-[4rem]', 'md:text-[5.5rem]', 'lg:text-[7rem]', 'xl:text-[9rem]']
+                          ? ['text-2xl', 'sm:text-3xl', 'md:text-4xl', 'lg:text-5xl', 'xl:text-6xl']
                           : fontSize === 'large'
-                          ? ['text-[4rem]', 'sm:text-[6rem]', 'md:text-[8.5rem]', 'lg:text-[11rem]', 'xl:text-[14rem]']
-                          : ['text-[3rem]', 'sm:text-[5rem]', 'md:text-[7rem]', 'lg:text-[9rem]', 'xl:text-[12rem]']
+                          ? ['text-4xl', 'sm:text-5xl', 'md:text-6xl', 'lg:text-7xl', 'xl:text-8xl']
+                          : ['text-3xl', 'sm:text-4xl', 'md:text-5xl', 'lg:text-6xl', 'xl:text-7xl']
                       };
                       
                       const sizeClasses = (baseSizes[part.size] || baseSizes.md).join(' ');
@@ -264,15 +265,15 @@ const PresentationViewerComponent = ({ presentation, onBack, onUpdate, user }) =
                 </h1>
               </div>
               
-              {/* Explanation - Elegant & Refined */}
-              <div className="flex-[2] flex items-center justify-center overflow-hidden animate-fadeIn relative z-10" style={{ animationDelay: '0.5s' }}>
-                <p className={`text-center font-light text-n-2/80 max-w-4xl leading-relaxed ${
+              {/* Explanation - Clean & Readable */}
+              <div className="flex-shrink-0 flex items-center justify-center animate-fadeIn relative z-10 px-4 mt-2 sm:mt-3 md:mt-4" style={{ animationDelay: '0.5s' }}>
+                <p className={`text-center font-light text-n-2/90 max-w-3xl break-words ${
                   fontSize === 'small' 
-                    ? 'text-xs sm:text-sm md:text-base' 
+                    ? 'text-xs sm:text-sm' 
                     : fontSize === 'large'
-                    ? 'text-base sm:text-lg md:text-xl lg:text-2xl'
-                    : 'text-sm sm:text-base md:text-lg lg:text-xl'
-                }`} style={{ letterSpacing: '0.02em', lineHeight: '1.6' }}>
+                    ? 'text-sm sm:text-base md:text-lg lg:text-xl'
+                    : 'text-xs sm:text-sm md:text-base lg:text-lg'
+                }`} style={{ letterSpacing: '0.01em', lineHeight: '1.6', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
                   {slide.explanation || (slide.content ? slide.content.join('. ') : '')}
                 </p>
               </div>

@@ -170,9 +170,9 @@ const PresentationViewer = ({ setCurrentPage }) => {
             <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-color-2 rounded-full blur-3xl"></div>
           </div>
 
-          {/* Main content - FULL VIEWPORT - Best Practices */}
+          {/* Main content - FULL VIEWPORT - Professional & Responsive */}
           <div 
-            className={`fixed inset-0 z-10 flex flex-col justify-center bg-gradient-to-br from-n-8 via-n-8/95 to-n-7/90 backdrop-blur-3xl p-8 sm:p-12 md:p-16 lg:p-20 overflow-hidden animate-scaleIn ${
+            className={`fixed inset-0 z-10 flex flex-col justify-center bg-gradient-to-br from-n-8 via-n-8/95 to-n-7/90 backdrop-blur-3xl p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 overflow-y-auto overflow-x-hidden animate-scaleIn ${
               fontFamily === 'serif' ? 'font-serif' : fontFamily === 'mono' ? 'font-mono' : 'font-sans'
             }`}
             onTouchStart={handleTouchStart}
@@ -186,32 +186,32 @@ const PresentationViewer = ({ setCurrentPage }) => {
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[32rem] h-[32rem] bg-pink-500 rounded-full blur-[140px] animate-pulse" style={{ animationDuration: '8s', animationDelay: '2s' }}></div>
             </div>
             
-            {/* AWWWARDS-LEVEL DESIGN */}
-            <div className="flex-1 flex flex-col justify-center space-y-8 sm:space-y-10 md:space-y-12 relative z-10">
-              {/* Main message - MASSIVE typography */}
-              <h1 className={`font-black leading-[0.75] text-center uppercase bg-gradient-to-br from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(168,85,247,0.4)] animate-fadeInUp ${
+            {/* Professional Design - Responsive & Clean */}
+            <div className="flex-1 flex flex-col justify-center space-y-3 sm:space-y-4 md:space-y-5 relative z-10 px-4">
+              {/* Main message - Bold & Readable */}
+              <h1 className={`font-black leading-[1.1] text-center uppercase bg-gradient-to-br from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(168,85,247,0.4)] animate-fadeInUp break-words ${
                 fontSize === 'small'
-                  ? 'text-[2rem] sm:text-[3rem] md:text-[4rem] lg:text-[5rem] xl:text-[6rem]'
+                  ? 'text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl'
                   : fontSize === 'large'
-                  ? 'text-[3.5rem] sm:text-[5rem] md:text-[7rem] lg:text-[9rem] xl:text-[11rem]'
-                  : 'text-[2.5rem] sm:text-[4rem] md:text-[5.5rem] lg:text-[7rem] xl:text-[9rem]'
-              }`} style={{ letterSpacing: '-0.06em', wordSpacing: '-0.1em', textShadow: '0 0 80px rgba(168,85,247,0.3)' }}>
+                  ? 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl'
+                  : 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl'
+              }`} style={{ letterSpacing: '-0.03em', wordSpacing: '0.05em', textShadow: '0 0 80px rgba(168,85,247,0.3)', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
                 {slide.title}
               </h1>
               
-              {/* Content - elegant & refined */}
-              <div className="space-y-4 sm:space-y-5 md:space-y-6 max-w-4xl mx-auto">
+              {/* Content - Clean & Readable */}
+              <div className="space-y-2 sm:space-y-3 md:space-y-4 max-w-3xl mx-auto">
                 {slide.content.map((point, index) => (
                   <p
                     key={index}
-                    className={`text-center font-light text-n-2/80 leading-relaxed animate-fadeIn ${
+                    className={`text-center font-light text-n-2/90 animate-fadeIn break-words ${
                       fontSize === 'small'
-                        ? 'text-xs sm:text-sm md:text-base'
+                        ? 'text-xs sm:text-sm'
                         : fontSize === 'large'
-                        ? 'text-base sm:text-lg md:text-xl lg:text-2xl'
-                        : 'text-sm sm:text-base md:text-lg lg:text-xl'
+                        ? 'text-sm sm:text-base md:text-lg lg:text-xl'
+                        : 'text-xs sm:text-sm md:text-base lg:text-lg'
                     }`}
-                    style={{ animationDelay: `${index * 0.15 + 0.3}s`, letterSpacing: '0.02em', lineHeight: '1.6' }}
+                    style={{ animationDelay: `${index * 0.15 + 0.3}s`, letterSpacing: '0.01em', lineHeight: '1.6', overflowWrap: 'break-word', wordBreak: 'break-word' }}
                   >
                     {point}
                   </p>
