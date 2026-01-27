@@ -170,52 +170,48 @@ const PresentationViewer = ({ setCurrentPage }) => {
             <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-color-2 rounded-full blur-3xl"></div>
           </div>
 
-          {/* Main content - Full screen */}
+          {/* Main content - FULL VIEWPORT - Best Practices */}
           <div 
-            className="relative z-10 h-screen flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 lg:px-24 py-20"
+            className={`fixed inset-0 z-10 flex flex-col justify-center bg-gradient-to-br from-n-8 via-n-8/95 to-n-7/90 backdrop-blur-3xl p-8 sm:p-12 md:p-16 lg:p-20 overflow-hidden animate-scaleIn ${
+              fontFamily === 'serif' ? 'font-serif' : fontFamily === 'mono' ? 'font-mono' : 'font-sans'
+            }`}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
-            <div className="w-full h-full max-w-7xl flex items-center justify-center">
-              {/* Slide content - Responsive sizing with accessibility */}
-              <div 
-                className={`relative w-full h-full flex flex-col justify-center bg-gradient-to-br from-n-8 via-n-8/95 to-n-7/90 backdrop-blur-3xl border border-n-1/5 rounded-3xl p-6 sm:p-10 md:p-16 lg:p-24 xl:p-32 shadow-[0_20px_60px_rgba(0,0,0,0.3)] overflow-hidden animate-scaleIn ${
-                  fontFamily === 'serif' ? 'font-serif' : fontFamily === 'mono' ? 'font-mono' : 'font-sans'
-                }`}
-              >
-                {/* Animated gradient orbs */}
-                <div className="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
-                  <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '4s' }}></div>
-                  <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '6s', animationDelay: '1s' }}></div>
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[32rem] h-[32rem] bg-pink-500 rounded-full blur-[140px] animate-pulse" style={{ animationDuration: '8s', animationDelay: '2s' }}></div>
-                </div>
+            {/* Animated gradient orbs */}
+            <div className="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
+              <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '4s' }}></div>
+              <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '6s', animationDelay: '1s' }}></div>
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[32rem] h-[32rem] bg-pink-500 rounded-full blur-[140px] animate-pulse" style={{ animationDuration: '8s', animationDelay: '2s' }}></div>
+            </div>
+            
             {/* AWWWARDS-LEVEL DESIGN */}
-            <div className="flex-1 flex flex-col justify-center space-y-10 sm:space-y-12 md:space-y-16 relative z-10">
+            <div className="flex-1 flex flex-col justify-center space-y-8 sm:space-y-10 md:space-y-12 relative z-10">
               {/* Main message - MASSIVE typography */}
               <h1 className={`font-black leading-[0.75] text-center uppercase bg-gradient-to-br from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(168,85,247,0.4)] animate-fadeInUp ${
                 fontSize === 'small'
-                  ? 'text-[2.5rem] sm:text-[3.5rem] md:text-[5rem] lg:text-[7rem] xl:text-[9rem]'
+                  ? 'text-[2rem] sm:text-[3rem] md:text-[4rem] lg:text-[5rem] xl:text-[6rem]'
                   : fontSize === 'large'
-                  ? 'text-[4rem] sm:text-[5.5rem] md:text-[8rem] lg:text-[11rem] xl:text-[14rem]'
-                  : 'text-[3rem] sm:text-[4.5rem] md:text-[6.5rem] lg:text-[9rem] xl:text-[12rem]'
+                  ? 'text-[3.5rem] sm:text-[5rem] md:text-[7rem] lg:text-[9rem] xl:text-[11rem]'
+                  : 'text-[2.5rem] sm:text-[4rem] md:text-[5.5rem] lg:text-[7rem] xl:text-[9rem]'
               }`} style={{ letterSpacing: '-0.06em', wordSpacing: '-0.1em', textShadow: '0 0 80px rgba(168,85,247,0.3)' }}>
                 {slide.title}
               </h1>
               
               {/* Content - elegant & refined */}
-              <div className="space-y-5 sm:space-y-6 md:space-y-8 max-w-3xl mx-auto">
+              <div className="space-y-4 sm:space-y-5 md:space-y-6 max-w-4xl mx-auto">
                 {slide.content.map((point, index) => (
                   <p
                     key={index}
-                    className={`text-center font-light text-n-2/80 leading-loose tracking-wide animate-fadeIn ${
+                    className={`text-center font-light text-n-2/80 leading-relaxed animate-fadeIn ${
                       fontSize === 'small'
-                        ? 'text-sm sm:text-base md:text-lg'
+                        ? 'text-xs sm:text-sm md:text-base'
                         : fontSize === 'large'
-                        ? 'text-lg sm:text-xl md:text-2xl lg:text-3xl'
-                        : 'text-base sm:text-lg md:text-xl lg:text-2xl'
+                        ? 'text-base sm:text-lg md:text-xl lg:text-2xl'
+                        : 'text-sm sm:text-base md:text-lg lg:text-xl'
                     }`}
-                    style={{ animationDelay: `${index * 0.15 + 0.3}s`, letterSpacing: '0.03em', lineHeight: '1.8' }}
+                    style={{ animationDelay: `${index * 0.15 + 0.3}s`, letterSpacing: '0.02em', lineHeight: '1.6' }}
                   >
                     {point}
                   </p>
@@ -224,7 +220,7 @@ const PresentationViewer = ({ setCurrentPage }) => {
             </div>
 
             {/* Logo - Bottom Left inside presentation */}
-            <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6">
+            <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 z-20">
               <Logo 
                 logoSize={{ width: 24, height: 24 }}
                 textSize="text-xs"
@@ -232,9 +228,6 @@ const PresentationViewer = ({ setCurrentPage }) => {
               />
             </div>
           </div>
-
-        </div>
-      </div>
         </>
       )}
 
