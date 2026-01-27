@@ -186,7 +186,9 @@ const PresentationViewerComponent = ({ presentation, onBack, onUpdate, user }) =
 
   return (
     <>
-      <div className="fixed inset-0 bg-gradient-to-br from-n-8 via-n-7 to-n-8 overflow-hidden z-50">
+      <div className="fixed inset-0 bg-[#0a0a0a] overflow-hidden z-50">
+        {/* Subtle grid pattern - Awwwards touch */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '50px 50px' }}></div>
       {/* Show ParticleLogo as first slide */}
       {currentSlide === 0 ? (
         <div className="relative z-10 h-screen">
@@ -209,42 +211,54 @@ const PresentationViewerComponent = ({ presentation, onBack, onUpdate, user }) =
           >
             <div className="w-full h-full max-w-7xl flex items-center justify-center">
               <div 
-                className={`relative w-full h-full flex flex-col justify-center bg-n-8/80 backdrop-blur-2xl border border-n-6/30 rounded-2xl p-8 sm:p-10 md:p-14 lg:p-20 xl:p-24 shadow-[0_8px_30px_rgb(0,0,0,0.12)] ${
+                className={`relative w-full h-full flex flex-col justify-center bg-gradient-to-br from-n-8 via-n-8/95 to-n-7/90 backdrop-blur-3xl border border-n-1/5 rounded-3xl p-6 sm:p-10 md:p-16 lg:p-24 xl:p-32 shadow-[0_20px_60px_rgba(0,0,0,0.3)] overflow-hidden ${
                   fontFamily === 'serif' ? 'font-serif' : fontFamily === 'mono' ? 'font-mono' : 'font-sans'
                 }`}
               >
-                {/* Main impactful message - 80% of space - Awwwards Style */}
-                <div className="flex-[8] flex items-center justify-center mb-6 sm:mb-8 md:mb-10 overflow-hidden">
-                  <h1 className="leading-[0.85] tracking-tighter text-center max-w-full px-4 sm:px-6 md:px-8" style={{ letterSpacing: '-0.04em' }}>
+                {/* Animated gradient orbs - Awwwards signature */}
+                <div className="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
+                  <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '4s' }}></div>
+                  <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '6s', animationDelay: '1s' }}></div>
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[32rem] h-[32rem] bg-pink-500 rounded-full blur-[140px] animate-pulse" style={{ animationDuration: '8s', animationDelay: '2s' }}></div>
+                </div>
+                {/* AWWWARDS-LEVEL TYPOGRAPHY - Ultra Bold & Dynamic */}
+                <div className="flex-[8] flex items-center justify-center mb-8 sm:mb-10 md:mb-12 overflow-hidden">
+                  <h1 className="leading-[0.75] text-center max-w-full px-2 sm:px-4 uppercase" style={{ letterSpacing: '-0.06em', wordSpacing: '-0.1em' }}>
                     {parseMessageWithEmphasis(slide.message || slide.title).map((part, idx) => {
-                      // Awwwards-style typography - bold, condensed, impactful
-                      const sizeClasses = {
+                      // REAL Awwwards sizing - MASSIVE and responsive
+                      const baseSizes = {
                         md: fontSize === 'small'
-                          ? 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl'
+                          ? ['text-[2.5rem]', 'sm:text-[3.5rem]', 'md:text-[5rem]', 'lg:text-[7rem]', 'xl:text-[9rem]', '2xl:text-[11rem]']
                           : fontSize === 'large'
-                          ? 'text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem]'
-                          : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl',
+                          ? ['text-[4rem]', 'sm:text-[5.5rem]', 'md:text-[8rem]', 'lg:text-[11rem]', 'xl:text-[14rem]', '2xl:text-[17rem]']
+                          : ['text-[3rem]', 'sm:text-[4.5rem]', 'md:text-[6.5rem]', 'lg:text-[9rem]', 'xl:text-[12rem]', '2xl:text-[15rem]'],
                         lg: fontSize === 'small'
-                          ? 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl'
+                          ? ['text-[3rem]', 'sm:text-[4.5rem]', 'md:text-[6.5rem]', 'lg:text-[9rem]', 'xl:text-[12rem]', '2xl:text-[15rem]']
                           : fontSize === 'large'
-                          ? 'text-7xl sm:text-8xl md:text-9xl lg:text-[10rem] xl:text-[12rem]'
-                          : 'text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[11rem]'
+                          ? ['text-[5rem]', 'sm:text-[7rem]', 'md:text-[10rem]', 'lg:text-[14rem]', 'xl:text-[18rem]', '2xl:text-[22rem]']
+                          : ['text-[4rem]', 'sm:text-[6rem]', 'md:text-[8.5rem]', 'lg:text-[12rem]', 'xl:text-[16rem]', '2xl:text-[20rem]']
                       };
                       
-                      const weightClasses = {
-                        light: 'font-light',
-                        black: 'font-black'
-                      };
-                      
+                      const sizeClasses = (baseSizes[part.size] || baseSizes.md).join(' ');
                       const isKeyword = part.size === 'lg' && part.weight === 'black';
+                      
+                      // Dynamic gradient per word based on position
+                      const gradients = [
+                        'from-purple-400 via-pink-400 to-orange-400',
+                        'from-blue-400 via-cyan-400 to-teal-400',
+                        'from-yellow-400 via-orange-400 to-red-400',
+                        'from-green-400 via-emerald-400 to-cyan-400',
+                        'from-pink-400 via-purple-400 to-indigo-400'
+                      ];
+                      const gradient = gradients[idx % gradients.length];
                       
                       return (
                         <span 
                           key={idx} 
-                          className={`inline-block bg-gradient-to-r from-color-1 via-n-1 to-color-2 bg-clip-text text-transparent ${weightClasses[part.weight] || weightClasses.light} ${sizeClasses[part.size] || sizeClasses.md} ${isKeyword ? 'mx-1 sm:mx-2 md:mx-3' : ''}`}
+                          className={`inline-block bg-gradient-to-br ${isKeyword ? gradient : 'from-n-1 to-n-3'} bg-clip-text text-transparent ${part.weight === 'black' ? 'font-black' : 'font-extralight'} ${sizeClasses} transition-all duration-700 ease-out hover:scale-105 ${isKeyword ? 'drop-shadow-[0_0_30px_rgba(168,85,247,0.4)]' : ''}`}
                           style={{ 
-                            wordBreak: 'keep-all',
-                            hyphens: 'none'
+                            textShadow: isKeyword ? '0 0 80px rgba(168,85,247,0.3)' : 'none',
+                            animation: isKeyword ? `fadeInUp 0.8s ease-out ${idx * 0.15}s both` : `fadeIn 0.6s ease-out ${idx * 0.1}s both`
                           }}
                         >
                           {part.text}
@@ -254,15 +268,15 @@ const PresentationViewerComponent = ({ presentation, onBack, onUpdate, user }) =
                   </h1>
                 </div>
                 
-                {/* Explanation - 20% of space - Minimal & Clean */}
-                <div className="flex-[2] flex items-center justify-center overflow-hidden px-6 sm:px-8 md:px-12">
-                  <p className={`text-center font-light text-n-3/90 max-w-3xl leading-relaxed ${
+                {/* Explanation - Elegant & Refined */}
+                <div className="flex-[2] flex items-center justify-center overflow-hidden px-4 sm:px-8 md:px-16 animate-fadeIn" style={{ animationDelay: '0.5s' }}>
+                  <p className={`text-center font-light text-n-2/80 max-w-2xl leading-loose tracking-wide ${
                     fontSize === 'small' 
-                      ? 'text-xs sm:text-sm md:text-base' 
+                      ? 'text-sm sm:text-base md:text-lg' 
                       : fontSize === 'large'
-                      ? 'text-base sm:text-lg md:text-xl lg:text-2xl'
-                      : 'text-sm sm:text-base md:text-lg lg:text-xl'
-                  }`} style={{ letterSpacing: '0.01em' }}>
+                      ? 'text-lg sm:text-xl md:text-2xl lg:text-3xl'
+                      : 'text-base sm:text-lg md:text-xl lg:text-2xl'
+                  }`} style={{ letterSpacing: '0.03em', lineHeight: '1.8' }}>
                     {slide.explanation || (slide.content ? slide.content.join('. ') : '')}
                   </p>
                 </div>

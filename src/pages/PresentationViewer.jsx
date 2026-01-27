@@ -154,7 +154,9 @@ const PresentationViewer = ({ setCurrentPage }) => {
   const progress = ((currentSlide + 1) / totalSlides) * 100;
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-n-8 via-n-7 to-n-8 overflow-hidden">
+    <div className="fixed inset-0 bg-[#0a0a0a] overflow-hidden">
+      {/* Subtle grid pattern */}
+      <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '50px 50px' }}></div>
       {/* Show ParticleLogo as first slide (slide 0) */}
       {currentSlide === 0 ? (
         <div className="relative z-10 h-screen">
@@ -178,36 +180,42 @@ const PresentationViewer = ({ setCurrentPage }) => {
             <div className="w-full h-full max-w-7xl flex items-center justify-center">
               {/* Slide content - Responsive sizing with accessibility */}
               <div 
-                className={`relative w-full h-full flex flex-col justify-center bg-n-8/80 backdrop-blur-2xl border border-n-6/30 rounded-2xl p-8 sm:p-10 md:p-14 lg:p-20 xl:p-24 shadow-[0_8px_30px_rgb(0,0,0,0.12)] ${
+                className={`relative w-full h-full flex flex-col justify-center bg-gradient-to-br from-n-8 via-n-8/95 to-n-7/90 backdrop-blur-3xl border border-n-1/5 rounded-3xl p-6 sm:p-10 md:p-16 lg:p-24 xl:p-32 shadow-[0_20px_60px_rgba(0,0,0,0.3)] overflow-hidden animate-scaleIn ${
                   fontFamily === 'serif' ? 'font-serif' : fontFamily === 'mono' ? 'font-mono' : 'font-sans'
                 }`}
               >
-            {/* Awwwards-style minimal presentation */}
-            <div className="flex-1 flex flex-col justify-center space-y-8 sm:space-y-10 md:space-y-12 lg:space-y-16">
-              {/* Main message - giant, bold, impactful */}
-              <h1 className={`font-black leading-[0.85] tracking-tighter text-center bg-gradient-to-r from-color-1 via-n-1 to-color-2 bg-clip-text text-transparent ${
+                {/* Animated gradient orbs */}
+                <div className="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
+                  <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '4s' }}></div>
+                  <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '6s', animationDelay: '1s' }}></div>
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[32rem] h-[32rem] bg-pink-500 rounded-full blur-[140px] animate-pulse" style={{ animationDuration: '8s', animationDelay: '2s' }}></div>
+                </div>
+            {/* AWWWARDS-LEVEL DESIGN */}
+            <div className="flex-1 flex flex-col justify-center space-y-10 sm:space-y-12 md:space-y-16 relative z-10">
+              {/* Main message - MASSIVE typography */}
+              <h1 className={`font-black leading-[0.75] text-center uppercase bg-gradient-to-br from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(168,85,247,0.4)] animate-fadeInUp ${
                 fontSize === 'small'
-                  ? 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl'
+                  ? 'text-[2.5rem] sm:text-[3.5rem] md:text-[5rem] lg:text-[7rem] xl:text-[9rem]'
                   : fontSize === 'large'
-                  ? 'text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem]'
-                  : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl'
-              }`} style={{ letterSpacing: '-0.04em' }}>
+                  ? 'text-[4rem] sm:text-[5.5rem] md:text-[8rem] lg:text-[11rem] xl:text-[14rem]'
+                  : 'text-[3rem] sm:text-[4.5rem] md:text-[6.5rem] lg:text-[9rem] xl:text-[12rem]'
+              }`} style={{ letterSpacing: '-0.06em', wordSpacing: '-0.1em', textShadow: '0 0 80px rgba(168,85,247,0.3)' }}>
                 {slide.title}
               </h1>
               
-              {/* Content - clean, minimal, readable */}
-              <div className="space-y-4 sm:space-y-5 md:space-y-6 max-w-4xl mx-auto">
+              {/* Content - elegant & refined */}
+              <div className="space-y-5 sm:space-y-6 md:space-y-8 max-w-3xl mx-auto">
                 {slide.content.map((point, index) => (
                   <p
                     key={index}
-                    className={`text-center font-light text-n-3/90 leading-relaxed animate-fadeIn ${
+                    className={`text-center font-light text-n-2/80 leading-loose tracking-wide animate-fadeIn ${
                       fontSize === 'small'
                         ? 'text-sm sm:text-base md:text-lg'
                         : fontSize === 'large'
                         ? 'text-lg sm:text-xl md:text-2xl lg:text-3xl'
                         : 'text-base sm:text-lg md:text-xl lg:text-2xl'
                     }`}
-                    style={{ animationDelay: `${index * 0.1}s`, letterSpacing: '0.01em' }}
+                    style={{ animationDelay: `${index * 0.15 + 0.3}s`, letterSpacing: '0.03em', lineHeight: '1.8' }}
                   >
                     {point}
                   </p>
