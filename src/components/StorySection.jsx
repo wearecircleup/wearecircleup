@@ -79,10 +79,7 @@ const StorySection = ({ fontSize = 'normal' }) => {
   }, []);
 
   const scrollToSection = (index) => {
-    sectionRefs.current[index]?.scrollIntoView({ 
-      behavior: 'smooth',
-      block: 'start'
-    });
+    setActiveSection(index);
   };
 
   return (

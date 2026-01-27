@@ -204,14 +204,14 @@ const PresentationViewer = ({ setCurrentPage }) => {
                 {slide.content.map((point, index) => (
                   <p
                     key={index}
-                    className={`text-center font-light text-n-2/90 animate-fadeIn break-words ${
+                    className={`text-center font-extralight text-n-2/90 animate-fadeIn break-words ${
                       fontSize === 'small'
-                        ? 'text-xs sm:text-sm'
+                        ? 'text-sm sm:text-base'
                         : fontSize === 'large'
-                        ? 'text-sm sm:text-base md:text-lg lg:text-xl'
-                        : 'text-xs sm:text-sm md:text-base lg:text-lg'
+                        ? 'text-base sm:text-lg md:text-xl lg:text-2xl'
+                        : 'text-sm sm:text-base md:text-lg lg:text-xl'
                     }`}
-                    style={{ animationDelay: `${index * 0.15 + 0.3}s`, letterSpacing: '0.01em', lineHeight: '1.6', overflowWrap: 'break-word', wordBreak: 'break-word' }}
+                    style={{ animationDelay: `${index * 0.15 + 0.3}s`, letterSpacing: '0.01em', lineHeight: '1.6', overflowWrap: 'break-word', wordBreak: 'break-word', fontWeight: '200' }}
                   >
                     {point}
                   </p>
@@ -219,11 +219,11 @@ const PresentationViewer = ({ setCurrentPage }) => {
               </div>
             </div>
 
-            {/* Logo - Bottom Left inside presentation */}
-            <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 z-20">
+            {/* Logo - Bottom Left inside presentation - Responsive */}
+            <div className="absolute bottom-16 left-4 sm:bottom-6 sm:left-6 z-50">
               <Logo 
-                logoSize={{ width: 24, height: 24 }}
-                textSize="text-xs"
+                logoSize={{ width: 20, height: 20 }}
+                textSize="text-[0.65rem]"
                 className="opacity-60 hover:opacity-100 transition-opacity"
               />
             </div>

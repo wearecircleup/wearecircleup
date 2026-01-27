@@ -106,8 +106,8 @@ Respond ONLY with valid JSON in this format:
 {
   "slides": [
     {
-      "message": "Main impactful message (5-10 words maximum)",
-      "explanation": "Complementary paragraph that explains or supports the message (MANDATORY 20-30 words exactly, will be displayed in italic)"
+      "message": "Main impactful message (3-8 words maximum)",
+      "explanation": "Complementary paragraph that explains or supports the message (30-50 words exactly, will be displayed in italic)"
     }
   ]
 }
@@ -140,7 +140,7 @@ RULES FOR AWWWARDS-STYLE TYPOGRAPHY:
   * No clutter: if it doesn't add value, remove it
   * Think: "What would Apple/Awwwards do?" - then simplify more
 
-- "explanation": MANDATORY 20-30 words. Count each word carefully - this is CRITICAL. Brief, impactful statement in italic that complements the message.
+- "explanation": 30-50 words. Count each word carefully - this is CRITICAL. Brief, impactful statement in italic that complements the message.
 - NO bullet points, NO lists
 - Focus on subtle visual hierarchy through the 2 keyword highlights
 - Think TEDx style: slides are visual support, NOT reading material

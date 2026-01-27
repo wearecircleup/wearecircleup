@@ -63,11 +63,13 @@ const Hero = ({ fontSize = 'normal' }) => {
             </div>
             
             {/* Right: Visual minimalista con partículas */}
-            <div className="lg:col-span-5 relative group z-10 mt-8 lg:mt-0 overflow-hidden flex items-end">
+            <div className="lg:col-span-5 relative group z-10 mt-8 lg:mt-0 flex items-end">
               <div className="relative aspect-square w-full max-w-[336px] sm:max-w-[384px] md:max-w-[480px] mx-auto lg:max-w-none">
                 {/* Background circles behind particles */}
-                <div className="absolute inset-0 z-0">
-                  <BackgroundCircles />
+                <div className="absolute inset-0 z-0 flex items-center justify-center">
+                  <div className="relative w-full h-full">
+                    <BackgroundCircles />
+                  </div>
                 </div>
                 {/* Particles on top */}
                 <div className="relative z-10 h-full">

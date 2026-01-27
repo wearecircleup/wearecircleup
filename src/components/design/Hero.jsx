@@ -27,10 +27,10 @@ export const BottomLine = () => {
 const Rings = () => {
   return (
     <>
-      <div className="absolute top-1/2 left-1/2 w-[65.875rem] aspect-square border border-n-2/10 rounded-full -translate-x-1/2 -translate-y-1/2" />
-      <div className="absolute top-1/2 left-1/2 w-[51.375rem] aspect-square border border-n-2/10 rounded-full -translate-x-1/2 -translate-y-1/2" />
-      <div className="absolute top-1/2 left-1/2 w-[36.125rem] aspect-square border border-n-2/10 rounded-full -translate-x-1/2 -translate-y-1/2" />
-      <div className="absolute top-1/2 left-1/2 w-[23.125rem] aspect-square border border-n-2/10 rounded-full -translate-x-1/2 -translate-y-1/2" />
+      <div className="absolute top-1/2 left-1/2 w-[90%] sm:w-[85%] md:w-[65.875rem] aspect-square border-2 border-n-1/20 rounded-full -translate-x-1/2 -translate-y-1/2" />
+      <div className="absolute top-1/2 left-1/2 w-[75%] sm:w-[70%] md:w-[51.375rem] aspect-square border-2 border-n-1/20 rounded-full -translate-x-1/2 -translate-y-1/2" />
+      <div className="absolute top-1/2 left-1/2 w-[60%] sm:w-[55%] md:w-[36.125rem] aspect-square border-2 border-n-1/20 rounded-full -translate-x-1/2 -translate-y-1/2" />
+      <div className="absolute top-1/2 left-1/2 w-[45%] sm:w-[40%] md:w-[23.125rem] aspect-square border-2 border-n-1/20 rounded-full -translate-x-1/2 -translate-y-1/2" />
     </>
   );
 };
@@ -43,7 +43,7 @@ export const BackgroundCircles = ({ parallaxRef }) => {
   }, []);
 
   return (
-    <div className="absolute -top-[42.375rem] left-1/2 w-[78rem] aspect-square border border-n-2/5 rounded-full -translate-x-1/2 md:-top-[38.5rem] xl:-top-[32rem]">
+    <div className="absolute top-1/2 left-1/2 w-[95%] sm:w-[90%] md:w-[78rem] aspect-square border-2 border-n-1/20 rounded-full -translate-x-1/2 -translate-y-1/2">
       <Rings />
 
       {/* Moving background colored circle balls */}

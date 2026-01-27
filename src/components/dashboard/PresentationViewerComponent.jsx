@@ -267,22 +267,22 @@ const PresentationViewerComponent = ({ presentation, onBack, onUpdate, user }) =
               
               {/* Explanation - Clean & Readable */}
               <div className="flex-shrink-0 flex items-center justify-center animate-fadeIn relative z-10 px-4 mt-2 sm:mt-3 md:mt-4" style={{ animationDelay: '0.5s' }}>
-                <p className={`text-center font-light text-n-2/90 max-w-3xl break-words ${
+                <p className={`text-center font-extralight text-n-2/90 max-w-3xl break-words ${
                   fontSize === 'small' 
-                    ? 'text-xs sm:text-sm' 
+                    ? 'text-sm sm:text-base' 
                     : fontSize === 'large'
-                    ? 'text-sm sm:text-base md:text-lg lg:text-xl'
-                    : 'text-xs sm:text-sm md:text-base lg:text-lg'
-                }`} style={{ letterSpacing: '0.01em', lineHeight: '1.6', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
+                    ? 'text-base sm:text-lg md:text-xl lg:text-2xl'
+                    : 'text-sm sm:text-base md:text-lg lg:text-xl'
+                }`} style={{ letterSpacing: '0.01em', lineHeight: '1.6', overflowWrap: 'break-word', wordBreak: 'break-word', fontWeight: '200' }}>
                   {slide.explanation || (slide.content ? slide.content.join('. ') : '')}
                 </p>
               </div>
 
-              {/* Logo */}
-              <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 z-20">
+              {/* Logo - Responsive positioning */}
+              <div className="absolute bottom-16 left-4 sm:bottom-6 sm:left-6 z-50">
                 <Logo 
-                  logoSize={{ width: 24, height: 24 }}
-                  textSize="text-xs"
+                  logoSize={{ width: 20, height: 20 }}
+                  textSize="text-[0.65rem]"
                   className="opacity-60 hover:opacity-100 transition-opacity"
                 />
               </div>
