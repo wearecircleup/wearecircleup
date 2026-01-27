@@ -135,8 +135,8 @@ const Benefits = ({ fontSize = 'normal' }) => {
               }}
             >
               {benefits.map((benefit) => (
-                <div key={benefit.id} className="w-full md:w-1/2 flex-shrink-0 px-2 md:px-4 touch-pan-y">
-                  <div className="relative h-[18rem] sm:h-[22rem] bg-n-8 rounded-xl overflow-hidden md:h-[25rem] border border-n-6 select-none">
+                <div key={benefit.id} className="w-full md:w-1/2 flex-shrink-0 px-2 sm:px-3 md:px-4 touch-pan-y">
+                  <div className="relative h-[20rem] sm:h-[24rem] md:h-[28rem] lg:h-[32rem] bg-n-8 rounded-xl md:rounded-2xl overflow-hidden border border-n-6 select-none">
                     {/* Background image */}
                     <div className="absolute inset-0">
                       <img
@@ -145,60 +145,43 @@ const Benefits = ({ fontSize = 'normal' }) => {
                         width={520}
                         height={400}
                         alt="Background"
+                        loading="lazy"
                         onError={(e) => {
                           console.log('Image failed to load:', benefit.image);
                           e.target.style.display = 'none';
                         }}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent"></div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent"></div>
                     </div>
                     
                     {/* Logo */}
-                    <div className="absolute top-4 left-4 md:top-6 md:left-6">
-                      <div className="flex items-center gap-2 md:gap-3 px-3 py-2 md:px-4 bg-black/60 backdrop-blur-sm rounded-lg border border-white/20">
+                    <div className="absolute top-3 left-3 sm:top-4 sm:left-4 md:top-5 md:left-5 lg:top-6 lg:left-6">
+                      <div className="flex items-center gap-2 md:gap-3 px-2.5 py-1.5 sm:px-3 sm:py-2 md:px-4 bg-black/60 backdrop-blur-sm rounded-lg border border-white/20">
                         <Logo 
-                          logoSize={{ width: 32, height: 32 }}
-                          textSize="text-xs md:text-sm"
+                          logoSize={{ width: 28, height: 28 }}
+                          textSize="text-xs sm:text-sm"
                           showText={true}
                         />
                       </div>
                     </div>
                     
                     {/* User info */}
-                    <div className="absolute bottom-4 left-4 md:bottom-6 md:left-6">
-                      <h4 className={`text-white font-semibold mb-1 ${
-                        fontSize === 'small' 
-                          ? 'text-base md:text-lg' 
-                          : fontSize === 'large'
-                          ? 'text-xl md:text-2xl'
-                          : 'text-lg md:text-xl'
-                      }`}>{benefit.name}</h4>
-                      <p className={`text-gray-400 ${
-                        fontSize === 'small' 
-                          ? 'text-xs md:text-sm' 
-                          : fontSize === 'large'
-                          ? 'text-sm md:text-base'
-                          : 'text-sm md:text-base'
-                      }`}>{benefit.role}</p>
+                    <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 md:bottom-5 md:left-5 lg:bottom-6 lg:left-6">
+                      <h4 className="text-base sm:text-lg md:text-xl lg:text-2xl text-white font-semibold mb-1">{benefit.name}</h4>
+                      <p className="text-xs sm:text-sm md:text-base text-gray-400">{benefit.role}</p>
                     </div>
                   </div>
                   
-                  {/* Floating text box - responsive positioning */}
-                  <div className="relative -mt-20 md:-mt-40 ml-4 mr-auto md:ml-auto md:mr-4 w-3/4 md:w-2/5 z-10 pointer-events-none">
-                    <div className="bg-n-8/95 backdrop-blur-sm border border-n-1/10 rounded-xl md:rounded-2xl p-4 md:p-6 shadow-2xl">
+                  {/* Text box - Inline on mobile, floating on larger screens */}
+                  <div className="mt-4 sm:mt-5 md:relative md:-mt-32 lg:-mt-40 md:ml-auto md:mr-4 lg:mr-6 md:w-3/5 lg:w-1/2 md:z-10">
+                    <div className="bg-n-8/95 backdrop-blur-sm border border-n-1/10 rounded-xl md:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg md:shadow-2xl">
                       {/* Quote icon */}
-                      <div className="mb-3 md:mb-4">
-                        <svg width="24" height="18" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="md:w-8 md:h-6">
+                      <div className="mb-2.5 sm:mb-3 md:mb-4">
+                        <svg width="20" height="15" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-4 sm:w-6 sm:h-5 md:w-7 md:h-5 lg:w-8 lg:h-6">
                           <path d="M0 32V16C0 7.2 7.2 0 16 0V8C11.6 8 8 11.6 8 16V20H16V32H0ZM24 32V16C24 7.2 31.2 0 40 0V8C35.6 8 32 11.6 32 16V20H40V32H24Z" fill="#AC6AFF"/>
                         </svg>
                       </div>
-                      <p className={`body-1 text-n-1 font-mono leading-relaxed ${
-                        fontSize === 'small' 
-                          ? 'text-xs md:text-sm' 
-                          : fontSize === 'large'
-                          ? 'text-base md:text-lg'
-                          : 'text-sm md:text-base'
-                      }`}>
+                      <p className="text-sm sm:text-base md:text-lg text-n-1 font-mono leading-relaxed">
                         {benefit.text}
                       </p>
                     </div>
@@ -209,44 +192,47 @@ const Benefits = ({ fontSize = 'normal' }) => {
           </div>
           
           {/* Navigation buttons */}
-          <div className="flex justify-center mt-6 md:mt-8 space-x-3 md:space-x-4">
+          <div className="flex justify-center mt-6 sm:mt-7 md:mt-8 lg:mt-10 space-x-3 sm:space-x-4">
             <button 
               onClick={prevSlide}
               disabled={isTransitioning}
-              className="w-10 h-10 md:w-12 md:h-12 bg-n-7 border border-n-6 rounded-full flex items-center justify-center hover:bg-n-6 transition-colors disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
+              aria-label="Previous slide"
+              className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 bg-n-7 border border-n-6 rounded-full flex items-center justify-center hover:bg-n-6 active:bg-n-5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="md:w-6 md:h-6">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 sm:w-5.5 sm:h-5.5 md:w-6 md:h-6">
                 <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
             <button 
               onClick={nextSlide}
               disabled={isTransitioning}
-              className="w-10 h-10 md:w-12 md:h-12 bg-n-7 border border-n-6 rounded-full flex items-center justify-center hover:bg-n-6 transition-colors disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
+              aria-label="Next slide"
+              className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 bg-n-7 border border-n-6 rounded-full flex items-center justify-center hover:bg-n-6 active:bg-n-5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="md:w-6 md:h-6">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 sm:w-5.5 sm:h-5.5 md:w-6 md:h-6">
                 <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
           </div>
 
-          {/* Dots indicator for mobile */}
-          <div className="flex justify-center mt-4 space-x-2 md:hidden">
+          {/* Dots indicator */}
+          <div className="flex justify-center mt-4 sm:mt-5 space-x-2">
               {benefits.map((_item, index) => (
               <button
                 key={index}
                 onClick={() => !isTransitioning && setCurrentSlide(index)}
                 disabled={isTransitioning}
-                className={`w-2 h-2 rounded-full transition-colors touch-manipulation ${
-                  index === currentSlide ? 'bg-color-1' : 'bg-n-6'
+                aria-label={`Go to slide ${index + 1}`}
+                className={`h-2 rounded-full transition-all duration-300 touch-manipulation ${
+                  index === currentSlide ? 'bg-color-1 w-8 sm:w-10' : 'bg-n-6 w-2 hover:bg-n-5'
                 } disabled:opacity-50`}
               />
             ))}
           </div>
 
           {/* Swipe indicator for mobile */}
-          <div className="flex justify-center mt-2 md:hidden">
-            <p className="text-xs text-n-4 opacity-70">
+          <div className="flex justify-center mt-3 md:hidden">
+            <p className="text-xs sm:text-sm text-n-4 opacity-70">
               Desliza para navegar
             </p>
           </div>

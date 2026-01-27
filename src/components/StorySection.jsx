@@ -86,39 +86,27 @@ const StorySection = ({ fontSize = 'normal' }) => {
   };
 
   return (
-    <section className="relative bg-n-8 py-20 md:py-32 lg:py-40">
-      <div className="max-w-[1800px] mx-auto px-4 sm:px-6 md:px-12 lg:px-20 xl:px-32">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 lg:gap-20 xl:gap-32">
+    <section className="relative bg-n-8 py-12 sm:py-16 md:py-24 lg:py-32 xl:py-40">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 md:gap-12 lg:gap-16 xl:gap-24">
           
-          {/* Fixed Navigation */}
-          <aside className="lg:col-span-3 lg:sticky lg:top-32 lg:self-start overflow-hidden">
-            <nav className="space-y-2 overflow-hidden">
+          {/* Fixed Navigation - Hidden on mobile, visible on lg+ */}
+          <aside className="hidden lg:block lg:col-span-3 lg:sticky lg:top-24 xl:top-32 lg:self-start">
+            <nav className="space-y-1.5 lg:space-y-2">
               {storyContent.map((section, index) => (
                 <button
                   key={section.id}
                   onClick={() => scrollToSection(index)}
-                  className={`w-full text-left py-4 transition-all duration-300 group border-l-[1px] pl-6 ${
+                  className={`w-full text-left py-3 lg:py-4 transition-all duration-300 group border-l-2 pl-4 lg:pl-6 ${
                     activeSection === index
                       ? 'border-n-1 text-n-1'
                       : 'border-n-7 text-n-4 hover:text-n-2 hover:border-n-5'
                   }`}
                 >
-                  <div className={`uppercase tracking-[0.2em] mb-2 opacity-60 ${
-                    fontSize === 'small' 
-                      ? 'text-[clamp(0.5rem,0.8vw,0.65rem)]' 
-                      : fontSize === 'large'
-                      ? 'text-[clamp(0.65rem,1.1vw,0.875rem)]'
-                      : 'text-[clamp(0.55rem,0.95vw,0.75rem)]'
-                  } font-light`}>
+                  <div className="text-xs lg:text-sm uppercase tracking-widest mb-1.5 lg:mb-2 opacity-60 font-light">
                     {section.id}
                   </div>
-                  <div className={`transition-colors ${
-                    fontSize === 'small' 
-                      ? 'text-[clamp(1rem,2vw,1.5rem)]' 
-                      : fontSize === 'large'
-                      ? 'text-[clamp(1.5rem,3vw,2.25rem)]'
-                      : 'text-[clamp(1.25rem,2.5vw,1.875rem)]'
-                  } ${
+                  <div className={`text-base lg:text-lg xl:text-xl transition-colors ${
                     activeSection === index ? 'font-medium' : 'font-light'
                   }`}>
                     {section.title}
@@ -128,14 +116,8 @@ const StorySection = ({ fontSize = 'normal' }) => {
             </nav>
 
             {/* Progress Indicator */}
-            <div className="mt-16 pt-10 border-t border-n-7">
-              <div className={`text-n-5 mb-4 tracking-wider ${
-                fontSize === 'small' 
-                  ? 'text-[clamp(0.875rem,1.5vw,1.125rem)]' 
-                  : fontSize === 'large'
-                  ? 'text-[clamp(1.25rem,2.5vw,1.875rem)]'
-                  : 'text-[clamp(1rem,2vw,1.5rem)]'
-              } font-light`}>
+            <div className="mt-12 lg:mt-16 pt-8 lg:pt-10 border-t border-n-7">
+              <div className="text-2xl lg:text-3xl xl:text-4xl text-n-5 mb-3 lg:mb-4 tracking-wider font-light">
                 {Math.round(((activeSection + 1) / storyContent.length) * 100)}%
               </div>
               <div className="h-[1px] bg-n-7 relative overflow-hidden">
@@ -149,48 +131,63 @@ const StorySection = ({ fontSize = 'normal' }) => {
 
           {/* Content Area */}
           <div className="lg:col-span-9">
-            <div className="space-y-24 md:space-y-40 lg:space-y-48 xl:space-y-56">
+            {/* Mobile Navigation Dropdown */}
+            <div className="lg:hidden mb-8 sm:mb-10">
+              <div className="bg-n-7/50 backdrop-blur-sm border border-n-6 rounded-xl p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs uppercase tracking-widest text-n-4">Progreso</span>
+                  <span className="text-lg font-semibold text-n-1">
+                    {Math.round(((activeSection + 1) / storyContent.length) * 100)}%
+                  </span>
+                </div>
+                <div className="h-1 bg-n-7 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-color-1 to-color-2 transition-all duration-1000 ease-out"
+                    style={{ width: `${((activeSection + 1) / storyContent.length) * 100}%` }}
+                  />
+                </div>
+                <div className="mt-4 flex gap-2 overflow-x-auto pb-2">
+                  {storyContent.map((section, index) => (
+                    <button
+                      key={section.id}
+                      onClick={() => scrollToSection(index)}
+                      className={`flex-shrink-0 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
+                        activeSection === index
+                          ? 'bg-n-1 text-n-8'
+                          : 'bg-n-7 text-n-3 hover:bg-n-6'
+                      }`}
+                    >
+                      {section.id}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-16 sm:space-y-20 md:space-y-28 lg:space-y-36 xl:space-y-44">
               {storyContent.map((section, index) => (
                 <article
                   key={section.id}
                   ref={(el) => (sectionRefs.current[index] = el)}
-                  className="scroll-mt-20 md:scroll-mt-28 lg:scroll-mt-32"
+                  className="scroll-mt-16 sm:scroll-mt-20 md:scroll-mt-24 lg:scroll-mt-28"
                 >
                   {/* Section Header */}
-                  <header className="mb-12 md:mb-16 lg:mb-20">
-                    <div className={`uppercase tracking-[0.25em] text-n-5 mb-4 md:mb-6 ${
-                      fontSize === 'small' 
-                        ? 'text-[clamp(0.5rem,0.8vw,0.65rem)]' 
-                        : fontSize === 'large'
-                        ? 'text-[clamp(0.65rem,1.1vw,0.875rem)]'
-                        : 'text-[clamp(0.55rem,0.95vw,0.75rem)]'
-                    } font-light`}>
+                  <header className="mb-8 sm:mb-10 md:mb-12 lg:mb-16">
+                    <div className="text-xs sm:text-sm uppercase tracking-widest text-n-5 mb-3 sm:mb-4 md:mb-5 lg:mb-6 font-light">
                       {section.id} — {section.subtitle}
                     </div>
-                    <h2 className={`leading-[0.95] font-bold text-n-1 tracking-tighter mb-6 md:mb-8 break-words ${
-                      fontSize === 'small' 
-                        ? 'text-[clamp(1.75rem,4.5vw,5rem)]' 
-                        : fontSize === 'large'
-                        ? 'text-[clamp(2.5rem,6.5vw,7rem)]'
-                        : 'text-[clamp(2rem,5.5vw,6rem)]'
-                    }`}>
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-[0.95] font-bold text-n-1 tracking-tighter mb-4 sm:mb-5 md:mb-6 lg:mb-8">
                       {section.title}
                     </h2>
-                    <div className="w-12 md:w-16 h-[1px] bg-n-1"></div>
+                    <div className="w-10 sm:w-12 md:w-14 lg:w-16 h-[1px] bg-n-1"></div>
                   </header>
 
                   {/* Content */}
-                  <div className="space-y-6 md:space-y-8">
+                  <div className="space-y-4 sm:space-y-5 md:space-y-6 lg:space-y-8">
                     {section.content.map((paragraph, pIndex) => (
                       <p 
                         key={pIndex}
-                        className={`text-n-3 leading-relaxed max-w-3xl font-extralight break-words ${
-                          fontSize === 'small' 
-                            ? 'text-[clamp(0.875rem,1.5vw,1.125rem)]' 
-                            : fontSize === 'large'
-                            ? 'text-[clamp(1.25rem,2.5vw,1.875rem)]'
-                            : 'text-[clamp(1rem,2vw,1.5rem)]'
-                        }`}
+                        className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-n-3 leading-relaxed max-w-4xl font-extralight"
                       >
                         {paragraph}
                       </p>

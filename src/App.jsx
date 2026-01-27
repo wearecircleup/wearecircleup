@@ -44,7 +44,7 @@ const App = () => {
 
   try {
     return (
-      <div>
+      <div className="overflow-x-hidden w-full">
         {currentPage === 'home' && <Home setCurrentPage={setCurrentPage} />}
         {currentPage === 'aliados' && <HowToUseBusiness setCurrentPage={setCurrentPage} />}
         {currentPage === 'voluntarios' && <HowToUseVolunteer setCurrentPage={setCurrentPage} />}

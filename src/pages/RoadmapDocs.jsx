@@ -12,9 +12,8 @@ const RoadmapDocs = ({ setCurrentPage }) => {
   const [fontFamily, setFontFamily] = useState('sans');
   const [fontSize, setFontSize] = useState('normal');
   const [menuLanguage, setMenuLanguage] = useState('es');
-  const [pageLanguage, setPageLanguage] = useState('es'); // Language for page content
+  const [pageLanguage, setPageLanguage] = useState('es');
   const [activeSection, setActiveSection] = useState(0);
-  const [showAccessibilityButton, setShowAccessibilityButton] = useState(false);
   const sectionRefs = useRef([]);
   const menuRef = useRef(null);
 
@@ -248,14 +247,6 @@ const RoadmapDocs = ({ setCurrentPage }) => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY + window.innerHeight / 2;
       
-      // Check if first section is visible to show accessibility button
-      if (sectionRefs.current[0]) {
-        const firstSection = sectionRefs.current[0];
-        const rect = firstSection.getBoundingClientRect();
-        const isVisible = rect.top <= window.innerHeight && rect.bottom >= 0;
-        setShowAccessibilityButton(isVisible);
-      }
-      
       sectionRefs.current.forEach((section, index) => {
         if (section) {
           const rect = section.getBoundingClientRect();
@@ -293,11 +284,9 @@ const RoadmapDocs = ({ setCurrentPage }) => {
       <Header setCurrentPage={setCurrentPage} />
       <ButtonGradient />
 
-      {/* Accessibility Button - Page Specific - Appears when first section is visible */}
+      {/* Accessibility Button - Page Specific */}
       <div 
-        className={`fixed top-24 left-4 sm:left-6 md:left-8 lg:left-12 z-50 transition-all duration-500 ${
-          showAccessibilityButton ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-full pointer-events-none'
-        }`}
+        className="fixed top-24 left-4 sm:left-6 md:left-8 lg:left-12 z-40 transition-all duration-500"
         ref={menuRef}
       >
         <Button 
@@ -313,7 +302,7 @@ const RoadmapDocs = ({ setCurrentPage }) => {
         </Button>
 
         {/* Accessibility Menu */}
-        {showAccessibilityMenu && showAccessibilityButton && (
+        {showAccessibilityMenu && (
           <div className="absolute top-full mt-2 left-0 bg-n-8/95 backdrop-blur-xl border border-n-6/50 rounded-2xl p-4 sm:p-6 shadow-2xl w-72 sm:w-80 animate-fadeIn">
             {/* Page Language Selector */}
             <div className="mb-6">
@@ -466,17 +455,11 @@ const RoadmapDocs = ({ setCurrentPage }) => {
         )}
       </div>
 
-      {/* Full Width Hero - Awwwards Style with Particle Logo */}
-      <section className="relative pt-32 md:pt-40 lg:pt-48 pb-20 md:pb-28 lg:pb-32 px-4 sm:px-6 md:px-12 lg:px-20 xl:px-32">
-        <div className="max-w-[1800px] mx-auto">
-          {/* Hero Particle Logo - Mobile (above title) */}
-          <div className="lg:hidden h-[300px] sm:h-[350px] md:h-[400px] mb-12 md:mb-16">
-            <HeroParticleLogo />
-          </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-20 xl:gap-32 items-center">
-            {/* Left: Hero Text */}
-            <div className="max-w-5xl relative z-20">
+      {/* Full Width Hero - Consistent Style */}
+      <section className="relative pt-32 sm:pt-36 md:pt-40 lg:pt-48 pb-12 sm:pb-16 md:pb-24 lg:pb-32 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 md:gap-12 lg:gap-16 xl:gap-20 items-center">
+            <div className="lg:col-span-7 text-center lg:text-left relative z-20 px-4 sm:px-6 lg:px-0">
               <div className={`uppercase tracking-[0.25em] text-n-4 mb-6 md:mb-8 lg:mb-10 ${
                 fontSize === 'small' 
                   ? 'text-[0.55rem] sm:text-[0.6rem] md:text-[0.65rem]' 
@@ -520,15 +503,15 @@ const RoadmapDocs = ({ setCurrentPage }) => {
               </div>
             </div>
 
-            {/* Right: Particle Logo - Desktop */}
-            <div className="hidden lg:block relative z-10">
-              <div className="relative aspect-square max-w-md mx-auto lg:max-w-none scale-[1.4] lg:-translate-x-[20%]">
+            {/* Hero Particle Logo - Consistent positioning */}
+            <div className="lg:col-span-5 relative group z-10 mt-8 lg:mt-0 overflow-hidden flex items-end">
+              <div className="relative aspect-square w-full max-w-[336px] sm:max-w-[384px] md:max-w-[480px] mx-auto lg:max-w-none">
                 {/* Background circles behind particles */}
                 <div className="absolute inset-0 z-0">
                   <BackgroundCircles />
                 </div>
                 {/* Particles on top */}
-                <div className="relative z-10">
+                <div className="relative z-10 h-full">
                   <HeroParticleLogo />
                 </div>
               </div>

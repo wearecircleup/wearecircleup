@@ -36,7 +36,7 @@ const Home = ({ setCurrentPage }) => {
         
         {/* Accessibility Button */}
         <div 
-          className="fixed top-24 left-4 sm:left-6 md:left-8 lg:left-12 z-50 transition-all duration-500"
+          className="fixed top-24 left-4 sm:left-6 md:left-8 lg:left-12 z-40 transition-all duration-500"
           ref={menuRef}
         >
           <Button 

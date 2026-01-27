@@ -29,11 +29,11 @@ const Header = ({ setCurrentPage }) => {
 
   return (
     <div
-      className={`fixed top-0 left-0 w-full z-50 border-b border-n-6 lg:bg-n-8/90 lg:bg-blur-sm ${
+      className={`fixed top-0 left-0 w-full z-[100] border-b border-n-6 lg:bg-n-8/90 lg:bg-blur-sm ${
         openNavigation ? "bg-n-8" : "bg-n-8/90 backdrop-blur-sm"
       }`}
     >
-      <div className="flex items-center px-5 lg:px-7.5 xl:px-10 max-lg:py-4">
+      <div className="flex items-center px-5 lg:px-7.5 xl:px-10 max-lg:py-4 relative z-[101]">
         <Logo 
           className="xl:mr-8" 
           logoSize={{ width: 60, height: 60 }}
@@ -117,7 +117,7 @@ const Header = ({ setCurrentPage }) => {
 
         <Button
           onClick={toggleNavigation}
-          className="ml-auto lg:hidden"
+          className="ml-auto lg:hidden relative z-[102]"
           px="px-3"
         >
           <MenuSvg openNavigation={openNavigation} />

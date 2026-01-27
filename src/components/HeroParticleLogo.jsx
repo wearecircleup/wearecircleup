@@ -40,8 +40,8 @@ function HeroParticleCanvas({ imageUrl, containerRef }) {
       const tempCanvas = document.createElement('canvas');
       const tempCtx = tempCanvas.getContext('2d');
       
-      // Scale image to fit container - 10% smaller
-      const scale = Math.min(canvas.width / img.width, canvas.height / img.height) * 0.85;
+      // Scale image to fit container - 2% larger (0.85 * 1.2 = 1.02)
+      const scale = Math.min(canvas.width / img.width, canvas.height / img.height) * 1.02;
       const width = Math.floor(img.width * scale);
       const height = Math.floor(img.height * scale);
       
@@ -68,11 +68,10 @@ function HeroParticleCanvas({ imageUrl, containerRef }) {
           if (alpha > 50 && brightness > 30) {
             const offsetX = (Math.random() - 0.5) * 2;
             const offsetY = (Math.random() - 0.5) * 2;
-            // Move image 15% to the left and 10% up within canvas
+            // Center image horizontally and align to bottom
             const leftOffset = canvas.width * -0.15;
-            const upOffset = canvas.height * -0.10;
             const baseX = x + (canvas.width - width) / 2 + offsetX + leftOffset;
-            const baseY = y + (canvas.height - height) / 2 + offsetY + upOffset;
+            const baseY = y + (canvas.height - height) + offsetY;
             
             // Random starting position - closer to base for gentler transition
             const angle = Math.random() * Math.PI * 2;
@@ -232,8 +231,8 @@ export default function HeroParticleLogo() {
   return (
     <div 
       ref={containerRef}
-      className="relative w-full h-full overflow-hidden cursor-pointer rounded-2xl" 
-      style={{ backgroundColor: '#110f19', minHeight: '400px' }}
+      className="relative w-full h-full overflow-hidden cursor-pointer rounded-2xl flex items-end" 
+      style={{ backgroundColor: '#110f19', minHeight: '100%' }}
       onClick={handleClick}
     >
       {/* Simple dark background */}
