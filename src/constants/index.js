@@ -112,23 +112,23 @@ export const roadmap = [
 ];
 
 export const collabText =
-  "Utilizamos tecnología moderna y segura para crear experiencias de aprendizaje efectivas y accesibles para toda la comunidad.";
+  "Herramientas que funcionan. Datos que protegen. Experiencias que transforman. Tu aprendizaje, nuestra tecnología.";
 
 export const collabContent = [
   {
     id: "0",
-    title: "Gestión de Datos",
-    text: "Snowflake para almacenamiento y análisis de datos de participantes y talleres.",
+    title: "Datos que importan",
+    text: "Snowflake. Seguro. Inteligente. Tu progreso, siempre protegido.",
   },
   {
     id: "1",
-    title: "Organización de Eventos",
-    text: "Eventbrite para gestionar inscripciones y logística de talleres comunitarios.",
+    title: "Eventos sin fricción",
+    text: "Eventbrite. Un clic. Tu cupo. Así de simple.",
   },
   {
     id: "2",
-    title: "Automatización y Audio",
-    text: "GitHub Actions, Jellypod y Deepgram para procesos automatizados y contenido multimedia.",
+    title: "Automatización que fluye",
+    text: "GitHub Actions. Jellypod. Deepgram. Tecnología invisible. Experiencia perfecta.",
   },
 ];
 

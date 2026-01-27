@@ -5,7 +5,8 @@ const RoadmapSection = ({
   quote, 
   authorTitle, 
   authorRole, 
-  steps 
+  steps,
+  fontSize = 'normal'
 }) => {
   return (
     <Section className="overflow-hidden relative">
@@ -26,7 +27,13 @@ const RoadmapSection = ({
             
             {/* Content */}
             <div className="pt-8">
-              <p className="body-1 mb-8 text-n-1 font-mono">
+              <p className={`body-1 mb-8 text-n-1 font-mono ${
+                fontSize === 'small' 
+                  ? 'text-base md:text-lg' 
+                  : fontSize === 'large'
+                  ? 'text-2xl md:text-3xl'
+                  : 'text-xl md:text-2xl'
+              }`}>
                 {quote}
               </p>
               
@@ -73,13 +80,25 @@ const RoadmapSection = ({
                 
                 {/* Content on the right */}
                 <div className="flex-1 pl-8">
-                  <h3 className="text-xl font-semibold text-n-1 mb-3 flex items-center">
+                  <h3 className={`font-semibold text-n-1 mb-3 flex items-center ${
+                    fontSize === 'small' 
+                      ? 'text-xl md:text-2xl' 
+                      : fontSize === 'large'
+                      ? 'text-3xl md:text-4xl'
+                      : 'text-2xl md:text-3xl'
+                  }`}>
                     <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center mr-3">
                       <span className="text-white text-xs">✓</span>
                     </div>
                     {step.title}
                   </h3>
-                  <p className="text-n-4 max-w-xl">{step.description}</p>
+                  <p className={`text-n-4 max-w-xl ${
+                    fontSize === 'small' 
+                      ? 'text-base md:text-lg' 
+                      : fontSize === 'large'
+                      ? 'text-xl md:text-2xl'
+                      : 'text-lg md:text-xl'
+                  }`}>{step.description}</p>
                 </div>
               </div>
             ))}

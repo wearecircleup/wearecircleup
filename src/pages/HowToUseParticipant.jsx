@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from "react";
 import Header from "../components/Header";
 import HowItWorks from "../components/HowItWorks";
 import NeedHelp from "../components/NeedHelp";
@@ -6,116 +7,102 @@ import Footer from "../components/Footer";
 import ButtonGradient from "../assets/svg/ButtonGradient";
 import RoadmapSection from "../components/RoadmapSection";
 import CallToActionSection from "../components/CallToActionSection";
+import Button from "../components/Button";
 
 const HowToUseParticipant = ({ setCurrentPage }) => {
+  const [showAccessibilityMenu, setShowAccessibilityMenu] = useState(false);
+  const [fontSize, setFontSize] = useState('normal');
+  const [menuLanguage, setMenuLanguage] = useState('es');
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowAccessibilityMenu(false);
+      }
+    };
+
+    if (showAccessibilityMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showAccessibilityMenu]);
 
   const steps = [
     {
       id: 0,
-      title: "Encuentra tu taller",
-      description: "Explora temas útiles cerca de ti: habilidades para el trabajo, vida práctica y desarrollo personal. Todos los talleres son gratuitos y abiertos.",
+      title: "Descubre tu momento",
+      description: "Tu próximo nivel está aquí. Habilidades que transforman. Talleres cerca de ti. Gratuitos. Abiertos. Listos para ti.",
       image: "/assets/circleimages/par-sub-nav-1.png"
     },
     {
       id: 1,
-      title: "Inscríbete en 1 minuto",
-      description: "Reserva tu cupo con un formulario corto y recibe recordatorios. Si el taller es en café con ticket simbólico, te lo contamos antes para que decidas.",
+      title: "Un minuto. Tu cupo.",
+      description: "Reserva en segundos. Recibe recordatorios. Si hay ticket simbólico en café, tú decides. Sin sorpresas. Solo claridad.",
       image: "/assets/circleimages/par-sub-nav-2.png"
     },
     {
       id: 2,
-      title: "Participa y crea algo",
-      description: "Sesiones prácticas de 1–2 horas donde haces, no solo escuchas. Te llevas algo concreto: un documento, un plan o una habilidad demostrable.",
+      title: "Haz que pase",
+      description: "1–2 horas donde tú creas. No escuchas. Haces. Sales con algo real: tu documento, tu plan, tu nueva habilidad.",
       image: "/assets/circleimages/par-sub-nav-3.png"
     },
     {
       id: 3,
-      title: "Sigue aprendiendo",
-      description: "Recibe recursos, certificado digital y opciones para continuar. Si te animas, también puedes enseñar lo que sabes en el futuro.",
+      title: "Sigue tu ritmo",
+      description: "Tu certificado digital. Tus recursos. Tu siguiente paso. Y cuando estés listo, comparte lo que sabes. El círculo continúa.",
       image: "/assets/circleimages/par-sub-nav-4.png"
     }
   ];
 
   const participationSteps = [
     {
-      date: "PASO 1",
-      title: "Registro en 1 minuto",
-      description: "Sin costo ni requisitos. Completa tu perfil y recibe el calendario por WhatsApp o email.",
+      date: "TU INICIO",
+      title: "Un minuto que lo cambia todo",
+      description: "Cero costo. Cero barreras. Solo tú y tu decisión. Completa tu perfil. El calendario llega a tu WhatsApp. Así de simple.",
       completed: true
     },
     {
-      date: "PASO 2", 
-      title: "Reserva tu cupo",
-      description: "Confirma con un clic. Si el taller es en café con ticket simbólico, te lo avisamos antes para que decidas.",
+      date: "TU MOMENTO", 
+      title: "Confirma. Listo.",
+      description: "Un clic y estás dentro. Ticket simbólico en café? Te avisamos antes. Tú siempre decides. Siempre en control.",
       completed: true
     },
     {
-      date: "PASO 3",
-      title: "Taller práctico 1–2 h", 
-      description: "Haces algo concreto: CV, plan de presupuesto, portafolio o proyecto. Formato cercano e intergeneracional.",
+      date: "TU PODER",
+      title: "1–2 horas. Resultados reales.", 
+      description: "Tu CV. Tu presupuesto. Tu portafolio. Tu proyecto. Creas, no solo escuchas. Intergeneracional. Cercano. Tuyo.",
       completed: true
     },
     {
-      date: "PASO 4",
-      title: "Certificado y siguientes pasos", 
-      description: "Recibes certificado digital y recursos para continuar. Puedes volver a otros talleres o compartir lo aprendido.",
+      date: "TU LEGADO",
+      title: "Certificado. Recursos. Infinitas posibilidades.", 
+      description: "Tu certificado digital te espera. Recursos para seguir. Vuelve cuando quieras. O enseña lo que aprendiste. El círculo eres tú.",
       completed: false
     }
   ];
 
-  const participantTestimonials = [
-    {
-      name: "María González",
-      role: "Madre de familia - Bogotá",
-      text: "En 4 semanas reduje mis gastos 12% y abrí un ahorro programado. El formato paso a paso me ordenó.",
-      avatar: "/src/assets/benefits/image-2.png"
-    },
-    {
-      name: "Carlos Ramírez",
-      role: "Emprendedor - Medellín",
-      text: "Con el plan de negocio, formalicé y contraté a 3 personas. Usé las plantillas para costos y precios.",
-      avatar: "/src/assets/benefits/image-2.png"
-    },
-    {
-      name: "Ana Sofía Herrera",
-      role: "Estudiante universitaria - Cali",
-      text: "Aprendí HTML/CSS básico y armé mi portafolio; ya hago trabajos freelance mientras estudio.",
-      avatar: "/src/assets/benefits/image-2.png"
-    },
-    {
-      name: "Pedro Martínez",
-      role: "Trabajador independiente - Barranquilla",
-      text: "Mejoré mi comunicación y conseguí un mejor contrato; ahora lidero un equipo de 8.",
-      avatar: "/src/assets/benefits/image-2.png"
-    },
-    {
-      name: "Lucía Vargas",
-      role: "Ama de casa - Bucaramanga",
-      text: "Volví a creer en mí. Hoy enseño repostería en mi barrio y vendo por encargo desde casa.",
-      avatar: "/src/assets/benefits/image-2.png"
-    }
-  ];
 
   const participantFAQs = [
     {
-      question: "¿Los talleres son completamente gratuitos?",
-      answer: "Sí, 100% gratuitos. En cafés puede existir un ticket simbólico opcional; siempre te lo informamos antes."
+      question: "¿Realmente es gratis?",
+      answer: "100% gratis. Siempre. En cafés puede haber ticket simbólico opcional. Te avisamos antes. Tú decides. Sin sorpresas."
     },
     {
-      question: "¿Qué requisitos necesito para participar?",
-      answer: "Ninguno. Solo ganas de aprender. No importa tu edad o nivel educativo: los talleres son accesibles y prácticos."
+      question: "¿Qué necesito para empezar?",
+      answer: "Solo ganas. Nada más. Tu edad no importa. Tu nivel educativo no importa. Si quieres aprender, ya tienes todo lo necesario."
     },
     {
-      question: "¿Cómo me inscribo a los talleres?",
-      answer: "En 1 minuto: formulario corto desde la agenda. También puedes inscribirte en puntos comunitarios o por WhatsApp."
+      question: "¿Cómo me inscribo?",
+      answer: "Un minuto. Formulario corto. Desde la agenda, puntos comunitarios o WhatsApp. Elige tu forma. Empieza ya."
     },
     {
-      question: "¿Recibo algún certificado al completar los talleres?",
-      answer: "Sí, certificado digital por taller que puedes anexar a tu hoja de vida o LinkedIn."
+      question: "¿Obtengo certificado?",
+      answer: "Sí. Certificado digital por cada taller. Para tu hoja de vida. Para tu LinkedIn. Para ti. Tu logro, tu prueba."
     },
     {
-      question: "¿Qué pasa si no puedo asistir a todas las sesiones?",
-      answer: "Hay horarios flexibles y material de apoyo. Puedes reprogramar y retomar cuando puedas."
+      question: "¿Y si no puedo asistir a todas las sesiones?",
+      answer: "La vida pasa. Lo entendemos. Horarios flexibles. Material de apoyo. Reprograma. Retoma cuando puedas. Tu ritmo. Tu camino."
     }
   ];
 
@@ -125,16 +112,121 @@ const HowToUseParticipant = ({ setCurrentPage }) => {
       <div className="pt-[4.75rem] lg:pt-[5.25rem] overflow-hidden">
         <Header setCurrentPage={setCurrentPage} />
         
+        {/* Accessibility Button */}
+        <div 
+          className="fixed top-24 left-4 sm:left-6 md:left-8 lg:left-12 z-50 transition-all duration-500"
+          ref={menuRef}
+        >
+          <Button 
+            onClick={() => setShowAccessibilityMenu(!showAccessibilityMenu)}
+            white
+          >
+            <span className="flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+              <span className="font-semibold">Aa</span>
+            </span>
+          </Button>
+
+          {/* Accessibility Menu */}
+          {showAccessibilityMenu && (
+            <div className="absolute top-full mt-2 left-0 bg-n-8/95 backdrop-blur-xl border border-n-6/50 rounded-2xl p-4 sm:p-6 shadow-2xl w-72 sm:w-80 animate-fadeIn">
+              <div className="flex justify-end gap-1 mb-4 pb-4 border-b border-n-6/30">
+                <button
+                  onClick={() => setMenuLanguage('en')}
+                  className={`px-2 py-1 text-xs font-medium rounded transition-all ${
+                    menuLanguage === 'en' ? 'bg-color-1 text-n-1' : 'text-n-4 hover:text-n-2'
+                  }`}
+                >
+                  EN
+                </button>
+                <button
+                  onClick={() => setMenuLanguage('es')}
+                  className={`px-2 py-1 text-xs font-medium rounded transition-all ${
+                    menuLanguage === 'es' ? 'bg-color-1 text-n-1' : 'text-n-4 hover:text-n-2'
+                  }`}
+                >
+                  ES
+                </button>
+              </div>
+
+              <div className="mb-6">
+                <h3 className="text-n-1 text-xs font-bold uppercase tracking-wider mb-3">
+                  {menuLanguage === 'en' ? 'FONT SIZE' : 'TAMAÑO DE FUENTE'}
+                </h3>
+                
+                <div className="flex items-center justify-between mb-3">
+                  <button
+                    onClick={() => setFontSize(fontSize === 'normal' ? 'small' : fontSize === 'large' ? 'normal' : 'small')}
+                    className="p-2 rounded-lg bg-n-7 hover:bg-n-6 text-n-1 transition-all"
+                  >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                    </svg>
+                  </button>
+                  <div className="flex-1 mx-4 text-center">
+                    <div className="text-n-1 font-semibold">
+                      {fontSize === 'small' 
+                        ? (menuLanguage === 'en' ? 'Small' : 'Pequeño')
+                        : fontSize === 'large' 
+                        ? (menuLanguage === 'en' ? 'Large' : 'Grande')
+                        : (menuLanguage === 'en' ? 'Medium' : 'Mediano')}
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setFontSize(fontSize === 'small' ? 'normal' : fontSize === 'normal' ? 'large' : 'large')}
+                    className="p-2 rounded-lg bg-n-7 hover:bg-n-6 text-n-1 transition-all"
+                  >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                  </button>
+                </div>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setFontSize('small')}
+                    className={`flex-1 py-2.5 px-2 rounded-xl text-sm font-medium transition-all ${
+                      fontSize === 'small' ? 'bg-n-1 text-n-8' : 'bg-n-7 text-n-3 hover:bg-n-6'
+                    }`}
+                  >
+                    {menuLanguage === 'en' ? 'Small' : 'Pequeño'}
+                  </button>
+                  <button
+                    onClick={() => setFontSize('normal')}
+                    className={`flex-1 py-2.5 px-2 rounded-xl text-sm font-medium transition-all ${
+                      fontSize === 'normal' ? 'bg-n-1 text-n-8' : 'bg-n-7 text-n-3 hover:bg-n-6'
+                    }`}
+                  >
+                    {menuLanguage === 'en' ? 'Medium' : 'Mediano'}
+                  </button>
+                  <button
+                    onClick={() => setFontSize('large')}
+                    className={`flex-1 py-2.5 px-2 rounded-xl text-sm font-medium transition-all ${
+                      fontSize === 'large' ? 'bg-n-1 text-n-8' : 'bg-n-7 text-n-3 hover:bg-n-6'
+                    }`}
+                  >
+                    {menuLanguage === 'en' ? 'Large' : 'Grande'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        
         <HowItWorks 
           steps={steps}
-          title="CÓMO FUNCIONA"
+          title="TU CAMINO EMPIEZA AQUÍ"
+          fontSize={fontSize}
         />
 
         <RoadmapSection 
-          quote="Talleres prácticos de 1–2 horas. Temas útiles para tu trabajo y vida. Sin requisitos. Inscripción en 1 minuto, certificado digital y flexibilidad para retomar cuando puedas."
+          quote="1–2 horas que transforman. Temas que importan. Para tu trabajo. Para tu vida. Sin barreras. Un minuto para inscribirte. Tu certificado digital te espera. Retoma cuando quieras. A tu ritmo. Siempre."
           authorTitle="Circle Up Volunteer"
           authorRole="Coordinador Proyecto"
           steps={participationSteps}
+          fontSize={fontSize}
         />
 
         {/* Community Testimonials Section */}
@@ -183,28 +275,33 @@ const HowToUseParticipant = ({ setCurrentPage }) => {
 
         <FAQ 
           faqs={participantFAQs}
+          fontSize={fontSize}
         />
 
 
         <CallToActionSection 
-          title="Aprende haciendo, gratis y cerca de ti con"
-          subtitle="Talleres prácticos de 1–2 horas. Temas útiles para tu trabajo y vida. Sin requisitos."
-          buttonText="INSCRIBIRME GRATIS"
-          buttonAction={() => { window.location.href = 'mailto:hola@circleup.com.co?subject=Quiero%20inscribirme&body=Nombre%3A%0ATaller%20de%20inter%C3%A9s%3A%0ACiudad%3A%0ATel%C3%A9fono%3A'; }}
+          title="Tu momento es ahora"
+          subtitle="Aprende haciendo. Gratis. Cerca de ti. 1–2 horas. Resultados reales. Sin requisitos. Solo tú y tu decisión."
+          buttonText="EMPIEZA TU HISTORIA"
+          buttonAction={() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setCurrentPage && setCurrentPage('login');
+          }}
+          fontSize={fontSize}
         />
 
         <NeedHelp 
-          title="¿Listo para transformar tu vida?"
-          subtitle="Únete a miles de personas que ya están creciendo con Circle Up"
+          title="Tu transformación empieza hoy"
+          subtitle="Miles ya crecen con Circle Up. Tu historia puede ser la siguiente."
           cards={[
             {
-              icon: "💬",
-              title: "Comunidad de Aprendizaje",
-              description: "Conecta con otros participantes y mentores"
+              iconType: "community",
+              title: "Tu comunidad te espera",
+              description: "Conecta. Aprende. Crece. Junto a otros como tú."
             },
             {
-              icon: "📧",
-              title: "Inscríbete Ya",
+              iconType: "email",
+              title: "Da el primer paso",
               description: "",
               email: "hola@circleup.com.co"
             }

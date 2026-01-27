@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from "react";
 import Header from "../components/Header";
 import HowItWorks from "../components/HowItWorks";
 import NeedHelp from "../components/NeedHelp";
@@ -6,59 +7,77 @@ import Footer from "../components/Footer";
 import ButtonGradient from "../assets/svg/ButtonGradient";
 import RoadmapSection from "../components/RoadmapSection";
 import CallToActionSection from "../components/CallToActionSection";
+import Button from "../components/Button";
 
 const HowToUseVolunteer = ({ setCurrentPage }) => {
+  const [showAccessibilityMenu, setShowAccessibilityMenu] = useState(false);
+  const [fontSize, setFontSize] = useState('normal');
+  const [menuLanguage, setMenuLanguage] = useState('es');
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowAccessibilityMenu(false);
+      }
+    };
+
+    if (showAccessibilityMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showAccessibilityMenu]);
 
   const steps = [
     {
       id: 0,
-      title: "Define tu rol",
-      description: "Cuéntanos qué sabes y a quién quieres apoyar. Desde 2 h al mes. No necesitas ser docente.",
+      title: "Lo que sabes importa",
+      description: "Cuéntanos tu saber. A quién quieres apoyar. Desde 2 horas al mes. No necesitas ser maestro. Solo tener algo que dar.",
       image: "/assets/circleimages/vol-sub-nav-1.png"
     },
     {
       id: 1,
-      title: "Onboarding 90 min",
-      description: "Metodología, plantillas y tips. Quedas listo para tu primera sesión.",
+      title: "90 minutos. Listo.",
+      description: "Metodología clara. Plantillas útiles. Tips reales. Sales preparado. Tu primera sesión te espera.",
       image: "/assets/circleimages/vol-sub-nav-2.png"
     },
     {
       id: 2,
-      title: "Primer taller acompañado",
-      description: "Sesión práctica de 1–2 h con apoyo de un coordinador. Tú pones el conocimiento; nosotros la logística y la comunidad.",
+      title: "Tu primer taller",
+      description: "1–2 horas. Con apoyo. Tú pones el conocimiento. Nosotros la logística. La comunidad llega. Tú brillas.",
       image: "/assets/circleimages/vol-sub-nav-3.png"
     },
     {
       id: 3,
-      title: "Suma impacto",
-      description: "Itera con feedback, propone nuevos temas y, si quieres, mentoriza a nuevos voluntarios.",
+      title: "Crece con cada sesión",
+      description: "Feedback real. Nuevos temas. Mentoriza a otros si quieres. Tu impacto se multiplica. El círculo crece.",
       image: "/assets/circleimages/vol-sub-nav-4.png"
     }
   ];
 
   const volunteerJourney = [
     {
-      date: "PASO 1",
-      title: "Registro y Perfil",
-      description: "Completa tu registro con tus habilidades, experiencia y disponibilidad. Define qué conocimientos quieres compartir con la comunidad.",
+      date: "TU PERFIL",
+      title: "Comparte quién eres",
+      description: "Tus habilidades. Tu experiencia. Tu disponibilidad. Define qué sabes. Decide qué quieres dar. Así de simple.",
       completed: true
     },
     {
-      date: "PASO 2", 
-      title: "Capacitación Inicial",
-      description: "Participa en nuestra sesión de onboarding donde aprenderás nuestra metodología de enseñanza comunitaria y herramientas digitales.",
+      date: "TU ONBOARDING", 
+      title: "90 minutos que cambian todo",
+      description: "Metodología comunitaria. Herramientas digitales. Técnicas de facilitación. Sales listo. Tu primera sesión te espera.",
       completed: true
     },
     {
-      date: "PASO 3",
-      title: "Primer Taller", 
-      description: "Facilita tu primer taller con el apoyo de un coordinador experimentado. Recibirás retroalimentación para mejorar tu técnica.",
+      date: "TU DEBUT",
+      title: "Primer taller. Con apoyo.", 
+      description: "Coordinador experimentado a tu lado. Feedback real. Mejoras tu técnica. Descubres tu estilo. Nace el facilitador que llevas dentro.",
       completed: true
     },
     {
-      date: "PASO 4",
-      title: "Autonomía y Crecimiento", 
-      description: "Desarrolla talleres independientes, mentoriza a otros voluntarios y contribuye al crecimiento del ecosistema educativo.",
+      date: "TU LEGADO",
+      title: "Vuela solo. Crece libre.", 
+      description: "Talleres independientes. Mentoriza a otros. Contribuye al ecosistema. Tu conocimiento se multiplica. El impacto no tiene límites.",
       completed: false
     }
   ];
@@ -98,24 +117,24 @@ const HowToUseVolunteer = ({ setCurrentPage }) => {
 
   const volunteerFAQs = [
     {
-      question: "¿Qué requisitos necesito para ser voluntario?",
-      answer: "Necesitas experiencia profesional en el área que quieres enseñar, disponibilidad desde 2 horas mensuales y ganas de compartir conocimientos. No requieres experiencia previa como instructor: te capacitamos en metodología de enseñanza comunitaria."
+      question: "¿Qué necesito para empezar?",
+      answer: "Experiencia en lo que quieres enseñar. 2 horas al mes. Ganas de compartir. No necesitas ser instructor. Te capacitamos. Te acompañamos. Tú solo trae tu saber."
     },
     {
-      question: "¿Cómo funciona el proceso de capacitación?",
-      answer: "Tras el registro, asistes a un onboarding de 90 minutos con metodología, herramientas y técnicas de facilitación. Tu primer taller lo haces acompañado por un coordinador experimentado."
+      question: "¿Cómo me preparan?",
+      answer: "90 minutos de onboarding. Metodología clara. Herramientas prácticas. Técnicas de facilitación. Tu primer taller con coordinador a tu lado. Aprendes haciendo."
     },
     {
-      question: "¿Qué apoyo recibo como voluntario?",
-      answer: "Capacitación inicial, plantillas y checklists, materiales didácticos, acceso a plataforma, acompañamiento de coordinadores, retroalimentación constante y constancia digital de voluntariado."
+      question: "¿Qué recibo como voluntario?",
+      answer: "Capacitación. Plantillas. Materiales. Plataforma. Acompañamiento. Feedback constante. Constancia digital. Todo lo que necesitas para brillar."
     },
     {
-      question: "¿Puedo elegir mi horario y ubicación?",
-      answer: "Sí, trabajamos con tu disponibilidad. Puedes elegir entre talleres presenciales en bibliotecas y espacios comunitarios, o talleres virtuales. Tú defines cuándo y dónde te sientes más cómodo enseñando."
+      question: "¿Puedo elegir cuándo y dónde?",
+      answer: "Sí. Tu horario. Tu ubicación. Presencial en bibliotecas. Virtual desde casa. Tú decides. Nos adaptamos. Tu comodidad es nuestra prioridad."
     },
     {
-      question: "¿Cómo mido el impacto de mis talleres?",
-      answer: "Tienes un tablero simple con 3 señales: asistencia, práctica aplicada y retroalimentación. Recibes constancia digital y recomendaciones concretas para mejorar."
+      question: "¿Cómo sé que estoy generando impacto?",
+      answer: "Tablero simple. 3 señales: asistencia, práctica aplicada, retroalimentación. Constancia digital. Recomendaciones concretas. Ves tu impacto. Lo sientes. Lo mides."
     }
   ];
 
@@ -125,42 +144,152 @@ const HowToUseVolunteer = ({ setCurrentPage }) => {
       <div className="pt-[4.75rem] lg:pt-[5.25rem] overflow-hidden">
         <Header setCurrentPage={setCurrentPage} />
         
+        {/* Accessibility Button */}
+        <div 
+          className="fixed top-24 left-4 sm:left-6 md:left-8 lg:left-12 z-50 transition-all duration-500"
+          ref={menuRef}
+        >
+          <Button 
+            onClick={() => setShowAccessibilityMenu(!showAccessibilityMenu)}
+            white
+          >
+            <span className="flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+              <span className="font-semibold">Aa</span>
+            </span>
+          </Button>
+
+          {/* Accessibility Menu */}
+          {showAccessibilityMenu && (
+            <div className="absolute top-full mt-2 left-0 bg-n-8/95 backdrop-blur-xl border border-n-6/50 rounded-2xl p-4 sm:p-6 shadow-2xl w-72 sm:w-80 animate-fadeIn">
+              <div className="flex justify-end gap-1 mb-4 pb-4 border-b border-n-6/30">
+                <button
+                  onClick={() => setMenuLanguage('en')}
+                  className={`px-2 py-1 text-xs font-medium rounded transition-all ${
+                    menuLanguage === 'en' ? 'bg-color-1 text-n-1' : 'text-n-4 hover:text-n-2'
+                  }`}
+                >
+                  EN
+                </button>
+                <button
+                  onClick={() => setMenuLanguage('es')}
+                  className={`px-2 py-1 text-xs font-medium rounded transition-all ${
+                    menuLanguage === 'es' ? 'bg-color-1 text-n-1' : 'text-n-4 hover:text-n-2'
+                  }`}
+                >
+                  ES
+                </button>
+              </div>
+
+              <div className="mb-6">
+                <h3 className="text-n-1 text-xs font-bold uppercase tracking-wider mb-3">
+                  {menuLanguage === 'en' ? 'FONT SIZE' : 'TAMAÑO DE FUENTE'}
+                </h3>
+                
+                <div className="flex items-center justify-between mb-3">
+                  <button
+                    onClick={() => setFontSize(fontSize === 'normal' ? 'small' : fontSize === 'large' ? 'normal' : 'small')}
+                    className="p-2 rounded-lg bg-n-7 hover:bg-n-6 text-n-1 transition-all"
+                  >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                    </svg>
+                  </button>
+                  <div className="flex-1 mx-4 text-center">
+                    <div className="text-n-1 font-semibold">
+                      {fontSize === 'small' 
+                        ? (menuLanguage === 'en' ? 'Small' : 'Pequeño')
+                        : fontSize === 'large' 
+                        ? (menuLanguage === 'en' ? 'Large' : 'Grande')
+                        : (menuLanguage === 'en' ? 'Medium' : 'Mediano')}
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setFontSize(fontSize === 'small' ? 'normal' : fontSize === 'normal' ? 'large' : 'large')}
+                    className="p-2 rounded-lg bg-n-7 hover:bg-n-6 text-n-1 transition-all"
+                  >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                  </button>
+                </div>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setFontSize('small')}
+                    className={`flex-1 py-2.5 px-2 rounded-xl text-sm font-medium transition-all ${
+                      fontSize === 'small' ? 'bg-n-1 text-n-8' : 'bg-n-7 text-n-3 hover:bg-n-6'
+                    }`}
+                  >
+                    {menuLanguage === 'en' ? 'Small' : 'Pequeño'}
+                  </button>
+                  <button
+                    onClick={() => setFontSize('normal')}
+                    className={`flex-1 py-2.5 px-2 rounded-xl text-sm font-medium transition-all ${
+                      fontSize === 'normal' ? 'bg-n-1 text-n-8' : 'bg-n-7 text-n-3 hover:bg-n-6'
+                    }`}
+                  >
+                    {menuLanguage === 'en' ? 'Medium' : 'Mediano'}
+                  </button>
+                  <button
+                    onClick={() => setFontSize('large')}
+                    className={`flex-1 py-2.5 px-2 rounded-xl text-sm font-medium transition-all ${
+                      fontSize === 'large' ? 'bg-n-1 text-n-8' : 'bg-n-7 text-n-3 hover:bg-n-6'
+                    }`}
+                  >
+                    {menuLanguage === 'en' ? 'Large' : 'Grande'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        
         <HowItWorks 
           steps={steps}
-          title="CÓMO FUNCIONA"
+          title="TU CAMINO COMO VOLUNTARIO"
+          fontSize={fontSize}
         />
 
         <RoadmapSection 
-          quote="Facilita sesiones prácticas de 1–2 horas con plantillas y acompañamiento. Tú pones el conocimiento; nosotros la logística y la comunidad. Desde 2 horas al mes, sin experiencia previa como instructor."
+          quote="1–2 horas prácticas. Plantillas listas. Acompañamiento real. Tú pones el conocimiento. Nosotros la logística. La comunidad llega. Desde 2 horas al mes. Sin experiencia previa. Solo ganas de compartir."
           authorTitle="Circle Up Volunteer"
           authorRole="Coordinador Voluntarios"
           steps={volunteerJourney}
+          fontSize={fontSize}
         />
 
         <FAQ 
           faqs={volunteerFAQs}
+          fontSize={fontSize}
         />
 
 
         <CallToActionSection 
-          title="Comparte tu experiencia con tu comunidad en"
-          subtitle="Facilita sesiones prácticas de 1–2 horas con plantillas y acompañamiento. Tú pones el conocimiento; nosotros la logística y la comunidad."
-          buttonText="APLICAR COMO VOLUNTARIO"
-          buttonAction={() => { window.location.href = 'mailto:hola@circleup.com.co?subject=Quiero%20ser%20voluntario&body=Nombre%3A%0AExperiencia%3A%0ADisponibilidad%3A%0A'; }}
+          title="Tu conocimiento puede cambiar vidas con"
+          subtitle="1–2 horas. Tu experiencia. Nuestra logística. Su transformación. Desde 2 horas al mes. Empieza cuando estés listo."
+          buttonText="COMPARTE TU SABER"
+          buttonAction={() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setCurrentPage && setCurrentPage('login');
+          }}
+          fontSize={fontSize}
         />
 
         <NeedHelp 
-          title="¿Necesitas apoyo?"
-          subtitle="Estamos aquí para acompañarte en tu journey como voluntario"
+          title="Tu camino como voluntario empieza hoy"
+          subtitle="Acompañamiento. Plantillas. Comunidad. Todo lo que necesitas para brillar."
           cards={[
             {
-              icon: "💬",
-              title: "Únete a nuestra comunidad",
-              description: "Conecta con otros voluntarios y coordinadores"
+              iconType: "community",
+              title: "Tu comunidad te espera",
+              description: "Voluntarios que inspiran. Coordinadores que apoyan. Juntos crecemos."
             },
             {
-              icon: "📧",
-              title: "Escríbenos",
+              iconType: "email",
+              title: "Da el primer paso",
               description: "",
               email: "hola@circleup.com.co"
             }

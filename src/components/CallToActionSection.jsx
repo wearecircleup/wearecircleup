@@ -4,7 +4,8 @@ const CallToActionSection = ({
   title, 
   subtitle, 
   buttonText, 
-  buttonAction 
+  buttonAction,
+  fontSize = 'normal'
 }) => {
   return (
     <Section className="overflow-hidden">
@@ -45,7 +46,13 @@ const CallToActionSection = ({
 
           {/* Content */}
           <div className="relative z-10 text-center max-w-[40rem]">
-            <h2 className="h2 mb-6">
+            <h2 className={`h2 mb-6 ${
+              fontSize === 'small' 
+                ? 'text-3xl md:text-4xl lg:text-5xl' 
+                : fontSize === 'large'
+                ? 'text-5xl md:text-6xl lg:text-7xl'
+                : 'text-4xl md:text-5xl lg:text-6xl'
+            }`}>
               {title}{" "}
               <span className="inline-block relative font-semibold">
                 Circle Up
@@ -58,7 +65,13 @@ const CallToActionSection = ({
                 />
               </span>
             </h2>
-            <p className="body-1 mb-8 text-n-4">
+            <p className={`body-1 mb-8 text-n-4 ${
+              fontSize === 'small' 
+                ? 'text-base md:text-lg' 
+                : fontSize === 'large'
+                ? 'text-xl md:text-2xl lg:text-3xl'
+                : 'text-lg md:text-xl lg:text-2xl'
+            }`}>
               {subtitle}
             </p>
             <button 

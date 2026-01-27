@@ -6,7 +6,8 @@ const HowItWorks = ({
   steps = [],
   title = "CÓMO FUNCIONA",
   className = "",
-  sectionClassName = "overflow-hidden relative"
+  sectionClassName = "overflow-hidden relative",
+  fontSize = 'normal'
 }) => {
   const [activeStep, setActiveStep] = useState(0);
 
@@ -54,11 +55,36 @@ const HowItWorks = ({
           
           {/* Right side - Text Content */}
           <div className="relative">
+            {/* Label superior */}
+            <div className={`uppercase tracking-[0.25em] text-n-4 mb-4 md:mb-6 text-center lg:text-left ${
+              fontSize === 'small' 
+                ? 'text-[0.6rem] sm:text-[0.65rem] md:text-xs' 
+                : fontSize === 'large'
+                ? 'text-[0.75rem] sm:text-sm md:text-base'
+                : 'text-[0.7rem] sm:text-[0.75rem] md:text-sm'
+            } font-light`}>
+              PASO {String(activeStep + 1).padStart(2, '0')}
+            </div>
             
-            <h2 className="h2 mb-4 md:mb-6 text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center lg:text-left">
+            {/* Título principal en negrita BLACK */}
+            <h2 className={`leading-[0.95] font-black text-n-1 mb-6 md:mb-8 tracking-tighter text-center lg:text-left ${
+              fontSize === 'small' 
+                ? 'text-[2rem] sm:text-[3rem] md:text-[4rem] lg:text-[5.5rem]' 
+                : fontSize === 'large'
+                ? 'text-[3rem] sm:text-[4.5rem] md:text-[6rem] lg:text-[8rem]'
+                : 'text-[2.5rem] sm:text-[3.5rem] md:text-[5rem] lg:text-[6.5rem]'
+            }`}>
               {steps[activeStep]?.title || ""}
             </h2>
-            <p className="body-1 text-n-4 mb-6 md:mb-8 leading-relaxed text-sm sm:text-base text-center lg:text-left">
+            
+            {/* Descripción */}
+            <p className={`body-1 text-n-4 mb-6 md:mb-8 leading-relaxed text-center lg:text-left ${
+              fontSize === 'small' 
+                ? 'text-base sm:text-lg' 
+                : fontSize === 'large'
+                ? 'text-xl sm:text-2xl md:text-3xl'
+                : 'text-lg sm:text-xl md:text-2xl'
+            }`}>
               {steps[activeStep]?.description || ""}
             </p>
             
@@ -139,15 +165,27 @@ const HowItWorks = ({
                   </div>
                   
                   {/* Step title */}
-                  <h4 className={`text-lg font-semibold mb-2 transition-all duration-300 ${
+                  <h4 className={`font-semibold mb-2 transition-all duration-300 ${
                     activeStep === index ? 'text-n-1' : 'text-n-3'
+                  } ${
+                    fontSize === 'small' 
+                      ? 'text-base' 
+                      : fontSize === 'large'
+                      ? 'text-2xl'
+                      : 'text-xl'
                   }`}>
                     {step.title}
                   </h4>
                   
                   {/* Step description */}
-                  <p className={`text-sm leading-relaxed transition-all duration-300 ${
-                    activeStep === index ? 'text-n-2' : 'text-n-4'
+                  <p className={`transition-all duration-300 ${
+                    activeStep === index ? 'text-n-4' : 'text-n-5'
+                  } ${
+                    fontSize === 'small' 
+                      ? 'text-sm' 
+                      : fontSize === 'large'
+                      ? 'text-xl'
+                      : 'text-lg'
                   }`}>
                     {activeStep === index 
                       ? step.description.substring(0, 120) + (step.description.length > 120 ? '...' : '')

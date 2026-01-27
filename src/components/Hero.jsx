@@ -5,6 +5,7 @@ import { curve } from "../assets";
 import CompanyLogos from "./CompanyLogos";
 import { BackgroundCircles, BottomLine } from "./design/Hero";
 import Section from "./Section";
+import HeroImageParticles from "./HeroImageParticles";
 
 // Hero Images Infinite Carousel Component
 const HeroImagesGrid = () => {
@@ -244,7 +245,7 @@ const HeroImagesGrid = () => {
   );
 };
 
-const Hero = () => {
+const Hero = ({ fontSize = 'normal' }) => {
   const parallaxRef = useRef(null);
 
   return (
@@ -256,50 +257,89 @@ const Hero = () => {
       id="hero"
     >
       <div ref={parallaxRef} className="container relative">
-        <div className="relative z-1 max-w-[62rem] mx-auto text-center mb-[1rem] md:mb-4 lg:mb-[1.5rem]">
-          <h1 className="h1 mb-6">
-            <span className="inline-block relative font-semibold">
-              Circle Up Volunteer
-              <img
-                src={curve}
-                className="absolute top-full left-0 w-full xl:-mt-2 pointer-events-none select-none"
-                width={624}
-                height={28}
-                alt="Curve"
-              />
-            </span>
-          </h1>
-          
-          <div className="mt-8 mb-8">
-            <div className="text-4xl md:text-6xl lg:text-6xl font-mono text-n-1">
-              <Typewriter
-                options={{
-                  strings: [
-                    "Habilidades Digitales",
-                    "Inteligencia Artificial",
-                    "Finanzas Personales",
-                    "Diseño y Creatividad",
-                    "Liderazgo",
-                    "Comunicación Efectiva",
-                  ],
-                  autoStart: true,
-                  loop: true,
-                }}
-              />
+        <div className="relative z-1 max-w-[90rem] mx-auto mb-20 md:mb-32 lg:mb-40">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+            
+            {/* Left: Hero Text */}
+            <div className="lg:col-span-7 text-center lg:text-left">
+              <div className={`uppercase tracking-[0.25em] text-n-4 mb-6 md:mb-8 lg:mb-10 ${
+                fontSize === 'small' 
+                  ? 'text-[clamp(0.5rem,0.8vw,0.65rem)]' 
+                  : fontSize === 'large'
+                  ? 'text-[clamp(0.65rem,1.1vw,0.875rem)]'
+                  : 'text-[clamp(0.55rem,0.95vw,0.75rem)]'
+              } font-light`}>
+                Circle Up Volunteer
+              </div>
+              
+              <h1 className={`leading-[0.9] font-bold text-n-1 mb-8 md:mb-12 tracking-tighter ${
+                fontSize === 'small' 
+                  ? 'text-[clamp(2rem,5vw,6rem)]' 
+                  : fontSize === 'large'
+                  ? 'text-[clamp(3rem,8vw,10rem)]'
+                  : 'text-[clamp(2.5rem,7vw,9rem)]'
+              }`}>
+                Sabes algo <br className="hidden sm:block" />que alguien <br className="hidden sm:block" />necesita
+              </h1>
+              
+              {/* Typewriter interactivo */}
+              <div className="mb-12 md:mb-16">
+                <div className={`text-n-3 font-light leading-relaxed ${
+                  fontSize === 'small' 
+                    ? 'text-[clamp(1rem,2vw,1.5rem)]' 
+                    : fontSize === 'large'
+                    ? 'text-[clamp(1.5rem,3vw,2.5rem)]'
+                    : 'text-[clamp(1.25rem,2.5vw,2rem)]'
+                }`}>
+                  <Typewriter
+                    options={{
+                      strings: [
+                        "Tu Excel puede cambiar una carrera.",
+                        "Tu diseño puede abrir puertas.",
+                        "Tu experiencia vale más de lo que crees.",
+                        "2 horas tuyas = un futuro diferente.",
+                        "No enseñas porque sabes todo.<br/>Enseñas porque sabes algo.",
+                      ],
+                      autoStart: true,
+                      loop: true,
+                      delay: 50,
+                      deleteSpeed: 30,
+                    }}
+                  />
+                </div>
+              </div>
+              
+              {/* Metadata minimalista */}
+              <div className={`flex flex-wrap items-center justify-center lg:justify-start gap-4 md:gap-6 text-n-4 tracking-wider ${
+                fontSize === 'small' 
+                  ? 'text-[clamp(0.6rem,0.9vw,0.75rem)]' 
+                  : fontSize === 'large'
+                  ? 'text-[clamp(0.75rem,1.2vw,1rem)]'
+                  : 'text-[clamp(0.65rem,1vw,0.875rem)]'
+              } font-light`}>
+                <span>Tocancipá, Colombia</span>
+                <span className="w-1 h-1 rounded-full bg-n-6"></span>
+                <span>127 vidas impactadas</span>
+                <span className="w-1 h-1 rounded-full bg-n-6"></span>
+                <span>Gratis siempre</span>
+              </div>
+            </div>
+            
+            {/* Right: Visual minimalista con partículas */}
+            <div className="lg:col-span-5 relative group">
+              <div className="relative aspect-square max-w-md mx-auto lg:max-w-none">
+                {/* Background circles behind particles */}
+                <div className="absolute inset-0 z-0">
+                  <BackgroundCircles />
+                </div>
+                {/* Particles on top */}
+                <div className="absolute inset-0 z-10">
+                  <HeroImageParticles />
+                </div>
+              </div>
             </div>
           </div>
-
-          {/* Hero Images Grid */}
-          <div className="mt-8 mb-2">
-            <HeroImagesGrid />
-          </div>
         </div>
-
-        <div className="relative max-w-[28rem] mx-auto md:max-w-6xl xl:mb-4">
-          <BackgroundCircles />
-        </div>
-
-        <CompanyLogos className="hidden relative z-10 mt-4 lg:block" />
       </div>
 
       <BottomLine />

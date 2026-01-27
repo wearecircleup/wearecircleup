@@ -7,7 +7,8 @@ const FAQ = ({
   contactText = "Contáctanos",
   faqs = [],
   className = "",
-  sectionClassName = "overflow-hidden relative"
+  sectionClassName = "overflow-hidden relative",
+  fontSize = 'normal'
 }) => {
   const [expandedFAQ, setExpandedFAQ] = useState(null);
 
@@ -25,8 +26,20 @@ const FAQ = ({
       <div className={`container relative z-2 ${className}`}>
         <div className="grid gap-6 md:gap-8 lg:gap-10 lg:grid-cols-2">
           <div>
-            <h2 className="h2 mb-4">{title}</h2>
-            <p className="body-1 text-n-4 mb-6">
+            <h2 className={`h2 mb-4 ${
+              fontSize === 'small' 
+                ? 'text-3xl md:text-4xl' 
+                : fontSize === 'large'
+                ? 'text-5xl md:text-6xl'
+                : 'text-4xl md:text-5xl'
+            }`}>{title}</h2>
+            <p className={`body-1 text-n-4 mb-6 ${
+              fontSize === 'small' 
+                ? 'text-base md:text-lg' 
+                : fontSize === 'large'
+                ? 'text-xl md:text-2xl'
+                : 'text-lg md:text-xl'
+            }`}>
               {subtitle} <span className="text-color-1 cursor-pointer hover:underline">{contactText}</span>
             </p>
           </div>
@@ -40,7 +53,13 @@ const FAQ = ({
                   aria-expanded={expandedFAQ === index}
                   aria-controls={`faq-answer-${index}`}
                 >
-                  <span className="text-n-1 font-medium text-base sm:text-lg pr-4 group-hover:text-color-1 transition-colors">
+                  <span className={`text-n-1 font-medium pr-4 group-hover:text-color-1 transition-colors ${
+                    fontSize === 'small' 
+                      ? 'text-base sm:text-lg' 
+                      : fontSize === 'large'
+                      ? 'text-xl sm:text-2xl'
+                      : 'text-lg sm:text-xl'
+                  }`}>
                     {faq.question}
                   </span>
                   <span className="text-n-3 text-xl sm:text-2xl font-light flex-shrink-0 transition-transform duration-200 ease-in-out">
@@ -52,7 +71,13 @@ const FAQ = ({
                     id={`faq-answer-${index}`}
                     className="pb-4 sm:pb-6 -mt-2 transition-all duration-300 ease-out"
                   >
-                    <p className="text-n-3 leading-relaxed pr-4 sm:pr-8 text-sm sm:text-base">
+                    <p className={`text-n-3 leading-relaxed pr-4 sm:pr-8 ${
+                      fontSize === 'small' 
+                        ? 'text-sm sm:text-base' 
+                        : fontSize === 'large'
+                        ? 'text-lg sm:text-xl'
+                        : 'text-base sm:text-lg'
+                    }`}>
                       {faq.answer}
                     </p>
                   </div>

@@ -4,17 +4,18 @@ import Section from "./Section";
 import Heading from "./Heading";
 import { Gradient, VideoBar } from "./design/Services";
 
-const Services = () => {
+const Services = ({ fontSize = 'normal' }) => {
   return (
     <Section id="how-to-use">
       <div className="container">
         <Heading
           className="md:max-w-md lg:max-w-2xl"
+          fontSize={fontSize}
           title={
             <>
-              Descubre Nuestros{" "}
+              Qué necesitas para{" "}
               <span className="inline-block relative font-semibold">
-                Servicios
+                empezar
                 <img
                   src={curve}
                   className="absolute top-full left-0 w-full xl:-mt-2 pointer-events-none select-none"
@@ -92,9 +93,14 @@ const Services = () => {
                       <path d="M0 32V16C0 7.2 7.2 0 16 0V8C11.6 8 8 11.6 8 16V20H16V32H0ZM24 32V16C24 7.2 31.2 0 40 0V8C35.6 8 32 11.6 32 16V20H40V32H24Z" fill="#AC6AFF"/>
                     </svg>
                   </div>
-                  <p className="body-1 text-n-1 font-mono leading-relaxed text-xs md:text-sm">
-                    Conecta con expertos voluntarios que te guían paso a paso
-                    en tu desarrollo profesional y personal.
+                  <p className={`body-1 text-n-1 font-mono leading-relaxed ${
+                    fontSize === 'small' 
+                      ? 'text-[clamp(0.75rem,1.2vw,0.875rem)]' 
+                      : fontSize === 'large'
+                      ? 'text-[clamp(1rem,1.8vw,1.25rem)]'
+                      : 'text-[clamp(0.875rem,1.5vw,1rem)]'
+                  }`}>
+                    Conocimiento aplicable. No necesitas ser el mejor del mundo en tu campo. Solo necesitas saber lo suficiente para guiar a alguien que está empezando.
                   </p>
                   <div className="mt-2 md:mt-3 flex items-center gap-2">
                     <div className="w-6 h-6 md:w-8 md:h-8 bg-gradient-to-r from-color-1 to-color-2 rounded-full flex items-center justify-center">
@@ -187,9 +193,14 @@ const Services = () => {
                       <path d="M0 32V16C0 7.2 7.2 0 16 0V8C11.6 8 8 11.6 8 16V20H16V32H0ZM24 32V16C24 7.2 31.2 0 40 0V8C35.6 8 32 11.6 32 16V20H40V32H24Z" fill="#AC6AFF"/>
                     </svg>
                   </div>
-                  <p className="body-1 text-n-1 font-mono leading-relaxed text-xs md:text-sm">
-                    Aprende haciendo en talleres prácticos donde la comunidad
-                    comparte conocimientos y experiencias reales.
+                  <p className={`body-1 text-n-1 font-mono leading-relaxed ${
+                    fontSize === 'small' 
+                      ? 'text-[clamp(0.75rem,1.2vw,0.875rem)]' 
+                      : fontSize === 'large'
+                      ? 'text-[clamp(1rem,1.8vw,1.25rem)]'
+                      : 'text-[clamp(0.875rem,1.5vw,1rem)]'
+                  }`}>
+                    2 horas de tu agenda. Coordinamos espacio, inscripciones y materiales básicos. Tú preparas el contenido práctico y llegas a enseñar. Sin compromisos a largo plazo.
                   </p>
                   <div className="mt-2 md:mt-3 flex items-center gap-2">
                     <div className="w-6 h-6 md:w-8 md:h-8 bg-gradient-to-r from-color-2 to-color-1 rounded-full flex items-center justify-center">

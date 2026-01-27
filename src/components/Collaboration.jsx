@@ -3,15 +3,21 @@ import Section from "./Section";
 import { collabApps, collabContent, collabText } from "../constants";
 import { LeftCurve, RightCurve } from "./design/Collaboration";
 
-const Collaboration = () => {
+const Collaboration = ({ fontSize = 'normal' }) => {
   return (
     <Section crosses>
       <div className="container lg:flex">
         <div className="max-w-[25rem] px-4 lg:px-0">
-          <h2 className="h2 mb-4 md:mb-8 text-center lg:text-left">
-            Herramientas que potencian nuestro
+          <h2 className={`h2 mb-4 md:mb-8 text-center lg:text-left ${
+            fontSize === 'small' 
+              ? 'text-3xl md:text-4xl' 
+              : fontSize === 'large'
+              ? 'text-5xl md:text-6xl'
+              : 'text-4xl md:text-5xl'
+          }`}>
+            Tecnología que
             <span className="inline-block relative font-semibold">
-              ecosistema
+              {" "}te impulsa
               <img
                 src={curve}
                 className="absolute top-full left-0 w-full xl:-mt-2 pointer-events-none select-none"
@@ -33,11 +39,23 @@ const Collaboration = () => {
                     height={20}
                     className="pointer-events-none select-none md:w-6 md:h-6"
                   />
-                  <h6 className="body-2 ml-3 md:ml-5 text-sm md:text-base">{item.title}</h6>
+                  <h6 className={`body-2 ml-3 md:ml-5 ${
+                    fontSize === 'small' 
+                      ? 'text-sm md:text-base' 
+                      : fontSize === 'large'
+                      ? 'text-lg md:text-xl'
+                      : 'text-base md:text-lg'
+                  }`}>{item.title}</h6>
                 </div>
 
                 {item.text && (
-                  <p className="body-2 mt-2 md:mt-3 text-n-4 text-sm md:text-base ml-6 md:ml-8">{item.text}</p>
+                  <p className={`body-2 mt-2 md:mt-3 text-n-4 ml-6 md:ml-8 ${
+                    fontSize === 'small' 
+                      ? 'text-sm md:text-base' 
+                      : fontSize === 'large'
+                      ? 'text-base md:text-lg'
+                      : 'text-base md:text-lg'
+                  }`}>{item.text}</p>
                 )}
               </li>
             ))}
@@ -45,7 +63,13 @@ const Collaboration = () => {
         </div>
 
         <div className="lg:ml-auto xl:w-[50rem] mt-8 lg:mt-4 px-4 lg:px-0">
-          <p className="body-2 mb-8 text-n-4 md:mb-16 lg:mb-20 lg:w-[40rem] lg:mx-auto text-center lg:text-left text-sm md:text-base">
+          <p className={`body-2 mb-8 text-n-4 md:mb-16 lg:mb-20 lg:w-[40rem] lg:mx-auto text-center lg:text-left ${
+            fontSize === 'small' 
+              ? 'text-sm md:text-base' 
+              : fontSize === 'large'
+              ? 'text-lg md:text-xl'
+              : 'text-base md:text-lg'
+          }`}>
             {collabText}
           </p>
 

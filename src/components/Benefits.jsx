@@ -4,7 +4,7 @@ import Section from "./Section";
 import Logo from "./Logo";
 import { curve } from "../assets";
 
-const Benefits = () => {
+const Benefits = ({ fontSize = 'normal' }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -27,51 +27,30 @@ const Benefits = () => {
     {
       id: 0,
       name: "Biblioteca Central",
-      role: "Espacio de Aprendizaje",
-      text: "Un lugar tranquilo y acogedor donde puedes concentrarte en aprender nuevas habilidades con el apoyo de voluntarios expertos.",
+      role: "Espacio Disponible",
+      text: "Mesas amplias, WiFi estable, ambiente tranquilo. Coordinamos el espacio, tú llegas y enseñas. Martes y jueves, 3-5 PM disponibles.",
       image: "./assets/circleimages/home-carrusel-1.png"
     },
     {
       id: 1,
       name: "Café Comunitario",
-      role: "Espacio de Aprendizaje", 
-      text: "Aprende mientras disfrutas de un café. Un ambiente relajado perfecto para talleres de emprendimiento y networking.",
+      role: "Espacio Disponible", 
+      text: "Ambiente relajado, café incluido para voluntarios. Ideal para talleres de emprendimiento y marketing. Sábados 10 AM, cupo 15 personas.",
       image: "./assets/circleimages/home-carrusel-2.png"
     },
     {
       id: 2,
       name: "Plaza Comunitaria",
-      role: "Espacio de Aprendizaje",
-      text: "Conecta con tu comunidad. Un espacio donde la tradición te permite crear experiencias de aprendizaje únicas y colaborativas.",
+      role: "Espacio Disponible",
+      text: "Sesiones al aire libre, buena iluminación natural. Perfecto para fotografía, diseño, contenido visual. Domingos por la tarde.",
       image: "./assets/circleimages/home-carrusel-3.png"
-    },
-    {
-      id: 3,
-      name: "Espacio Natural",
-      role: "Espacio de Aprendizaje",
-      text: "Aprende en armonía. Un ambiente donde el arte, la creatividad y el conocimiento fluyen naturalmente bajo el cielo abierto.",
-      image: "./assets/circleimages/home-carrusel-4.png"
     },
     {
       id: 4,
       name: "Biblioteca Moderna",
-      role: "Espacio de Aprendizaje",
-      text: "Un espacio que eleva tu experiencia de aprendizaje. Perfecto para estudio colaborativo y talleres en un ambiente contemporáneo.",
+      role: "Espacio Disponible",
+      text: "Equipos disponibles si los participantes no traen dispositivos. Proyector y pantalla incluidos. Certificado digital para tu portafolio.",
       image: "./assets/circleimages/home-carrusel-5.png"
-    },
-    {
-      id: 5,
-      name: "Plaza Patrimonial",
-      role: "Espacio de Aprendizaje",
-      text: "Aprende rodeado de historia y tradición. Un espacio donde el patrimonio cultural se convierte en talleres y memoria colectiva.",
-      image: "./assets/circleimages/home-carrusel-6.png"
-    },
-    {
-      id: 6,
-      name: "Ludoteca Creativa",
-      role: "Espacio de Aprendizaje",
-      text: "Un mundo de colores donde el juego se convierte en aprendizaje. Espacio diseñado para talleres lúdicos, desarrollo de habilidades sociales y creatividad.",
-      image: "./assets/circleimages/home-carrusel-7.png"
     }
   ];
 
@@ -121,11 +100,12 @@ const Benefits = () => {
       <div className="container relative z-2">
         <Heading
           className="md:max-w-md lg:max-w-2xl"
+          fontSize={fontSize}
           title={
             <>
-              Conecta, Aprende y Crece con{" "}
+              Dónde puedes{" "}
               <span className="inline-block relative font-semibold">
-                Circle Up
+                enseñar
                 <img
                   src={curve}
                   className="absolute top-full left-0 w-full xl:-mt-2 pointer-events-none select-none"
@@ -186,8 +166,20 @@ const Benefits = () => {
                     
                     {/* User info */}
                     <div className="absolute bottom-4 left-4 md:bottom-6 md:left-6">
-                      <h4 className="text-white font-semibold text-base md:text-lg mb-1">{benefit.name}</h4>
-                      <p className="text-gray-400 text-xs md:text-sm">{benefit.role}</p>
+                      <h4 className={`text-white font-semibold mb-1 ${
+                        fontSize === 'small' 
+                          ? 'text-base md:text-lg' 
+                          : fontSize === 'large'
+                          ? 'text-xl md:text-2xl'
+                          : 'text-lg md:text-xl'
+                      }`}>{benefit.name}</h4>
+                      <p className={`text-gray-400 ${
+                        fontSize === 'small' 
+                          ? 'text-xs md:text-sm' 
+                          : fontSize === 'large'
+                          ? 'text-sm md:text-base'
+                          : 'text-sm md:text-base'
+                      }`}>{benefit.role}</p>
                     </div>
                   </div>
                   
@@ -200,7 +192,13 @@ const Benefits = () => {
                           <path d="M0 32V16C0 7.2 7.2 0 16 0V8C11.6 8 8 11.6 8 16V20H16V32H0ZM24 32V16C24 7.2 31.2 0 40 0V8C35.6 8 32 11.6 32 16V20H40V32H24Z" fill="#AC6AFF"/>
                         </svg>
                       </div>
-                      <p className="body-1 text-n-1 font-mono leading-relaxed text-xs md:text-sm">
+                      <p className={`body-1 text-n-1 font-mono leading-relaxed ${
+                        fontSize === 'small' 
+                          ? 'text-xs md:text-sm' 
+                          : fontSize === 'large'
+                          ? 'text-base md:text-lg'
+                          : 'text-sm md:text-base'
+                      }`}>
                         {benefit.text}
                       </p>
                     </div>
