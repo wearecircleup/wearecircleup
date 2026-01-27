@@ -5,7 +5,7 @@ import { curve } from "../assets";
 import CompanyLogos from "./CompanyLogos";
 import { BackgroundCircles, BottomLine } from "./design/Hero";
 import Section from "./Section";
-import HeroImageParticles from "./HeroImageParticles";
+import HeroParticleLogo from "./HeroParticleLogo";
 
 // Hero Images Infinite Carousel Component
 const HeroImagesGrid = () => {
@@ -261,7 +261,7 @@ const Hero = ({ fontSize = 'normal' }) => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
             
             {/* Left: Hero Text */}
-            <div className="lg:col-span-7 text-center lg:text-left">
+            <div className="lg:col-span-7 text-center lg:text-left relative z-20">
               <div className={`uppercase tracking-[0.25em] text-n-4 mb-6 md:mb-8 lg:mb-10 ${
                 fontSize === 'small' 
                   ? 'text-[clamp(0.5rem,0.8vw,0.65rem)]' 
@@ -326,15 +326,15 @@ const Hero = ({ fontSize = 'normal' }) => {
             </div>
             
             {/* Right: Visual minimalista con partículas */}
-            <div className="lg:col-span-5 relative group">
-              <div className="relative aspect-square max-w-md mx-auto lg:max-w-none">
+            <div className="lg:col-span-5 relative group z-10">
+              <div className="relative aspect-square max-w-md mx-auto lg:max-w-none scale-[1.4] lg:-translate-x-[20%]">
                 {/* Background circles behind particles */}
                 <div className="absolute inset-0 z-0">
                   <BackgroundCircles />
                 </div>
                 {/* Particles on top */}
-                <div className="absolute inset-0 z-10">
-                  <HeroImageParticles />
+                <div className="relative z-10">
+                  <HeroParticleLogo />
                 </div>
               </div>
             </div>

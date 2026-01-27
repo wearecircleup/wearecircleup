@@ -40,8 +40,8 @@ function HeroParticleCanvas({ imageUrl, containerRef }) {
       const tempCanvas = document.createElement('canvas');
       const tempCtx = tempCanvas.getContext('2d');
       
-      // Scale image to fit container - larger size
-      const scale = Math.min(canvas.width / img.width, canvas.height / img.height) * 0.95;
+      // Scale image to fit container - 10% smaller
+      const scale = Math.min(canvas.width / img.width, canvas.height / img.height) * 0.85;
       const width = Math.floor(img.width * scale);
       const height = Math.floor(img.height * scale);
       
@@ -68,12 +68,15 @@ function HeroParticleCanvas({ imageUrl, containerRef }) {
           if (alpha > 50 && brightness > 30) {
             const offsetX = (Math.random() - 0.5) * 2;
             const offsetY = (Math.random() - 0.5) * 2;
-            const baseX = x + (canvas.width - width) / 2 + offsetX;
-            const baseY = y + (canvas.height - height) / 2 + offsetY;
+            // Move image 15% to the left and 10% up within canvas
+            const leftOffset = canvas.width * -0.15;
+            const upOffset = canvas.height * -0.10;
+            const baseX = x + (canvas.width - width) / 2 + offsetX + leftOffset;
+            const baseY = y + (canvas.height - height) / 2 + offsetY + upOffset;
             
-            // Random starting position
+            // Random starting position - closer to base for gentler transition
             const angle = Math.random() * Math.PI * 2;
-            const distance = Math.random() * 400 + 200;
+            const distance = Math.random() * 150 + 80;
             const startX = baseX + Math.cos(angle) * distance;
             const startY = baseY + Math.sin(angle) * distance;
             
@@ -107,7 +110,7 @@ function HeroParticleCanvas({ imageUrl, containerRef }) {
         
         particles.forEach(particle => {
           if (particle.forming) {
-            particle.formProgress += 0.08;
+            particle.formProgress += 0.06;
             
             if (particle.formProgress >= 1) {
               particle.forming = false;
@@ -117,8 +120,8 @@ function HeroParticleCanvas({ imageUrl, containerRef }) {
             const easeProgress = 1 - Math.pow(1 - particle.formProgress, 3);
             const dxForm = particle.baseX - particle.x;
             const dyForm = particle.baseY - particle.y;
-            particle.x += dxForm * 0.35 * easeProgress;
-            particle.y += dyForm * 0.35 * easeProgress;
+            particle.x += dxForm * 0.25 * easeProgress;
+            particle.y += dyForm * 0.25 * easeProgress;
           } else {
             // Mouse interaction - only when active
             if (mouseRef.current.active) {

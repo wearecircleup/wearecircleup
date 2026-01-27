@@ -31,7 +31,7 @@ const Home = ({ setCurrentPage }) => {
 
   return (
     <>
-      <div className="pt-[4.75rem] lg:pt-[5.25rem] overflow-hidden">
+      <div className="pt-[4.75rem] lg:pt-[5.25rem]">
         <Header setCurrentPage={setCurrentPage} />
         
         {/* Accessibility Button */}
@@ -141,7 +141,7 @@ const Home = ({ setCurrentPage }) => {
         <Benefits fontSize={fontSize} />
         <Services fontSize={fontSize} />
         <StorySection fontSize={fontSize} />
-        <Roadmap />
+        <Roadmap setCurrentPage={setCurrentPage} />
         <div className="w-full bg-n-8 border-t border-n-6">
           <NeedHelp 
             title="Tu conocimiento importa"

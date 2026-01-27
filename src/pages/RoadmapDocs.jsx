@@ -5,6 +5,7 @@ import ButtonGradient from "../assets/svg/ButtonGradient";
 import NeedHelp from "../components/NeedHelp";
 import Button from "../components/Button";
 import HeroParticleLogo from "../components/HeroParticleLogo";
+import { BackgroundCircles } from "../components/design/Hero";
 
 const RoadmapDocs = ({ setCurrentPage }) => {
   const [showAccessibilityMenu, setShowAccessibilityMenu] = useState(false);
@@ -475,7 +476,7 @@ const RoadmapDocs = ({ setCurrentPage }) => {
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-20 xl:gap-32 items-center">
             {/* Left: Hero Text */}
-            <div className="max-w-5xl">
+            <div className="max-w-5xl relative z-20">
               <div className={`uppercase tracking-[0.25em] text-n-4 mb-6 md:mb-8 lg:mb-10 ${
                 fontSize === 'small' 
                   ? 'text-[0.55rem] sm:text-[0.6rem] md:text-[0.65rem]' 
@@ -520,8 +521,17 @@ const RoadmapDocs = ({ setCurrentPage }) => {
             </div>
 
             {/* Right: Particle Logo - Desktop */}
-            <div className="hidden lg:block h-[500px] xl:h-[600px]">
-              <HeroParticleLogo />
+            <div className="hidden lg:block relative z-10">
+              <div className="relative aspect-square max-w-md mx-auto lg:max-w-none scale-[1.4] lg:-translate-x-[20%]">
+                {/* Background circles behind particles */}
+                <div className="absolute inset-0 z-0">
+                  <BackgroundCircles />
+                </div>
+                {/* Particles on top */}
+                <div className="relative z-10">
+                  <HeroParticleLogo />
+                </div>
+              </div>
             </div>
           </div>
         </div>

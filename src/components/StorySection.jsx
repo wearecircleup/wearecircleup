@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import Section from "./Section";
 
 const StorySection = ({ fontSize = 'normal' }) => {
   const [activeSection, setActiveSection] = useState(0);
@@ -87,13 +86,13 @@ const StorySection = ({ fontSize = 'normal' }) => {
   };
 
   return (
-    <Section className="overflow-hidden relative bg-n-8">
-      <div className="max-w-[1800px] mx-auto px-4 sm:px-6 md:px-12 lg:px-20 xl:px-32 py-20 md:py-32 lg:py-40">
+    <section className="relative bg-n-8 py-20 md:py-32 lg:py-40">
+      <div className="max-w-[1800px] mx-auto px-4 sm:px-6 md:px-12 lg:px-20 xl:px-32">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 lg:gap-20 xl:gap-32">
           
           {/* Fixed Navigation */}
-          <aside className="lg:col-span-3 lg:sticky lg:top-32 lg:self-start">
-            <nav className="space-y-2">
+          <aside className="lg:col-span-3 lg:sticky lg:top-32 lg:self-start overflow-hidden">
+            <nav className="space-y-2 overflow-hidden">
               {storyContent.map((section, index) => (
                 <button
                   key={section.id}
@@ -168,7 +167,7 @@ const StorySection = ({ fontSize = 'normal' }) => {
                     } font-light`}>
                       {section.id} — {section.subtitle}
                     </div>
-                    <h2 className={`leading-[0.95] font-bold text-n-1 tracking-tighter mb-6 md:mb-8 ${
+                    <h2 className={`leading-[0.95] font-bold text-n-1 tracking-tighter mb-6 md:mb-8 break-words ${
                       fontSize === 'small' 
                         ? 'text-[clamp(1.75rem,4.5vw,5rem)]' 
                         : fontSize === 'large'
@@ -185,7 +184,7 @@ const StorySection = ({ fontSize = 'normal' }) => {
                     {section.content.map((paragraph, pIndex) => (
                       <p 
                         key={pIndex}
-                        className={`text-n-3 leading-relaxed max-w-3xl ${
+                        className={`text-n-3 leading-relaxed max-w-3xl font-extralight break-words ${
                           fontSize === 'small' 
                             ? 'text-[clamp(0.875rem,1.5vw,1.125rem)]' 
                             : fontSize === 'large'
@@ -203,7 +202,7 @@ const StorySection = ({ fontSize = 'normal' }) => {
           </div>
         </div>
       </div>
-    </Section>
+    </section>
   );
 };
 

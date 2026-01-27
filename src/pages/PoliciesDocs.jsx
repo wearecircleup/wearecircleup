@@ -5,6 +5,7 @@ import ButtonGradient from "../assets/svg/ButtonGradient";
 import NeedHelp from "../components/NeedHelp";
 import Button from "../components/Button";
 import HeroParticleLogo from "../components/HeroParticleLogo";
+import { BackgroundCircles } from "../components/design/Hero";
 
 const PoliciesDocs = ({ setCurrentPage }) => {
   const [showAccessibilityMenu, setShowAccessibilityMenu] = useState(false);
@@ -473,7 +474,7 @@ const PoliciesDocs = ({ setCurrentPage }) => {
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 xl:gap-20 items-center">
-            <div>
+            <div className="relative z-20">
               <div className={`uppercase tracking-[0.25em] text-n-4 mb-6 md:mb-8 lg:mb-10 ${
               fontSize === 'small' 
                 ? 'text-[clamp(0.5rem,0.8vw,0.65rem)]' 
@@ -487,10 +488,10 @@ const PoliciesDocs = ({ setCurrentPage }) => {
               </div>
               <h1 className={`leading-[0.9] font-bold text-n-1 mb-8 md:mb-12 lg:mb-16 tracking-tighter ${
                 fontSize === 'small' 
-                  ? 'text-[clamp(2rem,6vw,7.5rem)]' 
+                  ? 'text-[clamp(2.3rem,6.9vw,8.625rem)]' 
                   : fontSize === 'large'
-                  ? 'text-[clamp(3rem,9vw,10.5rem)]'
-                  : 'text-[clamp(2.5rem,7.5vw,9rem)]'
+                  ? 'text-[clamp(3.45rem,10.35vw,12.075rem)]'
+                  : 'text-[clamp(2.875rem,8.625vw,10.35rem)]'
             } ${
                 fontFamily === 'serif' ? 'font-serif' : 'font-sans'
               }`}>
@@ -518,8 +519,17 @@ const PoliciesDocs = ({ setCurrentPage }) => {
             </div>
             
             {/* Hero Particle Logo - Desktop (right side) */}
-            <div className="hidden lg:block h-[500px] xl:h-[600px]">
-              <HeroParticleLogo />
+            <div className="hidden lg:block relative z-10">
+              <div className="relative aspect-square max-w-md mx-auto lg:max-w-none scale-[1.4] lg:-translate-x-[20%]">
+                {/* Background circles behind particles */}
+                <div className="absolute inset-0 z-0">
+                  <BackgroundCircles />
+                </div>
+                {/* Particles on top */}
+                <div className="relative z-10">
+                  <HeroParticleLogo />
+                </div>
+              </div>
             </div>
           </div>
         </div>
