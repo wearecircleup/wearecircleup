@@ -1,0 +1,59 @@
+/* Awwwards-level animations - SCOPED to presentations only */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Animation classes - work globally in presentation components */
+.animate-fadeIn {
+  animation: fadeIn 0.6s ease-out both;
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.8s ease-out both;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.7s ease-out both;
+}
+
+/* Responsive text that NEVER breaks */
+@media (max-width: 640px) {
+  h1, h2, h3 {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: none;
+  }
+}
+
+/* Ultra-smooth scrolling for presentations */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

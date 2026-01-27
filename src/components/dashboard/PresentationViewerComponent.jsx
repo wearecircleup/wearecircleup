@@ -3,6 +3,7 @@ import Button from '../Button';
 import Logo from '../Logo';
 import ParticleLogo from '../presentation/ParticleLogo';
 import EditPresentationModal from './EditPresentationModal';
+import '../../presentation-animations.css';
 
 // Parse message with size and weight markers: |size:weight|word|
 const parseMessageWithEmphasis = (message) => {
@@ -279,7 +280,7 @@ const PresentationViewerComponent = ({ presentation, onBack, onUpdate, user }) =
               </div>
 
               {/* Logo - Responsive positioning */}
-              <div className="absolute bottom-16 left-4 sm:bottom-6 sm:left-6 z-50">
+              <div className="absolute bottom-24 left-4 sm:bottom-20 md:bottom-16 lg:bottom-6 sm:left-6 z-50">
                 <Logo 
                   logoSize={{ width: 20, height: 20 }}
                   textSize="text-[0.65rem]"

@@ -3,6 +3,7 @@ import { PresentationsAPI } from '../shared/utils/presentations-api';
 import Button from '../components/Button';
 import Logo from '../components/Logo';
 import ParticleLogo from '../components/presentation/ParticleLogo';
+import '../presentation-animations.css';
 
 const PresentationViewer = ({ setCurrentPage }) => {
   // Extract userId and presentationId from URL
@@ -220,7 +221,7 @@ const PresentationViewer = ({ setCurrentPage }) => {
             </div>
 
             {/* Logo - Bottom Left inside presentation - Responsive */}
-            <div className="absolute bottom-16 left-4 sm:bottom-6 sm:left-6 z-50">
+            <div className="absolute bottom-24 left-4 sm:bottom-20 md:bottom-16 lg:bottom-6 sm:left-6 z-50">
               <Logo 
                 logoSize={{ width: 20, height: 20 }}
                 textSize="text-[0.65rem]"
