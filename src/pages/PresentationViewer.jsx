@@ -178,37 +178,41 @@ const PresentationViewer = ({ setCurrentPage }) => {
             <div className="w-full h-full max-w-7xl flex items-center justify-center">
               {/* Slide content - Responsive sizing with accessibility */}
               <div 
-                className={`relative w-full h-full flex flex-col justify-center bg-n-7/50 backdrop-blur-xl border border-n-6/50 rounded-3xl p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 shadow-2xl ${
+                className={`relative w-full h-full flex flex-col justify-center bg-n-8/80 backdrop-blur-2xl border border-n-6/30 rounded-2xl p-8 sm:p-10 md:p-14 lg:p-20 xl:p-24 shadow-[0_8px_30px_rgb(0,0,0,0.12)] ${
                   fontFamily === 'serif' ? 'font-serif' : fontFamily === 'mono' ? 'font-mono' : 'font-sans'
                 }`}
               >
-            <h1 className={`font-bold mb-6 sm:mb-8 md:mb-10 lg:mb-12 bg-gradient-to-r from-color-1 to-color-2 bg-clip-text text-transparent leading-tight ${
-              fontSize === 'small'
-                ? 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl'
-                : fontSize === 'large'
-                ? 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl'
-                : 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl'
-            }`}>
-              {slide.title}
-            </h1>
-            
-            <div className="space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6 flex-1 flex flex-col justify-center">
-              {slide.content.map((point, index) => (
-                <div
-                  key={index}
-                  className={`flex items-start gap-3 sm:gap-4 text-n-2 animate-fadeIn ${
-                    fontSize === 'small'
-                      ? 'text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl'
-                      : fontSize === 'large'
-                      ? 'text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl'
-                      : 'text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl'
-                  }`}
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <span className="text-color-1 font-bold flex-shrink-0">•</span>
-                  <p className="leading-relaxed">{point}</p>
-                </div>
-              ))}
+            {/* Awwwards-style minimal presentation */}
+            <div className="flex-1 flex flex-col justify-center space-y-8 sm:space-y-10 md:space-y-12 lg:space-y-16">
+              {/* Main message - giant, bold, impactful */}
+              <h1 className={`font-black leading-[0.85] tracking-tighter text-center bg-gradient-to-r from-color-1 via-n-1 to-color-2 bg-clip-text text-transparent ${
+                fontSize === 'small'
+                  ? 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl'
+                  : fontSize === 'large'
+                  ? 'text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem]'
+                  : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl'
+              }`} style={{ letterSpacing: '-0.04em' }}>
+                {slide.title}
+              </h1>
+              
+              {/* Content - clean, minimal, readable */}
+              <div className="space-y-4 sm:space-y-5 md:space-y-6 max-w-4xl mx-auto">
+                {slide.content.map((point, index) => (
+                  <p
+                    key={index}
+                    className={`text-center font-light text-n-3/90 leading-relaxed animate-fadeIn ${
+                      fontSize === 'small'
+                        ? 'text-sm sm:text-base md:text-lg'
+                        : fontSize === 'large'
+                        ? 'text-lg sm:text-xl md:text-2xl lg:text-3xl'
+                        : 'text-base sm:text-lg md:text-xl lg:text-2xl'
+                    }`}
+                    style={{ animationDelay: `${index * 0.1}s`, letterSpacing: '0.01em' }}
+                  >
+                    {point}
+                  </p>
+                ))}
+              </div>
             </div>
 
             {/* Logo - Bottom Left inside presentation */}

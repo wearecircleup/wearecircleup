@@ -112,31 +112,33 @@ Respond ONLY with valid JSON in this format:
   ]
 }
 
-RULES FOR ARTISTIC TYPOGRAPHY:
-- "message": Must be 5-10 words maximum. This is the key takeaway that occupies 70% of the slide.
+RULES FOR AWWWARDS-STYLE TYPOGRAPHY:
+- "message": Must be 3-8 words maximum. Short, punchy, memorable. Think billboard, not paragraph.
   
-  SIMPLIFIED TYPOGRAPHY SYSTEM:
-  * Use pipe | to mark ONLY the 2 most important words: |lg:black|word|
-  * ALL other words are automatically |md:light| (no need to mark them)
-  * ONLY 2 words maximum can be marked with |lg:black|
+  MINIMALIST TYPOGRAPHY SYSTEM (Inspired by Awwwards winners):
+  * Use pipe | to mark ONLY 1-2 hero words: |lg:black|word|
+  * ALL other words are automatically |md:light| - creating elegant contrast
+  * Maximum 2 words can be |lg:black| - restraint is key
   
-  CRITICAL RULES:
-  * Default: ALL words are medium size (md) and light weight - clean and readable
-  * Hero words: Mark EXACTLY 2 keywords with |lg:black| - these are your focal points
-  * NEVER mark articles (el, la, los, las, un, una, de, del, en, es, por, para, con, sin, y, o)
-  * NEVER mark prepositions or conjunctions
-  * Only mark the 2 MOST IMPORTANT nouns or verbs
+  CRITICAL RULES FOR AWARD-WINNING DESIGN:
+  * Default: Most words are light weight - creates breathing room and sophistication
+  * Hero words: Mark 1-2 POWER words with |lg:black| - your visual anchors
+  * NEVER mark: articles, prepositions, conjunctions (el, la, de, en, y, o, etc.)
+  * ONLY mark: The most impactful NOUNS or ACTION VERBS
+  * Shorter is better: 3-5 words is ideal, 8 is absolute maximum
   
-  EXAMPLES:
-  * "La |lg:black|deforestación| del |lg:black|Amazonas| es una crisis global" ✓ CORRECT
-  * "Ganaderia y |lg:black|agricultura| impulsan la |lg:black|destrucción| del bosque" ✓ CORRECT
-  * "El |lg:black|futuro| depende de nuestras acciones" ✓ CORRECT (only 1 keyword is fine too)
+  EXAMPLES (Awwwards-inspired):
+  * "|lg:black|Innovación| que transforma" ✓ PERFECT - 3 words, 1 hero
+  * "El |lg:black|futuro| es |lg:black|ahora|" ✓ GOOD - 4 words, 2 heroes
+  * "|lg:black|Diseño| minimalista y |lg:black|poderoso|" ✓ GOOD - 4 words, 2 heroes
+  * "Creamos |lg:black|experiencias| memorables" ✓ PERFECT - 3 words, 1 hero
   
-  DESIGN PHILOSOPHY:
-  * Keep it simple: most text is uniform (md:light)
-  * Create focus: 2 keywords stand out (lg:black)
-  * Readability first: text must ALWAYS fit within slide boundaries
-  * Less is more: subtle contrast is more elegant than chaos
+  DESIGN PHILOSOPHY (Like creativewebmanual.com):
+  * Extreme simplicity: fewer words = more impact
+  * Visual hierarchy: light base + bold accents = sophistication
+  * Breathing room: generous spacing makes text feel premium
+  * No clutter: if it doesn't add value, remove it
+  * Think: "What would Apple/Awwwards do?" - then simplify more
 
 - "explanation": MANDATORY 20-30 words. Count each word carefully - this is CRITICAL. Brief, impactful statement in italic that complements the message.
 - NO bullet points, NO lists

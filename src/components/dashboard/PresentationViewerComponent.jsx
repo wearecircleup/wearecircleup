@@ -207,29 +207,28 @@ const PresentationViewerComponent = ({ presentation, onBack, onUpdate, user }) =
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
-            <div className="w-full h-full max-w-[90vw] flex items-center justify-center">
+            <div className="w-full h-full max-w-7xl flex items-center justify-center">
               <div 
-                className={`relative w-full h-full flex flex-col justify-center bg-n-7/50 backdrop-blur-xl border border-n-6/50 rounded-3xl p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 shadow-2xl ${
+                className={`relative w-full h-full flex flex-col justify-center bg-n-8/80 backdrop-blur-2xl border border-n-6/30 rounded-2xl p-8 sm:p-10 md:p-14 lg:p-20 xl:p-24 shadow-[0_8px_30px_rgb(0,0,0,0.12)] ${
                   fontFamily === 'serif' ? 'font-serif' : fontFamily === 'mono' ? 'font-mono' : 'font-sans'
                 }`}
               >
-                {/* Main impactful message - 80% of space */}
-                <div className="flex-[8] flex items-center justify-center mb-4 sm:mb-6 overflow-hidden">
-                  <h1 className="leading-tight text-center break-words hyphens-auto max-w-full px-2" style={{ wordSpacing: '0.3em' }}>
+                {/* Main impactful message - 80% of space - Awwwards Style */}
+                <div className="flex-[8] flex items-center justify-center mb-6 sm:mb-8 md:mb-10 overflow-hidden">
+                  <h1 className="leading-[0.85] tracking-tighter text-center max-w-full px-4 sm:px-6 md:px-8" style={{ letterSpacing: '-0.04em' }}>
                     {parseMessageWithEmphasis(slide.message || slide.title).map((part, idx) => {
-                      // Size multipliers based on fontSize setting
-                      // Simplified responsive font sizes - 30% larger
-                      const sizeStyles = {
-                        md: fontSize === 'small' 
-                          ? { fontSize: 'clamp(2rem, 4.5vw, 4rem)' }
+                      // Awwwards-style typography - bold, condensed, impactful
+                      const sizeClasses = {
+                        md: fontSize === 'small'
+                          ? 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl'
                           : fontSize === 'large'
-                          ? { fontSize: 'clamp(3.25rem, 6.5vw, 6rem)' }
-                          : { fontSize: 'clamp(2.6rem, 5.2vw, 4.5rem)' },
+                          ? 'text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem]'
+                          : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl',
                         lg: fontSize === 'small'
-                          ? { fontSize: 'clamp(2.6rem, 5.8vw, 5.2rem)' }
+                          ? 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl'
                           : fontSize === 'large'
-                          ? { fontSize: 'clamp(3.9rem, 7.8vw, 7rem)' }
-                          : { fontSize: 'clamp(3.25rem, 6.5vw, 5.8rem)' }
+                          ? 'text-7xl sm:text-8xl md:text-9xl lg:text-[10rem] xl:text-[12rem]'
+                          : 'text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[11rem]'
                       };
                       
                       const weightClasses = {
@@ -237,18 +236,15 @@ const PresentationViewerComponent = ({ presentation, onBack, onUpdate, user }) =
                         black: 'font-black'
                       };
                       
-                      // Add extra spacing for lg+black keywords
                       const isKeyword = part.size === 'lg' && part.weight === 'black';
                       
                       return (
                         <span 
                           key={idx} 
-                          className={`inline-block bg-gradient-to-r from-color-1 to-color-2 bg-clip-text text-transparent ${weightClasses[part.weight] || weightClasses.light} ${isKeyword ? 'mx-2 sm:mx-3 md:mx-4' : ''}`}
+                          className={`inline-block bg-gradient-to-r from-color-1 via-n-1 to-color-2 bg-clip-text text-transparent ${weightClasses[part.weight] || weightClasses.light} ${sizeClasses[part.size] || sizeClasses.md} ${isKeyword ? 'mx-1 sm:mx-2 md:mx-3' : ''}`}
                           style={{ 
-                            ...(sizeStyles[part.size] || sizeStyles.md),
-                            wordBreak: 'break-word', 
-                            overflowWrap: 'break-word',
-                            maxWidth: '100%'
+                            wordBreak: 'keep-all',
+                            hyphens: 'none'
                           }}
                         >
                           {part.text}
@@ -258,15 +254,15 @@ const PresentationViewerComponent = ({ presentation, onBack, onUpdate, user }) =
                   </h1>
                 </div>
                 
-                {/* Explanation - 20% of space */}
-                <div className="flex-[2] flex items-center justify-center overflow-hidden px-4">
-                  <p className={`text-center italic text-n-3 max-w-4xl break-words hyphens-auto ${
+                {/* Explanation - 20% of space - Minimal & Clean */}
+                <div className="flex-[2] flex items-center justify-center overflow-hidden px-6 sm:px-8 md:px-12">
+                  <p className={`text-center font-light text-n-3/90 max-w-3xl leading-relaxed ${
                     fontSize === 'small' 
-                      ? 'text-xs sm:text-sm md:text-base lg:text-lg' 
+                      ? 'text-xs sm:text-sm md:text-base' 
                       : fontSize === 'large'
                       ? 'text-base sm:text-lg md:text-xl lg:text-2xl'
                       : 'text-sm sm:text-base md:text-lg lg:text-xl'
-                  }`} style={{ wordSpacing: '0.2em' }}>
+                  }`} style={{ letterSpacing: '0.01em' }}>
                     {slide.explanation || (slide.content ? slide.content.join('. ') : '')}
                   </p>
                 </div>
