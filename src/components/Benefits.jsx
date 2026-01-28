@@ -5,11 +5,12 @@ import Logo from "./Logo";
 import { curve } from "../assets";
 
 const Benefits = ({ fontSize = 'normal' }) => {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(1); // Start at 1 (first real slide)
   const [isMobile, setIsMobile] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
+  const touchDeltaX = useRef(0);
   const carouselRef = useRef(null);
 
   useEffect(() => {
@@ -23,7 +24,7 @@ const Benefits = ({ fontSize = 'normal' }) => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const benefits = [
+  const originalBenefits = [
     {
       id: 0,
       name: "Biblioteca Central",
@@ -54,35 +55,65 @@ const Benefits = ({ fontSize = 'normal' }) => {
     }
   ];
 
+  // Create infinite loop: [last, ...original, first]
+  const benefits = [
+    originalBenefits[originalBenefits.length - 1], // Clone last
+    ...originalBenefits,
+    originalBenefits[0] // Clone first
+  ];
+
   const nextSlide = () => {
     if (isTransitioning) return;
     setIsTransitioning(true);
-    setCurrentSlide((prev) => (prev + 1) % benefits.length);
+    setCurrentSlide((prev) => prev + 1);
     setTimeout(() => setIsTransitioning(false), 500);
   };
 
   const prevSlide = () => {
     if (isTransitioning) return;
     setIsTransitioning(true);
-    setCurrentSlide((prev) => (prev - 1 + benefits.length) % benefits.length);
+    setCurrentSlide((prev) => prev - 1);
     setTimeout(() => setIsTransitioning(false), 500);
   };
 
-  // Touch event handlers for mobile swipe
+  // Handle infinite loop reset without transition
+  useEffect(() => {
+    if (!isTransitioning) return;
+
+    const timer = setTimeout(() => {
+      if (currentSlide === 0) {
+        // At clone of last item, jump to real last item instantly
+        setIsTransitioning(false);
+        setCurrentSlide(originalBenefits.length);
+      } else if (currentSlide === benefits.length - 1) {
+        // At clone of first item, jump to real first item instantly
+        setIsTransitioning(false);
+        setCurrentSlide(1);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [currentSlide, isTransitioning, benefits.length, originalBenefits.length]);
+
+  // Enhanced touch event handlers for mobile swipe
   const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
+    touchDeltaX.current = 0;
   };
 
   const handleTouchMove = (e) => {
+    if (!touchStartX.current) return;
     touchEndX.current = e.touches[0].clientX;
+    touchDeltaX.current = touchStartX.current - touchEndX.current;
   };
 
   const handleTouchEnd = () => {
-    if (!touchStartX.current || !touchEndX.current) return;
+    if (!touchStartX.current) return;
     
-    const distance = touchStartX.current - touchEndX.current;
-    const isLeftSwipe = distance > 50;
-    const isRightSwipe = distance < -50;
+    const distance = touchDeltaX.current;
+    const threshold = window.innerWidth < 640 ? 30 : 50; // Lower threshold for small screens
+    const isLeftSwipe = distance > threshold;
+    const isRightSwipe = distance < -threshold;
 
     if (isLeftSwipe) {
       nextSlide();
@@ -93,6 +124,7 @@ const Benefits = ({ fontSize = 'normal' }) => {
     // Reset touch positions
     touchStartX.current = 0;
     touchEndX.current = 0;
+    touchDeltaX.current = 0;
   };
 
   return (
@@ -122,21 +154,22 @@ const Benefits = ({ fontSize = 'normal' }) => {
         <div className="relative">
           {/* Carousel container */}
           <div 
-            className="relative overflow-hidden"
+            className="relative overflow-hidden touch-pan-y -mx-2 sm:-mx-3 md:-mx-4"
             ref={carouselRef}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
             <div 
-              className="flex transition-transform duration-500 ease-in-out"
+              className={`flex ${isTransitioning ? 'transition-transform duration-500 ease-in-out' : ''}`}
               style={{ 
-                transform: `translateX(-${currentSlide * (isMobile ? 100 : 50)}%)` 
+                transform: `translateX(-${currentSlide * (isMobile ? 100 : 50)}%)`,
+                willChange: isTransitioning ? 'transform' : 'auto'
               }}
             >
-              {benefits.map((benefit) => (
-                <div key={benefit.id} className="w-full md:w-1/2 flex-shrink-0 px-2 sm:px-3 md:px-4 touch-pan-y">
-                  <div className="relative h-[20rem] sm:h-[24rem] md:h-[28rem] lg:h-[32rem] bg-n-8 rounded-xl md:rounded-2xl overflow-hidden border border-n-6 select-none">
+              {benefits.map((benefit, index) => (
+                <div key={`${benefit.id}-${index}`} className="w-full md:w-1/2 flex-shrink-0 px-2 sm:px-3 md:px-4">
+                  <div className="relative h-[22rem] sm:h-[26rem] md:h-[28rem] lg:h-[32rem] xl:h-[36rem] bg-n-8 rounded-xl md:rounded-2xl overflow-hidden border border-n-6 select-none">
                     {/* Background image */}
                     <div className="absolute inset-0">
                       <img
@@ -173,15 +206,15 @@ const Benefits = ({ fontSize = 'normal' }) => {
                   </div>
                   
                   {/* Text box - Inline on mobile, floating on larger screens */}
-                  <div className="mt-4 sm:mt-5 md:relative md:-mt-32 lg:-mt-40 md:ml-auto md:mr-4 lg:mr-6 md:w-3/5 lg:w-1/2 md:z-10">
-                    <div className="bg-n-8/95 backdrop-blur-sm border border-n-1/10 rounded-xl md:rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg md:shadow-2xl">
+                  <div className="mt-3 sm:mt-4 md:relative md:-mt-32 lg:-mt-40 xl:-mt-48 md:ml-auto md:mr-4 lg:mr-6 md:w-3/5 lg:w-1/2 md:z-10">
+                    <div className="bg-n-8/95 backdrop-blur-sm border border-n-1/10 rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-5 lg:p-6 shadow-lg md:shadow-2xl">
                       {/* Quote icon */}
-                      <div className="mb-2.5 sm:mb-3 md:mb-4">
-                        <svg width="20" height="15" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-4 sm:w-6 sm:h-5 md:w-7 md:h-5 lg:w-8 lg:h-6">
+                      <div className="mb-2 sm:mb-2.5 md:mb-3">
+                        <svg width="20" height="15" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-4 h-3 sm:w-5 sm:h-4 md:w-6 md:h-5 lg:w-7 lg:h-6">
                           <path d="M0 32V16C0 7.2 7.2 0 16 0V8C11.6 8 8 11.6 8 16V20H16V32H0ZM24 32V16C24 7.2 31.2 0 40 0V8C35.6 8 32 11.6 32 16V20H40V32H24Z" fill="#AC6AFF"/>
                         </svg>
                       </div>
-                      <p className="text-sm sm:text-base md:text-lg text-n-1 font-mono leading-relaxed">
+                      <p className="text-xs sm:text-sm md:text-base lg:text-lg text-n-1 font-mono leading-relaxed">
                         {benefit.text}
                       </p>
                     </div>
@@ -192,14 +225,14 @@ const Benefits = ({ fontSize = 'normal' }) => {
           </div>
           
           {/* Navigation buttons */}
-          <div className="flex justify-center mt-6 sm:mt-7 md:mt-8 lg:mt-10 space-x-3 sm:space-x-4">
+          <div className="flex justify-center mt-4 sm:mt-5 md:mt-6 lg:mt-8 space-x-2 sm:space-x-3 md:space-x-4">
             <button 
               onClick={prevSlide}
               disabled={isTransitioning}
               aria-label="Previous slide"
-              className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 bg-n-7 border border-n-6 rounded-full flex items-center justify-center hover:bg-n-6 active:bg-n-5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
+              className="w-11 h-11 sm:w-12 sm:h-12 md:w-13 md:h-13 lg:w-14 lg:h-14 bg-n-7 border border-n-6 rounded-full flex items-center justify-center hover:bg-n-6 active:bg-n-5 transition-colors disabled:opacity-30 disabled:cursor-not-allowed touch-manipulation active:scale-95"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 sm:w-5.5 sm:h-5.5 md:w-6 md:h-6">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7">
                 <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
@@ -207,33 +240,39 @@ const Benefits = ({ fontSize = 'normal' }) => {
               onClick={nextSlide}
               disabled={isTransitioning}
               aria-label="Next slide"
-              className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 bg-n-7 border border-n-6 rounded-full flex items-center justify-center hover:bg-n-6 active:bg-n-5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
+              className="w-11 h-11 sm:w-12 sm:h-12 md:w-13 md:h-13 lg:w-14 lg:h-14 bg-n-7 border border-n-6 rounded-full flex items-center justify-center hover:bg-n-6 active:bg-n-5 transition-colors disabled:opacity-30 disabled:cursor-not-allowed touch-manipulation active:scale-95"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 sm:w-5.5 sm:h-5.5 md:w-6 md:h-6">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7">
                 <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
           </div>
 
           {/* Dots indicator */}
-          <div className="flex justify-center mt-4 sm:mt-5 space-x-2">
-              {benefits.map((_item, index) => (
-              <button
-                key={index}
-                onClick={() => !isTransitioning && setCurrentSlide(index)}
-                disabled={isTransitioning}
-                aria-label={`Go to slide ${index + 1}`}
-                className={`h-2 rounded-full transition-all duration-300 touch-manipulation ${
-                  index === currentSlide ? 'bg-color-1 w-8 sm:w-10' : 'bg-n-6 w-2 hover:bg-n-5'
-                } disabled:opacity-50`}
-              />
-            ))}
+          <div className="flex justify-center mt-3 sm:mt-4 space-x-2">
+              {originalBenefits.map((_item, index) => {
+                // Map current slide to original benefits index
+                const realIndex = currentSlide === 0 ? originalBenefits.length - 1 : 
+                                 currentSlide === benefits.length - 1 ? 0 : 
+                                 currentSlide - 1;
+                return (
+                  <button
+                    key={index}
+                    onClick={() => !isTransitioning && setCurrentSlide(index + 1)}
+                    disabled={isTransitioning}
+                    aria-label={`Go to slide ${index + 1}`}
+                    className={`h-2 rounded-full transition-all duration-300 touch-manipulation ${
+                      index === realIndex ? 'bg-color-1 w-8 sm:w-10 md:w-12' : 'bg-n-6 w-2 hover:bg-n-5'
+                    } disabled:opacity-50`}
+                  />
+                );
+              })}
           </div>
 
           {/* Swipe indicator for mobile */}
-          <div className="flex justify-center mt-3 md:hidden">
-            <p className="text-xs sm:text-sm text-n-4 opacity-70">
-              Desliza para navegar
+          <div className="flex justify-center mt-2 sm:mt-3 md:hidden">
+            <p className="text-xs text-n-4 opacity-60">
+              ← Desliza para navegar →
             </p>
           </div>
         </div>
