@@ -270,11 +270,11 @@ const PresentationViewerComponent = ({ presentation, onBack, onUpdate, user }) =
               <div className="flex-shrink-0 flex items-center justify-center animate-fadeIn relative z-10 px-4 mt-2 sm:mt-3 md:mt-4" style={{ animationDelay: '0.5s' }}>
                 <p className={`text-center font-extralight text-n-2/90 max-w-3xl break-words ${
                   fontSize === 'small' 
-                    ? 'text-sm sm:text-base' 
+                    ? 'text-base sm:text-lg' 
                     : fontSize === 'large'
-                    ? 'text-base sm:text-lg md:text-xl lg:text-2xl'
-                    : 'text-sm sm:text-base md:text-lg lg:text-xl'
-                }`} style={{ letterSpacing: '0.01em', lineHeight: '1.6', overflowWrap: 'break-word', wordBreak: 'break-word', fontWeight: '200' }}>
+                    ? 'text-lg sm:text-xl md:text-2xl lg:text-3xl'
+                    : 'text-base sm:text-lg md:text-xl lg:text-2xl'
+                }`} style={{ letterSpacing: '0.01em', lineHeight: '1.6', overflowWrap: 'break-word', wordBreak: 'break-word', fontWeight: '100' }}>
                   {slide.explanation || (slide.content ? slide.content.join('. ') : '')}
                 </p>
               </div>

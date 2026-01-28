@@ -10,9 +10,11 @@ const HelpModal = ({ onClose }) => {
   "explanation": "Tu explicación aquí"
 }
 
-Es simple: todas las palabras son medianas y claras por defecto. Solo marca las 2 palabras más importantes con |lg:black|palabra| para que resalten. Nunca marques artículos ni preposiciones. La explicación debe tener entre 20 y 30 palabras exactas.
+Marca 1-2 palabras clave con |lg:black|palabra| para resaltarlas en bold. Las demás palabras quedan en peso normal. Nunca marques artículos ni preposiciones.
 
-Ejemplo: "La |lg:black|deforestación| del |lg:black|Amazonas| es una crisis global"
+El mensaje debe tener 3-8 palabras máximo. La explicación debe tener 30-50 palabras exactas.
+
+Ejemplo: "La |lg:black|innovación| transforma |lg:black|industrias|"
 
 Devuelve solo el JSON con la sintaxis aplicada.`;
 
