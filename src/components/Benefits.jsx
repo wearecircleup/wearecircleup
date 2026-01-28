@@ -4,7 +4,40 @@ import Section from "./Section";
 import Logo from "./Logo";
 import { curve } from "../assets";
 
-const Benefits = ({ fontSize = 'normal' }) => {
+const Benefits = ({ 
+  fontSize = 'normal',
+  heading = 'Dónde puedes enseñar',
+  benefitsCards = [
+    {
+      id: 0,
+      name: "Biblioteca Central",
+      role: "Espacio Disponible",
+      text: "Mesas amplias, WiFi estable, ambiente tranquilo. Coordinamos el espacio, tú llegas y enseñas. Martes y jueves, 3-5 PM disponibles.",
+      image: "./assets/circleimages/home-carrusel-1.png"
+    },
+    {
+      id: 1,
+      name: "Café Comunitario",
+      role: "Espacio Disponible",
+      text: "Ambiente relajado, café incluido para voluntarios. Ideal para talleres de emprendimiento y marketing. Sábados 10 AM, cupo 15 personas.",
+      image: "./assets/circleimages/home-carrusel-2.png"
+    },
+    {
+      id: 2,
+      name: "Plaza Comunitaria",
+      role: "Espacio Disponible",
+      text: "Sesiones al aire libre, buena iluminación natural. Perfecto para fotografía, diseño, contenido visual. Domingos por la tarde.",
+      image: "./assets/circleimages/home-carrusel-3.png"
+    },
+    {
+      id: 4,
+      name: "Biblioteca Moderna",
+      role: "Espacio Disponible",
+      text: "Equipos disponibles si los participantes no traen dispositivos. Proyector y pantalla incluidos. Certificado digital para tu portafolio.",
+      image: "./assets/circleimages/home-carrusel-5.png"
+    }
+  ]
+}) => {
   const [currentSlide, setCurrentSlide] = useState(1); // Start at 1 (first real slide)
   const [isMobile, setIsMobile] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -24,36 +57,7 @@ const Benefits = ({ fontSize = 'normal' }) => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const originalBenefits = [
-    {
-      id: 0,
-      name: "Biblioteca Central",
-      role: "Espacio Disponible",
-      text: "Mesas amplias, WiFi estable, ambiente tranquilo. Coordinamos el espacio, tú llegas y enseñas. Martes y jueves, 3-5 PM disponibles.",
-      image: "./assets/circleimages/home-carrusel-1.png"
-    },
-    {
-      id: 1,
-      name: "Café Comunitario",
-      role: "Espacio Disponible", 
-      text: "Ambiente relajado, café incluido para voluntarios. Ideal para talleres de emprendimiento y marketing. Sábados 10 AM, cupo 15 personas.",
-      image: "./assets/circleimages/home-carrusel-2.png"
-    },
-    {
-      id: 2,
-      name: "Plaza Comunitaria",
-      role: "Espacio Disponible",
-      text: "Sesiones al aire libre, buena iluminación natural. Perfecto para fotografía, diseño, contenido visual. Domingos por la tarde.",
-      image: "./assets/circleimages/home-carrusel-3.png"
-    },
-    {
-      id: 4,
-      name: "Biblioteca Moderna",
-      role: "Espacio Disponible",
-      text: "Equipos disponibles si los participantes no traen dispositivos. Proyector y pantalla incluidos. Certificado digital para tu portafolio.",
-      image: "./assets/circleimages/home-carrusel-5.png"
-    }
-  ];
+  const originalBenefits = benefitsCards;
 
   // Create infinite loop: [last, ...original, first]
   const benefits = [
@@ -135,9 +139,9 @@ const Benefits = ({ fontSize = 'normal' }) => {
           fontSize={fontSize}
           title={
             <>
-              Dónde puedes{" "}
+              {heading.split(' ').slice(0, -1).join(' ')}{" "}
               <span className="inline-block relative font-semibold">
-                enseñar
+                {heading.split(' ').slice(-1)[0]}
                 <img
                   src={curve}
                   className="absolute top-full left-0 w-full xl:-mt-2 pointer-events-none select-none"

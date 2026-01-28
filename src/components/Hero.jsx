@@ -6,7 +6,23 @@ import { BackgroundCircles, BottomLine } from "./design/Hero";
 import Section from "./Section";
 import HeroParticleLogo from "./HeroParticleLogo";
 
-const Hero = ({ fontSize = 'normal' }) => {
+const Hero = ({ 
+  fontSize = 'normal',
+  subtitle = 'Circle Up Volunteer',
+  title = 'Sabes algo que alguien necesita',
+  typewriterStrings = [
+    "Tu Excel puede cambiar una carrera.",
+    "Tu diseño puede abrir puertas.",
+    "Tu experiencia vale más de lo que crees.",
+    "2 horas tuyas = un futuro diferente.",
+    "No enseñas porque sabes todo.<br/>Enseñas porque sabes algo."
+  ],
+  metadata = {
+    location: 'Tocancipá, Colombia',
+    impact: 'Vidas impactadas',
+    cost: 'Gratis siempre'
+  }
+}) => {
   const parallaxRef = useRef(null);
 
   return (
@@ -24,25 +40,36 @@ const Hero = ({ fontSize = 'normal' }) => {
             {/* Left: Hero Text */}
             <div className="lg:col-span-7 text-center lg:text-left relative z-20 px-4 sm:px-6 lg:px-0">
               <div className="uppercase tracking-widest text-n-4 mb-4 sm:mb-5 md:mb-6 lg:mb-8 text-xs sm:text-sm font-light">
-                Circle Up Volunteer
+                {subtitle}
               </div>
               
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl leading-[0.9] font-bold text-n-1 mb-6 sm:mb-8 md:mb-10 lg:mb-12 tracking-tighter">
-                Sabes algo <br className="hidden sm:block" />que alguien <br className="hidden sm:block" />necesita
+              <h1 className={`leading-[0.9] font-bold text-n-1 mb-6 sm:mb-8 md:mb-10 lg:mb-12 tracking-tighter ${
+                fontSize === 'small' 
+                  ? 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl' 
+                  : fontSize === 'large'
+                  ? 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl 2xl:text-[10rem]'
+                  : 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl'
+              }`}>
+                {title.split(' ').map((word, i, arr) => (
+                  <span key={i}>
+                    {word}{i < arr.length - 1 ? ' ' : ''}
+                    {(i === 1 || i === 3) && <br className="hidden sm:block" />}
+                  </span>
+                ))}
               </h1>
               
               {/* Typewriter interactivo */}
               <div className="mb-8 sm:mb-10 md:mb-12 lg:mb-16">
-                <div className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-n-3 font-light leading-relaxed">
+                <div className={`text-n-3 font-light leading-relaxed ${
+                  fontSize === 'small'
+                    ? 'text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl'
+                    : fontSize === 'large'
+                    ? 'text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl'
+                    : 'text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl'
+                }`}>
                   <Typewriter
                     options={{
-                      strings: [
-                        "Tu Excel puede cambiar una carrera.",
-                        "Tu diseño puede abrir puertas.",
-                        "Tu experiencia vale más de lo que crees.",
-                        "2 horas tuyas = un futuro diferente.",
-                        "No enseñas porque sabes todo.<br/>Enseñas porque sabes algo.",
-                      ],
+                      strings: typewriterStrings,
                       autoStart: true,
                       loop: true,
                       delay: 50,
@@ -53,12 +80,18 @@ const Hero = ({ fontSize = 'normal' }) => {
               </div>
               
               {/* Metadata minimalista */}
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4 md:gap-5 lg:gap-6 text-n-4 tracking-wider text-xs sm:text-sm md:text-base font-light">
-                <span>Tocancipá, Colombia</span>
+              <div className={`flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4 md:gap-5 lg:gap-6 text-n-4 tracking-wider font-light ${
+                fontSize === 'small'
+                  ? 'text-[0.625rem] sm:text-xs md:text-sm'
+                  : fontSize === 'large'
+                  ? 'text-sm sm:text-base md:text-lg'
+                  : 'text-xs sm:text-sm md:text-base'
+              }`}>
+                <span>{metadata.location}</span>
                 <span className="w-1 h-1 rounded-full bg-n-6"></span>
-                <span>127 vidas impactadas</span>
+                <span>{metadata.impact}</span>
                 <span className="w-1 h-1 rounded-full bg-n-6"></span>
-                <span>Gratis siempre</span>
+                <span>{metadata.cost}</span>
               </div>
             </div>
             

@@ -1,24 +1,19 @@
 import { curve } from "../assets";
 import Button from "./Button";
 
-const Roadmap = ({ setCurrentPage }) => {
-  const steps = [
-    {
-      id: "01",
-      title: "Tu primer taller",
-      subtitle: "Empieza aquí"
-    },
-    {
-      id: "02", 
-      title: "Alguien aprende",
-      subtitle: "Tu momento"
-    },
-    {
-      id: "03",
-      title: "Cambias vidas",
-      subtitle: "Tu legado"
-    }
-  ];
+const Roadmap = ({ 
+  setCurrentPage,
+  subtitle = 'Tu impacto',
+  title = 'Así de simple. Así de real.',
+  steps = [
+    { id: "01", title: "Tu primer taller", subtitle: "Empieza aquí" },
+    { id: "02", title: "Alguien aprende", subtitle: "Tu momento" },
+    { id: "03", title: "Cambias vidas", subtitle: "Tu legado" }
+  ],
+  ctaTitle = 'Tu próximo taller empieza aquí.',
+  ctaSubtitle = '2 horas tuyas. Impacto real.',
+  ctaButton = 'Empieza ahora'
+}) => {
 
   return (
     <section className="relative bg-n-8 py-12 sm:py-16 md:py-24 lg:py-32 xl:py-40" id="roadmap">
@@ -27,12 +22,12 @@ const Roadmap = ({ setCurrentPage }) => {
         {/* Minimal Header */}
         <div className="text-center mb-12 sm:mb-16 md:mb-24 lg:mb-32 xl:mb-40">
           <div className="uppercase tracking-widest text-n-4 mb-4 sm:mb-5 md:mb-6 text-xs sm:text-sm font-light">
-            Tu impacto
+            {subtitle}
           </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl leading-[0.9] font-bold text-n-1 tracking-tighter px-4">
-            Así de simple.{" "}
+            {title.split('.')[0]}.{" "}
             <span className="inline-block relative">
-              Así de real.
+              {title.split('.')[1]}.
               <img
                 src={curve}
                 className="absolute top-full left-0 w-full xl:-mt-2 pointer-events-none select-none"
@@ -71,10 +66,10 @@ const Roadmap = ({ setCurrentPage }) => {
         <div className="text-center mt-16 sm:mt-20 md:mt-32 lg:mt-40 xl:mt-48">
           <div className="inline-block max-w-2xl px-4">
             <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-n-1 mb-3 sm:mb-4 tracking-tight">
-              Tu próximo taller empieza aquí.
+              {ctaTitle}
             </div>
             <div className="text-n-4 text-base sm:text-lg md:text-xl lg:text-2xl font-extralight mb-8 sm:mb-10 md:mb-12">
-              2 horas tuyas. Impacto real.
+              {ctaSubtitle}
             </div>
             
             <div className="mb-6 sm:mb-7 md:mb-8">
@@ -83,7 +78,7 @@ const Roadmap = ({ setCurrentPage }) => {
                 white
                 className="text-sm sm:text-base md:text-lg"
               >
-                Empieza ahora
+                {ctaButton}
               </Button>
             </div>
             

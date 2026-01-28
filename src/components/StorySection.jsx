@@ -1,62 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 
-const StorySection = ({ fontSize = 'normal' }) => {
+const StorySection = ({ fontSize = 'normal', storyContent = [] }) => {
   const [activeSection, setActiveSection] = useState(0);
   const sectionRefs = useRef([]);
-
-  const storyContent = [
-    {
-      id: "01",
-      subtitle: "TU CONOCIMIENTO",
-      title: "Ya sabes algo valioso",
-      content: [
-        "Sabes usar Excel para hacer presupuestos. Sabes editar fotos en Canva. Sabes cómo funciona Instagram para negocios. Sabes organizar finanzas personales.",
-        "Ese conocimiento que usas todos los días, que te parece obvio, es exactamente lo que alguien más necesita aprender. No necesitas ser experto mundial. Solo necesitas saber más que quien está empezando.",
-        "En tu ciudad hay personas buscando aprender lo que tú ya dominas. No encuentran cursos accesibles, no pueden pagar academias, no tienen tiempo para videos de 40 horas. Necesitan 2 horas contigo, práctica real, preguntas respondidas en el momento."
-      ]
-    },
-    {
-      id: "02",
-      subtitle: "EL ESPACIO",
-      title: "Los lugares ya existen",
-      content: [
-        "Una biblioteca con mesas vacías los martes por la tarde. Un café con WiFi que necesita más clientes entre semana. Una sala comunal que solo se usa los fines de semana.",
-        "No necesitas rentar un salón. No necesitas equipos especiales. Una mesa, sillas, conexión WiFi. Los participantes traen sus dispositivos. Tú traes el conocimiento.",
-        "Los dueños de estos espacios quieren actividad, quieren comunidad, quieren que sus lugares tengan propósito. Un taller de 2 horas les da vida a esas mesas vacías."
-      ]
-    },
-    {
-      id: "03",
-      subtitle: "LA SESIÓN",
-      title: "2 horas que cambian perspectivas",
-      content: [
-        "Martes 4 PM. 12 personas llegan a la biblioteca. Tú les enseñas cómo hacer una tabla dinámica en Excel. No teoría abstracta. Casos reales: inventarios, nóminas, reportes.",
-        "30 minutos de explicación. 90 minutos de práctica. Tú caminas entre las mesas, respondes preguntas, corriges errores, muestras atajos. Ellos practican con sus propios datos.",
-        "Al final, cada persona se va con una habilidad aplicable mañana en su trabajo. Tú te vas sabiendo que tu conocimiento sirvió para algo concreto. No es caridad, es intercambio de valor real."
-      ]
-    },
-    {
-      id: "04",
-      subtitle: "EL IMPACTO",
-      title: "Resultados medibles, no promesas",
-      content: [
-        "Tocancipá, 6 meses: 23 voluntarios enseñaron 47 talleres. 127 personas aprendieron habilidades prácticas. 89% las aplicó en su trabajo en menos de 2 semanas.",
-        "Costo: $0 para todos. Infraestructura: espacios existentes. Tasa de asistencia: 78%. Tasa de finalización: 71%. Comparado con cursos online: 15% asistencia, 8% finalización.",
-        "41% de los participantes regresó para aprender otro tema. 23% se convirtió en voluntario después de asistir a 3 talleres. El ciclo se autoalimenta: aprendes, luego enseñas."
-      ]
-    },
-    {
-      id: "05",
-      subtitle: "TU DECISIÓN",
-      title: "Empieza con un taller",
-      content: [
-        "No necesitas preparar un curso de 40 horas. No necesitas certificaciones de docencia. No necesitas experiencia previa enseñando. Solo necesitas 2 horas y ganas de compartir.",
-        "Nosotros te ayudamos con la logística: encontramos el espacio, gestionamos inscripciones, enviamos recordatorios, preparamos materiales básicos. Tú solo llegas y enseñas.",
-        "Después de tu primer taller, decides si continúas. Sin compromisos, sin obligaciones. Si funcionó y quieres repetir, coordinamos el siguiente. Si no, está bien. Un taller ya hizo diferencia.",
-        "El conocimiento que tienes puede cambiar la trayectoria laboral de alguien. Puede ayudar a alguien a conseguir un mejor trabajo, negociar un aumento, emprender un negocio. 2 horas tuyas, impacto medible en vidas reales."
-      ]
-    }
-  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -100,11 +46,15 @@ const StorySection = ({ fontSize = 'normal' }) => {
                       : 'border-n-7 text-n-4 hover:text-n-2 hover:border-n-5'
                   }`}
                 >
-                  <div className="text-xs lg:text-sm uppercase tracking-widest mb-1.5 lg:mb-2 opacity-60 font-light">
+                  <div className={`uppercase tracking-widest mb-1.5 lg:mb-2 opacity-60 font-light ${
+                    fontSize === 'small' ? 'text-[0.625rem] lg:text-xs' : fontSize === 'large' ? 'text-sm lg:text-base' : 'text-xs lg:text-sm'
+                  }`}>
                     {section.id}
                   </div>
-                  <div className={`text-base lg:text-lg xl:text-xl transition-colors ${
+                  <div className={`transition-colors ${
                     activeSection === index ? 'font-medium' : 'font-light'
+                  } ${
+                    fontSize === 'small' ? 'text-sm lg:text-base xl:text-lg' : fontSize === 'large' ? 'text-lg lg:text-xl xl:text-2xl' : 'text-base lg:text-lg xl:text-xl'
                   }`}>
                     {section.title}
                   </div>
@@ -114,7 +64,9 @@ const StorySection = ({ fontSize = 'normal' }) => {
 
             {/* Progress Indicator */}
             <div className="mt-12 lg:mt-16 pt-8 lg:pt-10 border-t border-n-7">
-              <div className="text-2xl lg:text-3xl xl:text-4xl text-n-5 mb-3 lg:mb-4 tracking-wider font-light">
+              <div className={`text-n-5 mb-3 lg:mb-4 tracking-wider font-light ${
+                fontSize === 'small' ? 'text-xl lg:text-2xl xl:text-3xl' : fontSize === 'large' ? 'text-3xl lg:text-4xl xl:text-5xl' : 'text-2xl lg:text-3xl xl:text-4xl'
+              }`}>
                 {Math.round(((activeSection + 1) / storyContent.length) * 100)}%
               </div>
               <div className="h-[1px] bg-n-7 relative overflow-hidden">
@@ -170,10 +122,14 @@ const StorySection = ({ fontSize = 'normal' }) => {
                 >
                   {/* Section Header */}
                   <header className="mb-8 sm:mb-10 md:mb-12 lg:mb-16">
-                    <div className="text-xs sm:text-sm uppercase tracking-widest text-n-5 mb-3 sm:mb-4 md:mb-5 lg:mb-6 font-light">
+                    <div className={`uppercase tracking-widest text-n-5 mb-3 sm:mb-4 md:mb-5 lg:mb-6 font-light ${
+                      fontSize === 'small' ? 'text-[0.625rem] sm:text-xs' : fontSize === 'large' ? 'text-sm sm:text-base' : 'text-xs sm:text-sm'
+                    }`}>
                       {section.id} — {section.subtitle}
                     </div>
-                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-[0.95] font-bold text-n-1 tracking-tighter mb-4 sm:mb-5 md:mb-6 lg:mb-8">
+                    <h2 className={`leading-[0.95] font-bold text-n-1 tracking-tighter mb-4 sm:mb-5 md:mb-6 lg:mb-8 ${
+                      fontSize === 'small' ? 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl' : fontSize === 'large' ? 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl' : 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl'
+                    }`}>
                       {section.title}
                     </h2>
                     <div className="w-10 sm:w-12 md:w-14 lg:w-16 h-[1px] bg-n-1"></div>
@@ -184,7 +140,9 @@ const StorySection = ({ fontSize = 'normal' }) => {
                     {section.content.map((paragraph, pIndex) => (
                       <p 
                         key={pIndex}
-                        className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-n-3 leading-relaxed max-w-4xl font-extralight"
+                        className={`text-n-3 leading-relaxed max-w-4xl font-extralight ${
+                          fontSize === 'small' ? 'text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl' : fontSize === 'large' ? 'text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl' : 'text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl'
+                        }`}
                       >
                         {paragraph}
                       </p>

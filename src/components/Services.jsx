@@ -4,7 +4,26 @@ import Section from "./Section";
 import Heading from "./Heading";
 import { Gradient, VideoBar } from "./design/Services";
 
-const Services = ({ fontSize = 'normal' }) => {
+const Services = ({ 
+  fontSize = 'normal',
+  heading = 'Qué necesitas para empezar',
+  servicesCards = [
+    {
+      title: "Mentorías",
+      subtitle: "Personalizadas",
+      text: "Conocimiento aplicable. No necesitas ser el mejor del mundo en tu campo. Solo necesitas saber lo suficiente para guiar a alguien que está empezando.",
+      image: "./assets/circleimages/service-left.png",
+      alt: "Mentorías Personalizadas"
+    },
+    {
+      title: "Talleres",
+      subtitle: "Interactivos",
+      text: "2 horas de tu agenda. Coordinamos espacio, inscripciones y materiales básicos. Tú preparas el contenido práctico y llegas a enseñar. Sin compromisos a largo plazo.",
+      image: "./assets/circleimages/service-right.png",
+      alt: "Talleres Interactivos"
+    }
+  ]
+}) => {
   return (
     <Section id="how-to-use">
       <div className="container">
@@ -13,9 +32,9 @@ const Services = ({ fontSize = 'normal' }) => {
           fontSize={fontSize}
           title={
             <>
-              Qué necesitas para{" "}
+              {heading.split(' ').slice(0, -1).join(' ')}{" "}
               <span className="inline-block relative font-semibold">
-                empezar
+                {heading.split(' ').slice(-1)[0]}
                 <img
                   src={curve}
                   className="absolute top-full left-0 w-full xl:-mt-2 pointer-events-none select-none"
@@ -39,8 +58,8 @@ const Services = ({ fontSize = 'normal' }) => {
                 {/* Background Image - Full Coverage */}
                 <div className="absolute inset-0">
                   <img
-                    src="./assets/circleimages/service-left.png"
-                    alt="Mentorías Personalizadas"
+                    src={servicesCards[0].image}
+                    alt={servicesCards[0].alt}
                     className="h-full w-full object-cover pointer-events-none select-none"
                     width={630}
                     height={750}
@@ -92,16 +111,18 @@ const Services = ({ fontSize = 'normal' }) => {
                       <path d="M0 32V16C0 7.2 7.2 0 16 0V8C11.6 8 8 11.6 8 16V20H16V32H0ZM24 32V16C24 7.2 31.2 0 40 0V8C35.6 8 32 11.6 32 16V20H40V32H24Z" fill="#AC6AFF"/>
                     </svg>
                   </div>
-                  <p className="text-sm sm:text-base md:text-lg lg:text-xl text-n-1 font-mono leading-relaxed">
-                    Conocimiento aplicable. No necesitas ser el mejor del mundo en tu campo. Solo necesitas saber lo suficiente para guiar a alguien que está empezando.
+                  <p className={`text-n-1 font-mono leading-relaxed ${
+                    fontSize === 'small' ? 'text-xs sm:text-sm md:text-base lg:text-lg' : fontSize === 'large' ? 'text-base sm:text-lg md:text-xl lg:text-2xl' : 'text-sm sm:text-base md:text-lg lg:text-xl'
+                  }`}>
+                    {servicesCards[0].text}
                   </p>
                   <div className="mt-2 sm:mt-2.5 md:mt-3 flex items-center gap-2">
                     <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 bg-gradient-to-r from-color-1 to-color-2 rounded-full flex items-center justify-center">
-                      <span className="text-white text-xs sm:text-sm font-bold">M</span>
+                      <span className="text-white text-xs sm:text-sm font-bold">{servicesCards[0].title.charAt(0)}</span>
                     </div>
                     <div>
-                      <p className="text-n-1 text-xs sm:text-sm font-semibold">Mentorías</p>
-                      <p className="text-n-4 text-xs sm:text-sm">Personalizadas</p>
+                      <p className="text-n-1 text-xs sm:text-sm font-semibold">{servicesCards[0].title}</p>
+                      <p className="text-n-4 text-xs sm:text-sm">{servicesCards[0].subtitle}</p>
                     </div>
                   </div>
                 </div>
@@ -115,8 +136,8 @@ const Services = ({ fontSize = 'normal' }) => {
                 {/* Background Image - Full Coverage */}
                 <div className="absolute inset-0">
                   <img
-                    src="./assets/circleimages/service-right.png"
-                    alt="Talleres Interactivos"
+                    src={servicesCards[1].image}
+                    alt={servicesCards[1].alt}
                     className="h-full w-full object-cover pointer-events-none select-none"
                     width={630}
                     height={750}
@@ -185,16 +206,18 @@ const Services = ({ fontSize = 'normal' }) => {
                       <path d="M0 32V16C0 7.2 7.2 0 16 0V8C11.6 8 8 11.6 8 16V20H16V32H0ZM24 32V16C24 7.2 31.2 0 40 0V8C35.6 8 32 11.6 32 16V20H40V32H24Z" fill="#AC6AFF"/>
                     </svg>
                   </div>
-                  <p className="text-sm sm:text-base md:text-lg lg:text-xl text-n-1 font-mono leading-relaxed">
-                    2 horas de tu agenda. Coordinamos espacio, inscripciones y materiales básicos. Tú preparas el contenido práctico y llegas a enseñar. Sin compromisos a largo plazo.
+                  <p className={`text-n-1 font-mono leading-relaxed ${
+                    fontSize === 'small' ? 'text-xs sm:text-sm md:text-base lg:text-lg' : fontSize === 'large' ? 'text-base sm:text-lg md:text-xl lg:text-2xl' : 'text-sm sm:text-base md:text-lg lg:text-xl'
+                  }`}>
+                    {servicesCards[1].text}
                   </p>
                   <div className="mt-2 sm:mt-2.5 md:mt-3 flex items-center gap-2">
                     <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 bg-gradient-to-r from-color-2 to-color-1 rounded-full flex items-center justify-center">
-                      <span className="text-white text-xs sm:text-sm font-bold">T</span>
+                      <span className="text-white text-xs sm:text-sm font-bold">{servicesCards[1].title.charAt(0)}</span>
                     </div>
                     <div>
-                      <p className="text-n-1 text-xs sm:text-sm font-semibold">Talleres</p>
-                      <p className="text-n-4 text-xs sm:text-sm">Interactivos</p>
+                      <p className="text-n-1 text-xs sm:text-sm font-semibold">{servicesCards[1].title}</p>
+                      <p className="text-n-4 text-xs sm:text-sm">{servicesCards[1].subtitle}</p>
                     </div>
                   </div>
                 </div>
