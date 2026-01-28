@@ -21,7 +21,7 @@ const Section = ({
         once: true,
       }}
       id={id}
-      className={`relative ${
+      className={`relative overflow-x-hidden ${
         customPaddings ||
         `py-10 lg:py-16 xl:py-20 ${crosses && "lg:py-32 xl:py-40"}`
       } ${className || ""}`}
