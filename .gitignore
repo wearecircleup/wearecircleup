@@ -29,3 +29,8 @@ dist-ssr
 *.sw?
 .vercel
 .env*.local
+
+# Project-specific excluded assets/docs
+INVENTARIO-UI-DISEÑO.md
+brochure/
+pendon/

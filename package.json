@@ -16,6 +16,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.1067.0",
     "@aws-sdk/client-dynamodb": "^3.975.0",
     "@aws-sdk/lib-dynamodb": "^3.975.0",
     "@fluejs/noscroll": "^1.0.0",
