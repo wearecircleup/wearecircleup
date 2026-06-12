@@ -446,3 +446,5 @@ Do NOT include any other fields. Only "message" and "explanation" for each slide
     });
   }
 }
+
+export { callModelsAPI, callWithRetry, generateSlidesWithFallback, callBedrockFallback, mapLlmError };
