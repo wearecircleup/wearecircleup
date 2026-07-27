@@ -34,3 +34,6 @@ dist-ssr
 INVENTARIO-UI-DISEÑO.md
 brochure/
 pendon/
+
+# Local-only Eventbrite CRUD API and its credentials/runtime files
+local_eventbrite_api/
