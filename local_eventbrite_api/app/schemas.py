@@ -79,7 +79,6 @@ class VenueBase(BaseModel):
     country: str = Field(default="CO", min_length=2, max_length=2, examples=["CO"])
     latitude: float | None = Field(default=None, examples=[4.711])
     longitude: float | None = Field(default=None, examples=[-74.0721])
-    description: str | None = Field(default=None, examples=["Sede local para actividades Circle Up."])
 
 
 class VenueCreate(VenueBase):
@@ -104,8 +103,6 @@ class VenueCreate(VenueBase):
             venue["address"]["latitude"] = self.latitude
         if self.longitude is not None:
             venue["address"]["longitude"] = self.longitude
-        if self.description is not None:
-            venue["description"] = self.description
         return venue
 
 
@@ -119,7 +116,6 @@ class VenueUpdate(BaseModel):
     country: str | None = Field(default=None, min_length=2, max_length=2)
     latitude: float | None = None
     longitude: float | None = None
-    description: str | None = None
 
     def eventbrite_payload(self) -> dict:
         venue: dict = {}
@@ -134,10 +130,6 @@ class VenueUpdate(BaseModel):
             address["country"] = self.country.upper()
         if address:
             venue["address"] = address
-        for field in ("description",):
-            value = getattr(self, field)
-            if value is not None:
-                venue[field] = value
         return venue
 
 

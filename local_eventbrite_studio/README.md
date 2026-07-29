@@ -14,6 +14,11 @@ The app guides the required human review through five tabs:
 The fixed Circle Up organization and organizer are visible only as reference.
 `USD` remains fixed because this Eventbrite organization currently rejects COP.
 
+The registration flow always includes education level, age range and the
+conduct acknowledgement. In the Content tab, each presenter may add zero, one
+or two audience questions. Supported types are text, radio, dropdown and
+checkbox; choice-based questions require at least two options.
+
 ## Run with uv
 
 ```powershell

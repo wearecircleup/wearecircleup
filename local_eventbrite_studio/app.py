@@ -12,7 +12,7 @@ from PIL import Image
 import httpx
 import streamlit as st
 
-from venue import clean_text, normalize_venue, venue_request, venue_validation_errors
+from venue import clean_text, minimum_consumption_cop, normalize_venue, venue_request, venue_validation_errors
 
 
 TIMEZONE = "America/Bogota"
@@ -23,45 +23,39 @@ START_TIME_OPTIONS = tuple(
     for minute in (0, 30)
 ) + (time(19, 0),)
 DEFAULT_FAQS = [
-    ("Circle Up y la participacion", "Circle Up es un proyecto de investigacion que une tecnologia, personas y academia. Cada encuentro dura una hora, reune de cuatro a diez personas y es gratuito; un lugar comercial puede tener un consumo minimo previamente comunicado."),
-    ("Datos y convivencia", "Solicitamos solo la informacion necesaria para organizar el encuentro, registrar asistencia y aprender de la actividad. Tratamos a todas las personas con respeto, cuidamos el espacio anfitrion y seguimos sus reglas razonables."),
+    ("¿Qué es Circle Up Community?", "Un proyecto de investigación que conecta tecnología, comunidad y academia mediante aprendizaje comunitario."),
+    ("¿Cómo es la sesion?", "Dura hasta una hora, reúne de 4 a 10 personas y se adapta a cualquier espacio. ¿Conoces uno? Cuéntanos y lo gestionamos."),
+    ("¿Tiene algún costo?", "Es gratuito. Presencial: según el sitio puede haber un consumo mínimo de $0 a $2.000 COP, indicado en la descripción del lugar. Virtual: no aplica."),
 ]
-DEFAULT_TICKETS = ["General", "Clase gratuita"]
-TOPIC_INTEREST_QUESTION = "Que tema te interesa mas para este encuentro?"
-TOPIC_INTEREST_CHOICES = [
-    "Tecnologia y herramientas digitales",
-    "Aprendizaje y estudio",
-    "Comunidad y redes",
-    "Bienestar y vida diaria",
-    "Otro o aun no lo se",
-]
-EDUCATION_LEVEL_QUESTION = "Cual es tu nivel educativo actual?"
+DEFAULT_TICKETS = ["Entrada General"]
+EDUCATION_LEVEL_QUESTION = "¿Cuál es tu nivel educativo actual?"
 EDUCATION_LEVEL_CHOICES = [
     "Primaria",
     "Secundaria o bachillerato",
     "Tecnico o tecnologo",
     "Universitario",
+    "Especializacion",
     "Posgrado",
-    "Prefiero no responder",
+    "Doctorado",
+    "Otro"
 ]
-AGE_RANGE_QUESTION = "Selecciona tu rango de edad"
+PRESENTER_QUESTION_TYPES = {
+    "Texto abierto": "text",
+    "Radio (una respuesta)": "radio",
+    "Dropdown (una respuesta)": "dropdown",
+    "Checkbox (varias respuestas)": "checkbox",
+}
+MULTIPLE_CHOICE_TYPES = {"radio", "dropdown", "checkbox"}
+AGE_RANGE_QUESTION = "¿Cuál es tu rango de edad?"
 AGE_RANGE_CHOICES = [
-    "14–17 años — entiendo que recibiré un formulario de autorización; deberá estar completo para su verificación el día del evento.",
-    "18–24 años",
-    "25–34 años",
-    "35–44 años",
-    "45–54 años",
+    "14 a 17 años — Requiere autorización obligatoria del acudiente (asistencia, datos y protección de menores, Ley 1098 de 2006), enviada por correo de registro antes del evento.",
+    "18 a 24 años",
+    "25 a 34 años",
+    "35 a 44 años",
+    "45 a 54 años",
     "55 años o más",
 ]
 DEFAULT_VENUES: list[dict] = []
-
-# Eventbrite does not offer conditional registration questions.  Keep the
-# minor-participation policy in the only applicable age-range choice.
-AGE_RANGE_CHOICES[0] = (
-    "14-17 anos - requiere autorizacion de madre, padre o tutor; el formulario se enviara por email "
-    "y debera presentarse el dia del evento. Aplican la regla de dos adultos, datos minimos y materiales adecuados a la edad."
-)
-
 
 def init_state() -> None:
     defaults = {
@@ -76,11 +70,10 @@ def init_state() -> None:
         "event_date": None,
         "start_time": None,
         "capacity": None,
-        "ticket_name": "General",
+        "ticket_name": "Entrada General",
         "registration_lead_days": 7,
+        "presenter_question_count": 0,
         "description": "",
-        "arrival": "",
-        "materials": "",
         "draft_saved": False,
     }
     for key, value in defaults.items():
@@ -106,11 +99,6 @@ def event_start() -> datetime | None:
 def event_end() -> datetime | None:
     start = event_start()
     return start + timedelta(hours=1) if start else None
-
-
-def event_arrival() -> datetime | None:
-    start = event_start()
-    return start - timedelta(minutes=10) if start else None
 
 
 def event_closes_same_day() -> bool:
@@ -142,6 +130,19 @@ def venue_by_id(venue_id: str | None) -> dict | None:
         if venue["id"] == venue_id:
             return venue
     return None
+
+
+def active_venue() -> dict | None:
+    return venue_by_id(st.session_state.venue_id)
+
+
+def venue_consumption_note() -> str:
+    venue = active_venue()
+    return clean_text(venue.get("address_2")) if venue else ""
+
+
+def venue_consumption_amount() -> int:
+    return minimum_consumption_cop(venue_consumption_note())
 
 
 def ensure_venue_selection() -> None:
@@ -210,7 +211,6 @@ def current_venue_form() -> dict:
         "country": "CO",
         "latitude": None,
         "longitude": None,
-        "description": "",
     }
 
 
@@ -218,7 +218,7 @@ def issues_for_venue() -> list[str]:
     if st.session_state.format == "Online":
         return []
     if not local_venues():
-        return ["Crea al menos un venue local para poder usarlo en un encuentro presencial."]
+        return ["Crea al menos un venue local para poder usarlo en un evento presencial."]
     venue = venue_by_id(st.session_state.venue_id)
     if not venue:
         return ["Selecciona un venue valido del registro local."]
@@ -228,11 +228,11 @@ def issues_for_venue() -> list[str]:
 def issues_for_event() -> list[str]:
     issues = []
     if not st.session_state.event_name.strip():
-        issues.append("Falta el nombre del encuentro.")
+        issues.append("Falta el nombre del evento.")
     if len(st.session_state.summary.strip()) > 140:
         issues.append("El resumen supera el limite de 140 caracteres.")
     if not st.session_state.event_date:
-        issues.append("Falta la fecha del encuentro.")
+        issues.append("Falta la fecha del evento.")
     if not st.session_state.start_time:
         issues.append("Falta la hora de inicio.")
     if st.session_state.start_time and st.session_state.start_time not in START_TIME_OPTIONS:
@@ -251,16 +251,24 @@ def issues_for_registration() -> list[str]:
     if st.session_state.registration_lead_days is None:
         issues.append("Falta definir cuantas dias antes se abren las inscripciones.")
     elif st.session_state.registration_lead_days <= 0:
-        issues.append("Las inscripciones deben abrir antes del inicio del encuentro.")
+        issues.append("Las inscripciones deben abrir antes del inicio del evento.")
     return issues
 
 
 def issues_for_content() -> list[str]:
     issues = []
     if not st.session_state.description.strip():
-        issues.append("Falta describir el tema o la actividad del encuentro.")
-    if not st.session_state.arrival.strip():
-        issues.append("Faltan las instrucciones de llegada.")
+        issues.append("Falta describir el tema o la actividad del evento.")
+    for index in range(int(st.session_state.presenter_question_count)):
+        prompt = clean_text(st.session_state.get(f"presenter_question_{index}", ""))
+        label = st.session_state.get(f"presenter_question_type_{index}", "Texto abierto")
+        question_type = PRESENTER_QUESTION_TYPES[label]
+        if not prompt:
+            issues.append(f"Falta el enunciado de la pregunta opcional {index + 1}.")
+        if question_type in MULTIPLE_CHOICE_TYPES:
+            choices = [choice.strip() for choice in st.session_state.get(f"presenter_question_choices_{index}", "").splitlines() if choice.strip()]
+            if len(choices) < 2:
+                issues.append(f"La pregunta opcional {index + 1} necesita al menos dos opciones.")
     return issues
 
 
@@ -269,26 +277,44 @@ def all_issues() -> list[str]:
 
 
 def content_html() -> str:
-    faqs = "".join(f"<p><strong>{question}.</strong> {answer}</p>" for question, answer in DEFAULT_FAQS)
-    materials = st.session_state.materials or "No necesitas llevar equipo adicional salvo que el evento lo especifique."
+    note = venue_consumption_note()
+    faqs = []
+    for question, answer in DEFAULT_FAQS:
+        if "costo" in question.lower() and st.session_state.format == "Presencial" and note:
+            answer = note
+        faqs.append(f"<p><strong>{question}.</strong> {answer}</p>")
     return (
-        f"<p><strong>Sobre este encuentro.</strong> {st.session_state.description}</p>"
-        f"<p><strong>Llegada.</strong> {st.session_state.arrival}</p>"
-        f"<p><strong>Que llevar.</strong> {materials}</p>"
-        "<p><strong>Si no puedes asistir.</strong> Libera tu cupo en Eventbrite tan pronto como puedas para que otra persona pueda participar.</p>"
-        f"{faqs}"
+        f"<p>{st.session_state.description}</p>"
+        "<h2>FAQs</h2>"
+        f"{''.join(faqs)}"
     )
+
+
+def presenter_questions() -> list[dict]:
+    """Translate up to two presenter-defined questions to Eventbrite's contract."""
+    questions = []
+    for index in range(int(st.session_state.presenter_question_count)):
+        label = st.session_state[f"presenter_question_type_{index}"]
+        question_type = PRESENTER_QUESTION_TYPES[label]
+        question = {
+            "question": {"html": clean_text(st.session_state[f"presenter_question_{index}"])},
+            "type": question_type,
+            "required": bool(st.session_state[f"presenter_question_required_{index}"]),
+            "choices": [],
+            "ticket_classes": [],
+        }
+        if question_type in MULTIPLE_CHOICE_TYPES:
+            question["choices"] = [
+                {"answer": {"html": choice.strip()}}
+                for choice in st.session_state[f"presenter_question_choices_{index}"].splitlines()
+                if choice.strip()
+            ]
+        questions.append(question)
+    return questions
 
 
 def payload() -> dict:
     questions = [
-        {
-            "question": {"html": TOPIC_INTEREST_QUESTION},
-            "type": "dropdown",
-            "required": False,
-            "choices": [{"answer": {"html": choice}} for choice in TOPIC_INTEREST_CHOICES],
-            "ticket_classes": [],
-        },
         {
             "question": {"html": EDUCATION_LEVEL_QUESTION},
             "type": "dropdown",
@@ -313,6 +339,15 @@ def payload() -> dict:
             "ticket_classes": [],
         },
     ]
+    minimum = venue_consumption_amount()
+    if st.session_state.format == "Presencial" and minimum:
+        amount = f"${minimum:,.0f}".replace(",", ".")
+        questions.append({
+            "question": {"html": f"Entiendo que participar en este evento no tiene costo. El lugar anfitrion solicita un consumo minimo de {amount} COP para permanecer en el sitio; este valor es un acuerdo directo con el lugar y no un cobro de Circle Up."},
+            "type": "checkbox", "required": True,
+            "choices": [{"answer": {"html": "Confirmo"}}], "ticket_classes": [],
+        })
+    questions.extend(presenter_questions())
 
     event = {
         "name": {"html": st.session_state.event_name},
@@ -485,7 +520,12 @@ def render_venue_page() -> None:
         with st.form("venue_form"):
             name = st.text_input("Nombre del venue *", value=form["name"])
             address_1 = st.text_input("Direccion linea 1", value=form["address_1"])
-            address_2 = st.text_input("Direccion linea 2", value=form["address_2"])
+            address_2 = st.text_area(
+                "Disclaimer del lugar y consumo minimo (se guarda en Direccion linea 2)",
+                value=form["address_2"],
+                height=96,
+                help="Incluye el texto visible para asistentes y, si aplica, un patron como $2.000 COP para detectar automaticamente el consumo minimo.",
+            )
             city = st.text_input("Ciudad", value=form["city"])
             region = st.text_input("Region / departamento", value=form["region"])
             postal_code = st.text_input("Codigo postal", value=form["postal_code"])
@@ -502,7 +542,6 @@ def render_venue_page() -> None:
                 placeholder="Opcional",
                 format="%.6f",
             )
-            description = st.text_area("Descripcion", value=form["description"], height=80)
             save = st.form_submit_button("Guardar venue", type="primary", width="stretch")
         if save:
             venue_data = {
@@ -516,7 +555,6 @@ def render_venue_page() -> None:
                     "country": clean_text(country)[:2].upper() or "CO",
                     "latitude": latitude,
                     "longitude": longitude,
-                    "description": clean_text(description),
                 }
             errors = venue_validation_errors(venue_data)
             if errors:
@@ -585,25 +623,20 @@ def render_venue_page() -> None:
 
 
 def render_event_page() -> None:
-    st.text_input("Nombre del encuentro *", placeholder="Ejemplo: Conversacion practica sobre ...", key="event_name")
+    st.text_input("Nombre del evento *", placeholder="Ejemplo: Conversacion practica sobre ...", key="event_name")
     st.text_input("Resumen publico", max_chars=140, placeholder="Invitacion breve y concreta.", key="summary")
-    left, middle, right = st.columns(3)
+    left, middle = st.columns(2)
     left.date_input("Fecha *", min_value=date.today(), key="event_date")
     middle.selectbox(
         "Hora de inicio *",
         options=START_TIME_OPTIONS,
         key="start_time",
         format_func=lambda value: value.strftime("%I:%M %p").lstrip("0"),
-        help="Ventana permitida: de 8:00 a. m. a 7:00 p. m. para que el encuentro termine antes de las 8:00 p. m.",
+        help="Ventana permitida: de 8:00 a. m. a 7:00 p. m. para que la sesion termine antes de las 8:00 p. m.",
     )
-    arrival = event_arrival()
-    if arrival:
-        right.success(f"Llegada auto: {arrival.strftime('%I:%M %p').lstrip('0')} (-10 min)")
-    else:
-        right.caption("La hora de llegada se calcula automaticamente 10 min antes.")
     left, right = st.columns([1, 2])
     left.number_input("Aforo *", min_value=1, max_value=10, value=None, step=1, placeholder="4 a 10", key="capacity")
-    right.caption("El encuentro dura exactamente 1 hora y el cierre debe quedar el mismo dia.")
+    right.caption("La sesion dura exactamente 1 hora y el cierre debe quedar el mismo dia.")
     if st.session_state.format == "Presencial":
         venue = venue_by_id(st.session_state.venue_id)
         if venue:
@@ -616,7 +649,7 @@ def render_event_page() -> None:
         st.success(f"Inicio: {start.strftime('%d/%m/%Y %I:%M %p')} | Fin: {end.strftime('%d/%m/%Y %I:%M %p')} | Estado: {st.session_state.event_status.title()}")
     else:
         st.caption("El final se calculara automaticamente una hora despues del inicio.")
-    render_blockers(issues_for_event(), "Datos del encuentro listos.")
+    render_blockers(issues_for_event(), "Datos del evento listos.")
 
 
 def render_registration_page() -> None:
@@ -624,6 +657,16 @@ def render_registration_page() -> None:
     left.selectbox("Ticket class base *", DEFAULT_TICKETS, key="ticket_name", help="Esta es la clase general; sobre ella se aplican cupos, preguntas y reglas.")
     right.number_input("Apertura, dias antes", min_value=1, max_value=90, step=1, key="registration_lead_days")
     st.caption("Ticket gratuito 'General' con un solo cupo por orden. La apertura se deriva del inicio del evento.")
+    if st.session_state.format == "Presencial":
+        note = venue_consumption_note()
+        if note:
+            st.info(note)
+        if venue_consumption_amount():
+            st.info("La persona debera confirmar este consumo antes de completar la orden.")
+        elif active_venue():
+            st.caption("Si el lugar requiere consumo minimo, agrégalo en el disclaimer del venue usando un patron como $2.000 COP.")
+    else:
+        st.caption("Encuentro virtual: no aplica consumo minimo del lugar.")
     if registration_start() and event_start():
         st.success(
             f"Apertura: {registration_start().strftime('%d/%m/%Y %I:%M %p')} | Cierre: {event_start().strftime('%d/%m/%Y %I:%M %p')}"
@@ -638,9 +681,29 @@ def render_registration_page() -> None:
 
 
 def render_content_page() -> None:
-    st.text_area("Descripcion del encuentro *", placeholder="Que aprenderan o haran las personas durante esta hora?", key="description", height=96)
-    st.text_area("Instrucciones de llegada *", placeholder="Ejemplo: Busca la mesa de Circle Up desde las 5:50 p. m.", key="arrival", height=72)
-    st.text_input("Que llevar", placeholder="Ejemplo: Un cuaderno y curiosidad.", key="materials")
+    st.text_area("Descripcion del evento *", placeholder="Que aprenderan o haran las personas durante esta hora?", key="description", height=96)
+    st.number_input(
+        "Preguntas opcionales del presentador",
+        min_value=0,
+        max_value=2,
+        step=1,
+        key="presenter_question_count",
+        help="Se enviaran en el formulario de registro para conocer mejor a la audiencia.",
+    )
+    st.caption("Tipos compatibles: texto abierto, radio, dropdown y checkbox. Radio, dropdown y checkbox requieren al menos dos opciones.")
+    for index in range(int(st.session_state.presenter_question_count)):
+        with st.expander(f"Pregunta {index + 1}", expanded=True):
+            st.text_input("Enunciado *", key=f"presenter_question_{index}")
+            st.selectbox("Tipo *", list(PRESENTER_QUESTION_TYPES), key=f"presenter_question_type_{index}")
+            st.checkbox("Obligatoria", key=f"presenter_question_required_{index}")
+            selected_type = PRESENTER_QUESTION_TYPES[st.session_state[f"presenter_question_type_{index}"]]
+            if selected_type in MULTIPLE_CHOICE_TYPES:
+                st.text_area(
+                    "Opciones, una por linea *",
+                    key=f"presenter_question_choices_{index}",
+                    placeholder="Opcion 1\nOpcion 2",
+                    height=100,
+                )
     uploaded = st.file_uploader("Imagen principal (opcional)", type=["jpg", "jpeg", "png"], key="event_image", help="JPEG o PNG, maximo 10 MB, proporcion 2:1.")
     if uploaded:
         normalized_image, image_notice = prepare_event_image(uploaded)
@@ -649,7 +712,7 @@ def render_content_page() -> None:
         if normalized_image:
             st.image(normalized_image, caption=f"{uploaded.name} | {normalized_image.width}x{normalized_image.height}px", width="stretch")
     render_blockers(issues_for_content(), "Contenido listo.")
-    with st.expander("FAQs predeterminadas", expanded=False):
+    with st.expander("FAQs", expanded=False):
         for question, answer in DEFAULT_FAQS:
             st.markdown(f"**{question}**")
             st.caption(answer)
@@ -725,7 +788,7 @@ sanitize_start_time()
 ensure_venue_selection()
 show_pending_toast()
 
-st.title("Preparar un encuentro Circle Up")
+st.title("Preparar un evento Circle Up")
 st.caption("El borrador se conserva en esta sesion y se envia a la API local solo desde Revision.")
 
 issues = all_issues()

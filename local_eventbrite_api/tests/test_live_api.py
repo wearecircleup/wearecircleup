@@ -19,10 +19,6 @@ from app.main import app
 pytestmark = pytest.mark.live
 
 
-@pytest.mark.skipif(
-    os.getenv("EVENTBRITE_LIVE_TEST") != "1",
-    reason="Set EVENTBRITE_LIVE_TEST=1 to run real Eventbrite CRUD validation.",
-)
 def test_full_eventbrite_crud_lifecycle() -> None:
     start = (datetime.now(timezone.utc) + timedelta(days=3)).replace(
         hour=15, minute=0, second=0, microsecond=0
@@ -83,10 +79,6 @@ def test_full_eventbrite_crud_lifecycle() -> None:
         assert deleted_event.json()["status"] == "deleted"
 
 
-@pytest.mark.skipif(
-    os.getenv("EVENTBRITE_LIVE_TEST") != "1",
-    reason="Set EVENTBRITE_LIVE_TEST=1 to run real Eventbrite CRUD validation.",
-)
 def test_controlled_instantiation_content_questions_and_image_lifecycle() -> None:
     """Validate every current Studio feature against Eventbrite, then clean up."""
     start = (datetime.now(timezone.utc) + timedelta(days=4)).replace(

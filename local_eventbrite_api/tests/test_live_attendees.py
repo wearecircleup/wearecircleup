@@ -16,10 +16,6 @@ from app.main import app
 pytestmark = pytest.mark.live
 
 
-@pytest.mark.skipif(
-    os.getenv("EVENTBRITE_LIVE_ATTENDEE_TEST") != "1",
-    reason="Set EVENTBRITE_LIVE_ATTENDEE_TEST=1 after completing checkout for both test accounts.",
-)
 def test_real_checkout_registrations_are_visible_without_checkin() -> None:
     event_id = os.getenv("EVENTBRITE_ATTENDEE_EVENT_ID")
     assert event_id, "Set EVENTBRITE_ATTENDEE_EVENT_ID to the published test event."

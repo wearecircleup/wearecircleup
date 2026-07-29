@@ -99,9 +99,11 @@ Dates must include their UTC offset. `POST /events` has real side effects: it cr
 uv run pytest
 ```
 
-The default suite is network-free. To validate every endpoint against Eventbrite,
-run the opt-in integration test below. It creates and publishes one temporary
-event, then deletes it after checking create, read and update operations.
+The default suite is network-free and automatically excludes the live Eventbrite
+tests unless their opt-in environment variables are set. To validate every
+endpoint against Eventbrite, run the integration test below. It creates and
+publishes one temporary event, then deletes it after checking create, read and
+update operations.
 
 ```powershell
 $env:EVENTBRITE_LIVE_TEST = "1"
