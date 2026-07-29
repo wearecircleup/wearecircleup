@@ -109,7 +109,7 @@ def test_draft_preview_uses_trackable_dropdown_questions(monkeypatch: pytest.Mon
     assert '"presenter_questions": []' in preview
     assert '"ticket_name": "Entrada General"' in preview
     assert '"presenter_name": ""' in preview
-    assert '"learning_points": []' in preview
+    assert '"presenter_note": ""' in preview
 
 
 def test_presenter_can_add_a_dropdown_question(monkeypatch: pytest.MonkeyPatch) -> None:

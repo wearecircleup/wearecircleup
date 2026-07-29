@@ -23,11 +23,7 @@ def valid_payload() -> dict:
         "registration_opens": "2026-07-28T15:00:00Z",
         "overview": "Aprendizaje comunitario en una hora.",
         "presenter_name": "Ana Torres",
-        "presenter_profile": "Investigadora comunitaria y facilitadora de encuentros de aprendizaje.",
-        "learning_points": [
-            "Identificar ideas clave del tema.",
-            "Conectar el tema con casos cotidianos.",
-        ],
+        "presenter_note": "Investigadora comunitaria que guiara una conversacion practica sobre el tema y sus aplicaciones cotidianas.",
         "venue_consumption_note": "Consumo minimo sugerido por el lugar.",
         "venue_consumption_amount": 2000,
         "presenter_questions": [
@@ -111,10 +107,10 @@ def test_instantiation_validates_the_fixed_contract() -> None:
     invalid_overview["overview"] = "x" * 801
     with pytest.raises(ValidationError, match="at most 800 characters"):
         EventInstantiation(**invalid_overview)
-    invalid_learning_points = valid_payload()
-    invalid_learning_points["learning_points"] = ["a", "b", "c", "d", "e"]
-    with pytest.raises(ValidationError, match="at most 4 items"):
-        EventInstantiation(**invalid_learning_points)
+    invalid_presenter_note = valid_payload()
+    invalid_presenter_note["presenter_note"] = "x" * 601
+    with pytest.raises(ValidationError, match="at most 600 characters"):
+        EventInstantiation(**invalid_presenter_note)
 
 
 def test_manager_runs_event_ticket_questions_content_then_validation() -> None:
@@ -141,12 +137,11 @@ def test_manager_runs_event_ticket_questions_content_then_validation() -> None:
     assert client.structured_content["content"]["publish"] is True
     body = client.structured_content["content"]["modules"][0]["data"]["body"]["text"]
     assert "Aprendizaje comunitario en una hora." in body
-    assert "<blockquote><b>Ana Torres</b> Investigadora comunitaria y facilitadora de encuentros de aprendizaje.</blockquote>" in body
-    assert "<ul><li>✅ Identificar ideas clave del tema.</li><li>✅ Conectar el tema con casos cotidianos.</li></ul>" in body
+    assert "<aside><em><b>Ana Torres</b> Investigadora comunitaria que guiara una conversacion practica sobre el tema y sus aplicaciones cotidianas.</em></aside>" in body
     assert "Consumo minimo sugerido por el lugar." in body
     assert "<strong>" not in body
-    assert "<p><b>¿Qué es Circle Up Community?</b></p><p><em>Un proyecto de investigación que conecta tecnología, comunidad y academia mediante aprendizaje comunitario.</em></p>" in body
-    assert "<b>Contacto:</b>" in body
+    assert "<h3>¿Qué es Circle Up Community?</h3><p><em>Un proyecto de investigación que conecta tecnología, comunidad y academia mediante aprendizaje comunitario.</em></p>" in body
+    assert '<b>Contacto:</b> <a href="https://www.circleup.com.co/">https://www.circleup.com.co/</a>' in body
     assert "Sobre este encuentro" not in body
     assert "Llegada" not in body
     assert "Que llevar" not in body
@@ -160,8 +155,8 @@ def test_structured_content_omits_a_repeated_title_in_overview() -> None:
 
     body = EventInstantiation(**payload).structured_content_payload()["modules"][0]["data"]["body"]["text"]
 
-    assert body.startswith("<p>Este es un proyecto super interesante de matematicas avanzadas.</p><blockquote><b>Ana Torres</b>")
-    assert "<ul><li>✅ Identificar ideas clave del tema.</li><li>✅ Conectar el tema con casos cotidianos.</li></ul><br><br><h2>FAQs</h2>" in body
+    assert body.startswith("<p>Este es un proyecto super interesante de matematicas avanzadas.</p><aside><em><b>Ana Torres</b>")
+    assert "</aside><br><br><h2>FAQs</h2>" in body
     assert "Software NASA" not in body
 
 

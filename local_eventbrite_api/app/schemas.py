@@ -164,7 +164,7 @@ DEFAULT_FAQS = [
         "Al inscribirte, autorizas el tratamiento de los datos que proporcionas, conforme a la Ley 1581 de 2012, únicamente para gestionar tu inscripción, registrar tu asistencia, enviarte información y notificaciones relacionadas con el evento, y apoyar la actividad de investigación. Solicitamos solo la información necesaria y no compartiremos tus datos personales con terceros.",
     ),
 ]
-CONTACT_URL = "circleup.com.co"
+CONTACT_URL = "https://www.circleup.com.co/"
 CONTACT_EMAIL = "hola@circleup.com.co"
 TIMEZONE_FALLBACKS = {
     "America/Bogota": timezone(timedelta(hours=-5)),
@@ -236,8 +236,7 @@ class EventInstantiation(BaseModel):
     registration_opens: datetime
     overview: str = Field(min_length=1, max_length=800)
     presenter_name: str = Field(default="", max_length=80)
-    presenter_profile: str = Field(default="", max_length=320)
-    learning_points: list[str] = Field(default_factory=list, max_length=4)
+    presenter_note: str = Field(default="", max_length=600)
     venue_consumption_note: str = ""
     venue_consumption_amount: int = Field(default=0, ge=0)
     presenter_questions: list[PresenterQuestion] = Field(default_factory=list, max_length=2)
@@ -248,8 +247,7 @@ class EventInstantiation(BaseModel):
         self.ticket_name = self.ticket_name.strip()
         self.overview = self.overview.strip()
         self.presenter_name = self.presenter_name.strip()
-        self.presenter_profile = self.presenter_profile.strip()
-        self.learning_points = [point.strip() for point in self.learning_points if point.strip()]
+        self.presenter_note = self.presenter_note.strip()
         self.venue_consumption_note = self.venue_consumption_note.strip()
         if not self.name:
             raise ValueError("name is required.")
@@ -257,10 +255,10 @@ class EventInstantiation(BaseModel):
             raise ValueError("ticket_name is required.")
         if not self.overview:
             raise ValueError("overview is required.")
-        if self.presenter_name and not self.presenter_profile:
-            raise ValueError("presenter_profile is required when presenter_name is provided.")
-        if self.presenter_profile and not self.presenter_name:
-            raise ValueError("presenter_name is required when presenter_profile is provided.")
+        if self.presenter_name and not self.presenter_note:
+            raise ValueError("presenter_note is required when presenter_name is provided.")
+        if self.presenter_note and not self.presenter_name:
+            raise ValueError("presenter_name is required when presenter_note is provided.")
         if self.start.tzinfo is None or self.end.tzinfo is None or self.registration_opens.tzinfo is None:
             raise ValueError("Event and registration timestamps must include a UTC offset.")
         event_timezone = self._event_timezone()
@@ -368,18 +366,15 @@ class EventInstantiation(BaseModel):
         if overview_blocks and overview_blocks[0].casefold() == self.name.casefold():
             overview_blocks = overview_blocks[1:]
         overview_parts = [f"<p>{block}</p>" for block in overview_blocks]
-        if self.presenter_name and self.presenter_profile:
-            overview_parts.append(f"<blockquote><b>{self.presenter_name}</b> {self.presenter_profile}</blockquote>")
-        if self.learning_points:
-            bullets = "".join(f"<li>✅ {point}</li>" for point in self.learning_points)
-            overview_parts.append(f"<ul>{bullets}</ul>")
+        if self.presenter_name and self.presenter_note:
+            overview_parts.append(f"<aside><em><b>{self.presenter_name}</b> {self.presenter_note}</em></aside>")
         overview_html = "".join(overview_parts)
         faq_html = []
         for question, answer in DEFAULT_FAQS:
             current_answer = answer
             if "costo" in question.lower() and not self.online_event and self.venue_consumption_note.strip():
                 current_answer = self.venue_consumption_note.strip()
-            faq_html.append(f"<p><b>{question}</b></p><p><em>{current_answer}</em></p>")
+            faq_html.append(f"<h3>{question}</h3><p><em>{current_answer}</em></p>")
         body_parts = []
         if overview_html:
             body_parts.append(overview_html)

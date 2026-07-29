@@ -47,8 +47,7 @@ def init_state() -> None:
         "presenter_question_count": 0,
         "overview": "",
         "presenter_name": "",
-        "presenter_profile": "",
-        "learning_points": "",
+        "presenter_note": "",
     }
     for key, value in defaults.items():
         st.session_state.setdefault(key, value)
@@ -326,7 +325,7 @@ def render_event_page() -> None:
         help="Ventana permitida: de 8:00 a. m. a 7:00 p. m. para que la sesion termine antes de las 8:00 p. m.",
     )
     left, right = st.columns([1, 2])
-    left.number_input("Aforo *", min_value=3, max_value=10, value=3, step=1, key="capacity")
+    left.number_input("Aforo *", min_value=3, max_value=10, step=1, key="capacity")
     right.caption("La sesion dura exactamente 1 hora y el cierre debe quedar el mismo dia.")
     if st.session_state.format == "Presencial":
         venue = venue_by_id(st.session_state.venue_id)
@@ -380,21 +379,13 @@ def render_content_page() -> None:
         max_chars=800,
     )
     st.caption("Si la primera linea coincide con el nombre del evento, la API la omitira para evitar el titulo duplicado en Eventbrite.")
-    presenter_left, presenter_right = st.columns(2)
-    presenter_left.text_input("Nombre del presentador", key="presenter_name", max_chars=80)
-    presenter_right.text_area(
-        "Perfil del presentador",
-        key="presenter_profile",
-        height=96,
-        max_chars=320,
-        placeholder="Breve contexto humano del presentador. Su nombre ira en bold dentro de un quote.",
-    )
+    st.text_input("Nombre del presentador", key="presenter_name", max_chars=80)
     st.text_area(
-        "Que aprenderas",
-        key="learning_points",
-        height=110,
-        max_chars=360,
-        placeholder="Un aprendizaje por linea.\nMaximo 4 lineas.\nCada linea se publicara como ✅ bullet.",
+        "Perfil del presentador y que aprenderas",
+        key="presenter_note",
+        height=120,
+        max_chars=600,
+        placeholder="Escribe un solo texto fluido que cuente quien es el presentador y que aprenderan las personas. El nombre del presentador se destacara en bold y el resto ira en cursiva con tono visual mas suave.",
     )
     st.number_input(
         "Preguntas opcionales del presentador",
