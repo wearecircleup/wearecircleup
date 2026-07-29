@@ -91,26 +91,31 @@ const EventsTab = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="space-y-4">
+        <div className="flex justify-start">
+          <Button onClick={loadEvents} className="flex items-center gap-2 px-5 py-3 text-sm sm:text-base">
+            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            Actualizar
+          </Button>
+        </div>
+
         <div>
           <h2 className="text-2xl font-bold text-n-1">Eventos Circle Up</h2>
           <p className="text-n-4 text-sm mt-1">
             {events.length} {events.length === 1 ? 'evento disponible' : 'eventos disponibles'}
           </p>
         </div>
-        <Button onClick={loadEvents} className="flex items-center gap-2">
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-          </svg>
-          Actualizar
-        </Button>
       </div>
 
-      {/* Events grid - Responsive with equal height cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
-        {events.map((event) => (
-          <EventCard key={event.id} event={event} />
-        ))}
+      <div className="pt-1">
+        {/* Events grid - Responsive with equal height cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+          {events.map((event) => (
+            <EventCard key={event.id} event={event} />
+          ))}
+        </div>
       </div>
 
       {/* Info footer */}

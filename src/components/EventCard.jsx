@@ -82,7 +82,6 @@ const EventCard = ({ event }) => {
       {/* Content */}
       <div className="p-3 sm:p-4 md:p-6 flex flex-col flex-1">
         <h3 className="text-base sm:text-lg md:text-xl font-bold text-n-1 mb-2 line-clamp-2">{event.name}</h3>
-        <p className="text-n-4 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2">{event.summary}</p>
         
         {/* Event details */}
         <div className="space-y-2 mb-3 sm:mb-4 flex-1">
