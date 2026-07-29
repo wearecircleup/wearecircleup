@@ -22,6 +22,8 @@ def init_delete_state() -> None:
         "delete_event_confirmation": "",
         "delete_event_acknowledged": False,
         "delete_status_filter": "Todos",
+        "delete_event_detail": None,
+        "delete_event_attendance": None,
     }
     for key, value in defaults.items():
         st.session_state.setdefault(key, value)
@@ -64,25 +66,23 @@ def refresh_events() -> None:
         st.session_state.delete_event_id = str(st.session_state.delete_events[0]["id"]) if st.session_state.delete_events else ""
     st.session_state.delete_event_confirmation = ""
     st.session_state.delete_event_acknowledged = False
+    st.session_state.delete_event_detail = None
+    st.session_state.delete_event_attendance = None
+
+
+def load_selected_event() -> None:
+    summary = selected_event_summary()
+    if summary is None:
+        st.session_state.delete_event_detail = None
+        st.session_state.delete_event_attendance = None
+        return
+    st.session_state.delete_event_detail = get_event(str(summary["id"]))
+    st.session_state.delete_event_attendance = get_attendance(str(summary["id"]))
 
 
 def render_delete_event_page() -> None:
     st.title("Delete Event")
     st.caption("Modulo aislado para revisar y eliminar eventos sin mezclar este flujo con la creacion.")
-
-    controls_left, controls_right = st.columns([2, 1])
-    controls_left.selectbox(
-        "Estado a consultar",
-        DELETE_STATUS_OPTIONS,
-        key="delete_status_filter",
-        help="Usa este filtro para localizar el evento antes de revisar si puede eliminarse.",
-    )
-    if controls_right.button("Actualizar eventos", width="stretch"):
-        try:
-            refresh_events()
-            st.toast("Listado de eventos actualizado.")
-        except Exception as exc:
-            st.error(f"No se pudo actualizar el listado: {api_error_message(exc)}")
 
     if not st.session_state.delete_events_loaded:
         try:
@@ -95,25 +95,55 @@ def render_delete_event_page() -> None:
         st.warning("No hay eventos disponibles con el filtro actual.")
         return
 
-    st.selectbox(
-        "Evento a revisar",
-        [str(event["id"]) for event in st.session_state.delete_events],
-        format_func=lambda event_id: event_label(
-            next(event for event in st.session_state.delete_events if str(event["id"]) == str(event_id))
-        ),
-        key="delete_event_id",
-    )
+    with st.form("delete_event_form"):
+        controls_left, controls_right = st.columns([2, 1])
+        controls_left.selectbox(
+            "Estado a consultar",
+            DELETE_STATUS_OPTIONS,
+            key="delete_status_filter",
+            help="Usa este filtro para localizar el evento antes de revisar si puede eliminarse.",
+        )
+        event_ids = [str(event["id"]) for event in st.session_state.delete_events]
+        st.selectbox(
+            "Evento a revisar",
+            event_ids,
+            format_func=lambda event_id: event_label(
+                next(event for event in st.session_state.delete_events if str(event["id"]) == str(event_id))
+            ),
+            key="delete_event_id",
+        )
+        st.checkbox(
+            "Entiendo que la eliminacion permanente no debe usarse como primer paso si el evento tuvo registros.",
+            key="delete_event_acknowledged",
+        )
+        confirmation_target = event_name(selected_event_summary() or {})
+        st.text_input(
+            f'Escribe exactamente "{confirmation_target}" para confirmar',
+            key="delete_event_confirmation",
+        )
+        refresh_submitted = controls_right.form_submit_button("Actualizar eventos", width="stretch")
+        review_submitted = st.form_submit_button("Revisar evento", width="stretch")
 
-    summary = selected_event_summary()
-    if summary is None:
-        st.warning("Selecciona un evento valido.")
-        return
+        if refresh_submitted:
+            try:
+                refresh_events()
+                st.toast("Listado de eventos actualizado.")
+            except Exception as exc:
+                st.error(f"No se pudo actualizar el listado: {api_error_message(exc)}")
+            st.rerun()
 
-    try:
-        detail = get_event(str(summary["id"]))
-        attendance = get_attendance(str(summary["id"]))
-    except Exception as exc:
-        st.error(f"No se pudo cargar el detalle del evento: {api_error_message(exc)}")
+        if review_submitted:
+            try:
+                load_selected_event()
+            except Exception as exc:
+                st.session_state.delete_event_detail = None
+                st.session_state.delete_event_attendance = None
+                st.error(f"No se pudo cargar el detalle del evento: {api_error_message(exc)}")
+
+    detail = st.session_state.get("delete_event_detail")
+    attendance = st.session_state.get("delete_event_attendance")
+    if not detail or not attendance:
+        st.info("Selecciona un evento y pulsa 'Revisar evento' para ver su estado antes de continuar.")
         return
 
     top_left, top_mid, top_right = st.columns(3)
@@ -137,27 +167,24 @@ def render_delete_event_page() -> None:
         st.info("Este evento no tiene registros. Si confirmas, se puede eliminar permanentemente desde la API local.")
 
     confirmation_target = event_name(detail)
-    st.checkbox(
-        "Entiendo que la eliminacion permanente no debe usarse como primer paso si el evento tuvo registros.",
-        key="delete_event_acknowledged",
-    )
-    st.text_input(
-        f'Escribe exactamente "{confirmation_target}" para confirmar',
-        key="delete_event_confirmation",
-    )
-
     can_delete = (
         registered == 0
         and st.session_state.delete_event_acknowledged
         and st.session_state.delete_event_confirmation.strip() == confirmation_target
     )
-
-    if st.button("Eliminar evento permanentemente", type="primary", width="stretch", disabled=not can_delete):
-        try:
-            delete_event_permanently(str(detail["id"]))
-            st.toast("Evento eliminado correctamente.")
-            refresh_events()
-            st.success(f"Evento eliminado: {confirmation_target}")
-            st.rerun()
-        except Exception as exc:
-            st.error(f"No se pudo eliminar el evento: {api_error_message(exc)}")
+    with st.form("delete_event_submit_form"):
+        delete_submitted = st.form_submit_button(
+            "Eliminar evento permanentemente",
+            type="primary",
+            width="stretch",
+            disabled=not can_delete,
+        )
+        if delete_submitted:
+            try:
+                delete_event_permanently(str(detail["id"]))
+                st.toast("Evento eliminado correctamente.")
+                refresh_events()
+                st.success(f"Evento eliminado: {confirmation_target}")
+                st.rerun()
+            except Exception as exc:
+                st.error(f"No se pudo eliminar el evento: {api_error_message(exc)}")

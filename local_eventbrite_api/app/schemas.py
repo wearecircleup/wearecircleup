@@ -235,8 +235,7 @@ class EventInstantiation(BaseModel):
     ticket_name: str = Field(default="Entrada General", min_length=1)
     registration_opens: datetime
     overview: str = Field(min_length=1, max_length=800)
-    presenter_name: str = Field(default="", max_length=80)
-    presenter_note: str = Field(default="", max_length=600)
+    presenter_note: str = Field(default="", max_length=1000)
     venue_consumption_note: str = ""
     venue_consumption_amount: int = Field(default=0, ge=0)
     presenter_questions: list[PresenterQuestion] = Field(default_factory=list, max_length=2)
@@ -246,7 +245,6 @@ class EventInstantiation(BaseModel):
         self.name = self.name.strip()
         self.ticket_name = self.ticket_name.strip()
         self.overview = self.overview.strip()
-        self.presenter_name = self.presenter_name.strip()
         self.presenter_note = self.presenter_note.strip()
         self.venue_consumption_note = self.venue_consumption_note.strip()
         if not self.name:
@@ -255,10 +253,6 @@ class EventInstantiation(BaseModel):
             raise ValueError("ticket_name is required.")
         if not self.overview:
             raise ValueError("overview is required.")
-        if self.presenter_name and not self.presenter_note:
-            raise ValueError("presenter_note is required when presenter_name is provided.")
-        if self.presenter_note and not self.presenter_name:
-            raise ValueError("presenter_name is required when presenter_note is provided.")
         if self.start.tzinfo is None or self.end.tzinfo is None or self.registration_opens.tzinfo is None:
             raise ValueError("Event and registration timestamps must include a UTC offset.")
         event_timezone = self._event_timezone()
@@ -366,8 +360,8 @@ class EventInstantiation(BaseModel):
         if overview_blocks and overview_blocks[0].casefold() == self.name.casefold():
             overview_blocks = overview_blocks[1:]
         overview_parts = [f"<p>{block}</p>" for block in overview_blocks]
-        if self.presenter_name and self.presenter_note:
-            overview_parts.append(f"<aside><em><b>{self.presenter_name}</b> {self.presenter_note}</em></aside>")
+        if self.presenter_note:
+            overview_parts.append(f"<aside>{self.presenter_note}</aside>")
         overview_html = "".join(overview_parts)
         faq_html = []
         for question, answer in DEFAULT_FAQS:
@@ -382,7 +376,7 @@ class EventInstantiation(BaseModel):
         body_parts.append("<h2>FAQs</h2>")
         body_parts.append("".join(faq_html))
         body_parts.append(
-            f'<p><b>Contacto:</b> <a href="{CONTACT_URL}">{CONTACT_URL}</a> | <a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a></p>'
+            f'<p><b>Contacto:</b> <a href="{CONTACT_URL}">circleup.com.co</a> | <a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a></p>'
         )
         return {
             "version_number": 1,

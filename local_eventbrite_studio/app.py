@@ -46,7 +46,6 @@ def init_state() -> None:
         "registration_lead_days": 7,
         "presenter_question_count": 0,
         "overview": "",
-        "presenter_name": "",
         "presenter_note": "",
     }
     for key, value in defaults.items():
@@ -379,12 +378,11 @@ def render_content_page() -> None:
         max_chars=800,
     )
     st.caption("Si la primera linea coincide con el nombre del evento, la API la omitira para evitar el titulo duplicado en Eventbrite.")
-    st.text_input("Nombre del presentador", key="presenter_name", max_chars=80)
     st.text_area(
         "Perfil del presentador y que aprenderas",
         key="presenter_note",
         height=120,
-        max_chars=600,
+        max_chars=1000,
         placeholder="Escribe un solo texto fluido que cuente quien es el presentador y que aprenderan las personas. El nombre del presentador se destacara en bold y el resto ira en cursiva con tono visual mas suave.",
     )
     st.number_input(

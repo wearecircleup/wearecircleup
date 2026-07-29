@@ -110,14 +110,9 @@ def issues_for_content(state: Mapping[str, Any]) -> list[str]:
         issues.append("Falta el contenido del overview nativo de Eventbrite.")
     if len(overview) > 800:
         issues.append("El overview nativo de Eventbrite no puede superar 800 caracteres.")
-    presenter_name = clean_text(state.get("presenter_name", ""))
     presenter_note = str(state.get("presenter_note", "")).strip()
-    if presenter_name and not presenter_note:
-        issues.append("Falta el texto del presentador.")
-    if presenter_note and not presenter_name:
-        issues.append("Falta el nombre del presentador.")
-    if len(presenter_note) > 600:
-        issues.append("El texto del presentador no puede superar 600 caracteres.")
+    if len(presenter_note) > 1000:
+        issues.append("El texto del presentador no puede superar 1000 caracteres.")
     for index in range(int(state.get("presenter_question_count", 0))):
         prompt = clean_text(state.get(f"presenter_question_{index}", ""))
         label = state.get(f"presenter_question_type_{index}", "Texto abierto")
@@ -173,7 +168,6 @@ def build_draft_request(
         "ticket_name": str(state.get("ticket_name", "")).strip(),
         "registration_opens": utc_value(registration_start(state)),
         "overview": str(state.get("overview", "")).strip(),
-        "presenter_name": clean_text(state.get("presenter_name", "")),
         "presenter_note": str(state.get("presenter_note", "")).strip(),
         "venue_consumption_note": venue_consumption_note,
         "venue_consumption_amount": venue_consumption_amount,

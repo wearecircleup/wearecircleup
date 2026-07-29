@@ -108,7 +108,6 @@ def test_draft_preview_uses_trackable_dropdown_questions(monkeypatch: pytest.Mon
     assert '"structured_content": {' not in preview
     assert '"presenter_questions": []' in preview
     assert '"ticket_name": "Entrada General"' in preview
-    assert '"presenter_name": ""' in preview
     assert '"presenter_note": ""' in preview
 
 
