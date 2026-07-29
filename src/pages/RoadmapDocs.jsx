@@ -4,8 +4,7 @@ import Footer from "../components/Footer";
 import ButtonGradient from "../assets/svg/ButtonGradient";
 import NeedHelp from "../components/NeedHelp";
 import Button from "../components/Button";
-import HeroParticleLogo from "../components/HeroParticleLogo";
-import { BackgroundCircles } from "../components/design/Hero";
+import PublicPageHero from "../components/PublicPageHero";
 
 const RoadmapDocs = ({ setCurrentPage }) => {
   const [showAccessibilityMenu, setShowAccessibilityMenu] = useState(false);
@@ -454,73 +453,15 @@ const RoadmapDocs = ({ setCurrentPage }) => {
           </div>
         )}
       </div>
-
-      {/* Full Width Hero - Consistent Style */}
-      <section className="relative pt-32 sm:pt-36 md:pt-40 lg:pt-48 pb-12 sm:pb-16 md:pb-24 lg:pb-32 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 md:gap-12 lg:gap-16 xl:gap-20 items-center">
-            <div className="lg:col-span-7 text-center lg:text-left relative z-20 px-4 sm:px-6 lg:px-0">
-              <div className={`uppercase tracking-[0.25em] text-n-4 mb-6 md:mb-8 lg:mb-10 ${
-                fontSize === 'small' 
-                  ? 'text-[0.55rem] sm:text-[0.6rem] md:text-[0.65rem]' 
-                  : fontSize === 'large'
-                  ? 'text-[0.7rem] sm:text-[0.75rem] md:text-sm'
-                  : 'text-[0.6rem] sm:text-[0.65rem] md:text-xs'
-              } ${
-                fontFamily === 'serif' ? 'font-serif font-light' : 'font-sans font-light'
-              }`}>
-                Documentación
-              </div>
-              <h1 className={`leading-[0.9] font-bold text-n-1 mb-8 md:mb-12 lg:mb-16 tracking-tighter ${
-                fontSize === 'small' 
-                  ? 'text-[2rem] sm:text-[3rem] md:text-[4rem] lg:text-[6rem] xl:text-[7.5rem]' 
-                  : fontSize === 'large'
-                  ? 'text-[3rem] sm:text-[4rem] md:text-[6rem] lg:text-[8rem] xl:text-[10.5rem]'
-                  : 'text-[2.5rem] sm:text-[3.5rem] md:text-[5rem] lg:text-[7rem] xl:text-[9rem]'
-              } ${
-                fontFamily === 'serif' ? 'font-serif' : 'font-sans'
-              }`}>
-                {articleMeta.heroTitle.split(' ').map((word, i, arr) => (
-                  i === arr.length - 1 ? word : word + ' '
-                )).join('').split('CircleUp').map((part, i) => (
-                  i === 0 ? part : <><br key={i} />CircleUp</>
-                ))}
-              </h1>
-              <div className={`flex flex-wrap items-center gap-4 md:gap-6 lg:gap-8 text-n-4 tracking-wider ${
-                fontSize === 'small' 
-                  ? 'text-[0.6rem] sm:text-[0.65rem] md:text-xs' 
-                  : fontSize === 'large'
-                  ? 'text-[0.75rem] sm:text-sm md:text-base'
-                  : 'text-[0.65rem] sm:text-xs md:text-sm'
-              } ${
-                fontFamily === 'serif' ? 'font-serif font-light' : 'font-sans font-light'
-              }`}>
-                <span>{articleMeta.readTime}</span>
-                <span className="w-1 h-1 rounded-full bg-n-6"></span>
-                <span>{articleMeta.lastUpdated}</span>
-                <span className="w-1 h-1 rounded-full bg-n-6"></span>
-                <span className="hidden sm:inline">{articleMeta.location}</span>
-              </div>
-            </div>
-
-            {/* Hero Particle Logo - Consistent positioning */}
-            <div className="lg:col-span-5 relative group z-10 mt-8 lg:mt-0 flex items-end">
-              <div className="relative aspect-square w-full max-w-[336px] sm:max-w-[384px] md:max-w-[480px] mx-auto lg:max-w-none">
-                {/* Background circles behind particles */}
-                <div className="absolute inset-0 z-0 flex items-center justify-center">
-                  <div className="relative w-full h-full">
-                    <BackgroundCircles />
-                  </div>
-                </div>
-                {/* Particles on top */}
-                <div className="relative z-10 h-full">
-                  <HeroParticleLogo />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <PublicPageHero
+        heroLabel={articleMeta.heroLabel}
+        heroTitle={articleMeta.heroTitle}
+        readTime={articleMeta.readTime}
+        lastUpdated={articleMeta.lastUpdated}
+        location={articleMeta.location}
+        fontSize={fontSize}
+        fontFamily={fontFamily}
+      />
 
       {/* Full Width Layout - Native Scroll */}
       <section className="relative pb-20 md:pb-32 lg:pb-40">
@@ -685,3 +626,4 @@ const RoadmapDocs = ({ setCurrentPage }) => {
 };
 
 export default RoadmapDocs;
+

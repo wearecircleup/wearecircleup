@@ -7,6 +7,7 @@ import HowToUseParticipant from "./pages/HowToUseParticipant";
 import PresentationViewer from "./pages/PresentationViewer";
 import RoadmapDocs from "./pages/RoadmapDocs";
 import PoliciesDocs from "./pages/PoliciesDocs";
+import EventsPage from "./pages/EventsPage";
 import Login from "./pages/Login";
 import AuthCallback from "./pages/AuthCallback";
 import ParticleLogoTest from "./pages/ParticleLogoTest";
@@ -46,6 +47,7 @@ const App = () => {
     return (
       <div className="w-full">
         {currentPage === 'home' && <Home setCurrentPage={setCurrentPage} />}
+        {currentPage === 'events' && <EventsPage setCurrentPage={setCurrentPage} />}
         {currentPage === 'aliados' && <HowToUseBusiness setCurrentPage={setCurrentPage} />}
         {currentPage === 'voluntarios' && <HowToUseVolunteer setCurrentPage={setCurrentPage} />}
         {currentPage === 'participantes' && <HowToUseParticipant setCurrentPage={setCurrentPage} />}

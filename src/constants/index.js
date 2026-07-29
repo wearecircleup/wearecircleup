@@ -23,6 +23,11 @@ import { links } from "../config";
 
 export const navigation = [
   {
+    id: "0",
+    title: "Eventos",
+    url: "/eventos",
+  },
+  {
     id: "1",
     title: "Aliados",
     url: "/aliados",
