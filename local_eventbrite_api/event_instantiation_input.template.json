@@ -1,0 +1,88 @@
+{
+  "event": {
+    "name": {
+      "html": ""
+    },
+    "summary": "",
+    "start": {
+      "utc": "",
+      "timezone": "America/Bogota"
+    },
+    "end": {
+      "utc": "",
+      "timezone": "America/Bogota"
+    },
+    "currency": "USD",
+    "organizer_id": "121240412403",
+    "venue_id": "",
+    "online_event": false,
+    "capacity": null
+  },
+  "ticket_class": {
+    "name": "Inscripcion general",
+    "free": true,
+    "quantity_total": null,
+    "maximum_quantity": 1,
+    "sales_start": "",
+    "sales_end": ""
+  },
+  "questions": [
+    {
+      "question": {
+        "html": "Que te gustaria aprender o practicar en este encuentro?"
+      },
+      "type": "text",
+      "required": false,
+      "choices": [],
+      "ticket_classes": []
+    },
+    {
+      "question": {
+        "html": "Confirmo que leere la informacion del evento, respetare a las demas personas y seguire las reglas razonables del lugar."
+      },
+      "type": "checkbox",
+      "required": true,
+      "choices": [
+        {
+          "answer": {
+            "html": "Confirmo"
+          }
+        }
+      ],
+      "ticket_classes": []
+    },
+    {
+      "question": {
+        "html": "Selecciona tu rango de edad"
+      },
+      "type": "radio",
+      "required": true,
+      "choices": [
+        {"answer": {"html": "14–17 años — entiendo que recibiré un formulario de autorización; deberá estar completo para su verificación el día del evento."}},
+        {"answer": {"html": "18–24 años"}},
+        {"answer": {"html": "25–34 años"}},
+        {"answer": {"html": "35–44 años"}},
+        {"answer": {"html": "45–54 años"}},
+        {"answer": {"html": "55 años o más"}}
+      ],
+      "ticket_classes": []
+    }
+  ],
+  "structured_content": {
+    "version_number": 1,
+    "purpose": "listing",
+    "publish": true,
+    "modules": [
+      {
+        "type": "text",
+        "data": {
+          "body": {
+            "type": "text",
+            "alignment": "left",
+            "text": "<h2>Sobre este encuentro</h2><p></p><h2>Llegada</h2><p>La hora de llegada se confirmara en esta pagina. Por favor llega a tiempo y respeta las reglas del lugar.</p><h2>Que llevar</h2><p>Trae lo que se indique para esta clase. No necesitas llevar equipo adicional salvo que el evento lo especifique.</p><h2>Si no puedes asistir</h2><p>Libera tu cupo en Eventbrite tan pronto como puedas para que otra persona pueda participar.</p><h2>Preguntas frecuentes</h2><h3>Que es Circle Up?</h3><p>Circle Up es un proyecto de investigacion que une tecnologia, personas y academia para compartir conocimiento util con la comunidad. Su trazabilidad es periodica y limitada, y ha mostrado aportar valor a quienes participan.</p><h3>Cuanto dura y cuantas personas participan?</h3><p>Cada encuentro dura aproximadamente una hora y esta pensado para grupos pequenos de cuatro a diez personas.</p><h3>Donde se realizan los encuentros?</h3><p>Puede ser en una panaderia, cafe, restaurante, biblioteca, espacio abierto u otro lugar indicado en este evento. Se acuerda un horario que cuide la operacion normal del lugar.</p><h3>Tiene costo participar?</h3><p>La actividad es gratuita. En lugares comerciales puede existir un consumo minimo acordado y comunicado en este evento. En bibliotecas, parques y otros espacios no comerciales no aplica consumo minimo.</p><h3>Que pasa si el consumo minimo es una barrera?</h3><p>Escribenos antes del encuentro. Buscaremos una alternativa razonable cuando sea posible.</p><h3>Como se usan mis datos?</h3><p>Solicitamos solo la informacion necesaria para organizar el encuentro, registrar asistencia y aprender de la actividad de investigacion. No la usamos para fines ajenos al evento.</p><h3>Habra fotos o grabaciones?</h3><p>Solo se tomaran o publicaran imagenes con la autorizacion correspondiente. Las imagenes identificables de menores requieren autorizacion previa.</p><h3>Que reglas aplican?</h3><p>Tratamos a todas las personas con respeto, cuidamos el espacio anfitrion y seguimos las reglas razonables del lugar. No se tolera discriminacion, acoso ni conductas que pongan a otras personas en riesgo.</p><h3>La actividad continuara todas las semanas?</h3><p>Cada encuentro se publica de forma independiente. La continuidad se acuerda directamente con el lugar y depende de que funcione para la comunidad y el anfitrion.</p>"
+          }
+        }
+      }
+    ]
+  }
+}

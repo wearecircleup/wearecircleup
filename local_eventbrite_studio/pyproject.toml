@@ -1,0 +1,19 @@
+[project]
+name = "local-eventbrite-studio"
+version = "0.1.0"
+description = "Local Streamlit wireframe for Circle Up Eventbrite event preparation"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "httpx>=0.27,<1.0",
+    "pillow>=10.0,<12.0",
+    "streamlit>=1.55,<2.0",
+]
+
+[tool.uv]
+package = false
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0,<9.0",
+]
