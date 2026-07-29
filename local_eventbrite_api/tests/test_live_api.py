@@ -4,11 +4,10 @@ Run only with EVENTBRITE_LIVE_TEST=1. It creates a published event and deletes
 that same event in a finally block.
 """
 
-import os
 import json
-from pathlib import Path
 import struct
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
@@ -80,7 +79,7 @@ def test_full_eventbrite_crud_lifecycle() -> None:
 
 
 def test_controlled_instantiation_content_questions_and_image_lifecycle() -> None:
-    """Validate every current Studio feature against Eventbrite, then clean up."""
+    """Validate the simplified Studio payload and image flow against Eventbrite."""
     start = (datetime.now(timezone.utc) + timedelta(days=4)).replace(
         hour=15, minute=0, second=0, microsecond=0
     )
@@ -93,32 +92,20 @@ def test_controlled_instantiation_content_questions_and_image_lifecycle() -> Non
     crop_top = max(0, (height - crop_height) // 2)
 
     payload = {
-        "event": {
-            "name": {"html": f"Controlled integration {start.date().isoformat()}"},
-            "summary": "Temporary full integration validation.",
-            "start": {"utc": start.strftime("%Y-%m-%dT%H:%M:%SZ"), "timezone": "America/Bogota"},
-            "end": {"utc": end.strftime("%Y-%m-%dT%H:%M:%SZ"), "timezone": "America/Bogota"},
-            "online_event": True,
-            "capacity": 1,
-        },
-        "ticket_class": {
-            "name": "Integration ticket", "free": True, "quantity_total": 1,
-            "maximum_quantity": 1,
-            "sales_start": (start - timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "sales_end": start.strftime("%Y-%m-%dT%H:%M:%SZ"),
-        },
-        "questions": [
-            {"question": {"html": "Learning goal?"}, "type": "text", "required": False,
-                "choices": [], "ticket_classes": []},
-            {"question": {"html": "Conduct confirmation"}, "type": "checkbox", "required": True,
-                "choices": [{"answer": {"html": "Confirm"}}], "ticket_classes": []},
-            {"question": {"html": "Selecciona tu rango de edad"}, "type": "radio", "required": True,
-                "choices": [{"answer": {"html": "14–17 años — confirmo formulario"}}, {"answer": {"html": "18–24 años"}}], "ticket_classes": []},
+        "name": f"Controlled integration {start.date().isoformat()}",
+        "start": start.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "end": end.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "timezone": "America/Bogota",
+        "online_event": True,
+        "capacity": 3,
+        "ticket_name": "Integration ticket",
+        "registration_opens": (start - timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "overview": "FAQ integration check.",
+        "venue_consumption_note": "",
+        "venue_consumption_amount": 0,
+        "presenter_questions": [
+            {"prompt": "Learning goal?", "type": "text", "required": False, "choices": []}
         ],
-        "structured_content": {
-            "version_number": 1, "purpose": "listing", "publish": True,
-            "modules": [{"type": "text", "data": {"body": {"type": "text", "alignment": "left", "text": "<h2>Preguntas frecuentes</h2><p>FAQ integration check.</p>"}}}],
-        },
     }
 
     with TestClient(app) as client:
@@ -128,21 +115,31 @@ def test_controlled_instantiation_content_questions_and_image_lifecycle() -> Non
             created_body = created.json()
             event_id = str(created_body["event"]["id"])
             assert created_body["validated"] is True
-            assert len(created_body["questions"]) == 3
+            assert len(created_body["questions"]) == 5
 
             instructions = client.get(f"/events/{event_id}/image/upload-request")
             assert instructions.status_code == 200, instructions.text
             upload = instructions.json()
             binary = client.post(
                 f"/events/{event_id}/image/upload-binary",
-                data={"upload_url": upload["upload_url"], "upload_data": json.dumps(upload["upload_data"]),
-                      "file_parameter_name": upload.get("file_parameter_name", "file")},
+                data={
+                    "upload_url": upload["upload_url"],
+                    "upload_data": json.dumps(upload["upload_data"]),
+                    "file_parameter_name": upload.get("file_parameter_name", "file"),
+                },
                 files={"image": (image_path.name, image_bytes, "image/png")},
             )
             assert binary.status_code == 204, binary.text
             completed = client.post(
                 f"/events/{event_id}/image/complete",
-                json={"upload_token": upload["upload_token"], "crop_mask": {"top_left": {"x": 0, "y": crop_top}, "width": width, "height": crop_height}},
+                json={
+                    "upload_token": upload["upload_token"],
+                    "crop_mask": {
+                        "top_left": {"x": 0, "y": crop_top},
+                        "width": width,
+                        "height": crop_height,
+                    },
+                },
             )
             assert completed.status_code == 200, completed.text
             assert completed.json()["event"]["logo_id"]

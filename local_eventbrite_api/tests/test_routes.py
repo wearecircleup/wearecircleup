@@ -109,6 +109,14 @@ def test_venue_update_is_a_patch_and_rejects_an_empty_body(client_and_fake) -> N
     assert fake.calls[-1] == ("update_venue", "venue-1", {"name": "Casa"})
 
 
+def test_venue_delete_reports_that_eventbrite_does_not_support_it(client_and_fake) -> None:
+    client, fake = client_and_fake
+    response = client.delete("/venues/venue-1", params={"confirm": "true"})
+    assert response.status_code == 501
+    assert "does not support deleting venues" in response.text
+    assert not any(call[0] == "delete_venue" for call in fake.calls)
+
+
 def test_list_events_forwards_pagination_and_filters(client_and_fake) -> None:
     client, fake = client_and_fake
     response = client.get("/events", params={"page": 2, "page_size": 10, "status": "live"})

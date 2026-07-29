@@ -1,7 +1,6 @@
-from copy import deepcopy
-
 from app.client import EventbriteClient
 from app.config import Settings
+from app.schemas import EventInstantiation
 
 
 class EventInstantiationManager:
@@ -11,26 +10,23 @@ class EventInstantiationManager:
         self.client = client
         self.settings = settings
 
-    async def create_and_validate(self, data: dict) -> dict:
-        event = deepcopy(data["event"])
-        event.pop("status", None)
-        event["organizer_id"] = self.settings.organizer_id
-        event["currency"] = self.settings.default_currency
+    async def create_and_validate(self, draft: EventInstantiation) -> dict:
+        event = draft.event_payload(self.settings.organizer_id, self.settings.default_currency)
         created = await self.client.create_event(event)
         event_id = str(created["id"])
         try:
-            ticket = await self.client.create_ticket(event_id, data["ticket_class"])
+            ticket = await self.client.create_ticket(event_id, draft.ticket_payload())
             ticket_id = str(ticket["id"])
             questions = []
-            for question in data["questions"]:
-                request = deepcopy(question)
+            for question in draft.question_payloads():
+                request = dict(question)
                 # Eventbrite's Question contract expects ticket-class objects,
                 # not a list of bare IDs.
                 request["ticket_classes"] = [{"id": ticket_id}]
                 questions.append(await self.client.create_question(event_id, request))
             # The version belongs in the URL path. Eventbrite's documented body
             # contains only purpose, publish and the complete module list.
-            content = deepcopy(data["structured_content"])
+            content = draft.structured_content_payload()
             version_number = content.pop("version_number")
             await self.client.create_structured_content(event_id, version_number, content)
             persisted_content = await self.client.get_structured_content(event_id)

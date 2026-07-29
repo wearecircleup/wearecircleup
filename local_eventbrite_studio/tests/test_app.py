@@ -91,20 +91,25 @@ def test_required_fields_keep_draft_creation_disabled_when_api_is_healthy(monkey
     )
     app = run_app()
 
-    create_button = next(button for button in app.button if button.label == "Crear y validar borrador")
+    create_button = next(button for button in app.button if button.label == "Crear y publicar evento")
     assert create_button.disabled is True
+    capacity_input = next(widget for widget in app.number_input if widget.label == "Aforo *")
+    assert capacity_input.value == 3
+    assert not any(widget.label == "Resumen publico" for widget in app.text_input)
 
 
 def test_draft_preview_uses_trackable_dropdown_questions(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(httpx, "get", lambda *_, **__: venue_response())
     app = run_app()
 
-    preview = next(code.value for code in app.code if '"Primaria"' in code.value)
-    assert '"respondent"' not in preview
-    assert '"answer": {' in preview
-    assert '"html": "Confirmo"' in preview
-    assert '"type": "dropdown"' in preview
-    assert '"type": "radio"' in preview
+    preview = next(code.value for code in app.code if '"ticket_name"' in code.value)
+    assert '"event": {' not in preview
+    assert '"ticket_class": {' not in preview
+    assert '"structured_content": {' not in preview
+    assert '"presenter_questions": []' in preview
+    assert '"ticket_name": "Entrada General"' in preview
+    assert '"presenter_name": ""' in preview
+    assert '"learning_points": []' in preview
 
 
 def test_presenter_can_add_a_dropdown_question(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -118,17 +123,17 @@ def test_presenter_can_add_a_dropdown_question(monkeypatch: pytest.MonkeyPatch) 
 
     preview = next(code.value for code in app.code if "Que nivel de experiencia tienes?" in code.value)
     assert '"type": "dropdown"' in preview
-    assert '"html": "Intermedio"' in preview
+    assert '"choices": [' in preview
+    assert '"Intermedio"' in preview
 
 
 def test_minimum_consumption_requires_an_order_confirmation(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(httpx, "get", lambda *_, **__: venue_with_consumption_disclaimer_response())
     app = run_app()
 
-    preview = next(code.value for code in app.code if "no un cobro de Circle Up" in code.value)
-    assert "consumo minimo de $2.000 COP" in preview
-    assert '"type": "checkbox"' in preview
-    assert '"required": true' in preview
+    preview = next(code.value for code in app.code if '"venue_consumption_amount"' in code.value)
+    assert '"venue_consumption_amount": 2000' in preview
+    assert "La Duqueza abre su espacio en Tocancipa" in preview
 
 
 def test_venue_register_renders_when_eventbrite_returns_null_optional_fields(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -136,3 +141,10 @@ def test_venue_register_renders_when_eventbrite_returns_null_optional_fields(mon
     app = run_app()
 
     assert not app.exception
+
+
+def test_venue_page_explains_that_remote_venue_deletion_is_not_supported(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(httpx, "get", lambda *_, **__: venue_with_null_postal_code_response())
+    app = run_app()
+
+    assert any("Eventbrite no permite borrar venues" in info.value for info in app.info)

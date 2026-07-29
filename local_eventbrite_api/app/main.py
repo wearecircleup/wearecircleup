@@ -78,7 +78,7 @@ async def create_event_instantiation(
     client: EventbriteClient = Depends(get_client),
     settings: Settings = Depends(get_app_settings),
 ) -> dict:
-    return await EventInstantiationManager(client, settings).create_and_validate(payload.model_dump())
+    return await EventInstantiationManager(client, settings).create_and_validate(payload)
 
 
 @app.post("/event-instantiations/{event_id}/publish", tags=["instantiation"])
@@ -174,16 +174,17 @@ async def update_venue(
     return await client.update_venue(venue_id, update)
 
 
-@app.delete("/venues/{venue_id}", status_code=status.HTTP_204_NO_CONTENT, tags=["venues"])
+@app.delete("/venues/{venue_id}", tags=["venues"])
 async def delete_venue(
     venue_id: str,
     confirm: bool = Query(default=False, description="Must be true because deletion is permanent."),
-    client: EventbriteClient = Depends(get_client),
 ) -> Response:
     if not confirm:
         raise HTTPException(status_code=400, detail="Set confirm=true to permanently delete this venue.")
-    await client.delete_venue(venue_id)
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
+    raise HTTPException(
+        status_code=501,
+        detail="Eventbrite's public API does not support deleting venues. Edit the venue or remove it manually in Eventbrite.",
+    )
 
 
 @app.get("/events", tags=["events"])

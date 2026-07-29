@@ -9,9 +9,11 @@ This whole directory is intentionally ignored by Git. Keep it local and do not e
 For the controlled Circle Up event-creation process, use
 `event_instantiation_input.template.json` together with
 `EVENTBRITE_INSTANTIATION_STRATEGY.md`. The JSON contains only API request
-attributes and fixed IDs; the strategy contains the required human checks,
-endpoint order, image workflow, default FAQs, validation and delete/recreate
-policy.
+attributes for the simplified draft request, including a single `overview`
+field for the body shown in Eventbrite's native Overview. In this simplified
+flow, no separate public summary is sent; the strategy contains the
+required human checks, endpoint order, image workflow, default FAQs,
+validation and delete/recreate policy.
 
 The normal operating path is **create draft -> validate -> publish**. If an
 event is wrong, delete it and create a corrected replacement rather than using
@@ -24,7 +26,7 @@ not as the standard event-instantiation workflow.
 - `GET /venues/{venue_id}`: venue detail.
 - `POST /venues`: creates a venue.
 - `PATCH /venues/{venue_id}`: updates supplied venue fields.
-- `DELETE /venues/{venue_id}?confirm=true`: permanently deletes a venue.
+- `DELETE /venues/{venue_id}?confirm=true`: intentionally returns `501` because Eventbrite's public API does not support venue deletion.
 - `GET /events`: paginated list.
 - `GET /events/{event_id}`: detail.
 - `POST /events`: creates an event, creates a free ticket, then publishes it by default.

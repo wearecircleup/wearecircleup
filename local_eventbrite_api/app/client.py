@@ -86,6 +86,3 @@ class EventbriteClient:
 
     async def delete_event(self, event_id: str) -> None:
         await self.request("DELETE", f"/events/{event_id}/")
-
-    async def delete_venue(self, venue_id: str) -> None:
-        await self.request("DELETE", f"/venues/{venue_id}/")

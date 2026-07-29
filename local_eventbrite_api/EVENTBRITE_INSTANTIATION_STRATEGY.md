@@ -24,7 +24,7 @@ in this document.
 | Currency | `USD` | A live `POST /v3/organizations/2998243227926/events/` validation on 2026-07-28 rejected `COP` with `event.currency: INVALID`. Do not send COP until Eventbrite enables it for this organization. |
 | Format | Independent event | Weekly does not mean identical; no series parent or occurrences. |
 | Attendance | One free ticket class | One unambiguous capacity and a simple QR check-in list. |
-| Capacity | Human input, 1 through 10 | There is no capacity default. `event.capacity` and `ticket_class.quantity_total` must be identical. |
+| Capacity | Human input, 3 through 10 | Default to 3. `event.capacity` and `ticket_class.quantity_total` must be identical. |
 | Per-order limit | `maximum_quantity: 1` | Keeps registration equitable in a small group. |
 | Publication | Draft, validate, then publish | A listing is never public while incomplete. |
 | Corrections | Delete and recreate | This workflow does not use update as its normal correction mechanism. |
@@ -76,9 +76,13 @@ API call.
   before each `POST /v3/events/{event_id}/questions/` request.
 
 `door_time`, `presented_by`, and `age_restriction` are not Eventbrite Event
-attributes. State arrival instructions and Circle Up's public explanation in
-Structured Content. Confirm any age or access requirement with the venue; do
-not represent it as an API field that Eventbrite will silently ignore.
+attributes. Keep Structured Content limited to the text shown in Eventbrite's
+native Overview plus the
+standard FAQs. Confirm any age or access requirement with the venue; do not
+represent it as an API field that Eventbrite will silently ignore.
+
+For this simplified flow, the Eventbrite public summary is not authored
+separately. It is derived directly from the event name.
 
 The FAQs describe Circle Up accurately: it is a community research project,
 has periodic and limited traceability, and has demonstrated community value.
@@ -142,10 +146,11 @@ event image before automating the final attachment; do not guess an unverified
 `POST /v3/events/{event_id}/structured_content/{version_number}`
 
 Put `version_number: 1` in the endpoint URL; send the body with `purpose:
-"listing"`, `publish: true` and the full module list. The preloaded text module contains the permanent FAQs. Replace
-only the empty first paragraph with the class-specific description and amend
-arrival or materials details when needed. Structured Content is versioned and
-insert-only: send the full module list, not a partial patch.
+"listing"`, `publish: true` and the full module list. The text module should
+contain only the class-specific text for Eventbrite's native Overview plus the permanent FAQs. Do not add
+extra editorial sections such as arrival, materials, or attendance reminders.
+Structured Content is versioned and insert-only: send the full module list,
+not a partial patch.
 
 ### 6. Validate before publication
 
