@@ -182,3 +182,14 @@ poetry.toml
 
 # LSP config files
 pyrightconfig.json
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json

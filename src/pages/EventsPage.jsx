@@ -32,12 +32,12 @@ const EventsPage = ({ setCurrentPage }) => {
             {
               iconType: "community",
               title: "Quiero asistir",
-              description: "Explora eventos disponibles, proximos agotados e historicos desde una misma vista. Si un evento ya no tiene cupo, escribenos al correo y, si es posible, te ayudaremos.",
+              description: "Si un evento ya no tiene cupo, escribenos al correo y, si es posible, te ayudaremos. No te inscribas mas de una vez al mismo evento. Espera hasta 5 minutos para recibir tu invitacion y, si no llega, escribenos al correo.",
             },
             {
               iconType: "email",
               title: "Quiero colaborar",
-              description: "No te inscribas mas de una vez al mismo evento. Espera hasta 5 minutos para recibir tu invitacion y, si no llega, escribenos. Tambien puedes contactarnos para proponer espacios, actividades o nuevas alianzas.",
+              description: "Tambien puedes contactarnos para proponer espacios, actividades o nuevas alianzas.",
               email: "hola@circleup.com.co",
             },
           ]}
