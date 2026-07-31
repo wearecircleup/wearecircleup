@@ -27,3 +27,13 @@ output "eventbrite_secret_name" {
   description = "AWS Secrets Manager secret name for Eventbrite."
   value       = module.secretsmanager_eventbrite.secret_name
 }
+
+output "eventbrite_api_endpoint" {
+  description = "HTTP API endpoint for the Eventbrite API."
+  value       = module.eventbrite_api.api_endpoint
+}
+
+output "eventbrite_api_lambda_function_name" {
+  description = "Lambda function name serving the Eventbrite API."
+  value       = module.eventbrite_api.lambda_function_name
+}

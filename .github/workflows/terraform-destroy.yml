@@ -49,8 +49,17 @@ jobs:
           role-session-name: github-actions-terraform-destroy
           allowed-account-ids: 311923415472
 
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
       - name: Bootstrap Terraform state bucket
         run: bash ../scripts/bootstrap-state-bucket.sh
+
+      - name: Build eventbrite_api Lambda package
+        working-directory: .
+        run: bash ./infra/scripts/build-eventbrite-api-package.sh
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v4

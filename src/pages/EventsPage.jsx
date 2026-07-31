@@ -32,7 +32,7 @@ const EventsPage = ({ setCurrentPage }) => {
             {
               iconType: "community",
               title: "Quiero asistir",
-              description: "Si un evento ya no tiene cupo, escribenos al correo y, si es posible, te ayudaremos. No te inscribas mas de una vez al mismo evento. Espera hasta 5 minutos para recibir tu invitacion y, si no llega, escribenos al correo.",
+              description: "Si un evento ya no tiene cupo, escribenos al correo y, si es posible, te ayudaremos. No te inscribas mas de una vez al mismo evento. Espera hasta 5 minutos para recibir tu invitacion y, si no llega, escribenos.",
             },
             {
               iconType: "email",

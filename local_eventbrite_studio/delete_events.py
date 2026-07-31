@@ -161,10 +161,10 @@ def render_delete_event_page() -> None:
             "Este evento ya tiene registros. Para este caso no se debe borrar primero: el flujo recomendado es cancelar el evento en Eventbrite, avisar a asistentes y reembolsar ordenes antes de considerar cualquier eliminacion."
         )
         st.info(
-            "Este modulo bloquea la eliminacion directa cuando ya existen registros, porque la API local actual no automatiza cancelacion del evento ni reembolsos de ordenes."
+            "Este modulo bloquea la eliminacion directa cuando ya existen registros, porque la API actual no automatiza cancelacion del evento ni reembolsos de ordenes."
         )
     else:
-        st.info("Este evento no tiene registros. Si confirmas, se puede eliminar permanentemente desde la API local.")
+        st.info("Este evento no tiene registros. Si confirmas, se puede eliminar permanentemente desde la API.")
 
     confirmation_target = event_name(detail)
     can_delete = (

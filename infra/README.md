@@ -12,13 +12,16 @@ Este setup deja un flujo basico y profesional para Terraform con GitHub Actions 
 - Key del state remoto: `prod/terraform.tfstate`
 - Bucket de validacion: `wearecircleup-terraform-check-311923415472-us-east-1`
 - Secret de Eventbrite: `wearecircleup/prod/eventbrite`
+- API cloud de Eventbrite: `wearecircleup-prod-eventbrite-api`
 
 ## Estructura
 
 - `infra/prod`: root module del ambiente `prod`
 - `infra/modules/s3-validation`: modulo del servicio S3 para el bucket de validacion
 - `infra/modules/secretsmanager-eventbrite`: modulo del servicio Secrets Manager para Eventbrite
+- `infra/modules/eventbrite-api`: modulo del servicio Eventbrite API en Lambda + API Gateway
 - `infra/scripts/bootstrap-state-bucket.sh`: asegura que el bucket de state exista antes de ejecutar Terraform
+- `infra/scripts/build-eventbrite-api-package.sh`: empaqueta `eventbrite_api` para Lambda
 
 ## Flujos
 
@@ -29,6 +32,7 @@ Workflow: `.github/workflows/terraform-plan-apply.yml`
 - En `push` a `main`:
   - asume el role por OIDC
   - crea/configura el bucket remoto de state si no existe
+  - empaqueta `eventbrite_api` para Lambda
   - corre `terraform init`, `validate`, `plan` y `apply`
 - En `workflow_dispatch`:
   - puedes correr `plan` o `apply` manualmente
@@ -60,6 +64,7 @@ Despues del `apply`, puedes cargar algo como esto en el secret:
 ```json
 {
   "EVENTBRITE_PRIVATE_TOKEN": "REEMPLAZAR",
-  "EVENTBRITE_ORGANIZATION_ID": "2998243227926"
+  "EVENTBRITE_ORGANIZATION_ID": "2998243227926",
+  "EVENTBRITE_API_AUTH_TOKEN": "REEMPLAZAR"
 }
 ```

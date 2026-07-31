@@ -1,7 +1,7 @@
 # Local Eventbrite Studio
 
 Local Streamlit application for preparing and submitting one Circle Up
-Eventbrite event through the local API. It stores no Eventbrite credentials.
+Eventbrite event through the Eventbrite API. It stores no Eventbrite credentials.
 
 The app guides the required human review through five tabs:
 
@@ -33,11 +33,13 @@ Open the local URL displayed by Streamlit, normally
 The app retains inputs only during the active browser session. It creates and
 validates a draft first; publication is a separate explicit action. Start the
 API with `uv run uvicorn app.main:app --reload --port 8000`, then run Studio.
-Set `CIRCLE_UP_API_URL` only when the API is not at `http://127.0.0.1:8000`.
+Set `CIRCLE_UP_API_URL` when using the deployed API and set
+`EVENTBRITE_API_AUTH_TOKEN` so Studio can send the bearer token expected by the
+cloud service.
 
-## Reload after updating the local API
+## Reload after updating the API
 
-The Studio loads venues from the local API, which then calls Eventbrite. After
+The Studio loads venues from the API, which then calls Eventbrite. After
 pulling or editing this project, restart the API if it was started without
 `--reload`, then refresh the browser tab running Streamlit. With the documented
 commands (`uv run uvicorn app.main:app --reload` and `uv run streamlit run

@@ -1,4 +1,4 @@
-"""Local-only Streamlit app that prepares data and submits it to the local API."""
+"""Streamlit app that prepares data and submits it to the Eventbrite API."""
 
 from __future__ import annotations
 
@@ -489,7 +489,7 @@ def sanitize_start_time() -> None:
 
 def render_create_event_page() -> None:
     st.title("Preparar un evento Circle Up")
-    st.caption("El borrador se conserva en esta sesion y se envia a la API local solo desde Revision.")
+    st.caption("El borrador se conserva en esta sesion y se envia a la API solo desde Revision.")
 
     issues = all_issues()
     st.caption(f"Estado: Draft | {len(issues)} bloqueo(s) pendiente(s).")
