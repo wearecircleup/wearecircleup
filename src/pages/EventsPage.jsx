@@ -32,7 +32,7 @@ const EventsPage = ({ setCurrentPage }) => {
             {
               iconType: "community",
               title: "Quiero asistir",
-              description: "Explora los eventos activos y encuentra el taller que mejor se ajuste a ti.",
+              description: "Explora eventos disponibles, proximos agotados e historicos desde una misma vista. Si un evento ya no tiene cupo, escribenos al correo hola@circleup.com.co y, si es posible, te ayudaremos a revisar opciones adicionales.",
             },
             {
               iconType: "email",

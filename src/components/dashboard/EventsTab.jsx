@@ -174,27 +174,15 @@ const EventsTab = () => {
 
       <div className="mt-8 p-3 sm:p-4 bg-n-7/50 border border-n-6 rounded-xl">
         <div className="flex flex-col gap-4 sm:gap-5">
-          <div className="flex items-start gap-2 sm:gap-3">
-            <svg className="w-4 h-4 sm:w-5 sm:h-5 text-color-1 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <div>
-              <p className="text-n-2 text-xs sm:text-sm font-medium mb-1">Eventos de Circle Up Volunteer</p>
-              <p className="text-n-4 text-xs leading-relaxed">
-                Explora eventos disponibles, proximos agotados e historicos desde una misma vista. Los datos se actualizan cada 10 minutos para optimizar el uso de la API. Si un evento ya no tiene cupo, puedes escribirnos y trataremos de ayudarte a revisar opciones adicionales.
-              </p>
-            </div>
-          </div>
-
           {activeFilter === 'sold_out' && (
             <div className="flex justify-start">
-            <Button
-              href="mailto:hola@circleup.com.co?subject=Solicitud%20de%20cupo%20adicional%20Circle%20Up"
-              className="text-xs sm:text-sm"
-              white
-            >
-              Solicitar Cupo Extra
-            </Button>
+              <Button
+                href="mailto:hola@circleup.com.co?subject=Solicitud%20de%20cupo%20adicional%20Circle%20Up"
+                className="text-xs sm:text-sm"
+                white
+              >
+                Solicitar Cupo Extra
+              </Button>
             </div>
           )}
         </div>
