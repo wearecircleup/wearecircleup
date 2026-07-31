@@ -32,7 +32,7 @@ const EventsPage = ({ setCurrentPage }) => {
             {
               iconType: "community",
               title: "Quiero asistir",
-              description: "Explora eventos disponibles, proximos agotados e historicos desde una misma vista.",
+              description: "Explora eventos disponibles, proximos agotados e historicos desde una misma vista. Si un evento ya no tiene cupo, escribenos al correo y, si es posible, te ayudaremos.",
             },
             {
               iconType: "email",
