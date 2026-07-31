@@ -1,38 +1,40 @@
 data "aws_caller_identity" "current" {}
 
-resource "aws_s3_bucket" "validation" {
-  bucket        = local.validation_bucket_name
-  force_destroy = false
+module "s3_validation" {
+  source = "../modules/s3-validation"
 
-  tags = merge(local.common_tags, {
-    Name    = local.validation_bucket_name
-    Purpose = "validation"
-  })
+  bucket_name = local.validation_bucket_name
+  common_tags = local.common_tags
 }
 
-resource "aws_s3_bucket_versioning" "validation" {
-  bucket = aws_s3_bucket.validation.id
+module "secretsmanager_eventbrite" {
+  source = "../modules/secretsmanager-eventbrite"
 
-  versioning_configuration {
-    status = "Enabled"
-  }
+  secret_name = local.eventbrite_secret_name
+  common_tags = local.common_tags
 }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "validation" {
-  bucket = aws_s3_bucket.validation.id
-
-  rule {
-    apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
-    }
-  }
+moved {
+  from = aws_s3_bucket.validation
+  to   = module.s3_validation.aws_s3_bucket.this
 }
 
-resource "aws_s3_bucket_public_access_block" "validation" {
-  bucket = aws_s3_bucket.validation.id
+moved {
+  from = aws_s3_bucket_versioning.validation
+  to   = module.s3_validation.aws_s3_bucket_versioning.this
+}
 
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
+moved {
+  from = aws_s3_bucket_server_side_encryption_configuration.validation
+  to   = module.s3_validation.aws_s3_bucket_server_side_encryption_configuration.this
+}
+
+moved {
+  from = aws_s3_bucket_public_access_block.validation
+  to   = module.s3_validation.aws_s3_bucket_public_access_block.this
+}
+
+moved {
+  from = aws_secretsmanager_secret.eventbrite
+  to   = module.secretsmanager_eventbrite.aws_secretsmanager_secret.this
 }

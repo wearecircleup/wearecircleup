@@ -15,5 +15,15 @@ output "terraform_state_bucket_name" {
 
 output "validation_bucket_name" {
   description = "Validation bucket created by the main stack."
-  value       = aws_s3_bucket.validation.bucket
+  value       = module.s3_validation.bucket_name
+}
+
+output "eventbrite_secret_arn" {
+  description = "AWS Secrets Manager secret ARN for Eventbrite."
+  value       = module.secretsmanager_eventbrite.secret_arn
+}
+
+output "eventbrite_secret_name" {
+  description = "AWS Secrets Manager secret name for Eventbrite."
+  value       = module.secretsmanager_eventbrite.secret_name
 }
