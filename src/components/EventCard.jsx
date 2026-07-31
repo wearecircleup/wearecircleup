@@ -1,6 +1,6 @@
 /**
  * EventCard Component
- * 
+ *
  * Displays Eventbrite event information in a card format
  * Similar to PresentationCard but adapted for events
  */
@@ -8,19 +8,19 @@
 const EventCard = ({ event }) => {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('es-ES', { 
+    return date.toLocaleDateString('es-ES', {
       weekday: 'long',
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
     });
   };
 
   const formatTime = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleTimeString('es-ES', { 
-      hour: '2-digit', 
-      minute: '2-digit' 
+    return date.toLocaleTimeString('es-ES', {
+      hour: '2-digit',
+      minute: '2-digit'
     });
   };
 
@@ -29,8 +29,22 @@ const EventCard = ({ event }) => {
     const start = new Date(event.start.local);
     const end = new Date(event.end.local);
 
-    if (now < start) return { text: 'Próximo', color: 'bg-blue-500/20 text-blue-400 border-blue-500/50' };
-    if (now >= start && now <= end) return { text: 'En curso', color: 'bg-green-500/20 text-green-400 border-green-500/50' };
+    if (event.collection === 'sold_out') {
+      return { text: 'Agotado', color: 'bg-amber-500/20 text-amber-300 border-amber-500/50' };
+    }
+
+    if (event.collection === 'historical') {
+      return { text: 'Historico', color: 'bg-gray-500/20 text-gray-300 border-gray-500/50' };
+    }
+
+    if (now < start) {
+      return { text: 'Proximo', color: 'bg-blue-500/20 text-blue-400 border-blue-500/50' };
+    }
+
+    if (now >= start && now <= end) {
+      return { text: 'En curso', color: 'bg-green-500/20 text-green-400 border-green-500/50' };
+    }
+
     return { text: 'Finalizado', color: 'bg-gray-500/20 text-gray-400 border-gray-500/50' };
   };
 
@@ -38,23 +52,20 @@ const EventCard = ({ event }) => {
 
   return (
     <div className="group relative bg-n-7/90 backdrop-blur-sm border border-n-6/50 rounded-xl overflow-hidden hover:border-color-1/50 transition-all duration-300 w-full h-full flex flex-col">
-      {/* Event Image/Thumbnail */}
       <div className="relative h-40 sm:h-48 md:h-56 bg-gradient-to-br from-n-8 via-n-7 to-n-8 overflow-hidden border-b border-n-6/50 flex-shrink-0">
         {event.logo?.url ? (
-          <img 
-            src={event.logo.url} 
+          <img
+            src={event.logo.url}
             alt={event.name}
             className="w-full h-full object-cover"
           />
         ) : (
           <>
-            {/* Background decoration if no image */}
             <div className="absolute inset-0 opacity-20">
               <div className="absolute top-0 right-0 w-32 h-32 bg-color-1 rounded-full blur-3xl"></div>
               <div className="absolute bottom-0 left-0 w-32 h-32 bg-color-2 rounded-full blur-3xl"></div>
             </div>
-            
-            {/* Event icon */}
+
             <div className="relative h-full flex flex-col items-center justify-center p-6 text-center">
               <svg className="w-16 h-16 text-color-1/50 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -65,13 +76,11 @@ const EventCard = ({ event }) => {
             </div>
           </>
         )}
-        
-        {/* Status badge */}
+
         <div className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-medium border backdrop-blur-sm ${status.color}`}>
           {status.text}
         </div>
 
-        {/* Free badge if applicable */}
         {event.is_free && (
           <div className="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-medium border backdrop-blur-sm bg-green-500/20 text-green-400 border-green-500/50">
             Gratis
@@ -79,13 +88,10 @@ const EventCard = ({ event }) => {
         )}
       </div>
 
-      {/* Content */}
       <div className="p-3 sm:p-4 md:p-6 flex flex-col flex-1">
         <h3 className="text-base sm:text-lg md:text-xl font-bold text-n-1 mb-2 line-clamp-2">{event.name}</h3>
-        
-        {/* Event details */}
+
         <div className="space-y-2 mb-3 sm:mb-4 flex-1">
-          {/* Date and time */}
           <div className="flex items-start gap-2 text-xs sm:text-sm text-n-3">
             <svg className="w-4 h-4 mt-0.5 flex-shrink-0 text-color-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -96,7 +102,6 @@ const EventCard = ({ event }) => {
             </div>
           </div>
 
-          {/* Location */}
           {event.venue && (
             <div className="flex items-start gap-2 text-xs sm:text-sm text-n-3">
               <svg className="w-4 h-4 mt-0.5 flex-shrink-0 text-color-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -112,17 +117,15 @@ const EventCard = ({ event }) => {
             </div>
           )}
 
-          {/* Online event */}
           {event.online_event && (
             <div className="flex items-center gap-2 text-xs sm:text-sm text-n-3">
               <svg className="w-4 h-4 text-color-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
               </svg>
-              <span className="font-medium text-n-2">Evento en línea</span>
+              <span className="font-medium text-n-2">Evento en linea</span>
             </div>
           )}
 
-          {/* Category */}
           {event.category && (
             <div className="flex items-center gap-2 text-xs text-n-4">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -133,7 +136,6 @@ const EventCard = ({ event }) => {
           )}
         </div>
 
-        {/* Action button */}
         <a
           href={event.url}
           target="_blank"
