@@ -30,9 +30,22 @@ const EventsTab = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const visibleFilters = FILTERS.filter(({ key }) => (groups[key] || 0) > 0);
+
   useEffect(() => {
     loadEvents();
   }, []);
+
+  useEffect(() => {
+    if (visibleFilters.length === 0) {
+      return;
+    }
+
+    const activeFilterExists = visibleFilters.some(({ key }) => key === activeFilter);
+    if (!activeFilterExists) {
+      setActiveFilter(visibleFilters[0].key);
+    }
+  }, [activeFilter, visibleFilters]);
 
   const loadEvents = async () => {
     setLoading(true);
@@ -110,10 +123,7 @@ const EventsTab = () => {
     <div className="space-y-6">
       <div className="space-y-4">
         <div className="flex justify-start">
-          <Button onClick={loadEvents} className="flex items-center gap-2 px-5 py-3 text-sm sm:text-base">
-            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-            </svg>
+          <Button onClick={loadEvents} className="px-5 py-3 text-sm sm:text-base">
             Actualizar
           </Button>
         </div>
@@ -126,7 +136,7 @@ const EventsTab = () => {
         </div>
 
         <div className="flex flex-wrap gap-2">
-          {FILTERS.map(({ key, label }) => (
+          {visibleFilters.map(({ key, label }) => (
             <button
               key={key}
               onClick={() => setActiveFilter(key)}
@@ -171,23 +181,22 @@ const EventsTab = () => {
             <div>
               <p className="text-n-2 text-xs sm:text-sm font-medium mb-1">Eventos de Circle Up Volunteer</p>
               <p className="text-n-4 text-xs leading-relaxed">
-                Explora eventos disponibles, proximos agotados e historicos desde una misma vista. Los datos se actualizan cada 10 minutos para optimizar el uso de la API.
+                Explora eventos disponibles, proximos agotados e historicos desde una misma vista. Los datos se actualizan cada 10 minutos para optimizar el uso de la API. Si un evento ya no tiene cupo, puedes escribirnos y trataremos de ayudarte a revisar opciones adicionales.
               </p>
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <p className="text-n-4 text-xs sm:text-sm">
-              Si un evento ya no tiene cupo, puedes escribirnos para revisar opciones adicionales.
-            </p>
+          {activeFilter === 'sold_out' && (
+            <div className="flex justify-start">
             <Button
               href="mailto:hola@circleup.com.co?subject=Solicitud%20de%20cupo%20adicional%20Circle%20Up"
               className="text-xs sm:text-sm"
               white
             >
-              Solicitar cupo
+              Solicitar Cupo Extra
             </Button>
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
