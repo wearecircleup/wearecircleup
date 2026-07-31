@@ -146,7 +146,7 @@ class ImageUploadCompletion(BaseModel):
     crop_mask: dict
 
 
-DEFAULT_FAQS = [
+DEFAULT_FAQS = (
     (
         "¿Qué es Circle Up Community?",
         "Un proyecto de investigación que conecta tecnología, comunidad y academia mediante aprendizaje comunitario.",
@@ -163,7 +163,7 @@ DEFAULT_FAQS = [
         "¿Cómo usamos tus datos?",
         "Al inscribirte, autorizas el tratamiento de los datos que proporcionas, conforme a la Ley 1581 de 2012, únicamente para gestionar tu inscripción, registrar tu asistencia, enviarte información y notificaciones relacionadas con el evento, y apoyar la actividad de investigación. Solicitamos solo la información necesaria y no compartiremos tus datos personales con terceros.",
     ),
-]
+)
 CONTACT_URL = "https://www.circleup.com.co/"
 CONTACT_EMAIL = "hola@circleup.com.co"
 TIMEZONE_FALLBACKS = {
@@ -180,7 +180,7 @@ EDUCATION_LEVEL_CHOICES = [
     "Doctorado",
     "Otro",
 ]
-PHONE_QUESTION = "¿Quieres recibir actualizaciones del evento por SMS? Déjanos tu número *(opcional)*. Lo usaremos solo para este evento."
+PHONE_QUESTION = "¿Quieres recibir actualizaciones del evento por SMS? Déjanos tu número (opcional). Lo usaremos solo para este evento."
 AGE_RANGE_QUESTION = "¿Cuál es tu rango de edad?"
 AGE_RANGE_CHOICES = [
     "14 a 17 años — Te enviaremos una autorización para tu acudiente. Preséntala validada el día del evento para realizar el check-in.",
@@ -332,7 +332,7 @@ class EventInstantiation(BaseModel):
             },
             {
                 "question": {
-                    "html": "¿Aceptas leer la información del evento y respetar a las demás personas y las reglas del lugar?<br><br><em>También autorizo el tratamiento de mis datos conforme a la Ley 1581 de 2012, solo para gestionar mi inscripción, enviarme información del evento y notificaciones relacionadas, sin compartirlos con terceros.</em>",
+                    "html": "¿Aceptas la información del evento y las reglas de convivencia del lugar?<br><br><em>Acepto el tratamiento de mis datos, según la Ley 1581 de 2012, solo para mi inscripción y mensajes de este evento. No se comparten con terceros.</em>",
                 },
                 "type": "checkbox",
                 "required": True,
@@ -365,10 +365,7 @@ class EventInstantiation(BaseModel):
         overview_html = "".join(overview_parts)
         faq_html = []
         for question, answer in DEFAULT_FAQS:
-            current_answer = answer
-            if "costo" in question.lower() and not self.online_event and self.venue_consumption_note.strip():
-                current_answer = self.venue_consumption_note.strip()
-            faq_html.append(f"<h3>{question}</h3><p><em>{current_answer}</em></p>")
+            faq_html.append(f"<h3>{question}</h3><p><em>{answer}</em></p>")
         body_parts = []
         if overview_html:
             body_parts.append(overview_html)
@@ -395,7 +392,6 @@ class EventInstantiation(BaseModel):
                 }
             ],
         }
-
 
 
 

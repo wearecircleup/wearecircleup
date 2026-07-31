@@ -13,7 +13,7 @@ START_TIME_OPTIONS = tuple(
     for hour in range(8, 19)
     for minute in (0, 30)
 ) + (time(19, 0),)
-DEFAULT_FAQS = [
+DEFAULT_FAQS = (
     (
         "¿Qué es Circle Up Community?",
         "Un proyecto de investigación que conecta tecnología, comunidad y academia mediante aprendizaje comunitario.",
@@ -30,7 +30,7 @@ DEFAULT_FAQS = [
         "¿Cómo usamos tus datos?",
         "Al inscribirte, autorizas el tratamiento de los datos que proporcionas, conforme a la Ley 1581 de 2012, únicamente para gestionar tu inscripción, registrar tu asistencia, enviarte información y notificaciones relacionadas con el evento, y apoyar la actividad de investigación. Solicitamos solo la información necesaria y no compartiremos tus datos personales con terceros.",
     ),
-]
+)
 DEFAULT_TICKETS = ["Entrada General"]
 PRESENTER_QUESTION_TYPES = {
     "Texto abierto": "text",

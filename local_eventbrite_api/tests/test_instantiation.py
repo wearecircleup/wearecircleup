@@ -137,9 +137,15 @@ def test_manager_runs_event_ticket_questions_content_then_validation() -> None:
     body = client.structured_content["content"]["modules"][0]["data"]["body"]["text"]
     assert "Aprendizaje comunitario en una hora." in body
     assert "<aside>Ana Torres es investigadora comunitaria y guiara una conversacion practica sobre el tema y sus aplicaciones cotidianas.</aside>" in body
-    assert "Consumo minimo sugerido por el lugar." in body
     assert "<strong>" not in body
     assert "<h3>¿Qué es Circle Up Community?</h3><p><em>Un proyecto de investigación que conecta tecnología, comunidad y academia mediante aprendizaje comunitario.</em></p>" in body
+    assert (
+        "<h3>¿Tiene algún costo?</h3><p><em>Participar es gratuito y Circle Up no recibe dinero por este encuentro. "
+        "Algunos espacios pueden tener un consumo mínimo como parte de su acuerdo con el lugar. Si aplica, encontrarás "
+        "el valor y las condiciones en la descripción del sitio en Eventbrite. Para encuentros virtuales, no aplica.</em></p>"
+        in body
+    )
+    assert "Consumo minimo sugerido por el lugar." not in body
     assert '<b>Contacto:</b> <a href="https://www.circleup.com.co/">circleup.com.co</a>' in body
     assert "Sobre este encuentro" not in body
     assert "Llegada" not in body

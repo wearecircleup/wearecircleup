@@ -172,21 +172,19 @@ const EventsTab = () => {
         </div>
       )}
 
-      <div className="mt-8 p-3 sm:p-4 bg-n-7/50 border border-n-6 rounded-xl">
-        <div className="flex flex-col gap-4 sm:gap-5">
-          {activeFilter === 'sold_out' && (
-            <div className="flex justify-start">
-              <Button
-                href="mailto:hola@circleup.com.co?subject=Solicitud%20de%20cupo%20adicional%20Circle%20Up"
-                className="text-xs sm:text-sm"
-                white
-              >
-                Solicitar Cupo Extra
-              </Button>
-            </div>
-          )}
+      {activeFilter === 'sold_out' && (
+        <div className="mt-8 p-3 sm:p-4 bg-n-7/50 border border-n-6 rounded-xl">
+          <div className="flex justify-start">
+            <Button
+              href="mailto:hola@circleup.com.co?subject=Solicitud%20de%20cupo%20adicional%20Circle%20Up"
+              className="text-xs sm:text-sm"
+              white
+            >
+              Solicitar Cupo Extra
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
