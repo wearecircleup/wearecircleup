@@ -31,16 +31,19 @@ export const navigation = [
     id: "1",
     title: "Aliados",
     url: "/aliados",
+    hidden: true,
   },
   {
     id: "2",
     title: "Voluntarios",
     url: "/voluntarios",
+    hidden: true,
   },
   {
     id: "3",
     title: "Participantes",
     url: "/participantes",
+    hidden: true,
   },
   {
     id: "4",
