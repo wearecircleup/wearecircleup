@@ -13,7 +13,7 @@ const Button = ({
     px || "px-7"
   } ${white ? "text-n-8" : "text-n-1"} ${className || ""}`;
 
-  const spanClasses = "relative z-10";
+  const spanClasses = "relative z-10 block w-full text-center leading-tight whitespace-nowrap";
 
   const renderButton = () => (
     <button className={classes} onClick={onClick}>

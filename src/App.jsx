@@ -8,6 +8,7 @@ import PresentationViewer from "./pages/PresentationViewer";
 import RoadmapDocs from "./pages/RoadmapDocs";
 import PoliciesDocs from "./pages/PoliciesDocs";
 import EventsPage from "./pages/EventsPage";
+import CommunityPage from "./pages/CommunityPage";
 import Login from "./pages/Login";
 import AuthCallback from "./pages/AuthCallback";
 import ParticleLogoTest from "./pages/ParticleLogoTest";
@@ -22,6 +23,7 @@ const normalizePath = (pathname) => {
 
 const pagePathByKey = {
   home: "/",
+  community: "/comunidad",
   events: "/eventos",
   aliados: "/aliados",
   voluntarios: "/voluntarios",
@@ -33,6 +35,7 @@ const pagePathByKey = {
 
 const pageByPath = {
   "/": "home",
+  "/comunidad": "community",
   "/eventos": "events",
   "/aliados": "aliados",
   "/voluntarios": "voluntarios",
@@ -142,6 +145,7 @@ const App = () => {
     return (
       <div className="w-full">
         {currentPage === 'home' && <Home setCurrentPage={setCurrentPage} />}
+        {currentPage === 'community' && <CommunityPage setCurrentPage={setCurrentPage} />}
         {currentPage === 'events' && <EventsPage setCurrentPage={setCurrentPage} />}
         {currentPage === 'aliados' && <HowToUseBusiness setCurrentPage={setCurrentPage} />}
         {currentPage === 'voluntarios' && <HowToUseVolunteer setCurrentPage={setCurrentPage} />}

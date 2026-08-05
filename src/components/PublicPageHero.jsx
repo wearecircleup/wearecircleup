@@ -19,15 +19,28 @@ const metaSizeClasses = {
   large: "text-[clamp(0.7rem,1.1vw,1rem)]",
 };
 
-const renderHeroTitle = (heroTitle) => {
-  const normalizedTitle = heroTitle
+const renderTitleLine = (line, keyPrefix) => {
+  const normalizedLine = line
     .split(" ")
     .map((word, index, words) => (index === words.length - 1 ? word : `${word} `))
     .join("");
 
-  return normalizedTitle.split("CircleUp").map((part, index) =>
-    index === 0 ? part : <><br key={index} />CircleUp</>
-  );
+  return normalizedLine.split("CircleUp").map((part, index) => (
+    <span key={`${keyPrefix}-${index}`}>
+      {index > 0 && <br />}
+      {index > 0 ? "CircleUp" : ""}
+      {part}
+    </span>
+  ));
+};
+
+const renderHeroTitle = (heroTitle) => {
+  return heroTitle.split("\n").map((line, index, lines) => (
+    <span key={`line-${index}`}>
+      {renderTitleLine(line, `line-${index}`)}
+      {index < lines.length - 1 && <br />}
+    </span>
+  ));
 };
 
 const PublicPageHero = ({
@@ -38,6 +51,9 @@ const PublicPageHero = ({
   location,
   fontSize = "normal",
   fontFamily = "sans",
+  titleClassName = "",
+  contentClassName = "",
+  visualClassName = "",
 }) => {
   const familyClass = fontFamily === "serif" ? "font-serif" : "font-sans";
   const lightFamilyClass = fontFamily === "serif" ? "font-serif font-light" : "font-sans font-light";
@@ -46,11 +62,11 @@ const PublicPageHero = ({
     <section className="relative pt-32 sm:pt-36 md:pt-40 lg:pt-48 pb-12 sm:pb-16 md:pb-24 lg:pb-32 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 md:gap-12 lg:gap-16 xl:gap-20 items-center">
-          <div className="lg:col-span-7 text-center lg:text-left relative z-20 px-4 sm:px-6 lg:px-0">
+          <div className={`lg:col-span-7 text-center lg:text-left relative z-20 px-4 sm:px-6 lg:px-0 ${contentClassName}`}>
             <div className={`uppercase tracking-[0.25em] text-n-4 mb-6 md:mb-8 lg:mb-10 ${labelSizeClasses[fontSize]} ${lightFamilyClass}`}>
               {heroLabel}
             </div>
-            <h1 className={`leading-[0.9] font-bold text-n-1 mb-8 md:mb-12 lg:mb-16 tracking-tighter ${titleSizeClasses[fontSize]} ${familyClass}`}>
+            <h1 className={`leading-[0.9] font-bold text-n-1 mb-8 md:mb-12 lg:mb-16 tracking-tighter ${titleSizeClasses[fontSize]} ${familyClass} ${titleClassName}`}>
               {renderHeroTitle(heroTitle)}
             </h1>
             <div className={`flex flex-wrap items-center gap-4 md:gap-6 lg:gap-8 text-n-4 tracking-wider ${metaSizeClasses[fontSize]} ${lightFamilyClass}`}>
@@ -62,7 +78,7 @@ const PublicPageHero = ({
             </div>
           </div>
 
-          <div className="lg:col-span-5 relative group z-10 mt-8 lg:mt-0 flex items-end">
+          <div className={`lg:col-span-5 relative group z-10 mt-8 lg:mt-0 flex items-end ${visualClassName}`}>
             <div className="relative aspect-square w-full max-w-[336px] sm:max-w-[384px] md:max-w-[480px] mx-auto lg:max-w-none">
               <div className="absolute inset-0 z-0 flex items-center justify-center">
                 <div className="relative w-full h-full">

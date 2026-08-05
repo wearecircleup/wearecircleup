@@ -1,10 +1,10 @@
 const ButtonSvg = (white) => (
   <>
     <svg
-      className="absolute top-0 left-0"
+      className="absolute top-0 left-0 h-full"
       width="21"
-      height="44"
       viewBox="0 0 21 44"
+      preserveAspectRatio="none"
     >
       <path
         fill={white ? "white" : "none"}
@@ -14,8 +14,7 @@ const ButtonSvg = (white) => (
       />
     </svg>
     <svg
-      className="absolute top-0 left-[1.3125rem] w-[calc(100%-2.625rem)]"
-      height="44"
+      className="absolute top-0 left-[1.3125rem] w-[calc(100%-2.625rem)] h-full"
       viewBox="0 0 100 44"
       preserveAspectRatio="none"
       fill={white ? "white" : "none"}
@@ -42,10 +41,10 @@ const ButtonSvg = (white) => (
       )}
     </svg>
     <svg
-      className="absolute top-0 right-0"
+      className="absolute top-0 right-0 h-full"
       width="21"
-      height="44"
       viewBox="0 0 21 44"
+      preserveAspectRatio="none"
     >
       <path
         fill={white ? "white" : "none"}
