@@ -48,12 +48,12 @@ export const navigation = [
   {
     id: "4",
     title: "Core",
-    url: "/roadmap",
+    url: "/core",
   },
   {
     id: "5",
     title: "Politicas",
-    url: "/policies",
+    url: "/politicas",
   },
   {
     id: "6",

@@ -7,6 +7,19 @@ import Logo from "./Logo";
 import MenuSvg from "./design/Header";
 import { HambugerMenu } from "./design/Header";
 
+const pageByNavigationUrl = {
+  "/features": "features",
+  "/eventos": "events",
+  "/aliados": "aliados",
+  "/voluntarios": "voluntarios",
+  "/participantes": "participantes",
+  "/core": "roadmap",
+  "/roadmap": "roadmap",
+  "/politicas": "policies",
+  "/policies": "policies",
+  "/login": "login",
+};
+
 const Header = ({ setCurrentPage }) => {
   const [openNavigation, setOpenNavigation] = useState(false);
 
@@ -58,27 +71,12 @@ const Header = ({ setCurrentPage }) => {
                     handleClick();
                     // Scroll to top of page
                     window.scrollTo({ top: 0, behavior: 'smooth' });
-                    
-                    if (item.url === '/features') {
-                      setCurrentPage && setCurrentPage('features');
-                    } else if (item.url === '/eventos') {
-                      setCurrentPage && setCurrentPage('events');
-                    } else if (item.url === '/aliados') {
-                      setCurrentPage && setCurrentPage('aliados');
-                    } else if (item.url === '/voluntarios') {
-                      setCurrentPage && setCurrentPage('voluntarios');
-                    } else if (item.url === '/participantes') {
-                      setCurrentPage && setCurrentPage('participantes');
-                    } else if (item.url === '#how-to-use') {
+
+                    if (item.url === '#how-to-use') {
                       setCurrentPage && setCurrentPage('how-to-use');
-                    } else if (item.url === '/roadmap') {
-                      setCurrentPage && setCurrentPage('roadmap');
-                    } else if (item.url === '/policies') {
-                      setCurrentPage && setCurrentPage('policies');
-                    } else if (item.url === '/login') {
-                      setCurrentPage && setCurrentPage('login');
                     } else {
-                      setCurrentPage && setCurrentPage('home');
+                      const targetPage = pageByNavigationUrl[item.url] || "home";
+                      setCurrentPage && setCurrentPage(targetPage);
                     }
                   }}
                   className={`block relative font-code text-2xl uppercase text-n-1 transition-colors hover:text-color-1 cursor-pointer ${
