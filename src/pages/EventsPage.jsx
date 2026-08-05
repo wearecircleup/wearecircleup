@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ButtonGradient from "../assets/svg/ButtonGradient";
@@ -6,6 +7,10 @@ import EventsTab from "../components/dashboard/EventsTab";
 import PublicPageHero from "../components/PublicPageHero";
 
 const EventsPage = ({ setCurrentPage }) => {
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, []);
+
   return (
     <>
       <div className="pt-[4.75rem] lg:pt-[5.25rem] min-h-screen bg-n-8">
@@ -16,7 +21,7 @@ const EventsPage = ({ setCurrentPage }) => {
           heroTitle="Eventos CircleUp"
           readTime="Eventos activos"
           lastUpdated="Actualizacion en tiempo real"
-          location="Tocancipa, Cundinamarca"
+          location="Tocancipa, Colombia"
         />
 
         <section className="relative py-10 sm:py-12 lg:py-16">

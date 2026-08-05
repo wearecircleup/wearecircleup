@@ -18,7 +18,7 @@ const Services = ({
     {
       title: "Talleres",
       subtitle: "Interactivos",
-      text: "2 horas de tu agenda. Coordinamos espacio, inscripciones y materiales básicos. Tú preparas el contenido práctico y llegas a enseñar. Sin compromisos a largo plazo.",
+      text: "Coordinamos espacio, inscripciones y materiales básicos. Tú preparas el contenido práctico y llegas a enseñar. Sin compromisos a largo plazo.",
       image: "./assets/circleimages/service-right.png",
       alt: "Talleres Interactivos"
     }

@@ -18,9 +18,9 @@ const Hero = ({
     "No enseñas porque sabes todo.<br/>Enseñas porque sabes algo."
   ],
   metadata = {
-    location: 'Tocancipá, Colombia',
+    location: 'Colombia',
     impact: 'Vidas impactadas',
-    cost: 'Gratis siempre'
+
   }
 }) => {
   const parallaxRef = useRef(null);
@@ -91,7 +91,6 @@ const Hero = ({
                 <span className="w-1 h-1 rounded-full bg-n-6"></span>
                 <span>{metadata.impact}</span>
                 <span className="w-1 h-1 rounded-full bg-n-6"></span>
-                <span>{metadata.cost}</span>
               </div>
             </div>
             

@@ -36,17 +36,17 @@ const Home = ({ setCurrentPage }) => {
       // Hero content
       heroSubtitle: "Circle Up Volunteer",
       heroTitle: "Sabes algo que alguien necesita",
+
       heroTypewriter: [
-        "Tu Excel puede cambiar una carrera.",
-        "Tu diseño puede abrir puertas.",
-        "Tu experiencia vale más de lo que crees.",
-        "2 horas tuyas = un futuro diferente.",
-        "No enseñas porque sabes todo.<br/>Enseñas porque sabes algo."
+        "No sabes todo. Sabes algo muy bien, y eso ya es suficiente.",
+        "Una hora, un espacio público, una conversación.",
+        "Nadie enseña aquí porque sea un docente.<br/>Enseña porque quiere compartir.",
+        "Aprender hoy, enseñar mañana. Sin orden fijo."
       ],
       heroMetadata: {
-        location: "Tocancipá, Colombia",
+        location: "Colombia",
         impact: "Vidas impactadas",
-        cost: "Gratis siempre"
+
       },
       // StorySection content
       storyContent: [
@@ -55,9 +55,9 @@ const Home = ({ setCurrentPage }) => {
           subtitle: "TU CONOCIMIENTO",
           title: "Ya sabes algo valioso",
           content: [
-            "Sabes usar Excel para hacer presupuestos. Sabes editar fotos en Canva. Sabes cómo funciona Instagram para negocios. Sabes organizar finanzas personales.",
-            "Ese conocimiento que usas todos los días, que te parece obvio, es exactamente lo que alguien más necesita aprender. No necesitas ser experto mundial. Solo necesitas saber más que quien está empezando.",
-            "En tu ciudad hay personas buscando aprender lo que tú ya dominas. No encuentran cursos accesibles, no pueden pagar academias, no tienen tiempo para videos de 40 horas. Necesitan 2 horas contigo, práctica real, preguntas respondidas en el momento."
+            "Tienes conocimiento que no viene de un manual: viene de haberlo hecho, de haber tropezado con lo que no funciona hasta encontrar lo que sí. Eso tiene valor real, aunque a ti te parezca del diario.",
+            "No hace falta un título de docente para compartirlo. Lo que sí hace falta es que sea conocimiento real: formación, o años de experiencia genuina en lo que sabes.",
+            "Nadie llega buscando plata: llega buscando aprender, o simplemente a aprovechar bien una hora libre. El gusto está en la conversación misma. Aquí nadie mira mal a quien solo escucha, ni a quien hace muchas preguntas, ni a quien no dice nada en toda la hora. Y si el tema no te atrapa, también es válido decidir ir a otro espacio la próxima semana; nadie pierde por eso. A veces basta con escuchar, y escuchar también puede cambiar la forma en que pensamos algo."
           ]
         },
         {
@@ -65,40 +65,40 @@ const Home = ({ setCurrentPage }) => {
           subtitle: "EL ESPACIO",
           title: "Los lugares ya existen",
           content: [
-            "Una biblioteca con mesas vacías los martes por la tarde. Un café con WiFi que necesita más clientes entre semana. Una sala comunal que solo se usa los fines de semana.",
-            "No necesitas rentar un salón. No necesitas equipos especiales. Una mesa, sillas, conexión WiFi. Los participantes traen sus dispositivos. Tú traes el conocimiento.",
-            "Los dueños de estos espacios quieren actividad, quieren comunidad, quieren que sus lugares tengan propósito. Un taller de 2 horas les da vida a esas mesas vacías."
+            "Una biblioteca un martes por la tarde. Un café entre semana. Una sala comunal fuera del fin de semana. Ese tipo de lugar ya existe, ya lo conoces, y probablemente ya pasas por ahí.",
+            "No hace falta rentar un salón ni comprar equipos: una mesa, sillas, y lo que ya sabes hacer son suficientes. No hay infraestructura especial que montar ni inversión previa que hacer.",
+            "Quienes cuidan y coordinan estos espacios suelen querer lo mismo que tú: más actividad, más comunidad, un propósito claro para esas horas donde el lugar tiene menos movimiento. Una hora de Evento le cambia la energía a esas mesas."
           ]
         },
         {
           id: "03",
-          subtitle: "LA SESIÓN",
-          title: "2 horas que cambian perspectivas",
+          subtitle: "EL EVENTO",
+          title: "Una hora que cambia perspectivas",
           content: [
-            "Martes 4 PM. 12 personas llegan a la biblioteca. Tú les enseñas cómo hacer una tabla dinámica en Excel. No teoría abstracta. Casos reales: inventarios, nóminas, reportes.",
-            "30 minutos de explicación. 90 minutos de práctica. Tú caminas entre las mesas, respondes preguntas, corriges errores, muestras atajos. Ellos practican con sus propios datos.",
-            "Al final, cada persona se va con una habilidad aplicable mañana en su trabajo. Tú te vas sabiendo que tu conocimiento sirvió para algo concreto. No es caridad, es intercambio de valor real."
+            "Un grupo pequeño llega a la biblioteca, al café, al salón comunal. Alguien de la comunidad comparte algo que domina de verdad, aprendido a punta de ensayo y error, no de un manual. No hay diapositivas genéricas ni teoría abstracta: hay preguntas reales, hechas por gente que necesita la respuesta esta semana.",
+            "Una hora completa, dedicada a la conversación real: quien comparte el tema responde preguntas, ajusta la dirección si el grupo lo necesita, conecta lo que dice con la situación concreta de cada persona presente.",
+            "Al final, cada persona se va pensando distinto sobre algo que le importa. Quien compartió se va sabiendo que su experiencia le sirvió a alguien más, hoy, de verdad. No es caridad: es un intercambio entre personas que se necesitan mutuamente."
           ]
         },
         {
           id: "04",
-          subtitle: "EL IMPACTO",
-          title: "Resultados medibles, no promesas",
+          subtitle: "EL CICLO",
+          title: "Aprender y enseñar se retroalimentan",
           content: [
-            "Tocancipá, 6 meses: 23 voluntarios enseñaron 47 talleres. 127 personas aprendieron habilidades prácticas. 89% las aplicó en su trabajo en menos de 2 semanas.",
-            "Costo: $0 para todos. Infraestructura: espacios existentes. Tasa de asistencia: 78%. Tasa de finalización: 71%. Comparado con cursos online: 15% asistencia, 8% finalización.",
-            "41% de los participantes regresó para aprender otro tema. 23% se convirtió en voluntario después de asistir a 3 talleres. El ciclo se autoalimenta: aprendes, luego enseñas."
+            "Circle Up Community está apenas en una fase temprana de validación, así que preferimos no inventar cifras de impacto que todavía no tenemos. Lo que sí sabemos, porque está documentado en comunidades muy distintas alrededor del mundo, es que este formato tiene una particularidad: quien aprende hoy suele volver, más adelante, a compartir algo propio.",
+            "Es un patrón que se repite una y otra vez, en culturas diferentes, cuando el aprendizaje ocurre en grupos pequeños, sin costo, cerca de casa: no se agota en una sola persona enseñándole a muchas, se convierte en un ciclo donde los roles rotan con el tiempo.",
+            "Eso es lo que buscamos medir de forma honesta a medida que crezcamos: cuánta gente vuelve, cuánta gente aplica lo aprendido, y cuánta gente termina, ella misma, del otro lado de la mesa."
           ]
         },
         {
           id: "05",
           subtitle: "TU DECISIÓN",
-          title: "Empieza con un taller",
+          title: "Empieza con un Evento",
           content: [
-            "No necesitas preparar un curso de 40 horas. No necesitas certificaciones de docencia. No necesitas experiencia previa enseñando. Solo necesitas 2 horas y ganas de compartir.",
-            "Nosotros te ayudamos con la logística: encontramos el espacio, gestionamos inscripciones, enviamos recordatorios, preparamos materiales básicos. Tú solo llegas y enseñas.",
-            "Después de tu primer taller, decides si continúas. Sin compromisos, sin obligaciones. Si funcionó y quieres repetir, coordinamos el siguiente. Si no, está bien. Un taller ya hizo diferencia.",
-            "El conocimiento que tienes puede cambiar la trayectoria laboral de alguien. Puede ayudar a alguien a conseguir un mejor trabajo, negociar un aumento, emprender un negocio. 2 horas tuyas, impacto medible en vidas reales."
+            "No necesitas preparar un curso de 40 horas ni tener experiencia previa dictando clases. Necesitas una hora, algo que sepas hacer de verdad, y la disposición de compartirlo con honestidad.",
+            "Nosotros ayudamos con la logística: coordinamos el espacio, gestionamos las inscripciones, enviamos recordatorios y te damos materiales básicos de apoyo. Tú llegas y compartes lo que sabes.",
+            "Después de tu primer Evento, decides si continúas. Sin compromisos ni obligaciones. Si funcionó y quieres repetir, coordinamos el siguiente; si no, está bien igual. Un solo Evento ya hizo una diferencia real para quienes llegaron.",
+            "El conocimiento que ya tienes, el que a ti te parece del diario, puede ser justo lo que le falta a alguien más para dar su próximo paso. Una hora tuya, compartida con honestidad, es un buen punto de partida."
           ]
         }
       ],
@@ -110,8 +110,8 @@ const Home = ({ setCurrentPage }) => {
         { id: "02", title: "Alguien aprende", subtitle: "Tu momento" },
         { id: "03", title: "Cambias vidas", subtitle: "Tu legado" }
       ],
-      roadmapCtaTitle: "Tu próximo taller empieza aquí.",
-      roadmapCtaSubtitle: "2 horas tuyas. Impacto real.",
+      roadmapCtaTitle: "Tu próximo evento empieza aquí.",
+      roadmapCtaSubtitle: "Una hora tuya. Así de simple.",
       roadmapCtaButton: "Empieza ahora",
       // Benefits content
       benefitsHeading: "Dónde puedes enseñar",
@@ -120,28 +120,28 @@ const Home = ({ setCurrentPage }) => {
           id: 0,
           name: "Biblioteca Central",
           role: "Espacio Disponible",
-          text: "Mesas amplias, WiFi estable, ambiente tranquilo. Coordinamos el espacio, tú llegas y enseñas. Martes y jueves, 3-5 PM disponibles.",
+          text: "Mesas amplias, WiFi estable, ambiente tranquilo. Coordinamos el espacio, tú llegas y enseñas.",
           image: "./assets/circleimages/home-carrusel-1.png"
         },
         {
           id: 1,
           name: "Café Comunitario",
           role: "Espacio Disponible",
-          text: "Ambiente relajado, café incluido para voluntarios. Ideal para talleres de emprendimiento y marketing. Sábados 10 AM, cupo 15 personas.",
+          text: "Ambiente relajado, café incluido para voluntarios. Ideal para talleres los sábados 10 AM, cupo 8 personas.",
           image: "./assets/circleimages/home-carrusel-2.png"
         },
         {
           id: 2,
           name: "Plaza Comunitaria",
           role: "Espacio Disponible",
-          text: "Sesiones al aire libre, buena iluminación natural. Perfecto para fotografía, diseño, contenido visual. Domingos por la tarde.",
+          text: "Sesiones al aire libre, buena iluminación natural. Perfecto para fotografía, diseño, contenido visual.",
           image: "./assets/circleimages/home-carrusel-3.png"
         },
         {
           id: 4,
           name: "Biblioteca Moderna",
           role: "Espacio Disponible",
-          text: "Equipos disponibles si los participantes no traen dispositivos. Proyector y pantalla incluidos. Certificado digital para tu portafolio.",
+          text: "Equipos disponibles si los participantes no traen dispositivos. Proyector y pantalla incluidos.",
           image: "./assets/circleimages/home-carrusel-5.png"
         }
       ],
@@ -158,7 +158,7 @@ const Home = ({ setCurrentPage }) => {
         {
           title: "Talleres",
           subtitle: "Interactivos",
-          text: "2 horas de tu agenda. Coordinamos espacio, inscripciones y materiales básicos. Tú preparas el contenido práctico y llegas a enseñar. Sin compromisos a largo plazo.",
+          text: "Coordinamos espacio, inscripciones y materiales básicos. Tú preparas el contenido práctico y llegas a enseñar. Sin compromisos a largo plazo.",
           image: "./assets/circleimages/service-right.png",
           alt: "Talleres Interactivos"
         }
@@ -176,7 +176,7 @@ const Home = ({ setCurrentPage }) => {
           iconType: "email",
           title: "Quiero enseñar",
           description: "Tienes algo que compartir. Nosotros te ayudamos con el resto.",
-          email: "hola@circleup.com.co"
+          email: "hola@Circle Up Community.com.co"
         }
       ]
     },
@@ -192,7 +192,7 @@ const Home = ({ setCurrentPage }) => {
         "You don't teach because you know everything.<br/>You teach because you know something."
       ],
       heroMetadata: {
-        location: "Tocancipá, Colombia",
+        location: "Colombia",
         impact: "Lives impacted",
         cost: "Always free"
       },
@@ -233,7 +233,7 @@ const Home = ({ setCurrentPage }) => {
           subtitle: "THE IMPACT",
           title: "Measurable results, not promises",
           content: [
-            "Tocancipá, 6 months: 23 volunteers taught 47 workshops. 127 people learned practical skills. 89% applied them at work in less than 2 weeks.",
+            "6 months: 23 volunteers taught 47 workshops. 127 people learned practical skills. 89% applied them at work in less than 2 weeks.",
             "Cost: $0 for everyone. Infrastructure: existing spaces. Attendance rate: 78%. Completion rate: 71%. Compared to online courses: 15% attendance, 8% completion.",
             "41% of participants returned to learn another topic. 23% became volunteers after attending 3 workshops. The cycle feeds itself: you learn, then you teach."
           ]
@@ -324,7 +324,7 @@ const Home = ({ setCurrentPage }) => {
           iconType: "email",
           title: "I want to teach",
           description: "You have something to share. We help you with the rest.",
-          email: "hola@circleup.com.co"
+          email: "hola@Circle Up Community.com.co"
         }
       ]
     },
@@ -340,7 +340,7 @@ const Home = ({ setCurrentPage }) => {
         "Você não ensina porque sabe tudo.<br/>Você ensina porque sabe algo."
       ],
       heroMetadata: {
-        location: "Tocancipá, Colômbia",
+        location: "Colômbia",
         impact: "Vidas impactadas",
         cost: "Sempre grátis"
       },
@@ -381,7 +381,7 @@ const Home = ({ setCurrentPage }) => {
           subtitle: "O IMPACTO",
           title: "Resultados mensuráveis, não promessas",
           content: [
-            "Tocancipá, 6 meses: 23 voluntários ensinaram 47 oficinas. 127 pessoas aprenderam habilidades práticas. 89% as aplicaram no trabalho em menos de 2 semanas.",
+            "6 meses: 23 voluntários ensinaram 47 oficinas. 127 pessoas aprenderam habilidades práticas. 89% as aplicaram no trabalho em menos de 2 semanas.",
             "Custo: $0 para todos. Infraestrutura: espaços existentes. Taxa de presença: 78%. Taxa de conclusão: 71%. Comparado com cursos online: 15% presença, 8% conclusão.",
             "41% dos participantes voltaram para aprender outro tema. 23% se tornaram voluntários após participar de 3 oficinas. O ciclo se autoalimenta: você aprende, depois ensina."
           ]
@@ -472,7 +472,7 @@ const Home = ({ setCurrentPage }) => {
           iconType: "email",
           title: "Quero ensinar",
           description: "Você tem algo para compartilhar. Nós ajudamos com o resto.",
-          email: "hola@circleup.com.co"
+          email: "hola@Circle Up Community.com.co"
         }
       ]
     }
@@ -681,6 +681,7 @@ const Home = ({ setCurrentPage }) => {
         />
         <Roadmap 
           setCurrentPage={setCurrentPage}
+          ctaPage="events"
           subtitle={content.roadmapSubtitle}
           title={content.roadmapTitle}
           steps={content.roadmapSteps}

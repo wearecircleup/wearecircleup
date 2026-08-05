@@ -3,6 +3,7 @@ import Button from "./Button";
 
 const Roadmap = ({ 
   setCurrentPage,
+  ctaPage = "login",
   subtitle = 'Tu impacto',
   title = 'Así de simple. Así de real.',
   steps = [
@@ -10,7 +11,7 @@ const Roadmap = ({
     { id: "02", title: "Alguien aprende", subtitle: "Tu momento" },
     { id: "03", title: "Cambias vidas", subtitle: "Tu legado" }
   ],
-  ctaTitle = 'Tu próximo taller empieza aquí.',
+  ctaTitle = 'Tu próximo evento empieza aquí.',
   ctaSubtitle = '2 horas tuyas. Impacto real.',
   ctaButton = 'Empieza ahora'
 }) => {
@@ -74,7 +75,7 @@ const Roadmap = ({
             
             <div className="mb-6 sm:mb-7 md:mb-8">
               <Button 
-                onClick={() => setCurrentPage && setCurrentPage('login')}
+                onClick={() => setCurrentPage && setCurrentPage(ctaPage)}
                 white
                 className="text-sm sm:text-base md:text-lg"
               >
