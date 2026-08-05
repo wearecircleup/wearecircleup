@@ -38,9 +38,8 @@ const Home = ({ setCurrentPage }) => {
       heroTitle: "Sabes algo que alguien necesita",
 
       heroTypewriter: [
-        "No sabes todo. Sabes algo muy bien, y eso ya es suficiente.",
         "Una hora, un espacio público, una conversación.",
-        "Nadie enseña aquí porque sea un docente.<br/>Enseña porque quiere compartir.",
+        "Nadie enseña aquí porque sea profesor.<br/>Enseña porque quiere compartir.",
         "Aprender hoy, enseñar mañana. Sin orden fijo."
       ],
       heroMetadata: {
@@ -185,11 +184,9 @@ const Home = ({ setCurrentPage }) => {
       heroSubtitle: "Circle Up Volunteer",
       heroTitle: "You know something someone needs",
       heroTypewriter: [
-        "Your Excel can change a career.",
-        "Your design can open doors.",
-        "Your experience is worth more than you think.",
-        "2 hours of yours = a different future.",
-        "You don't teach because you know everything.<br/>You teach because you know something."
+        "One hour, a public space, a conversation.",
+        "No one teaches here because they are a teacher.<br/>They teach because they want to share.",
+        "Learn today, teach tomorrow. No fixed order."
       ],
       heroMetadata: {
         location: "Colombia",
@@ -203,9 +200,9 @@ const Home = ({ setCurrentPage }) => {
           subtitle: "YOUR KNOWLEDGE",
           title: "You already know something valuable",
           content: [
-            "You know how to use Excel for budgets. You know how to edit photos in Canva. You know how Instagram works for businesses. You know how to organize personal finances.",
-            "That knowledge you use every day, that seems obvious to you, is exactly what someone else needs to learn. You don't need to be a world expert. You just need to know more than someone starting out.",
-            "In your city there are people looking to learn what you already master. They can't find accessible courses, can't afford academies, don't have time for 40-hour videos. They need 2 hours with you, real practice, questions answered in the moment."
+            "You have knowledge that did not come from a manual. It came from doing the work, from running into what does not work until you found what does. That has real value, even if it feels ordinary to you.",
+            "You do not need a teaching credential to share it. What you do need is real knowledge: training, or years of genuine experience in what you know.",
+            "No one shows up looking for money. They show up to learn, or simply to make good use of a free hour. The value is in the conversation itself. No one is judged for only listening, for asking many questions, or for saying nothing at all during the hour. And if the topic does not connect with you, it is also fine to choose a different space next week. No one loses because of that. Sometimes listening is enough, and listening can also change how we think about something."
           ]
         },
         {
@@ -213,40 +210,40 @@ const Home = ({ setCurrentPage }) => {
           subtitle: "THE SPACE",
           title: "The places already exist",
           content: [
-            "A library with empty tables on Tuesday afternoons. A café with WiFi that needs more weekday customers. A community room only used on weekends.",
-            "You don't need to rent a hall. You don't need special equipment. A table, chairs, WiFi connection. Participants bring their devices. You bring the knowledge.",
-            "The owners of these spaces want activity, want community, want their places to have purpose. A 2-hour workshop brings life to those empty tables."
+            "A library on a Tuesday afternoon. A cafe during the week. A community room outside the weekend. That kind of place already exists, you already know it, and you probably pass by it all the time.",
+            "There is no need to rent a hall or buy equipment. A table, some chairs, and what you already know are enough. There is no special infrastructure to build and no upfront investment to make.",
+            "The people who care for and coordinate these spaces usually want the same thing you do: more activity, more community, and a clear purpose for the quieter hours. One Event can change the energy around those tables."
           ]
         },
         {
           id: "03",
-          subtitle: "THE SESSION",
-          title: "2 hours that change perspectives",
+          subtitle: "THE EVENT",
+          title: "One hour that changes perspectives",
           content: [
-            "Tuesday 4 PM. 12 people arrive at the library. You teach them how to make a pivot table in Excel. Not abstract theory. Real cases: inventories, payrolls, reports.",
-            "30 minutes of explanation. 90 minutes of practice. You walk between tables, answer questions, correct errors, show shortcuts. They practice with their own data.",
-            "In the end, each person leaves with a skill applicable tomorrow at work. You leave knowing your knowledge served something concrete. It's not charity, it's real value exchange."
+            "A small group arrives at the library, the cafe, or the community room. Someone from the community shares something they truly know, learned through trial and error, not from a manual. There are no generic slides and no abstract theory. There are real questions from people who need the answer this week.",
+            "A full hour is dedicated to real conversation. The person leading the topic answers questions, adjusts direction if the group needs it, and connects what they are saying with each person's concrete situation.",
+            "At the end, each person leaves thinking differently about something that matters to them. The person who shared leaves knowing their experience helped someone else today, for real. It is not charity. It is an exchange between people who genuinely need each other."
           ]
         },
         {
           id: "04",
-          subtitle: "THE IMPACT",
-          title: "Measurable results, not promises",
+          subtitle: "THE CYCLE",
+          title: "Learning and teaching reinforce each other",
           content: [
-            "6 months: 23 volunteers taught 47 workshops. 127 people learned practical skills. 89% applied them at work in less than 2 weeks.",
-            "Cost: $0 for everyone. Infrastructure: existing spaces. Attendance rate: 78%. Completion rate: 71%. Compared to online courses: 15% attendance, 8% completion.",
-            "41% of participants returned to learn another topic. 23% became volunteers after attending 3 workshops. The cycle feeds itself: you learn, then you teach."
+            "CircleUp is still in an early validation stage, so we prefer not to invent impact numbers we do not have yet. What we do know, because it has been documented across very different communities around the world, is that this format has a particular pattern: the person who learns today often comes back later to share something of their own.",
+            "It is a pattern that appears again and again, across cultures, when learning happens in small groups, free of charge, and close to home. It does not end with one person teaching many others. Over time it becomes a cycle where roles rotate.",
+            "That is what we want to measure honestly as we grow: how many people return, how many people apply what they learned, and how many people eventually find themselves on the other side of the table."
           ]
         },
         {
           id: "05",
           subtitle: "YOUR DECISION",
-          title: "Start with one workshop",
+          title: "Start with one Event",
           content: [
-            "You don't need to prepare a 40-hour course. You don't need teaching certifications. You don't need prior teaching experience. You just need 2 hours and willingness to share.",
-            "We help you with logistics: we find the space, manage registrations, send reminders, prepare basic materials. You just show up and teach.",
-            "After your first workshop, you decide if you continue. No commitments, no obligations. If it worked and you want to repeat, we coordinate the next one. If not, that's okay. One workshop already made a difference.",
-            "The knowledge you have can change someone's career trajectory. Can help someone get a better job, negotiate a raise, start a business. 2 hours of yours, measurable impact on real lives."
+            "You do not need to prepare a 40-hour course or have previous teaching experience. You need one hour, something you genuinely know how to do, and the willingness to share it honestly.",
+            "We help with logistics: we coordinate the space, manage registrations, send reminders, and provide basic support materials. You show up and share what you know.",
+            "After your first Event, you decide whether to continue. No commitments and no obligations. If it worked and you want to do it again, we coordinate the next one. If not, that is fine too. One Event already made a real difference for the people who came.",
+            "The knowledge you already have, the kind that feels ordinary to you, may be exactly what someone else needs for their next step. One hour from you, shared honestly, is a strong place to begin."
           ]
         }
       ],
@@ -258,8 +255,8 @@ const Home = ({ setCurrentPage }) => {
         { id: "02", title: "Someone learns", subtitle: "Your moment" },
         { id: "03", title: "You change lives", subtitle: "Your legacy" }
       ],
-      roadmapCtaTitle: "Your next workshop starts here.",
-      roadmapCtaSubtitle: "2 hours of yours. Real impact.",
+      roadmapCtaTitle: "Your next Event starts here.",
+      roadmapCtaSubtitle: "One hour from you. That simple.",
       roadmapCtaButton: "Start now",
       // Benefits content
       benefitsHeading: "Where you can teach",
@@ -306,7 +303,7 @@ const Home = ({ setCurrentPage }) => {
         {
           title: "Workshops",
           subtitle: "Interactive",
-          text: "2 hours of your time. We coordinate space, registrations, and basic materials. You prepare the practical content and show up to teach. No long-term commitments.",
+          text: "We coordinate the space, registrations, and basic materials. You prepare the practical content and show up to teach. No long-term commitments.",
           image: "./assets/circleimages/service-right.png",
           alt: "Interactive Workshops"
         }
@@ -333,11 +330,9 @@ const Home = ({ setCurrentPage }) => {
       heroSubtitle: "Circle Up Volunteer",
       heroTitle: "Você sabe algo que alguém precisa",
       heroTypewriter: [
-        "Seu Excel pode mudar uma carreira.",
-        "Seu design pode abrir portas.",
-        "Sua experiência vale mais do que você pensa.",
-        "2 horas suas = um futuro diferente.",
-        "Você não ensina porque sabe tudo.<br/>Você ensina porque sabe algo."
+        "Uma hora, um espaço público, uma conversa.",
+        "Ninguém ensina aqui por ser professor.<br/>Ensina porque quer compartilhar.",
+        "Aprender hoje, ensinar amanhã. Sem ordem fixa."
       ],
       heroMetadata: {
         location: "Colômbia",
@@ -351,9 +346,9 @@ const Home = ({ setCurrentPage }) => {
           subtitle: "SEU CONHECIMENTO",
           title: "Você já sabe algo valioso",
           content: [
-            "Você sabe usar Excel para fazer orçamentos. Sabe editar fotos no Canva. Sabe como o Instagram funciona para negócios. Sabe organizar finanças pessoais.",
-            "Esse conhecimento que você usa todos os dias, que parece óbvio para você, é exatamente o que outra pessoa precisa aprender. Você não precisa ser um especialista mundial. Só precisa saber mais do que quem está começando.",
-            "Na sua cidade há pessoas procurando aprender o que você já domina. Não encontram cursos acessíveis, não podem pagar academias, não têm tempo para vídeos de 40 horas. Precisam de 2 horas com você, prática real, perguntas respondidas no momento."
+            "Você tem um conhecimento que não veio de um manual. Veio de fazer, de tropeçar no que não funciona até encontrar o que funciona. Isso tem valor real, mesmo que para você pareça algo do dia a dia.",
+            "Você não precisa de um título de professor para compartilhar isso. O que precisa é de conhecimento real: formação, ou anos de experiência genuína no que você sabe.",
+            "Ninguém chega procurando dinheiro. As pessoas chegam para aprender, ou simplesmente para aproveitar bem uma hora livre. O valor está na conversa em si. Aqui ninguém olha torto para quem só escuta, para quem faz muitas perguntas, ou para quem passa a hora inteira em silêncio. E, se o tema não te prende, também é totalmente válido escolher outro espaço na semana seguinte. Ninguém perde por isso. Às vezes basta escutar, e escutar também pode mudar a forma como pensamos sobre algo."
           ]
         },
         {
@@ -361,40 +356,40 @@ const Home = ({ setCurrentPage }) => {
           subtitle: "O ESPAÇO",
           title: "Os lugares já existem",
           content: [
-            "Uma biblioteca com mesas vazias nas terças à tarde. Um café com WiFi que precisa de mais clientes durante a semana. Uma sala comunitária usada apenas nos fins de semana.",
-            "Você não precisa alugar um salão. Não precisa de equipamentos especiais. Uma mesa, cadeiras, conexão WiFi. Os participantes trazem seus dispositivos. Você traz o conhecimento.",
-            "Os donos desses espaços querem atividade, querem comunidade, querem que seus lugares tenham propósito. Uma oficina de 2 horas dá vida a essas mesas vazias."
+            "Uma biblioteca numa tarde de terça-feira. Um café durante a semana. Uma sala comunitária fora do fim de semana. Esse tipo de lugar já existe, você já conhece, e provavelmente passa por ali com frequência.",
+            "Não é preciso alugar um salão nem comprar equipamentos. Uma mesa, algumas cadeiras e o que você já sabe fazer bastam. Não existe uma infraestrutura especial para montar, nem um investimento inicial para fazer.",
+            "Quem cuida e coordena esses espaços geralmente quer a mesma coisa que você: mais atividade, mais comunidade e um propósito claro para as horas de menor movimento. Um Evento pode mudar a energia dessas mesas."
           ]
         },
         {
           id: "03",
-          subtitle: "A SESSÃO",
-          title: "2 horas que mudam perspectivas",
+          subtitle: "O EVENTO",
+          title: "Uma hora que muda perspectivas",
           content: [
-            "Terça 16h. 12 pessoas chegam à biblioteca. Você ensina como fazer uma tabela dinâmica no Excel. Não teoria abstrata. Casos reais: inventários, folhas de pagamento, relatórios.",
-            "30 minutos de explicação. 90 minutos de prática. Você caminha entre as mesas, responde perguntas, corrige erros, mostra atalhos. Eles praticam com seus próprios dados.",
-            "No final, cada pessoa sai com uma habilidade aplicável amanhã no trabalho. Você sai sabendo que seu conhecimento serviu para algo concreto. Não é caridade, é troca de valor real."
+            "Um grupo pequeno chega à biblioteca, ao café ou à sala comunitária. Alguém da comunidade compartilha algo que realmente domina, aprendido na base da tentativa e erro, não em um manual. Não há slides genéricos nem teoria abstrata. Há perguntas reais, feitas por pessoas que precisam dessa resposta ainda esta semana.",
+            "Uma hora inteira é dedicada à conversa real. Quem compartilha o tema responde perguntas, ajusta a direção se o grupo precisar e conecta o que está dizendo com a situação concreta de cada pessoa presente.",
+            "No final, cada pessoa vai embora pensando diferente sobre algo que lhe importa. Quem compartilhou vai embora sabendo que sua experiência ajudou alguém naquele mesmo dia, de verdade. Não é caridade. É uma troca entre pessoas que realmente precisam umas das outras."
           ]
         },
         {
           id: "04",
-          subtitle: "O IMPACTO",
-          title: "Resultados mensuráveis, não promessas",
+          subtitle: "O CICLO",
+          title: "Aprender e ensinar se reforçam mutuamente",
           content: [
-            "6 meses: 23 voluntários ensinaram 47 oficinas. 127 pessoas aprenderam habilidades práticas. 89% as aplicaram no trabalho em menos de 2 semanas.",
-            "Custo: $0 para todos. Infraestrutura: espaços existentes. Taxa de presença: 78%. Taxa de conclusão: 71%. Comparado com cursos online: 15% presença, 8% conclusão.",
-            "41% dos participantes voltaram para aprender outro tema. 23% se tornaram voluntários após participar de 3 oficinas. O ciclo se autoalimenta: você aprende, depois ensina."
+            "A CircleUp ainda está em uma fase inicial de validação, então preferimos não inventar números de impacto que ainda não temos. O que sabemos, porque isso já foi documentado em comunidades muito diferentes ao redor do mundo, é que esse formato tem uma característica particular: quem aprende hoje costuma voltar, mais adiante, para compartilhar algo próprio.",
+            "É um padrão que se repete muitas vezes, em culturas diferentes, quando a aprendizagem acontece em grupos pequenos, sem custo e perto de casa. Não se resume a uma pessoa ensinando muitas. Com o tempo, vira um ciclo em que os papéis se alternam.",
+            "É isso que queremos medir com honestidade à medida que crescermos: quantas pessoas voltam, quantas aplicam o que aprenderam e quantas acabam, elas mesmas, do outro lado da mesa."
           ]
         },
         {
           id: "05",
           subtitle: "SUA DECISÃO",
-          title: "Comece com uma oficina",
+          title: "Comece com um Evento",
           content: [
-            "Você não precisa preparar um curso de 40 horas. Não precisa de certificações de ensino. Não precisa de experiência prévia ensinando. Só precisa de 2 horas e vontade de compartilhar.",
-            "Nós ajudamos com a logística: encontramos o espaço, gerenciamos inscrições, enviamos lembretes, preparamos materiais básicos. Você só aparece e ensina.",
-            "Depois da sua primeira oficina, você decide se continua. Sem compromissos, sem obrigações. Se funcionou e você quer repetir, coordenamos a próxima. Se não, tudo bem. Uma oficina já fez diferença.",
-            "O conhecimento que você tem pode mudar a trajetória profissional de alguém. Pode ajudar alguém a conseguir um emprego melhor, negociar um aumento, começar um negócio. 2 horas suas, impacto mensurável em vidas reais."
+            "Você não precisa preparar um curso de 40 horas nem ter experiência prévia dando aula. Precisa de uma hora, de algo que você realmente saiba fazer e da disposição de compartilhar isso com honestidade.",
+            "Nós ajudamos com a logística: coordenamos o espaço, gerenciamos as inscrições, enviamos lembretes e oferecemos materiais básicos de apoio. Você chega e compartilha o que sabe.",
+            "Depois do seu primeiro Evento, você decide se quer continuar. Sem compromissos e sem obrigações. Se funcionar e você quiser repetir, coordenamos o próximo. Se não, tudo bem também. Um único Evento já fez uma diferença real para quem apareceu.",
+            "O conhecimento que você já tem, aquele que para você parece corriqueiro, pode ser exatamente o que falta para alguém dar o próximo passo. Uma hora sua, compartilhada com honestidade, já é um excelente começo."
           ]
         }
       ],
@@ -406,8 +401,8 @@ const Home = ({ setCurrentPage }) => {
         { id: "02", title: "Alguém aprende", subtitle: "Seu momento" },
         { id: "03", title: "Você muda vidas", subtitle: "Seu legado" }
       ],
-      roadmapCtaTitle: "Sua próxima oficina começa aqui.",
-      roadmapCtaSubtitle: "2 horas suas. Impacto real.",
+      roadmapCtaTitle: "Seu próximo Evento começa aqui.",
+      roadmapCtaSubtitle: "Uma hora sua. Simples assim.",
       roadmapCtaButton: "Comece agora",
       // Benefits content
       benefitsHeading: "Onde você pode ensinar",
@@ -454,7 +449,7 @@ const Home = ({ setCurrentPage }) => {
         {
           title: "Oficinas",
           subtitle: "Interativas",
-          text: "2 horas do seu tempo. Coordenamos espaço, inscrições e materiais básicos. Você prepara o conteúdo prático e aparece para ensinar. Sem compromissos de longo prazo.",
+          text: "Coordenamos espaço, inscrições e materiais básicos. Você prepara o conteúdo prático e aparece para ensinar. Sem compromissos de longo prazo.",
           image: "./assets/circleimages/service-right.png",
           alt: "Oficinas Interativas"
         }
