@@ -533,7 +533,7 @@ const HowToUseVolunteer = ({ setCurrentPage }) => {
           subtitle={content.ctaSubtitle}
           buttonText={content.ctaButton}
           buttonAction={() => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
             setCurrentPage && setCurrentPage('login');
           }}
           fontSize={fontSize}

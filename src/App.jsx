@@ -1,17 +1,18 @@
-import { useState, useEffect } from 'react';
-import Home from "./pages/Home";
-import Dashboard from "./pages/Dashboard";
-import HowToUseBusiness from "./pages/HowToUseBusiness";
-import HowToUseVolunteer from "./pages/HowToUseVolunteer";
-import HowToUseParticipant from "./pages/HowToUseParticipant";
-import PresentationViewer from "./pages/PresentationViewer";
-import RoadmapDocs from "./pages/RoadmapDocs";
-import PoliciesDocs from "./pages/PoliciesDocs";
-import EventsPage from "./pages/EventsPage";
-import CommunityPage from "./pages/CommunityPage";
-import Login from "./pages/Login";
-import AuthCallback from "./pages/AuthCallback";
-import ParticleLogoTest from "./pages/ParticleLogoTest";
+import { Suspense, lazy, useEffect, useState } from 'react';
+
+const Home = lazy(() => import("./pages/Home"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const HowToUseBusiness = lazy(() => import("./pages/HowToUseBusiness"));
+const HowToUseVolunteer = lazy(() => import("./pages/HowToUseVolunteer"));
+const HowToUseParticipant = lazy(() => import("./pages/HowToUseParticipant"));
+const PresentationViewer = lazy(() => import("./pages/PresentationViewer"));
+const RoadmapDocs = lazy(() => import("./pages/RoadmapDocs"));
+const PoliciesDocs = lazy(() => import("./pages/PoliciesDocs"));
+const EventsPage = lazy(() => import("./pages/EventsPage"));
+const CommunityPage = lazy(() => import("./pages/CommunityPage"));
+const Login = lazy(() => import("./pages/Login"));
+const AuthCallback = lazy(() => import("./pages/AuthCallback"));
+const ParticleLogoTest = lazy(() => import("./pages/ParticleLogoTest"));
 
 const normalizePath = (pathname) => {
   if (!pathname || pathname === "/") {
@@ -46,6 +47,15 @@ const pageByPath = {
   "/policies": "policies",
   "/login": "login",
 };
+
+const PageLoader = () => (
+  <div className="min-h-screen bg-n-8 flex items-center justify-center">
+    <div className="text-center">
+      <div className="w-12 h-12 mx-auto mb-4 border-4 border-color-1 border-t-transparent rounded-full animate-spin"></div>
+      <p className="text-n-4">Cargando...</p>
+    </div>
+  </div>
+);
 
 const App = () => {
   const [currentPage, setCurrentPageState] = useState("home");
@@ -143,21 +153,23 @@ const App = () => {
 
   try {
     return (
-      <div className="w-full">
-        {currentPage === 'home' && <Home setCurrentPage={setCurrentPage} />}
-        {currentPage === 'community' && <CommunityPage setCurrentPage={setCurrentPage} />}
-        {currentPage === 'events' && <EventsPage setCurrentPage={setCurrentPage} />}
-        {currentPage === 'aliados' && <HowToUseBusiness setCurrentPage={setCurrentPage} />}
-        {currentPage === 'voluntarios' && <HowToUseVolunteer setCurrentPage={setCurrentPage} />}
-        {currentPage === 'participantes' && <HowToUseParticipant setCurrentPage={setCurrentPage} />}
-        {currentPage === 'roadmap' && <RoadmapDocs setCurrentPage={setCurrentPage} />}
-        {currentPage === 'policies' && <PoliciesDocs setCurrentPage={setCurrentPage} />}
-        {currentPage === 'login' && <Login setCurrentPage={setCurrentPage} />}
-        {currentPage === 'auth-callback' && <AuthCallback setCurrentPage={setCurrentPage} />}
-        {currentPage === 'dashboard' && <Dashboard setCurrentPage={setCurrentPage} />}
-        {currentPage === 'presentation-viewer' && <PresentationViewer setCurrentPage={setCurrentPage} />}
-        {currentPage === 'particle-test' && <ParticleLogoTest />}
-      </div>
+      <Suspense fallback={<PageLoader />}>
+        <div className="w-full">
+          {currentPage === 'home' && <Home setCurrentPage={setCurrentPage} />}
+          {currentPage === 'community' && <CommunityPage setCurrentPage={setCurrentPage} />}
+          {currentPage === 'events' && <EventsPage setCurrentPage={setCurrentPage} />}
+          {currentPage === 'aliados' && <HowToUseBusiness setCurrentPage={setCurrentPage} />}
+          {currentPage === 'voluntarios' && <HowToUseVolunteer setCurrentPage={setCurrentPage} />}
+          {currentPage === 'participantes' && <HowToUseParticipant setCurrentPage={setCurrentPage} />}
+          {currentPage === 'roadmap' && <RoadmapDocs setCurrentPage={setCurrentPage} />}
+          {currentPage === 'policies' && <PoliciesDocs setCurrentPage={setCurrentPage} />}
+          {currentPage === 'login' && <Login setCurrentPage={setCurrentPage} />}
+          {currentPage === 'auth-callback' && <AuthCallback setCurrentPage={setCurrentPage} />}
+          {currentPage === 'dashboard' && <Dashboard setCurrentPage={setCurrentPage} />}
+          {currentPage === 'presentation-viewer' && <PresentationViewer setCurrentPage={setCurrentPage} />}
+          {currentPage === 'particle-test' && <ParticleLogoTest />}
+        </div>
+      </Suspense>
     );
   } catch (error) {
     return (

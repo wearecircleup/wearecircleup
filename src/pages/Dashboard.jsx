@@ -1,12 +1,22 @@
-import { useState } from "react";
+import { Suspense, lazy, useState } from "react";
 import Section from "../components/Section";
 import Button from "../components/Button";
 import Logo from "../components/Logo";
 import { GitHubAuthService } from "../shared/utils/github";
-import DashboardHome from "../components/dashboard/DashboardHome";
-import CreatePresentation from "../components/dashboard/CreatePresentation";
-import PresentationViewerComponent from "../components/dashboard/PresentationViewerComponent";
 import curve from "../assets/hero/curve.png";
+
+const DashboardHome = lazy(() => import("../components/dashboard/DashboardHome"));
+const CreatePresentation = lazy(() => import("../components/dashboard/CreatePresentation"));
+const PresentationViewerComponent = lazy(() => import("../components/dashboard/PresentationViewerComponent"));
+
+const DashboardLoader = () => (
+  <div className="flex items-center justify-center min-h-[60vh]">
+    <div className="text-center">
+      <div className="w-12 h-12 mx-auto mb-4 border-4 border-color-1 border-t-transparent rounded-full animate-spin"></div>
+      <p className="text-n-4">Cargando dashboard...</p>
+    </div>
+  </div>
+);
 
 const Dashboard = ({ setCurrentPage }) => {
   const user = GitHubAuthService.getUser();
@@ -49,6 +59,11 @@ const Dashboard = ({ setCurrentPage }) => {
   const handleCreateSuccess = () => {
     // Return to home after successful creation
     setTimeout(() => setCurrentView('home'), 2000);
+  };
+
+  const navigateToPage = (page) => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    setCurrentPage(page);
   };
 
   return (
@@ -102,10 +117,7 @@ const Dashboard = ({ setCurrentPage }) => {
               </div>
               <div className="flex gap-2 w-full lg:w-auto">
                 <Button 
-                  onClick={() => {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                    setCurrentPage('home');
-                  }} 
+                  onClick={() => navigateToPage('home')} 
                   className="text-xs sm:text-sm whitespace-nowrap flex-1 lg:flex-initial"
                 >
                   ← Inicio
@@ -180,38 +192,40 @@ const Dashboard = ({ setCurrentPage }) => {
           </div>
 
           {/* Content */}
-          {currentView === 'home' && (
-            <DashboardHome 
-              user={user} 
-              onNavigate={handleNavigate}
-              profileAction={dashboardTab === 'profile' ? (profileAction || 'view') : null}
-              onProfileActionComplete={() => {
-                setProfileAction(null);
-                setDashboardTab('presentations');
-              }}
-              onProfileStatusChange={setHasProfile}
-              showPresentations={dashboardTab === 'presentations'}
-              currentTab={dashboardTab}
-            />
-          )}
-          
-          {currentView === 'create' && (
-            <CreatePresentation 
-              onBack={() => handleNavigate('home')}
-              onSuccess={handleCreateSuccess}
-            />
-          )}
-          
-          {currentView === 'view' && selectedPresentation && (
-            <PresentationViewerComponent 
-              presentation={selectedPresentation}
-              user={user}
-              onBack={() => handleNavigate('home')}
-              onUpdate={(updatedPresentation) => {
-                setSelectedPresentation(updatedPresentation);
-              }}
-            />
-          )}
+          <Suspense fallback={<DashboardLoader />}>
+            {currentView === 'home' && (
+              <DashboardHome 
+                user={user} 
+                onNavigate={handleNavigate}
+                profileAction={dashboardTab === 'profile' ? (profileAction || 'view') : null}
+                onProfileActionComplete={() => {
+                  setProfileAction(null);
+                  setDashboardTab('presentations');
+                }}
+                onProfileStatusChange={setHasProfile}
+                showPresentations={dashboardTab === 'presentations'}
+                currentTab={dashboardTab}
+              />
+            )}
+            
+            {currentView === 'create' && (
+              <CreatePresentation 
+                onBack={() => handleNavigate('home')}
+                onSuccess={handleCreateSuccess}
+              />
+            )}
+            
+            {currentView === 'view' && selectedPresentation && (
+              <PresentationViewerComponent 
+                presentation={selectedPresentation}
+                user={user}
+                onBack={() => handleNavigate('home')}
+                onUpdate={(updatedPresentation) => {
+                  setSelectedPresentation(updatedPresentation);
+                }}
+              />
+            )}
+          </Suspense>
 
         </div>
       </Section>

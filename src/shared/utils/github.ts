@@ -1,13 +1,15 @@
 import { ConfigService } from './config';
 
 export class GitHubAuthService {
-  private static config = ConfigService.getGitHubConfig();
+  private static readonly STATE_KEY = 'github_oauth_state';
+  private static readonly STATE_BACKUP_KEY = 'github_oauth_state_backup';
 
   static getAuthUrl(): string {
+    const config = ConfigService.getGitHubConfig();
     const params = new URLSearchParams({
-      client_id: this.config.github.app.clientId,
-      redirect_uri: this.config.github.app.redirectUri,
-      scope: this.config.github.app.scopes.join(' '),
+      client_id: config.github.app.clientId,
+      redirect_uri: config.github.app.redirectUri,
+      scope: config.github.app.scopes.join(' '),
       state: this.generateState()
     });
 
@@ -16,14 +18,21 @@ export class GitHubAuthService {
 
   private static generateState(): string {
     const state = crypto.randomUUID();
-    sessionStorage.setItem('github_oauth_state', state);
+
+    sessionStorage.setItem(this.STATE_KEY, state);
+    localStorage.setItem(this.STATE_BACKUP_KEY, state);
+
     return state;
   }
 
   static validateState(state: string): boolean {
-    const storedState = sessionStorage.getItem('github_oauth_state');
-    sessionStorage.removeItem('github_oauth_state');
-    return state === storedState;
+    const sessionState = sessionStorage.getItem(this.STATE_KEY);
+    const backupState = localStorage.getItem(this.STATE_BACKUP_KEY);
+
+    sessionStorage.removeItem(this.STATE_KEY);
+    localStorage.removeItem(this.STATE_BACKUP_KEY);
+
+    return state === sessionState || state === backupState;
   }
 
   static isAuthenticated(): boolean {

@@ -23,6 +23,11 @@ const pageByNavigationUrl = {
 const Header = ({ setCurrentPage }) => {
   const [openNavigation, setOpenNavigation] = useState(false);
 
+  const navigateToPage = (page) => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    setCurrentPage && setCurrentPage(page);
+  };
+
   const toggleNavigation = () => {
     if (openNavigation) {
       setOpenNavigation(false);
@@ -51,10 +56,7 @@ const Header = ({ setCurrentPage }) => {
           className="xl:mr-8" 
           logoSize={{ width: 60, height: 60 }}
           textSize="text-xl"
-          onClick={() => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            setCurrentPage && setCurrentPage('home');
-          }}
+          onClick={() => navigateToPage("home")}
         />
 
         <nav
@@ -69,14 +71,12 @@ const Header = ({ setCurrentPage }) => {
                   key={item.id}
                   onClick={() => {
                     handleClick();
-                    // Scroll to top of page
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
 
                     if (item.url === '#how-to-use') {
                       setCurrentPage && setCurrentPage('how-to-use');
                     } else {
                       const targetPage = pageByNavigationUrl[item.url] || "home";
-                      setCurrentPage && setCurrentPage(targetPage);
+                      navigateToPage(targetPage);
                     }
                   }}
                   className={`block relative font-code text-2xl uppercase text-n-1 transition-colors hover:text-color-1 cursor-pointer ${
@@ -107,10 +107,7 @@ const Header = ({ setCurrentPage }) => {
 
         <Button 
           className="hidden lg:flex" 
-          onClick={() => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            setCurrentPage && setCurrentPage('login');
-          }}
+          onClick={() => navigateToPage("login")}
         >
           únete a nosotros
         </Button>

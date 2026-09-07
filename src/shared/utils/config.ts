@@ -1,11 +1,23 @@
 export class ConfigService {
+  private static getBaseUrl() {
+    if (typeof window !== 'undefined' && window.location?.origin) {
+      return window.location.origin;
+    }
+
+    if (import.meta.env.VITE_BASE_URL) {
+      return import.meta.env.VITE_BASE_URL;
+    }
+
+    return 'http://localhost:3000';
+  }
+
   public static getAppConfig() {
     return {
       app: {
         name: 'CircleUp',
         version: '2.0.0',
         environment: import.meta.env.VITE_APP_ENV || 'development',
-        baseUrl: import.meta.env.VITE_BASE_URL || 'http://localhost:5173'
+        baseUrl: this.getBaseUrl()
       },
       features: {
         auth: true,
@@ -21,8 +33,7 @@ export class ConfigService {
   }
   
   public static getGitHubConfig() {
-    // Use production URL as base, GitHub OAuth allows same host with different paths
-    const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:5173';
+    const baseUrl = this.getBaseUrl();
     
     return {
       github: {

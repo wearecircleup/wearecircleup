@@ -6,10 +6,12 @@ import App from "./App.jsx";
 
 import "./index.css";
 
+const app = (
+  <Router basename="/">
+    <App />
+  </Router>
+);
+
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <Router basename="/">
-      <App />
-    </Router>
-  </React.StrictMode>
+  import.meta.env.DEV ? app : <React.StrictMode>{app}</React.StrictMode>
 );

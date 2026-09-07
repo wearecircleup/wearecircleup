@@ -6,6 +6,13 @@
  */
 
 export default async function handler(req, res) {
+  const requestHost = req.headers['x-forwarded-host'] || req.headers.host;
+  const requestProtocol = req.headers['x-forwarded-proto'] || 'http';
+  const redirectUri =
+    (requestHost ? `${requestProtocol}://${requestHost}/auth/callback` : null) ||
+    process.env.GITHUB_APP_REDIRECT_URI ||
+    'http://localhost:3000/auth/callback';
+
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -44,7 +51,7 @@ export default async function handler(req, res) {
         client_id: process.env.GITHUB_APP_CLIENT_ID,
         client_secret: process.env.GITHUB_APP_CLIENT_SECRET,
         code: code,
-        redirect_uri: process.env.GITHUB_APP_REDIRECT_URI
+        redirect_uri: redirectUri
       })
     });
 

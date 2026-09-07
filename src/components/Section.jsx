@@ -10,16 +10,23 @@ const Section = ({
   customPaddings,
   children,
 }) => {
+  const SectionComponent = import.meta.env.DEV ? "section" : motion.section;
+  const motionProps = import.meta.env.DEV
+    ? {}
+    : {
+        initial: { opacity: 0 },
+        whileInView: { opacity: 1 },
+        transition: {
+          duration: 1.5,
+        },
+        viewport: {
+          once: true,
+        },
+      };
+
   return (
-    <motion.section
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      transition={{
-        duration: 1.5,
-      }}
-      viewport={{
-        once: true,
-      }}
+    <SectionComponent
+      {...motionProps}
       id={id}
       className={`relative ${
         customPaddings ||
@@ -49,7 +56,7 @@ const Section = ({
           <SectionSvg crossesOffset={`${crossesOffset || ""}`} />
         </>
       )}
-    </motion.section>
+    </SectionComponent>
   );
 };
 

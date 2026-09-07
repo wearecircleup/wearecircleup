@@ -4,7 +4,12 @@
   "version": "2.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "powershell -ExecutionPolicy Bypass -File ./scripts/dev-local.ps1",
+    "dev:vite": "vite",
+    "dev:api": "node scripts/dev-api-server.mjs",
+    "dev:local": "powershell -ExecutionPolicy Bypass -File ./scripts/dev-local.ps1",
+    "dev:vercel-local": "powershell -ExecutionPolicy Bypass -File ./scripts/dev-vercel-local.ps1",
+    "kill:3000": "powershell -ExecutionPolicy Bypass -Command \"Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess -Unique | Where-Object { $_ -gt 0 } | ForEach-Object { Stop-Process -Id $_ -Force }\"",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives",
     "preview": "vite preview",
